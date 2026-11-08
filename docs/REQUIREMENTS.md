@@ -61,7 +61,7 @@ Age-agnostic — fun for a young child, still useful for an adult.
 
 ### 3.2 Quiz mode
 - The parent pre-selects a region or a custom set of countries — usually
-  through the kid's **quiz queue** (§5.4), which picks **today's quiz**.
+  through the family **quiz queue** (§5.4), which picks **today's quiz**.
 - The map zooms to that set; target countries get a coloured border.
 - The child picks targets **in any order**; no timer.
 - A corner counter shows how many countries are left.
@@ -95,6 +95,8 @@ Grading:
 - An **attempt is one quiz sitting**. Every question is scored again on each
   retake, including ones already answered correctly. The extra points from
   retakes are intended; the parent prices rewards to offset them.
+- Attempts are counted **per time the quiz comes up** in the queue (§5.4):
+  when a quiz comes back around, its attempts reset to the 1st (full points).
 - Flag multiple choice halves the points for that attempt, on top of the
   attempt factor (e.g. 2nd attempt + multiple choice = ¼).
 - Fractions round down, but a correct answer on attempts 1–3 always earns
@@ -122,13 +124,14 @@ Shows the child's own:
 - The gauge fills up and gets "hotter" in colour as it approaches 5.
 
 ### 3.8 Kid vs. grown-ups
-- Parents can take the **same quiz** as a kid (that kid's quiz of the day,
-  or any quiz in their queue). The quiz plays exactly as it does for the kid.
+- Parents take the **same quiz** as the kids: the family queue (§5.4) gives
+  everyone the same quiz of the day. It plays exactly as it does for a kid.
 - After a quiz, and on the personal board, the kid sees **their score next
   to each parent's** on that same quiz, e.g. "You 42 · Dad 38 · Mom 45",
   with a celebration when they beat a parent.
 - Comparisons use **first attempts only** (a retake can't beat a parent's
-  first try, and vice versa), shown as points and as % correct.
+  first try, and vice versa) from the same time the quiz came up, shown as
+  points and as % correct.
 - Parent scores are for comparison only: parents have no reward balance,
   never count toward attendance, and are left out of the kids' stats (§5.2).
 - Kids never see each other's scores.
@@ -147,7 +150,7 @@ Shows the child's own:
 ### 5.1 Setup
 - Assign point values.
 - Create rewards and their point prices.
-- Choose regions or custom country sets for quizzes, per child (via the quiz
+- Choose regions or custom country sets for quizzes (via the family quiz
   queue, §5.4).
 - The app suggests areas to practise based on what each child is forgetting.
 - Add, edit and archive other parents (§2).
@@ -173,27 +176,30 @@ stats here than in child mode:
 
 ### 5.4 Quiz queue
 So a parent can set up practice ahead of time (e.g. before work travel):
-- Each kid has a **queue of up to 20 quizzes**. A queued quiz is a region or
-  custom set of countries plus its question types and point values.
-- **One quiz per game day.** A new game day (10 pm US Eastern, §3.7) moves
-  the queue to the next quiz, whether or not the kid played the day before.
+- **One family queue** of up to 20 quizzes, shared by every kid and parent.
+  A queued quiz is a region or custom set of countries plus its question
+  types and point values.
+- The front of the queue is **today's quiz** for everyone. It moves on to
+  the next quiz at the start of the next game day (10 pm US Eastern, §3.7)
+  **only if a kid played it**. Missed days don't advance the queue, so no
+  quiz is ever skipped. Parents playing it doesn't count, so a parent can
+  never use up the kids' quiz.
 - At the end of the queue it **starts over from the top**. Quizzes added in
   the meantime go on the end, so they're played before it wraps around.
-- Parents can add, edit, reorder and remove queued quizzes, see which one is
-  today's and which come next, and copy a queue to another kid. Changes take
-  effect from the next game day; today's quiz never changes under the kid.
+- **Each time a quiz comes up again it's a fresh start:** attempts reset to
+  the 1st, worth full points (§3.4).
+- Parents can add, edit, reorder and remove queued quizzes and see which one
+  is today's and which come next. Changes take effect from the next game
+  day; today's quiz never changes mid-day.
 - An empty queue means no quiz of the day (explore mode still works).
 
 ## 6. Open questions
 
-- **Retakes when the queue wraps:** when a quiz comes back around, does it
-  start again at the 1st attempt (full points), or continue the attempt
-  count (so it soon scores 0)? *Proposed: start again at attempt 1.*
-- **Missed days:** should the queue advance on days the kid doesn't play
-  (current rule, keeps the calendar predictable) or only after they play
-  (no quiz is ever skipped)? *Proposed: advance every day, as written.*
-- **Parents and the queue:** should parents get their own queue, or only
-  play kids' quizzes? *Proposed: only kids' quizzes, for now.*
+- **Siblings and the shared queue:** with more than one kid, does the queue
+  move on once *any* kid has played today's quiz, or only once *every* kid
+  has? *Proposed: any kid* — "every kid" would stall the whole family if
+  one kid stops playing. A kid who missed a quiz meets it again next time
+  the queue wraps.
 - Whether answer-speed data should be recorded at all.
 - Sync design once there is more than one device.
 - Licensing if the app is ever sold (currently MIT).
@@ -206,10 +212,10 @@ How the v0.4 features fit the on-device data (SwiftData, versioned schema):
 |---|---|---|
 | `Profile` | role (parent/child), name, avatar, PIN, archivedAt | Already exists; multiple parents need no schema change. |
 | `QuizSet` | id, title, country codes, question types, point values, createdBy | A reusable quiz definition. |
-| `QueueEntry` | childID, quizSetID, position (0–19) | A kid's ordered queue, max 20. |
-| `QueueState` | childID, current position, day it was set | Advanced by game day; the "today's quiz" rule lives in the Rust core so it's unit-tested. |
-| `Attempt` | id, profileID, quizSetID, game day, attempt number, started/finished | One quiz sitting by anyone, kid or parent. |
+| `QueueEntry` | quizSetID, position (0–19) | The one family queue, max 20. |
+| `QueueState` | current position, run number, day it became current, played by a kid (yes/no) | Single record. At a new game day it advances only if a kid played; each advance starts a new run. The "today's quiz" rule lives in the Rust core so it's unit-tested. |
+| `Attempt` | id, profileID, quizSetID, run number, game day, attempt number, started/finished | One quiz sitting by anyone, kid or parent. Attempt numbers count within a run, so they reset when a quiz comes back around. |
 | `Answer` | attemptID, country, question type, correct, base points, multiple choice, points awarded | Scoring inputs stored per answer (§5.3). |
 
 Kid-vs-grown-up comparisons are then a query: first `Attempt` per profile
-for a given `QuizSet`.
+for a given `QuizSet` and run.
