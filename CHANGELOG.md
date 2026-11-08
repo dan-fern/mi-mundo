@@ -42,7 +42,8 @@ Versions: [Semantic Versioning](https://semver.org/).
 - Requirements v0.4: multiple parent (admin) accounts; kids can compare
   their quiz scores with their parents' on the same quiz (the family's only
   competition); one family quiz queue of up to 20 quizzes that serves the
-  same quiz to everyone, moves on only after a kid has played it, wraps
+  same quiz to everyone, moves on each day only if at least one kid
+  attempted it (kids who didn't get no entry), wraps
   around with attempts reset, so practice can be set up ahead of time.
 - Parent mode locks the moment the app leaves the screen; kids keep a
   10-minute grace period. Requirements v0.3 records these decisions.

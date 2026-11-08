@@ -179,11 +179,14 @@ So a parent can set up practice ahead of time (e.g. before work travel):
 - **One family queue** of up to 20 quizzes, shared by every kid and parent.
   A queued quiz is a region or custom set of countries plus its question
   types and point values.
-- The front of the queue is **today's quiz** for everyone. It moves on to
-  the next quiz at the start of the next game day (10 pm US Eastern, §3.7)
-  **only if a kid played it**. Missed days don't advance the queue, so no
-  quiz is ever skipped. Parents playing it doesn't count, so a parent can
-  never use up the kids' quiz.
+- The front of the queue is **today's quiz** for everyone. At the start of
+  each game day (10 pm US Eastern, §3.7) the queue moves on to the next quiz
+  **if at least one kid attempted** the current one. If no kid did, the same
+  quiz stays up, so a missed day never skips a quiz. Parents' attempts don't
+  count, so a parent can never use up the kids' quiz.
+- A kid who doesn't attempt a quiz before it moves on simply has **no entry**
+  for it: no score, no zero, and nothing counted against them in stats. They
+  meet it again the next time the queue wraps around.
 - At the end of the queue it **starts over from the top**. Quizzes added in
   the meantime go on the end, so they're played before it wraps around.
 - **Each time a quiz comes up again it's a fresh start:** attempts reset to
@@ -195,11 +198,6 @@ So a parent can set up practice ahead of time (e.g. before work travel):
 
 ## 6. Open questions
 
-- **Siblings and the shared queue:** with more than one kid, does the queue
-  move on once *any* kid has played today's quiz, or only once *every* kid
-  has? *Proposed: any kid* — "every kid" would stall the whole family if
-  one kid stops playing. A kid who missed a quiz meets it again next time
-  the queue wraps.
 - Whether answer-speed data should be recorded at all.
 - Sync design once there is more than one device.
 - Licensing if the app is ever sold (currently MIT).
@@ -213,7 +211,7 @@ How the v0.4 features fit the on-device data (SwiftData, versioned schema):
 | `Profile` | role (parent/child), name, avatar, PIN, archivedAt | Already exists; multiple parents need no schema change. |
 | `QuizSet` | id, title, country codes, question types, point values, createdBy | A reusable quiz definition. |
 | `QueueEntry` | quizSetID, position (0–19) | The one family queue, max 20. |
-| `QueueState` | current position, run number, day it became current, played by a kid (yes/no) | Single record. At a new game day it advances only if a kid played; each advance starts a new run. The "today's quiz" rule lives in the Rust core so it's unit-tested. |
+| `QueueState` | current position, run number, day it became current, attempted by a kid (yes/no) | Single record. At a new game day it advances only if at least one kid attempted it; each advance starts a new run. The "today's quiz" rule lives in the Rust core so it's unit-tested. |
 | `Attempt` | id, profileID, quizSetID, run number, game day, attempt number, started/finished | One quiz sitting by anyone, kid or parent. Attempt numbers count within a run, so they reset when a quiz comes back around. |
 | `Answer` | attemptID, country, question type, correct, base points, multiple choice, points awarded | Scoring inputs stored per answer (§5.3). |
 
