@@ -1,0 +1,80 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+# A new push to the same PR cancels the run that's still going. Runs on main
+# are never cancelled, so every merged commit gets a result.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build:
+    name: Rust checks + iPad simulator build
+    # Apple Silicon runner: the project only builds on arm64 Macs.
+    runs-on: macos-15
+    timeout-minutes: 30
+    env:
+      # Pinned so a runner-image update can't change the toolchain under us.
+      # Bump deliberately (and check the path exists on the image).
+      XCODE_APP: /Applications/Xcode_16.4.app
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: |
+          sudo xcode-select -s "$XCODE_APP"
+          xcodebuild -version
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      # rustup is preinstalled; core/rust-toolchain.toml makes it install the
+      # pinned Rust version and iOS targets on first use.
+      # PR runs can only restore caches saved from main (or their own ref), so
+      # only main saves: one shared cache instead of a dead one per PR.
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: core
+          save-if: ${{ github.ref == 'refs/heads/main' }}
+
+      - name: Format
+        working-directory: core
+        run: cargo fmt --check
+
+      - name: Clippy
+        working-directory: core
+        run: cargo clippy --all-targets --features cli -- -D warnings
+
+      - name: Rust tests
+        working-directory: core
+        run: cargo test
+
+      # Same path as a fresh clone: builds the XCFramework, bindings and the
+      # Xcode project from scratch.
+      - name: Build Rust core
+        run: ./scripts/build-core.sh
+
+      - name: Build app for iPad simulator
+        run: |
+          xcodebuild build \
+            -quiet \
+            -project apple/MiMundo/MiMundo.xcodeproj \
+            -scheme MiMundo \
+            -destination 'generic/platform=iOS Simulator' \
+            -resultBundlePath build/MiMundo.xcresult \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Upload build results on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcresult
+          path: build/MiMundo.xcresult
+          if-no-files-found: ignore

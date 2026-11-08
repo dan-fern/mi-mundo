@@ -35,6 +35,10 @@ Re-run `./scripts/build-core.sh` after changing anything in `core/` or
 `project.yml` — Xcode doesn't rebuild the Rust core on its own yet.
 Rust checks: `cd core && cargo test && cargo clippy --all-targets`.
 
+CI (`.github/workflows/ci.yml`) runs on every PR and push to `main`:
+`cargo fmt`, `clippy -D warnings`, `cargo test`, then a from-scratch
+`build-core.sh` and an iPad simulator build.
+
 To run on a real iPad, copy `apple/MiMundo/Config/Local.xcconfig.example` to
 `Local.xcconfig` (gitignored) and put in your Apple Team ID.
 
