@@ -33,57 +33,85 @@ PROFILE=debug
 CARGO_PROFILE_FLAG=()
 MODE=build
 REGENERATE_PROJECT=1
-usage() { echo "usage: $0 [--release] [--if-stale] [--no-project] | --check" >&2; exit 2; }
+usage() { echo "usage: $0 [--release] [--if-stale] [--no-project] | --check [--release]" >&2; exit 2; }
+set_mode() {
+  [[ "$MODE" == build || "$MODE" == "$1" ]] || usage # --check and --if-stale conflict
+  MODE="$1"
+}
 for arg in "$@"; do
   case "$arg" in
     --release) PROFILE=release; CARGO_PROFILE_FLAG=(--release) ;;
-    --if-stale) MODE=if-stale ;;
+    --if-stale) set_mode if-stale ;;
     --no-project) REGENERATE_PROJECT=0 ;;
-    --check) MODE=check ;;
+    --check) set_mode check ;;
     *) usage ;;
   esac
 done
+[[ "$MODE" != check || "$REGENERATE_PROJECT" == 1 ]] || usage
 
 fail() { echo "error: $*" >&2; exit 1; }
+LOG="$APP/build/rust-core.log"
 
-# Prints the first Rust input newer than the last build, or "missing" if
-# there is no usable build. Prints nothing when the build is current.
-first_stale_input() {
+# Prints why the Rust core needs rebuilding for $PROFILE: "missing", the
+# profile change, or the first input newer than the last build. Prints
+# nothing when the build is current.
+stale_reason() {
   if [[ ! -f "$STAMP" || ! -d "$PKG/$FFI_MODULE.xcframework" \
         || ! -f "$PKG/Sources/MiMundoCore/mimundo_core.swift" ]]; then
     echo "missing"
     return
   fi
+  local built_profile
+  built_profile="$(cat "$STAMP")"
+  if [[ "$built_profile" != "$PROFILE" ]]; then
+    echo "built as $built_profile, need $PROFILE"
+    return
+  fi
+  # -quit stops at the first match, so no pipe (a pipe into head can kill
+  # find with SIGPIPE, which pipefail + set -e would turn into a silent exit).
+  # A missing input makes find exit 1; that's not "stale", so ignore it.
   find "$CORE/src" "$CORE/Cargo.toml" "$CORE/Cargo.lock" \
        "$CORE/rust-toolchain.toml" "$ROOT/scripts/build-core.sh" \
-       -newer "$STAMP" -print 2>/dev/null | head -n 1
+       -newer "$STAMP" -print -quit 2>/dev/null || true
 }
 
 if [[ "$MODE" == check ]]; then
-  stale="$(first_stale_input)"
+  stale="$(stale_reason)"
   if [[ -n "$stale" ]]; then
-    echo "error: The Rust core is out of date (${stale#"$ROOT/"}). Xcode normally rebuilds it before each build; see apple/MiMundo/build/rust-core.log, or run scripts/build-core.sh." >&2
+    echo "error: The Rust core is out of date (${stale#"$ROOT/"}). Build once with Cmd-B to rebuild it (SwiftUI Previews don't run that step), or run scripts/build-core.sh." >&2
+    if [[ -f "$LOG" && ( ! -f "$STAMP" || "$LOG" -nt "$STAMP" ) ]]; then
+      echo "error: The last automatic Rust build failed. End of $LOG:" >&2
+      tail -n 15 "$LOG" >&2
+    fi
     exit 1
   fi
   exit 0
 fi
 
 if [[ "$MODE" == if-stale ]]; then
-  stale="$(first_stale_input)"
-  built_profile="$(cat "$STAMP" 2>/dev/null || true)"
-  if [[ -z "$stale" && "$built_profile" == "$PROFILE" ]]; then
+  stale="$(stale_reason)"
+  if [[ -z "$stale" ]]; then
     echo "==> Rust core is up to date ($PROFILE)"
     exit 0
   fi
-  echo "==> Rust core needs rebuilding (${stale:-profile $built_profile -> $PROFILE})"
+  echo "==> Rust core needs rebuilding (${stale#"$ROOT/"})"
 fi
 
-# Xcode runs scheme pre-actions with a minimal PATH, so add Homebrew's
-# locations explicitly. Its rustup is keg-only, so add that too.
-export PATH="/opt/homebrew/bin:/usr/local/bin:$HOME/.cargo/bin:$PATH"
+# Xcode runs scheme pre-actions with a minimal PATH, so make Homebrew
+# findable. Append rather than prepend so a Homebrew `cargo` (which ignores
+# rust-toolchain.toml) never wins over rustup's. Homebrew's rustup is
+# keg-only, so its proxies go first.
+export PATH="$HOME/.cargo/bin:$PATH:/opt/homebrew/bin:/usr/local/bin"
 if command -v brew >/dev/null && RUSTUP_PREFIX="$(brew --prefix rustup 2>/dev/null)"; then
   export PATH="$RUSTUP_PREFIX/bin:$PATH"
 fi
+
+# The stamp records the build's *start* time, so edits saved while a build
+# runs are still newer than it. Remove it now so a build that fails halfway
+# can never look current.
+BUILD_STARTED="$(mktemp -t mimundo-core-build)"
+trap 'rm -f "$BUILD_STARTED"' EXIT
+rm -f "$STAMP"
 
 echo "==> Checking tools"
 [[ "$(uname -m)" == arm64 ]] || fail "Mi Mundo builds on Apple Silicon Macs only."
@@ -138,6 +166,7 @@ if ! cmp -s "$GEN/mimundo_core.swift" "$PKG/Sources/MiMundoCore/mimundo_core.swi
 fi
 
 echo "$PROFILE" > "$STAMP"
+touch -r "$BUILD_STARTED" "$STAMP"
 
 if [[ "$REGENERATE_PROJECT" == 1 ]]; then
   echo "==> Generating Xcode project"

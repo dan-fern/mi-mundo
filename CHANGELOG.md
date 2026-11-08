@@ -16,7 +16,9 @@ Versions: [Semantic Versioning](https://semver.org/).
 - Xcode rebuilds the Rust core before each build when `core/` has changed,
   and fails the build with the Rust error if it can't, so pressing Run never
   silently uses stale Rust. `build-core.sh` gains `--if-stale`,
-  `--no-project` and `--check`.
+  `--no-project` and `--check`. The stamp records the build's start time and
+  profile, `--check` also catches a debug/release mismatch, and the script
+  can't exit silently on a missing input (PR #3 review).
 - "Who's playing?" launch screen with parent (PIN) and kid profiles,
   first-run parent setup, a kid-management parent home, and a placeholder
   kid home — the entry point every later feature hangs off.

@@ -31,7 +31,10 @@ targets:
     # built against stale Rust.
     preBuildScripts:
       - name: Check Rust core is up to date
-        script: '"$SRCROOT/../../scripts/build-core.sh" --check'
+        script: |
+          FLAG=""
+          if [ "$CONFIGURATION" = "Release" ]; then FLAG="--release"; fi
+          "$SRCROOT/../../scripts/build-core.sh" --check $FLAG
         basedOnDependencyAnalysis: false
     settings:
       base:
@@ -67,7 +70,9 @@ schemes:
       # Runs before anything is built (including the MiMundoCore package),
       # so Swift always compiles against fresh bindings. Output goes to
       # apple/MiMundo/build/rust-core.log. `env -i` keeps Xcode's iOS build
-      # variables (SDKROOT etc.) from leaking into cargo's Mac-side build.
+      # variables (SDKROOT etc.) from leaking into cargo's Mac-side build;
+      # DEVELOPER_DIR is passed through so the script uses the same Xcode
+      # that's running this build, not whatever xcode-select points at.
       preActions:
         - name: Rebuild Rust core if needed
           settingsTarget: MiMundo
@@ -76,7 +81,8 @@ schemes:
             mkdir -p "$PROJECT_DIR/build"
             FLAG=""
             if [ "$CONFIGURATION" = "Release" ]; then FLAG="--release"; fi
-            if ! env -i HOME="$HOME" USER="$USER" PATH="/usr/bin:/bin:/usr/sbin:/sbin" \
+            if ! env -i HOME="$HOME" USER="$USER" DEVELOPER_DIR="$DEVELOPER_DIR" \
+              PATH="/usr/bin:/bin:/usr/sbin:/sbin" \
               "$PROJECT_DIR/../../scripts/build-core.sh" --if-stale --no-project $FLAG \
               > "$LOG" 2>&1; then
               echo "error: Rust core build failed (full log: $LOG):" >&2
