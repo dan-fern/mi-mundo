@@ -14,3 +14,6 @@ apple/MiMundoCore/mimundo_coreFFI.xcframework/
 apple/MiMundoCore/Sources/MiMundoCore/mimundo_core.swift
 apple/MiMundo/MiMundo.xcodeproj/
 .swiftpm/
+
+# Per-developer signing team (see Config/Local.xcconfig.example)
+apple/MiMundo/Config/Local.xcconfig

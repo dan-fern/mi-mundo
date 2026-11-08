@@ -19,18 +19,24 @@ and [CHANGELOG.md](CHANGELOG.md).
 
 ## Getting started
 
-Requirements: Xcode, [rustup](https://rustup.rs) (`brew install rustup`), and
+Requirements: an **Apple Silicon Mac**, Xcode,
+[rustup](https://rustup.rs) (`brew install rustup`), and
 [XcodeGen](https://github.com/yonaskolb/XcodeGen) (`brew install xcodegen`).
+The Rust version and iPad targets are pinned in `core/rust-toolchain.toml`
+and installed automatically.
 
 ```bash
-rustup default stable
-rustup target add aarch64-apple-ios aarch64-apple-ios-sim
-./scripts/build-core.sh
+./scripts/build-core.sh            # fast debug build of the Rust core
+./scripts/build-core.sh --release  # optimized build, for the real iPad
 open apple/MiMundo/MiMundo.xcodeproj
 ```
 
 Re-run `./scripts/build-core.sh` after changing anything in `core/` or
-`project.yml`. Rust tests: `cd core && cargo test`.
+`project.yml` — Xcode doesn't rebuild the Rust core on its own yet.
+Rust checks: `cd core && cargo test && cargo clippy --all-targets`.
+
+To run on a real iPad, copy `apple/MiMundo/Config/Local.xcconfig.example` to
+`Local.xcconfig` (gitignored) and put in your Apple Team ID.
 
 ## License
 

@@ -2,6 +2,7 @@
 name = "mimundo_core"
 version = "0.1.0"
 edition = "2024"
+rust-version = "1.85"
 license = "MIT"
 description = "Game logic for Mi Mundo, shared with the SwiftUI app through UniFFI."
 
@@ -11,12 +12,19 @@ description = "Game logic for Mi Mundo, shared with the SwiftUI app through UniF
 # lib: used by Rust tests.
 crate-type = ["lib", "staticlib", "cdylib"]
 
+[features]
+# Only the Mac-side bindings generator needs UniFFI's CLI. Keeping it out of
+# the default build keeps clap/askama/bindgen out of the iPad static library
+# (~20 MB instead of ~80 MB).
+cli = ["uniffi/cli"]
+
 [[bin]]
 name = "uniffi-bindgen"
 path = "src/bin/uniffi-bindgen.rs"
+required-features = ["cli"]
 
 [dependencies]
-uniffi = { version = "0.32.2", features = ["cli"] }
+uniffi = "0.32.2"
 
 [profile.release]
 lto = true
