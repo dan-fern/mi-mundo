@@ -31,8 +31,11 @@ and installed automatically.
 open apple/MiMundo/MiMundo.xcodeproj
 ```
 
-Re-run `./scripts/build-core.sh` after changing anything in `core/` or
-`project.yml` — Xcode doesn't rebuild the Rust core on its own yet.
+After that, Xcode rebuilds the Rust core automatically whenever `core/`
+changes (a scheme pre-action; Release builds use `--release`). If the Rust
+build fails, the Xcode build fails with the compiler error; the full log is in
+`apple/MiMundo/build/rust-core.log`. Re-run `./scripts/build-core.sh` by hand
+only after editing `project.yml`.
 Rust checks: `cd core && cargo test && cargo clippy --all-targets`.
 
 CI (`.github/workflows/ci.yml`) runs on every PR and push to `main`:
