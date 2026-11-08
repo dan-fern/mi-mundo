@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+# A new push to the same PR cancels the run that's still going.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Rust checks + iPad simulator build
+    # Apple Silicon runner: the project only builds on arm64 Macs.
+    runs-on: macos-15
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      # rustup is preinstalled; core/rust-toolchain.toml makes it install the
+      # pinned Rust version and iOS targets on first use.
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: core
+
+      - name: Format
+        working-directory: core
+        run: cargo fmt --check
+
+      - name: Clippy
+        working-directory: core
+        run: cargo clippy --all-targets --features cli -- -D warnings
+
+      - name: Rust tests
+        working-directory: core
+        run: cargo test
+
+      # Same path as a fresh clone: builds the XCFramework, bindings and the
+      # Xcode project from scratch.
+      - name: Build Rust core
+        run: ./scripts/build-core.sh
+
+      - name: Build app for iPad simulator
+        run: |
+          xcodebuild build \
+            -project apple/MiMundo/MiMundo.xcodeproj \
+            -scheme MiMundo \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO
