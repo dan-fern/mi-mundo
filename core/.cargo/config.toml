@@ -1,0 +1,5 @@
+[env]
+# Time zones compiled into chrono-tz (see Cargo.toml). America/New_York is the
+# game-day zone; America/Los_Angeles is only used by tests. Add zones here if
+# the Rust core ever needs more.
+CHRONO_TZ_TIMEZONE_FILTER = "^(America/New_York|America/Los_Angeles)$"

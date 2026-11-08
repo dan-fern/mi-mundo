@@ -1,6 +1,6 @@
 # Mi Mundo — Requirements
 
-_Status: draft v0.2 · 2026-11-08_
+_Status: draft v0.4 · 2026-11-08_
 
 A gamified geography app for a family: kids explore and get quizzed on a
 world map, parents choose what to practise, set rewards and track progress.
@@ -21,11 +21,32 @@ Age-agnostic — fun for a young child, still useful for an adult.
 ## 2. Accounts
 
 - **Parent** accounts (PIN-protected) and **child** accounts (one per kid).
+- **Any number of parents.** Every parent is an equal admin with their own
+  PIN; any parent can add another parent from parent mode. The last parent
+  can't be archived or deleted.
 - Local profiles on the device to start; cross-device sync (CloudKit) later.
 - On launch the app asks **who's playing**. Picking a child goes straight to
   the explore worldview and logs attendance for that child (§3.7); picking a
   parent asks for the PIN and does not log attendance.
+- **Parent mode locks as soon as the app leaves the screen.** A kid's
+  session survives up to 10 minutes in the background; after that the app
+  asks who's playing again. Coming back sooner keeps the same kid (and logs
+  attendance again if a new day has started).
+- First launch sets up the parent (name, avatar, PIN entered twice); the
+  parent then adds kids (name + avatar) from parent mode.
+- **PIN:** 4 digits, stored as a salted hash. Wrong guesses lock the PIN pad
+  for 30 s after 3, 2 min after 5, and 10 min after 7 or more (survives
+  restarts). **Forgot PIN?** uses the iPad's own Touch ID / Face ID /
+  passcode, then sets a new PIN.
+- **Kids can be edited** (name, avatar) and **archived**: hidden from
+  "Who's playing?" with all progress kept, and restorable. Deleting a kid
+  forever is a separate, confirmed action on an archived kid.
+- **Sessions** are recorded for every player (who, game day, start, end) so
+  the parent stats (§5.2) have usage history from day one.
+- Parent home shows the day-start rule; build details ("Diagnostics") are
+  tucked away in a collapsed section.
 - Children never compete with each other (no head-to-head rankings for now).
+  The only competition is **kid vs. grown-ups** (§3.8).
 
 ## 3. Child mode
 
@@ -39,7 +60,8 @@ Age-agnostic — fun for a young child, still useful for an adult.
 - Low word count, large child-friendly fonts.
 
 ### 3.2 Quiz mode
-- The parent pre-selects a region or a custom set of countries.
+- The parent pre-selects a region or a custom set of countries — usually
+  through the family **quiz queue** (§5.4), which picks **today's quiz**.
 - The map zooms to that set; target countries get a coloured border.
 - The child picks targets **in any order**; no timer.
 - A corner counter shows how many countries are left.
@@ -73,6 +95,8 @@ Grading:
 - An **attempt is one quiz sitting**. Every question is scored again on each
   retake, including ones already answered correctly. The extra points from
   retakes are intended; the parent prices rewards to offset them.
+- Attempts are counted **per time the quiz comes up** in the queue (§5.4):
+  when a quiz comes back around, its attempts reset to the 1st (full points).
 - Flag multiple choice halves the points for that attempt, on top of the
   attempt factor (e.g. 2nd attempt + multiple choice = ¼).
 - Fractions round down, but a correct answer on attempts 1–3 always earns
@@ -99,6 +123,20 @@ Shows the child's own:
   definition.
 - The gauge fills up and gets "hotter" in colour as it approaches 5.
 
+### 3.8 Kid vs. grown-ups
+- Parents take the **same quiz** as the kids: the family queue (§5.4) gives
+  everyone the same quiz of the day. It plays exactly as it does for a kid.
+- After a quiz, and on the personal board, the kid sees **their score next
+  to each parent's** on that same quiz, e.g. "You 42 · Dad 38 · Mom 45",
+  with a celebration when they beat a parent.
+- Comparisons use **first attempts only** (a retake can't beat a parent's
+  first try, and vice versa) from the same time the quiz came up, shown as
+  points and as % correct.
+- Parent scores are for comparison only: parents have no reward balance,
+  never count toward attendance, and are left out of the kids' stats (§5.2).
+- Kids never see each other's scores.
+- **Later:** a points multiplier or special rewards when a kid beats a parent.
+
 ## 4. Data & content
 
 - Map geometry: Natural Earth (public domain) — countries, rivers, lakes,
@@ -112,8 +150,10 @@ Shows the child's own:
 ### 5.1 Setup
 - Assign point values.
 - Create rewards and their point prices.
-- Choose regions or custom country sets for quizzes, per child.
+- Choose regions or custom country sets for quizzes (via the family quiz
+  queue, §5.4).
 - The app suggests areas to practise based on what each child is forgetting.
+- Add, edit and archive other parents (§2).
 
 ### 5.2 Stats & review
 Pick a region, see each child's strengths and weaknesses. There are far more
@@ -134,8 +174,46 @@ stats here than in child mode:
 - A reward balance may go negative (e.g. after an override is reversed);
   most rewards are redeemed outside the app, so this is an accepted edge case.
 
+### 5.4 Quiz queue
+So a parent can set up practice ahead of time (e.g. before work travel):
+- **One family queue** of up to 20 quizzes, shared by every kid and parent.
+  A queued quiz is a region or custom set of countries plus its question
+  types and point values.
+- The front of the queue is **today's quiz** for everyone. At the start of
+  each game day (10 pm US Eastern, §3.7) the queue moves on to the next quiz
+  **if at least one kid attempted** the current one. If no kid did, the same
+  quiz stays up, so a missed day never skips a quiz. Parents' attempts don't
+  count, so a parent can never use up the kids' quiz.
+- A kid who doesn't attempt a quiz before it moves on simply has **no entry**
+  for it: no score, no zero, and nothing counted against them in stats. They
+  meet it again the next time the queue wraps around.
+- At the end of the queue it **starts over from the top**. Quizzes added in
+  the meantime go on the end, so they're played before it wraps around.
+- **Each time a quiz comes up again it's a fresh start:** attempts reset to
+  the 1st, worth full points (§3.4).
+- Parents can add, edit, reorder and remove queued quizzes and see which one
+  is today's and which come next. Changes take effect from the next game
+  day; today's quiz never changes mid-day.
+- An empty queue means no quiz of the day (explore mode still works).
+
 ## 6. Open questions
 
 - Whether answer-speed data should be recorded at all.
 - Sync design once there is more than one device.
 - Licensing if the app is ever sold (currently MIT).
+
+## 7. Design notes (data model sketch)
+
+How the v0.4 features fit the on-device data (SwiftData, versioned schema):
+
+| Model | Key fields | Notes |
+|---|---|---|
+| `Profile` | role (parent/child), name, avatar, PIN, archivedAt | Already exists; multiple parents need no schema change. |
+| `QuizSet` | id, title, country codes, question types, point values, createdBy | A reusable quiz definition. |
+| `QueueEntry` | quizSetID, position (0–19) | The one family queue, max 20. |
+| `QueueState` | current position, run number, day it became current, attempted by a kid (yes/no) | Single record. At a new game day it advances only if at least one kid attempted it; each advance starts a new run. The "today's quiz" rule lives in the Rust core so it's unit-tested. |
+| `Attempt` | id, profileID, quizSetID, run number, game day, attempt number, started/finished | One quiz sitting by anyone, kid or parent. Attempt numbers count within a run, so they reset when a quiz comes back around. |
+| `Answer` | attemptID, country, question type, correct, base points, multiple choice, points awarded | Scoring inputs stored per answer (§5.3). |
+
+Kid-vs-grown-up comparisons are then a query: first `Attempt` per profile
+for a given `QuizSet` and run.
