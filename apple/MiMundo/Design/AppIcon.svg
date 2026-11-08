@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Mi Mundo app icon: pastel globe wearing a graduation cap.
+     Source of truth for the icon. Render with:
+       inkscape apple/MiMundo/Design/AppIcon.svg -w 1024 -h 1024 \
+         -o apple/MiMundo/Resources/Assets.xcassets/AppIcon.appiconset/AppIcon.png
+     Full-bleed square, no transparency: iPadOS rounds the corners itself. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#EBDDFD"/>
+      <stop offset="0.55" stop-color="#F6DFF0"/>
+      <stop offset="1" stop-color="#FFE4D2"/>
+    </linearGradient>
+    <radialGradient id="ocean" cx="0.38" cy="0.32" r="0.8">
+      <stop offset="0" stop-color="#D3EEFF"/>
+      <stop offset="0.6" stop-color="#A9D8F7"/>
+      <stop offset="1" stop-color="#86C2EE"/>
+    </radialGradient>
+    <linearGradient id="board" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#AAB4F0"/>
+      <stop offset="1" stop-color="#8F9ADD"/>
+    </linearGradient>
+    <linearGradient id="skull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8793D8"/>
+      <stop offset="1" stop-color="#7783C9"/>
+    </linearGradient>
+    <clipPath id="globeClip">
+      <circle cx="512" cy="620" r="290"/>
+    </clipPath>
+    <filter id="blur" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+
+  <!-- Sparkles -->
+  <g fill="#FFFFFF" opacity="0.9">
+    <path d="M150 210 l14 36 36 14 -36 14 -14 36 -14 -36 -36 -14 36 -14 z"/>
+    <path d="M860 170 l10 26 26 10 -26 10 -10 26 -10 -26 -26 -10 26 -10 z"/>
+    <path d="M880 760 l12 30 30 12 -30 12 -12 30 -12 -30 -30 -12 30 -12 z"/>
+  </g>
+  <g fill="#FFD7A8" opacity="0.9">
+    <circle cx="118" cy="760" r="14"/>
+    <circle cx="930" cy="420" r="10"/>
+  </g>
+
+  <!-- Globe -->
+  <circle cx="512" cy="640" r="290" fill="#8A6FB8" opacity="0.22" filter="url(#blur)"/>
+  <circle cx="512" cy="620" r="290" fill="url(#ocean)"/>
+  <g clip-path="url(#globeClip)">
+    <!-- Continents (stylized Americas, Europe/Africa edge, Greenland) -->
+    <g fill="#BFE8B5" stroke="#9ED39A" stroke-width="6" stroke-linejoin="round">
+      <path d="M268 450 C330 400 450 400 515 440 C560 470 548 515 505 535 C475 550 474 575 450 600 C425 618 403 598 392 572 C372 535 322 525 280 495 C262 482 258 462 268 450 Z"/>
+      <path d="M455 612 C488 622 528 652 552 702 C572 748 548 802 516 852 C500 878 484 864 482 832 C478 782 458 742 444 702 C433 666 433 626 455 612 Z"/>
+      <path d="M648 478 C690 455 752 466 806 498 L834 572 C812 612 770 622 750 662 C734 702 708 734 686 714 C664 684 656 632 636 600 C616 568 616 508 648 478 Z"/>
+      <path d="M548 372 C580 356 622 366 612 392 C602 414 564 414 548 398 Z"/>
+    </g>
+    <!-- Graticule -->
+    <g fill="none" stroke="#FFFFFF" stroke-opacity="0.45" stroke-width="5">
+      <ellipse cx="512" cy="620" rx="290" ry="70"/>
+      <ellipse cx="512" cy="620" rx="120" ry="290"/>
+      <line x1="512" y1="330" x2="512" y2="910"/>
+    </g>
+    <!-- Shine -->
+    <ellipse cx="420" cy="470" rx="120" ry="70" fill="#FFFFFF" opacity="0.28" transform="rotate(-30 420 470)"/>
+  </g>
+  <circle cx="512" cy="620" r="290" fill="none" stroke="#7FB6E3" stroke-width="10"/>
+
+  <!-- Graduation cap, tilted -->
+  <g transform="rotate(-10 512 300)">
+    <!-- Shadow -->
+    <path d="M512 210 L772 304 L512 398 L252 304 Z" fill="#5A4E8C" opacity="0.25" filter="url(#blur)"/>
+    <!-- Skull cap -->
+    <path d="M392 300 L632 300 L622 392 C580 420 444 420 402 392 Z" fill="url(#skull)"/>
+    <!-- Board -->
+    <path d="M512 196 L772 290 L512 384 L252 290 Z" fill="url(#board)" stroke="#7783C9" stroke-width="8" stroke-linejoin="round"/>
+    <!-- Tassel cord -->
+    <path d="M512 290 C600 300 690 300 742 300 L742 400" fill="none" stroke="#FFD27A" stroke-width="10" stroke-linecap="round"/>
+    <!-- Tassel -->
+    <path d="M726 396 L758 396 L768 470 L716 470 Z" fill="#FFD27A"/>
+    <path d="M726 396 L758 396 L756 412 L728 412 Z" fill="#F4B860"/>
+    <!-- Button -->
+    <circle cx="512" cy="290" r="16" fill="#FFD27A"/>
+  </g>
+</svg>

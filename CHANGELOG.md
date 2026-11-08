@@ -10,6 +10,10 @@ Versions: [Semantic Versioning](https://semver.org/).
 ## [Unreleased]
 
 ### Added
+- Pastel globe-in-a-graduation-cap app icon, drawn as an SVG in
+  `apple/MiMundo/Design/` (original artwork, so no licensing questions).
+- Pastel globe-in-a-graduation-cap app icon, drawn as an SVG in
+  `apple/MiMundo/Design/` (original artwork, so no licensing questions).
 - GitHub Actions CI on every PR and push to `main` (fmt, clippy, Rust tests,
   fresh-clone build, iPad simulator build), so a PR can't break the build
   without anyone noticing — there's no second human reviewer.

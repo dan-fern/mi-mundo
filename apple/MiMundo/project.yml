@@ -23,6 +23,7 @@ targets:
     platform: iOS
     sources:
       - path: Sources
+      - path: Resources # Assets.xcassets (app icon)
     dependencies:
       - package: MiMundoCore
     # Safety net: the scheme pre-action below rebuilds the Rust core and fails
@@ -42,6 +43,8 @@ targets:
         ENABLE_USER_SCRIPT_SANDBOXING: NO
         PRODUCT_BUNDLE_IDENTIFIER: com.danfern.mimundo
         PRODUCT_NAME: MiMundo
+        # Rendered from Design/AppIcon.svg (see the comment at its top).
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         MARKETING_VERSION: 0.1.0
         CURRENT_PROJECT_VERSION: 1
         SWIFT_VERSION: "6.0"
