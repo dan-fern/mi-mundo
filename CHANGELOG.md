@@ -39,6 +39,10 @@ Versions: [Semantic Versioning](https://semver.org/).
   changes don't lose data on the iPad.
 
 ### Changed
+- Requirements v0.4: multiple parent (admin) accounts; kids can compare
+  their quiz scores with their parents' on the same quiz (the family's only
+  competition); a per-kid queue of up to 20 quizzes that serves one quiz
+  per game day and wraps around, so practice can be set up ahead of time.
 - Parent mode locks the moment the app leaves the screen; kids keep a
   10-minute grace period. Requirements v0.3 records these decisions.
 - Build details moved off the parent home into a collapsed "Diagnostics".

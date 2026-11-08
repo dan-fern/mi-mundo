@@ -1,6 +1,6 @@
 # Mi Mundo — Requirements
 
-_Status: draft v0.3 · 2026-11-08_
+_Status: draft v0.4 · 2026-11-08_
 
 A gamified geography app for a family: kids explore and get quizzed on a
 world map, parents choose what to practise, set rewards and track progress.
@@ -21,6 +21,9 @@ Age-agnostic — fun for a young child, still useful for an adult.
 ## 2. Accounts
 
 - **Parent** accounts (PIN-protected) and **child** accounts (one per kid).
+- **Any number of parents.** Every parent is an equal admin with their own
+  PIN; any parent can add another parent from parent mode. The last parent
+  can't be archived or deleted.
 - Local profiles on the device to start; cross-device sync (CloudKit) later.
 - On launch the app asks **who's playing**. Picking a child goes straight to
   the explore worldview and logs attendance for that child (§3.7); picking a
@@ -43,6 +46,7 @@ Age-agnostic — fun for a young child, still useful for an adult.
 - Parent home shows the day-start rule; build details ("Diagnostics") are
   tucked away in a collapsed section.
 - Children never compete with each other (no head-to-head rankings for now).
+  The only competition is **kid vs. grown-ups** (§3.8).
 
 ## 3. Child mode
 
@@ -56,7 +60,8 @@ Age-agnostic — fun for a young child, still useful for an adult.
 - Low word count, large child-friendly fonts.
 
 ### 3.2 Quiz mode
-- The parent pre-selects a region or a custom set of countries.
+- The parent pre-selects a region or a custom set of countries — usually
+  through the kid's **quiz queue** (§5.4), which picks **today's quiz**.
 - The map zooms to that set; target countries get a coloured border.
 - The child picks targets **in any order**; no timer.
 - A corner counter shows how many countries are left.
@@ -116,6 +121,19 @@ Shows the child's own:
   definition.
 - The gauge fills up and gets "hotter" in colour as it approaches 5.
 
+### 3.8 Kid vs. grown-ups
+- Parents can take the **same quiz** as a kid (that kid's quiz of the day,
+  or any quiz in their queue). The quiz plays exactly as it does for the kid.
+- After a quiz, and on the personal board, the kid sees **their score next
+  to each parent's** on that same quiz, e.g. "You 42 · Dad 38 · Mom 45",
+  with a celebration when they beat a parent.
+- Comparisons use **first attempts only** (a retake can't beat a parent's
+  first try, and vice versa), shown as points and as % correct.
+- Parent scores are for comparison only: parents have no reward balance,
+  never count toward attendance, and are left out of the kids' stats (§5.2).
+- Kids never see each other's scores.
+- **Later:** a points multiplier or special rewards when a kid beats a parent.
+
 ## 4. Data & content
 
 - Map geometry: Natural Earth (public domain) — countries, rivers, lakes,
@@ -129,8 +147,10 @@ Shows the child's own:
 ### 5.1 Setup
 - Assign point values.
 - Create rewards and their point prices.
-- Choose regions or custom country sets for quizzes, per child.
+- Choose regions or custom country sets for quizzes, per child (via the quiz
+  queue, §5.4).
 - The app suggests areas to practise based on what each child is forgetting.
+- Add, edit and archive other parents (§2).
 
 ### 5.2 Stats & review
 Pick a region, see each child's strengths and weaknesses. There are far more
@@ -151,8 +171,45 @@ stats here than in child mode:
 - A reward balance may go negative (e.g. after an override is reversed);
   most rewards are redeemed outside the app, so this is an accepted edge case.
 
+### 5.4 Quiz queue
+So a parent can set up practice ahead of time (e.g. before work travel):
+- Each kid has a **queue of up to 20 quizzes**. A queued quiz is a region or
+  custom set of countries plus its question types and point values.
+- **One quiz per game day.** A new game day (10 pm US Eastern, §3.7) moves
+  the queue to the next quiz, whether or not the kid played the day before.
+- At the end of the queue it **starts over from the top**. Quizzes added in
+  the meantime go on the end, so they're played before it wraps around.
+- Parents can add, edit, reorder and remove queued quizzes, see which one is
+  today's and which come next, and copy a queue to another kid. Changes take
+  effect from the next game day; today's quiz never changes under the kid.
+- An empty queue means no quiz of the day (explore mode still works).
+
 ## 6. Open questions
 
+- **Retakes when the queue wraps:** when a quiz comes back around, does it
+  start again at the 1st attempt (full points), or continue the attempt
+  count (so it soon scores 0)? *Proposed: start again at attempt 1.*
+- **Missed days:** should the queue advance on days the kid doesn't play
+  (current rule, keeps the calendar predictable) or only after they play
+  (no quiz is ever skipped)? *Proposed: advance every day, as written.*
+- **Parents and the queue:** should parents get their own queue, or only
+  play kids' quizzes? *Proposed: only kids' quizzes, for now.*
 - Whether answer-speed data should be recorded at all.
 - Sync design once there is more than one device.
 - Licensing if the app is ever sold (currently MIT).
+
+## 7. Design notes (data model sketch)
+
+How the v0.4 features fit the on-device data (SwiftData, versioned schema):
+
+| Model | Key fields | Notes |
+|---|---|---|
+| `Profile` | role (parent/child), name, avatar, PIN, archivedAt | Already exists; multiple parents need no schema change. |
+| `QuizSet` | id, title, country codes, question types, point values, createdBy | A reusable quiz definition. |
+| `QueueEntry` | childID, quizSetID, position (0–19) | A kid's ordered queue, max 20. |
+| `QueueState` | childID, current position, day it was set | Advanced by game day; the "today's quiz" rule lives in the Rust core so it's unit-tested. |
+| `Attempt` | id, profileID, quizSetID, game day, attempt number, started/finished | One quiz sitting by anyone, kid or parent. |
+| `Answer` | attemptID, country, question type, correct, base points, multiple choice, points awarded | Scoring inputs stored per answer (§5.3). |
+
+Kid-vs-grown-up comparisons are then a query: first `Attempt` per profile
+for a given `QuizSet`.
