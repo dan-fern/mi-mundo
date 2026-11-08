@@ -1,0 +1,23 @@
+[package]
+name = "mimundo_core"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+description = "Game logic for Mi Mundo, shared with the SwiftUI app through UniFFI."
+
+[lib]
+# staticlib: linked into the iPad app.
+# cdylib: used on the Mac to generate the Swift bindings.
+# lib: used by Rust tests.
+crate-type = ["lib", "staticlib", "cdylib"]
+
+[[bin]]
+name = "uniffi-bindgen"
+path = "src/bin/uniffi-bindgen.rs"
+
+[dependencies]
+uniffi = { version = "0.32.2", features = ["cli"] }
+
+[profile.release]
+lto = true
+strip = true
