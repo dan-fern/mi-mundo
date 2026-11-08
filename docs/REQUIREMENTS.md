@@ -1,6 +1,6 @@
 # Mi Mundo — Requirements
 
-_Status: draft v0.1 · 2026-11-08_
+_Status: draft v0.2 · 2026-11-08_
 
 A gamified geography app for a family: kids explore and get quizzed on a
 world map, parents choose what to practise, set rewards and track progress.
@@ -22,6 +22,9 @@ Age-agnostic — fun for a young child, still useful for an adult.
 
 - **Parent** accounts (PIN-protected) and **child** accounts (one per kid).
 - Local profiles on the device to start; cross-device sync (CloudKit) later.
+- On launch the app asks **who's playing**. Picking a child goes straight to
+  the explore worldview and logs attendance for that child (§3.7); picking a
+  parent asks for the PIN and does not log attendance.
 - Children never compete with each other (no head-to-head rankings for now).
 
 ## 3. Child mode
@@ -67,7 +70,13 @@ Grading:
 | 3rd | ¼ |
 | 4th+ | 0 (still recorded in stats) |
 
-Flag multiple choice halves the points for that attempt.
+- An **attempt is one quiz sitting**. Every question is scored again on each
+  retake, including ones already answered correctly. The extra points from
+  retakes are intended; the parent prices rewards to offset them.
+- Flag multiple choice halves the points for that attempt, on top of the
+  attempt factor (e.g. 2nd attempt + multiple choice = ¼).
+- Fractions round down, but a correct answer on attempts 1–3 always earns
+  **at least 1 point** (unless the parent set the question to 0).
 
 ### 3.5 Rewards shop
 - Spend points on parent-defined rewards (often real-world, e.g. ice cream).
@@ -83,7 +92,11 @@ Shows the child's own:
 
 ### 3.7 Attendance gauge
 - Shown next to the child's name.
-- Counts days the app was **opened** in the last 7 days, capped at 5.
+- Counts days the child **picked their profile** in the last 7 days, capped
+  at 5. Parent sessions never count.
+- A day starts at **10 pm US Eastern time** (America/New_York, so it follows
+  daylight saving), wherever the iPad is. The day streak uses the same
+  definition.
 - The gauge fills up and gets "hotter" in colour as it approaches 5.
 
 ## 4. Data & content
@@ -115,7 +128,11 @@ stats here than in child mode:
 
 ### 5.3 Drawing review
 - Browse every flag drawing with the app's verdict.
-- Override any verdict and award any lost points.
+- Override any verdict and award any lost points. An overturned answer earns
+  what that question was worth on that attempt, so each answer stores its
+  scoring inputs (base points, attempt, multiple choice) when it's made.
+- A reward balance may go negative (e.g. after an override is reversed);
+  most rewards are redeemed outside the app, so this is an accepted edge case.
 
 ## 6. Open questions
 

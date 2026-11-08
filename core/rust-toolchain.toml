@@ -1,0 +1,7 @@
+# Pins the Rust version and installs the iPad targets automatically, so every
+# machine (and CI) builds with the same toolchain.
+[toolchain]
+channel = "1.99.1"
+components = ["clippy", "rustfmt"]
+targets = ["aarch64-apple-ios", "aarch64-apple-ios-sim"]
+profile = "minimal"

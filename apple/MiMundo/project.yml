@@ -1,0 +1,50 @@
+# XcodeGen spec. MiMundo.xcodeproj is generated from this file
+# (scripts/build-core.sh runs `xcodegen generate`); edit this, not the project.
+name: MiMundo
+options:
+  bundleIdPrefix: com.danfern
+  deploymentTarget:
+    iOS: "18.0"
+  createIntermediateGroups: true
+
+# Signing team lives in Config/Local.xcconfig (gitignored), included from
+# Config/Base.xcconfig, so regenerating the project never loses it.
+configFiles:
+  Debug: Config/Base.xcconfig
+  Release: Config/Base.xcconfig
+
+packages:
+  MiMundoCore:
+    path: ../MiMundoCore
+
+targets:
+  MiMundo:
+    type: application
+    platform: iOS
+    sources:
+      - path: Sources
+    dependencies:
+      - package: MiMundoCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.danfern.mimundo
+        PRODUCT_NAME: MiMundo
+        MARKETING_VERSION: 0.1.0
+        CURRENT_PROJECT_VERSION: 1
+        SWIFT_VERSION: "6.0"
+        TARGETED_DEVICE_FAMILY: "2" # iPad only
+        # The Rust core is only built for Apple Silicon simulators.
+        "EXCLUDED_ARCHS[sdk=iphonesimulator*]": x86_64
+        CODE_SIGN_STYLE: Automatic
+        # Generated Info.plist, merged with Info.plist below. The scene
+        # manifest lives there so we can turn multi-window off: one window
+        # means one copy of the child's quiz and streak state.
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_FILE: Info.plist
+        INFOPLIST_KEY_CFBundleDisplayName: Mi Mundo
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: >-
+          UIInterfaceOrientationPortrait
+          UIInterfaceOrientationPortraitUpsideDown
+          UIInterfaceOrientationLandscapeLeft
+          UIInterfaceOrientationLandscapeRight

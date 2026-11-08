@@ -1,0 +1,5 @@
+// Shared build settings for all configurations.
+//
+// Per-developer settings (your Apple signing team) go in Local.xcconfig,
+// which is gitignored. Copy Local.xcconfig.example to get started.
+#include? "Local.xcconfig"
