@@ -7,6 +7,20 @@ struct CountryCard: View {
     let onClose: () -> Void
 
     var body: some View {
+        // Scrolls rather than clipping at the largest text sizes; text is
+        // capped at accessibility-2 so the card can't outgrow the iPad mini.
+        ScrollView {
+            content
+        }
+        .scrollBounceBehavior(.basedOnSize)
+        .fixedSize(horizontal: false, vertical: true)
+        .frame(maxWidth: 380)
+        .background(.regularMaterial, in: .rect(cornerRadius: 28))
+        .shadow(color: .black.opacity(0.2), radius: 16, y: 6)
+        .dynamicTypeSize(...DynamicTypeSize.accessibility2)
+    }
+
+    private var content: some View {
         VStack(alignment: .leading, spacing: 20) {
             HStack(alignment: .top) {
                 if let flag = country.flagAsset {
@@ -23,7 +37,7 @@ struct CountryCard: View {
                     Image(systemName: "xmark.circle.fill")
                         .font(.largeTitle)
                         .symbolRenderingMode(.hierarchical)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color(uiColor: .secondaryLabel))
                         .frame(minWidth: 44, minHeight: 44)
                 }
                 .buttonStyle(.plain)
@@ -56,9 +70,7 @@ struct CountryCard: View {
             }
         }
         .padding(24)
-        .frame(maxWidth: 380, alignment: .leading)
-        .background(.regularMaterial, in: .rect(cornerRadius: 28))
-        .shadow(color: .black.opacity(0.2), radius: 16, y: 6)
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     /// "About 68 million" — kids don't need every digit.
@@ -90,7 +102,7 @@ private struct FactRow: View {
                 .frame(width: 36)
                 .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 2) {
-                Text(label).font(.headline).foregroundStyle(.secondary)
+                Text(label).font(.headline).foregroundStyle(Color(uiColor: .secondaryLabel))
                 Text(value).font(.title2.weight(.semibold))
                     .fixedSize(horizontal: false, vertical: true)
             }

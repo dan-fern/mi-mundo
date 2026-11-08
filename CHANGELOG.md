@@ -22,6 +22,16 @@ Versions: [Semantic Versioning](https://semver.org/).
 - Each kid's map position is remembered while the app runs, and "Switch
   player" asks first, so a stray tap doesn't lose a kid's place (PR #4
   review).
+- From the PR #8 review: zoom-in / zoom-out / whole-world buttons; select
+  on the first tap (no double-tap delay); the card opens on the side away
+  from the country; a high-contrast highlight with a ring for tiny islands;
+  smooth animated zooms; the world can't be dragged off screen; the map
+  fits below the real height of the top bar; a Credits screen in parent
+  mode (flag-icons MIT notice, "Made with Natural Earth").
+- Country facts: a committed, dated Wikidata snapshot; best-rank
+  populations; ~110 hand fixes (capitals, language order, stale
+  populations) applied offline; download checksums; CI checks the
+  committed map data matches the tools.
 - Pastel globe-in-a-graduation-cap app icon, drawn as an SVG in
   `apple/MiMundo/Design/` (original artwork, so no licensing questions).
 - GitHub Actions CI on every PR and push to `main` (fmt, clippy, Rust tests,

@@ -86,6 +86,17 @@ mod tests {
     }
 
     #[test]
+    fn mid_latitude_reference_points() {
+        // Reference values from the published formula (d3-geo equalEarthRaw),
+        // y negated for screen orientation. These exercise A2–A4, which the
+        // equator/pole checks don't.
+        let (x, y) = equal_earth(180.0, 60.0);
+        assert!(close(x, 2.039_060) && close(y, -1.088_301), "{x}, {y}");
+        let (x, y) = equal_earth(90.0, 30.0);
+        assert!(close(x, 1.265_851) && close(y, -0.592_935), "{x}, {y}");
+    }
+
+    #[test]
     fn north_is_up_and_east_is_right() {
         let (_, y_north) = equal_earth(0.0, 45.0);
         let (_, y_south) = equal_earth(0.0, -45.0);

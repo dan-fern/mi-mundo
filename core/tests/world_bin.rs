@@ -35,16 +35,20 @@ fn has_every_country_with_both_detail_levels() {
 fn capitals_land_in_their_countries() {
     let w = world();
     let cases = [
-        (2.35, 48.86, "FRA"),    // Paris
-        (-77.04, 38.91, "USA"),  // Washington, D.C.
-        (139.69, 35.69, "JPN"),  // Tokyo
-        (-58.38, -34.60, "ARG"), // Buenos Aires
-        (28.04, -26.20, "ZAF"),  // Johannesburg
-        (27.48, -29.31, "LSO"),  // Maseru: Lesotho is a hole in South Africa
-        (149.13, -35.28, "AUS"), // Canberra
-        (37.62, 55.75, "RUS"),   // Moscow
-        (77.21, 28.61, "IND"),   // New Delhi
-        (-47.88, -15.79, "BRA"), // Brasília
+        (2.35, 48.86, "FRA"),      // Paris
+        (-77.04, 38.91, "USA"),    // Washington, D.C.
+        (139.69, 35.69, "JPN"),    // Tokyo
+        (-58.38, -34.60, "ARG"),   // Buenos Aires
+        (28.04, -26.20, "ZAF"),    // Johannesburg
+        (27.48, -29.31, "LSO"),    // Maseru: Lesotho is a hole in South Africa
+        (149.13, -35.28, "AUS"),   // Canberra
+        (37.62, 55.75, "RUS"),     // Moscow
+        (77.21, 28.61, "IND"),     // New Delhi
+        (-47.88, -15.79, "BRA"),   // Brasília
+        (-175.0, 66.0, "RUS"),     // Chukotka, west of the ±180° seam
+        (179.0, 68.0, "RUS"),      // Chukotka, east of the seam
+        (178.0, -17.8, "FJI"),     // Fiji straddles the seam
+        (12.4578, 43.9424, "SMR"), // San Marino, an enclave in Italy
     ];
     for (lon, lat, expected) in cases {
         assert_eq!(

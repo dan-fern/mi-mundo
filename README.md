@@ -54,14 +54,17 @@ The bundled map data is committed, so normal builds don't need this. To
 refresh it (needs Inkscape: `brew install --cask inkscape`):
 
 ```bash
-./tools/fetch-data.sh                 # Natural Earth + flag-icons -> data/raw/
-python3 -I tools/fetch-facts.py "$PWD" # Wikidata facts -> data/raw/
-./tools/build-data.sh                 # -> apple/MiMundo/Resources/
+./tools/fetch-data.sh   # Natural Earth + flag-icons -> data/raw/ (checksums in tools/data.sha256)
+./tools/build-data.sh   # -> apple/MiMundo/Resources/, then runs core/tests/world_bin.rs
 ```
 
-`core/tests/world_bin.rs` checks the result against known places (capitals,
-open ocean, Lesotho inside South Africa, tiny islands). Hand fixes to
-Wikidata go in `tools/facts-overrides.json`.
+Country facts come from a committed Wikidata snapshot,
+`tools/wikidata-facts.json` (refresh with `python3 -I tools/fetch-facts.py "$PWD"`
+and review the diff). Hand fixes go in `tools/facts-overrides.json` and apply
+offline. CI rebuilds `World.bin` and `Countries.json` from the pinned sources
+and fails if the committed files differ. `core/tests/world_bin.rs` checks the
+map against known places (capitals, open ocean, the ±180° seam, enclaves,
+tiny islands).
 
 ## License
 

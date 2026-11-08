@@ -16,7 +16,7 @@
   "languages": [
    "Arabic"
   ],
-  "population": 10100000,
+  "population": 9890400,
   "wikidata": "Q878"
  },
  "AF": {
@@ -32,11 +32,10 @@
  },
  "AG": {
   "capitals": [
-   "Q36262"
+   "St. John's"
   ],
   "languages": [
-   "English",
-   "Spanish"
+   "English"
   ],
   "population": 101489,
   "wikidata": "Q781"
@@ -58,7 +57,7 @@
   "languages": [
    "Albanian"
   ],
-  "population": 2811655,
+  "population": 2400000,
   "wikidata": "Q222"
  },
  "AM": {
@@ -68,7 +67,7 @@
   "languages": [
    "Armenian"
   ],
-  "population": 2930450,
+  "population": 3000000,
   "wikidata": "Q399"
  },
  "AO": {
@@ -84,7 +83,7 @@
  "AQ": {
   "capitals": [],
   "languages": [],
-  "population": 1100,
+  "population": 4400,
   "wikidata": "Q10372207"
  },
  "AR": {
@@ -102,8 +101,8 @@
    "Pago Pago"
   ],
   "languages": [
-   "English",
-   "Samoan"
+   "Samoan",
+   "English"
   ],
   "population": 49710,
   "wikidata": "Q16641"
@@ -133,8 +132,8 @@
    "Oranjestad"
   ],
   "languages": [
-   "Dutch",
-   "Papiamento"
+   "Papiamento",
+   "Dutch"
   ],
   "population": 106739,
   "wikidata": "Q21203"
@@ -164,9 +163,9 @@
    "Sarajevo"
   ],
   "languages": [
+   "Bosnian",
    "Serbian",
-   "Croatian",
-   "Bosnian"
+   "Croatian"
   ],
   "population": 3816459,
   "wikidata": "Q225"
@@ -187,9 +186,9 @@
    "Dhaka"
   ],
   "languages": [
-   "Bangla"
+   "Bengali"
   ],
-  "population": 175686899,
+  "population": 171466990,
   "wikidata": "Q902"
  },
  "BE": {
@@ -197,9 +196,9 @@
    "Brussels"
   ],
   "languages": [
+   "Dutch",
    "French",
-   "German",
-   "Dutch"
+   "German"
   ],
   "population": 11825551,
   "wikidata": "Q31"
@@ -233,7 +232,7 @@
   "languages": [
    "Arabic"
   ],
-  "population": 1600000,
+  "population": 1569666,
   "wikidata": "Q398"
  },
  "BI": {
@@ -241,9 +240,9 @@
    "Gitega"
   ],
   "languages": [
-   "English",
+   "Kirundi",
    "French",
-   "Kirundi"
+   "English"
   ],
   "population": 13689450,
   "wikidata": "Q967"
@@ -284,7 +283,7 @@
   ],
   "languages": [
    "Malay",
-   "British English"
+   "English"
   ],
   "population": 458949,
   "wikidata": "Q921"
@@ -329,7 +328,7 @@
   "languages": [
    "Dzongkha"
   ],
-  "population": 796682,
+  "population": 787424,
   "wikidata": "Q917"
  },
  "BW": {
@@ -371,7 +370,7 @@
    "English",
    "French"
   ],
-  "population": 41798407,
+  "population": 36991981,
   "wikidata": "Q16"
  },
  "CD": {
@@ -389,8 +388,8 @@
    "Bangui"
   ],
   "languages": [
-   "French",
-   "Sango"
+   "Sango",
+   "French"
   ],
   "population": 5152421,
   "wikidata": "Q929"
@@ -402,7 +401,7 @@
   "languages": [
    "French"
   ],
-  "population": 6278845,
+  "population": 6142180,
   "wikidata": "Q971"
  },
  "CH": {
@@ -410,8 +409,8 @@
    "Bern"
   ],
   "languages": [
-   "French",
    "German",
+   "French",
    "Italian"
   ],
   "population": 9104063,
@@ -453,8 +452,8 @@
    "Yaoundé"
   ],
   "languages": [
-   "English",
-   "French"
+   "French",
+   "English"
   ],
   "population": 28372687,
   "wikidata": "Q1009"
@@ -464,9 +463,9 @@
    "Beijing"
   ],
   "languages": [
-   "Putonghua"
+   "Mandarin Chinese"
   ],
-  "population": 1404890000,
+  "population": 1408000000,
   "wikidata": "Q148"
  },
  "CO": {
@@ -515,11 +514,11 @@
    "Willemstad"
   ],
   "languages": [
-   "English",
+   "Papiamento",
    "Dutch",
-   "Papiamento"
+   "English"
   ],
-  "population": 148925,
+  "population": 152849,
   "wikidata": "Q25279"
  },
  "CY": {
@@ -527,12 +526,11 @@
    "Nicosia"
   ],
   "languages": [
-   "Turkish",
-   "Modern Greek",
-   "Greek"
+   "Greek",
+   "Turkish"
   ],
   "population": 1344976,
-  "wikidata": "Q229"
+  "wikidata": "Q644636"
  },
  "CZ": {
   "capitals": [
@@ -559,10 +557,11 @@
    "Djibouti"
   ],
   "languages": [
-   "Arabic",
-   "French"
+   "Somali",
+   "French",
+   "Arabic"
   ],
-  "population": 1000000,
+  "population": 1152944,
   "wikidata": "Q977"
  },
  "DK": {
@@ -601,9 +600,9 @@
   ],
   "languages": [
    "Arabic",
-   "Standard Algerian Berber"
+   "Tamazight"
   ],
-  "population": 45600000,
+  "population": 46164219,
   "wikidata": "Q262"
  },
  "EC": {
@@ -612,7 +611,7 @@
   ],
   "languages": [
    "Spanish",
-   "Northern Quichua",
+   "Kichwa",
    "Shuar"
   ],
   "population": 16938986,
@@ -635,7 +634,7 @@
   "languages": [
    "Arabic"
   ],
-  "population": 114500000,
+  "population": 114535772,
   "wikidata": "Q79"
  },
  "EH": {
@@ -651,11 +650,11 @@
    "Asmara"
   ],
   "languages": [
-   "English",
+   "Tigrinya",
    "Arabic",
-   "Tigrinya"
+   "English"
   ],
-  "population": 3497000,
+  "population": 3500000,
   "wikidata": "Q986"
  },
  "ES": {
@@ -683,8 +682,8 @@
    "Helsinki"
   ],
   "languages": [
-   "Swedish",
-   "Finnish"
+   "Finnish",
+   "Swedish"
   ],
   "population": 5652881,
   "wikidata": "Q33"
@@ -698,7 +697,7 @@
    "Fiji Hindi",
    "Fijian"
   ],
-  "population": 926276,
+  "population": 930000,
   "wikidata": "Q712"
  },
  "FK": {
@@ -706,7 +705,7 @@
    "Stanley"
   ],
   "languages": [
-   "British English"
+   "English"
   ],
   "population": 3662,
   "wikidata": "Q9648"
@@ -718,7 +717,7 @@
   "languages": [
    "English"
   ],
-  "population": 75817,
+  "population": 105000,
   "wikidata": "Q702"
  },
  "FO": {
@@ -749,7 +748,7 @@
   "languages": [
    "French"
   ],
-  "population": 2300000,
+  "population": 2500000,
   "wikidata": "Q1000"
  },
  "GB": {
@@ -767,8 +766,7 @@
    "St. George's"
   ],
   "languages": [
-   "English",
-   "Grenadian Creole English"
+   "English"
   ],
   "population": 114299,
   "wikidata": "Q769"
@@ -811,7 +809,7 @@
   "languages": [
    "Greenlandic"
   ],
-  "population": 56542,
+  "population": 56609,
   "wikidata": "Q223"
  },
  "GM": {
@@ -829,8 +827,7 @@
    "Conakry"
   ],
   "languages": [
-   "French",
-   "languages of Guinea"
+   "French"
   ],
   "population": 17521167,
   "wikidata": "Q1006"
@@ -854,7 +851,7 @@
   "languages": [
    "Greek"
   ],
-  "population": 10566531,
+  "population": 10482487,
   "wikidata": "Q41"
  },
  "GS": {
@@ -874,7 +871,7 @@
   "languages": [
    "Spanish"
   ],
-  "population": 17263239,
+  "population": 18400000,
   "wikidata": "Q774"
  },
  "GU": {
@@ -895,7 +892,7 @@
   "languages": [
    "Portuguese"
   ],
-  "population": 1861283,
+  "population": 2200000,
   "wikidata": "Q1007"
  },
  "GY": {
@@ -911,7 +908,8 @@
  "HK": {
   "capitals": [],
   "languages": [
-   "Standard Chinese"
+   "Cantonese",
+   "English"
   ],
   "population": 7413070,
   "wikidata": "Q8646"
@@ -921,7 +919,7 @@
   "languages": [
    "English"
   ],
-  "population": 2,
+  "population": null,
   "wikidata": "Q131198"
  },
  "HN": {
@@ -931,7 +929,7 @@
   "languages": [
    "Spanish"
   ],
-  "population": 11002356,
+  "population": 10800000,
   "wikidata": "Q783"
  },
  "HR": {
@@ -949,10 +947,10 @@
    "Port-au-Prince"
   ],
   "languages": [
-   "French",
-   "Haitian Creole"
+   "Haitian Creole",
+   "French"
   ],
-  "population": 10981229,
+  "population": 11800000,
   "wikidata": "Q790"
  },
  "HU": {
@@ -962,7 +960,7 @@
   "languages": [
    "Hungarian"
   ],
-  "population": 9489000,
+  "population": 9603634,
   "wikidata": "Q28"
  },
  "ID": {
@@ -1012,10 +1010,10 @@
    "New Delhi"
   ],
   "languages": [
-   "English",
-   "Hindi"
+   "Hindi",
+   "English"
   ],
-  "population": 1326093247,
+  "population": 1460000000,
   "wikidata": "Q668"
  },
  "IO": {
@@ -1034,9 +1032,9 @@
   ],
   "languages": [
    "Arabic",
-   "Kurdish language"
+   "Kurdish"
   ],
-  "population": 43500000,
+  "population": 46000000,
   "wikidata": "Q796"
  },
  "IR": {
@@ -1056,7 +1054,7 @@
   "languages": [
    "Icelandic"
   ],
-  "population": 376248,
+  "population": 390000,
   "wikidata": "Q189"
  },
  "IT": {
@@ -1075,8 +1073,7 @@
   ],
   "languages": [
    "English",
-   "Jèrriais",
-   "Jersey Legal French"
+   "French"
   ],
   "population": 103267,
   "wikidata": "Q785"
@@ -1089,7 +1086,7 @@
    "English",
    "Jamaican Patois"
   ],
-  "population": 2734093,
+  "population": 2800000,
   "wikidata": "Q766"
  },
  "JO": {
@@ -1099,7 +1096,7 @@
   "languages": [
    "Arabic"
   ],
-  "population": 11300000,
+  "population": 11600000,
   "wikidata": "Q810"
  },
  "JP": {
@@ -1117,10 +1114,10 @@
    "Nairobi"
   ],
   "languages": [
-   "English",
-   "Swahili"
+   "Swahili",
+   "English"
   ],
-  "population": 47564296,
+  "population": 53000000,
   "wikidata": "Q114"
  },
  "KG": {
@@ -1148,8 +1145,8 @@
    "South Tarawa"
   ],
   "languages": [
-   "English",
-   "Gilbertese"
+   "Gilbertese",
+   "English"
   ],
   "population": 134518,
   "wikidata": "Q710"
@@ -1159,11 +1156,11 @@
    "Moroni"
   ],
   "languages": [
-   "Arabic",
+   "Comorian",
    "French",
-   "Comorian"
+   "Arabic"
   ],
-  "population": 900000,
+  "population": 902348,
   "wikidata": "Q970"
  },
  "KN": {
@@ -1181,8 +1178,7 @@
    "Pyongyang"
   ],
   "languages": [
-   "Korean",
-   "North Korean standard language"
+   "Korean"
   ],
   "population": 26418204,
   "wikidata": "Q423"
@@ -1194,7 +1190,7 @@
   "languages": [
    "Korean"
   ],
-  "population": 51628117,
+  "population": 51700000,
   "wikidata": "Q884"
  },
  "KW": {
@@ -1204,7 +1200,7 @@
   "languages": [
    "Arabic"
   ],
-  "population": 4300000,
+  "population": 4464000,
   "wikidata": "Q817"
  },
  "KY": {
@@ -1222,8 +1218,8 @@
    "Astana"
   ],
   "languages": [
-   "Russian",
-   "Kazakh"
+   "Kazakh",
+   "Russian"
   ],
   "population": 20139914,
   "wikidata": "Q232"
@@ -1235,7 +1231,7 @@
   "languages": [
    "Lao"
   ],
-  "population": 6858160,
+  "population": 7700000,
   "wikidata": "Q819"
  },
  "LB": {
@@ -1245,7 +1241,7 @@
   "languages": [
    "Arabic"
   ],
-  "population": 5300000,
+  "population": 5800000,
   "wikidata": "Q822"
  },
  "LC": {
@@ -1265,19 +1261,19 @@
   "languages": [
    "German"
   ],
-  "population": 38020,
+  "population": 40000,
   "wikidata": "Q347"
  },
  "LK": {
   "capitals": [
-   "Colombo",
-   "Sri Jayawardenepura Kotte"
+   "Sri Jayawardenepura Kotte",
+   "Colombo"
   ],
   "languages": [
-   "Tamil",
-   "Sinhala"
+   "Sinhala",
+   "Tamil"
   ],
-  "population": 22037000,
+  "population": 21900000,
   "wikidata": "Q854"
  },
  "LR": {
@@ -1295,10 +1291,10 @@
    "Maseru"
   ],
   "languages": [
-   "English",
-   "Sesotho"
+   "Sesotho",
+   "English"
   ],
-  "population": 2233339,
+  "population": 2300000,
   "wikidata": "Q1013"
  },
  "LT": {
@@ -1316,9 +1312,9 @@
    "Luxembourg"
   ],
   "languages": [
+   "Luxembourgish",
    "French",
-   "German",
-   "Luxembourgish"
+   "German"
   ],
   "population": 690959,
   "wikidata": "Q32"
@@ -1340,7 +1336,7 @@
   "languages": [
    "Arabic"
   ],
-  "population": 7100000,
+  "population": 7381023,
   "wikidata": "Q1016"
  },
  "MA": {
@@ -1349,9 +1345,9 @@
   ],
   "languages": [
    "Arabic",
-   "Standard Moroccan Tamazight"
+   "Tamazight"
   ],
-  "population": 38300000,
+  "population": 36828330,
   "wikidata": "Q1028"
  },
  "MC": {
@@ -1399,8 +1395,8 @@
    "Antananarivo"
   ],
   "languages": [
-   "French",
-   "Malagasy"
+   "Malagasy",
+   "French"
   ],
   "population": 31964956,
   "wikidata": "Q1019"
@@ -1410,10 +1406,10 @@
    "Majuro"
   ],
   "languages": [
-   "English",
-   "Marshallese"
+   "Marshallese",
+   "English"
   ],
-  "population": 54366,
+  "population": 42000,
   "wikidata": "Q709"
  },
  "MK": {
@@ -1421,8 +1417,8 @@
    "Skopje"
   ],
   "languages": [
-   "Albanian",
-   "Macedonian"
+   "Macedonian",
+   "Albanian"
   ],
   "population": 1836713,
   "wikidata": "Q221"
@@ -1432,9 +1428,9 @@
    "Bamako"
   ],
   "languages": [
-   "Fula",
    "Bambara",
-   "Hassaniya Arabic"
+   "Fula",
+   "French"
   ],
   "population": 22395489,
   "wikidata": "Q912"
@@ -1446,7 +1442,7 @@
   "languages": [
    "Burmese"
   ],
-  "population": 53370609,
+  "population": 54500000,
   "wikidata": "Q836"
  },
  "MN": {
@@ -1462,9 +1458,8 @@
  "MO": {
   "capitals": [],
   "languages": [
-   "Standard Chinese",
-   "Portuguese",
-   "Cantonese"
+   "Cantonese",
+   "Portuguese"
   ],
   "population": 682100,
   "wikidata": "Q14773"
@@ -1478,7 +1473,7 @@
    "Chamorro",
    "Carolinian"
   ],
-  "population": 51475,
+  "population": 47329,
   "wikidata": "Q16644"
  },
  "MR": {
@@ -1489,12 +1484,11 @@
    "Arabic",
    "French"
   ],
-  "population": 4900000,
+  "population": 4736139,
   "wikidata": "Q1025"
  },
  "MS": {
   "capitals": [
-   "Plymouth",
    "Brades"
   ],
   "languages": [
@@ -1508,8 +1502,8 @@
    "Valletta"
   ],
   "languages": [
-   "English",
-   "Maltese"
+   "Maltese",
+   "English"
   ],
   "population": 553214,
   "wikidata": "Q233"
@@ -1519,10 +1513,11 @@
    "Port Louis"
   ],
   "languages": [
+   "Mauritian Creole",
    "English",
    "French"
   ],
-  "population": 1264613,
+  "population": 1270000,
   "wikidata": "Q1027"
  },
  "MV": {
@@ -1530,9 +1525,9 @@
    "Malé"
   ],
   "languages": [
-   "Maldivian"
+   "Dhivehi"
   ],
-  "population": 436330,
+  "population": 530000,
   "wikidata": "Q826"
  },
  "MW": {
@@ -1540,11 +1535,11 @@
    "Lilongwe"
   ],
   "languages": [
+   "Chichewa",
    "English",
-   "Chewa",
    "Tumbuka"
   ],
-  "population": 17563749,
+  "population": 21500000,
   "wikidata": "Q1020"
  },
  "MX": {
@@ -1576,7 +1571,7 @@
   "languages": [
    "Portuguese"
   ],
-  "population": 29668834,
+  "population": 34000000,
   "wikidata": "Q1029"
  },
  "NA": {
@@ -1586,7 +1581,7 @@
   "languages": [
    "English"
   ],
-  "population": 2533794,
+  "population": 3000000,
   "wikidata": "Q1030"
  },
  "NC": {
@@ -1604,9 +1599,11 @@
    "Niamey"
   ],
   "languages": [
-   "Hausa"
+   "Hausa",
+   "Zarma",
+   "French"
   ],
-  "population": 21477348,
+  "population": 27000000,
   "wikidata": "Q1032"
  },
  "NF": {
@@ -1637,7 +1634,7 @@
   "languages": [
    "Spanish"
   ],
-  "population": 7005764,
+  "population": 7000000,
   "wikidata": "Q811"
  },
  "NL": {
@@ -1647,7 +1644,7 @@
   "languages": [
    "Dutch"
   ],
-  "population": 17100715,
+  "population": 17900000,
   "wikidata": "Q29999"
  },
  "NO": {
@@ -1672,13 +1669,13 @@
  },
  "NR": {
   "capitals": [
-   "Yaren District"
+   "Yaren"
   ],
   "languages": [
-   "English",
-   "Nauruan"
+   "Nauruan",
+   "English"
   ],
-  "population": 13650,
+  "population": 12000,
   "wikidata": "Q697"
  },
  "NU": {
@@ -1710,7 +1707,7 @@
   "languages": [
    "Arabic"
   ],
-  "population": 5100000,
+  "population": 5300000,
   "wikidata": "Q842"
  },
  "PA": {
@@ -1720,7 +1717,7 @@
   "languages": [
    "Spanish"
   ],
-  "population": 4565559,
+  "population": 4570133,
   "wikidata": "Q804"
  },
  "PE": {
@@ -1750,8 +1747,8 @@
    "Port Moresby"
   ],
   "languages": [
-   "English",
    "Tok Pisin",
+   "English",
    "Hiri Motu"
   ],
   "population": 8935000,
@@ -1762,9 +1759,8 @@
    "Manila"
   ],
   "languages": [
-   "English",
    "Filipino",
-   "Taglish"
+   "English"
   ],
   "population": 112729484,
   "wikidata": "Q928"
@@ -1774,10 +1770,10 @@
    "Islamabad"
   ],
   "languages": [
-   "English",
-   "Urdu"
+   "Urdu",
+   "English"
   ],
-  "population": 223773700,
+  "population": 241500000,
   "wikidata": "Q843"
  },
  "PL": {
@@ -1808,7 +1804,7 @@
    "English",
    "Pitkern"
   ],
-  "population": 47,
+  "population": 50,
   "wikidata": "Q35672"
  },
  "PR": {
@@ -1824,13 +1820,13 @@
  },
  "PS": {
   "capitals": [
-   "Ramallah",
-   "East Jerusalem"
+   "East Jerusalem",
+   "Ramallah"
   ],
   "languages": [
    "Arabic"
   ],
-  "population": 5400000,
+  "population": 5227193,
   "wikidata": "Q219060"
  },
  "PT": {
@@ -1848,11 +1844,10 @@
    "Ngerulmud"
   ],
   "languages": [
-   "English",
-   "Japanese",
-   "Palauan"
+   "Palauan",
+   "English"
   ],
-  "population": 21729,
+  "population": 17600,
   "wikidata": "Q695"
  },
  "PY": {
@@ -1863,7 +1858,7 @@
    "Spanish",
    "Guarani"
   ],
-  "population": 6811297,
+  "population": 6900000,
   "wikidata": "Q733"
  },
  "QA": {
@@ -1873,7 +1868,7 @@
   "languages": [
    "Arabic"
   ],
-  "population": 2639211,
+  "population": 3000000,
   "wikidata": "Q846"
  },
  "RO": {
@@ -1911,9 +1906,9 @@
    "Kigali"
   ],
   "languages": [
+   "Kinyarwanda",
    "English",
-   "French",
-   "Swahili"
+   "French"
   ],
   "population": 14569341,
   "wikidata": "Q1037"
@@ -1925,7 +1920,7 @@
   "languages": [
    "Arabic"
   ],
-  "population": 33000000,
+  "population": 35300000,
   "wikidata": "Q851"
  },
  "SB": {
@@ -1935,7 +1930,7 @@
   "languages": [
    "English"
   ],
-  "population": 611343,
+  "population": 760000,
   "wikidata": "Q685"
  },
  "SC": {
@@ -1943,9 +1938,9 @@
    "Victoria"
   ],
   "languages": [
+   "Seychellois Creole",
    "English",
-   "French",
-   "Seychellois Creole"
+   "French"
   ],
   "population": 119773,
   "wikidata": "Q1042"
@@ -1955,10 +1950,10 @@
    "Khartoum"
   ],
   "languages": [
-   "English",
-   "Arabic"
+   "Arabic",
+   "English"
   ],
-  "population": 48945000,
+  "population": 50400000,
   "wikidata": "Q1049"
  },
  "SE": {
@@ -1976,8 +1971,8 @@
    "Singapore"
   ],
   "languages": [
-   "Standard Chinese",
    "English",
+   "Mandarin Chinese",
    "Malay"
   ],
   "population": 5866139,
@@ -2000,7 +1995,7 @@
   "languages": [
    "Slovene"
   ],
-  "population": 2116972,
+  "population": 2100000,
   "wikidata": "Q215"
  },
  "SK": {
@@ -2021,7 +2016,7 @@
    "English",
    "Krio"
   ],
-  "population": 7557212,
+  "population": 8600000,
   "wikidata": "Q1044"
  },
  "SM": {
@@ -2039,11 +2034,10 @@
    "Dakar"
   ],
   "languages": [
-   "French",
    "Wolof",
-   "Badyara"
+   "French"
   ],
-  "population": 18100000,
+  "population": 16876720,
   "wikidata": "Q1041"
  },
  "SO": {
@@ -2051,10 +2045,10 @@
    "Mogadishu"
   ],
   "languages": [
-   "Arabic",
-   "Somali"
+   "Somali",
+   "Arabic"
   ],
-  "population": 18100000,
+  "population": 19000000,
   "wikidata": "Q1045"
  },
  "SR": {
@@ -2064,7 +2058,7 @@
   "languages": [
    "Dutch"
   ],
-  "population": 563402,
+  "population": 630000,
   "wikidata": "Q730"
  },
  "SS": {
@@ -2074,7 +2068,7 @@
   "languages": [
    "English"
   ],
-  "population": 12575714,
+  "population": 11900000,
   "wikidata": "Q958"
  },
  "ST": {
@@ -2084,7 +2078,7 @@
   "languages": [
    "Portuguese"
   ],
-  "population": 204327,
+  "population": 230000,
   "wikidata": "Q1039"
  },
  "SV": {
@@ -2115,17 +2109,17 @@
   "languages": [
    "Arabic"
   ],
-  "population": 23000000,
+  "population": 23865423,
   "wikidata": "Q858"
  },
  "SZ": {
   "capitals": [
-   "Mbabane",
-   "Lobamba"
+   "Lobamba",
+   "Mbabane"
   ],
   "languages": [
-   "English",
-   "Swazi"
+   "Swazi",
+   "English"
   ],
   "population": 1230506,
   "wikidata": "Q1050"
@@ -2158,7 +2152,7 @@
   "languages": [
    "French"
   ],
-  "population": 140,
+  "population": 196,
   "wikidata": "Q129003"
  },
  "TG": {
@@ -2168,7 +2162,7 @@
   "languages": [
    "French"
   ],
-  "population": 12400000,
+  "population": 9700000,
   "wikidata": "Q945"
  },
  "TH": {
@@ -2178,7 +2172,7 @@
   "languages": [
    "Thai"
   ],
-  "population": 66188503,
+  "population": 71700000,
   "wikidata": "Q869"
  },
  "TJ": {
@@ -2219,7 +2213,7 @@
   "languages": [
    "Arabic"
   ],
-  "population": 12400000,
+  "population": 12300000,
   "wikidata": "Q948"
  },
  "TO": {
@@ -2227,10 +2221,10 @@
    "Nukuʻalofa"
   ],
   "languages": [
-   "English",
-   "Tongan"
+   "Tongan",
+   "English"
   ],
-  "population": 105697,
+  "population": 104000,
   "wikidata": "Q678"
  },
  "TR": {
@@ -2250,7 +2244,7 @@
   "languages": [
    "English"
   ],
-  "population": 1369125,
+  "population": 1500000,
   "wikidata": "Q754"
  },
  "TV": {
@@ -2258,8 +2252,8 @@
    "Funafuti"
   ],
   "languages": [
-   "English",
-   "Tuvaluan"
+   "Tuvaluan",
+   "English"
   ],
   "population": 10643,
   "wikidata": "Q672"
@@ -2281,10 +2275,10 @@
    "Dodoma"
   ],
   "languages": [
-   "English",
-   "Swahili"
+   "Swahili",
+   "English"
   ],
-  "population": 61741120,
+  "population": 68500000,
   "wikidata": "Q924"
  },
  "UA": {
@@ -2294,7 +2288,7 @@
   "languages": [
    "Ukrainian"
   ],
-  "population": 41167335,
+  "population": 38000000,
   "wikidata": "Q212"
  },
  "UG": {
@@ -2387,7 +2381,7 @@
   "languages": [
    "English"
   ],
-  "population": 104917,
+  "population": 87000,
   "wikidata": "Q11703"
  },
  "VN": {
@@ -2397,7 +2391,7 @@
   "languages": [
    "Vietnamese"
   ],
-  "population": 96208984,
+  "population": 100900000,
   "wikidata": "Q881"
  },
  "VU": {
@@ -2405,9 +2399,9 @@
    "Port Vila"
   ],
   "languages": [
+   "Bislama",
    "English",
-   "French",
-   "Bislama"
+   "French"
   ],
   "population": 300019,
   "wikidata": "Q686"
@@ -2429,8 +2423,8 @@
    "Apia"
   ],
   "languages": [
-   "English",
-   "Samoan"
+   "Samoan",
+   "English"
   ],
   "population": 200010,
   "wikidata": "Q683"
@@ -2440,28 +2434,28 @@
    "Pristina"
   ],
   "languages": [
-   "Serbian",
-   "Albanian"
+   "Albanian",
+   "Serbian"
   ],
   "population": 1586659,
   "wikidata": "Q1246"
  },
  "YE": {
   "capitals": [
-   "Sanaa",
-   "Aden"
+   "Aden",
+   "Sanaa"
   ],
   "languages": [
    "Arabic"
   ],
-  "population": 34400000,
+  "population": 40600000,
   "wikidata": "Q805"
  },
  "ZA": {
   "capitals": [
-   "Pretoria",
+   "Bloemfontein",
    "Cape Town",
-   "Bloemfontein"
+   "Pretoria"
   ],
   "languages": [
    "Zulu",

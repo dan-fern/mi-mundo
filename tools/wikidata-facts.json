@@ -1,0 +1,3234 @@
+{
+ "_meta": {
+  "fetched": "2026-11-08",
+  "source": "Wikidata (CC0) via query.wikidata.org; see QUERY in tools/fetch-facts.py"
+ },
+ "countries": {
+  "AC": {
+   "capitals": [
+    "Georgetown"
+   ],
+   "languages": [
+    "English"
+   ],
+   "name": "Ascension",
+   "population": null,
+   "populationDate": null,
+   "wikidata": "Q31890709"
+  },
+  "AD": {
+   "capitals": [
+    "Andorra la Vella"
+   ],
+   "languages": [
+    "Catalan"
+   ],
+   "name": "Andorra",
+   "population": 89752,
+   "populationDate": "2026-06-30T00:00:00Z",
+   "wikidata": "Q228"
+  },
+  "AE": {
+   "capitals": [
+    "Abu Dhabi"
+   ],
+   "languages": [
+    "Arabic"
+   ],
+   "name": "United Arab Emirates",
+   "population": 9890400,
+   "populationDate": "2020-01-01T00:00:00Z",
+   "wikidata": "Q878"
+  },
+  "AF": {
+   "capitals": [
+    "Kabul"
+   ],
+   "languages": [
+    "Arabic",
+    "Pashto",
+    "Uzbek",
+    "Turkmen",
+    "Dari",
+    "Balochi",
+    "Pamir",
+    "Nuristani",
+    "Pashayi"
+   ],
+   "name": "Afghanistan",
+   "population": 41454761,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q889"
+  },
+  "AG": {
+   "capitals": [],
+   "languages": [
+    "English",
+    "Spanish"
+   ],
+   "name": "Antigua and Barbuda",
+   "population": 101489,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q781"
+  },
+  "AI": {
+   "capitals": [
+    "The Valley"
+   ],
+   "languages": [
+    "English"
+   ],
+   "name": "Anguilla",
+   "population": 19079,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q25228"
+  },
+  "AL": {
+   "capitals": [
+    "Tirana"
+   ],
+   "languages": [
+    "Albanian"
+   ],
+   "name": "Albania",
+   "population": 2811655,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q222"
+  },
+  "AM": {
+   "capitals": [
+    "Yerevan"
+   ],
+   "languages": [
+    "Armenian"
+   ],
+   "name": "Armenia",
+   "population": 2930450,
+   "populationDate": "2017-01-01T00:00:00Z",
+   "wikidata": "Q399"
+  },
+  "AO": {
+   "capitals": [
+    "Luanda"
+   ],
+   "languages": [
+    "Portuguese"
+   ],
+   "name": "Angola",
+   "population": 36749906,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q916"
+  },
+  "AQ": {
+   "capitals": [],
+   "languages": [],
+   "name": "Antarctic Treaty area",
+   "population": 4400,
+   "populationDate": "2009-01-01T00:00:00Z",
+   "wikidata": "Q10372207"
+  },
+  "AR": {
+   "capitals": [
+    "Buenos Aires"
+   ],
+   "languages": [
+    "Spanish"
+   ],
+   "name": "Argentina",
+   "population": 47327407,
+   "populationDate": "2022-01-01T00:00:00Z",
+   "wikidata": "Q414"
+  },
+  "AS": {
+   "capitals": [
+    "Pago Pago"
+   ],
+   "languages": [
+    "English",
+    "Samoan"
+   ],
+   "name": "American Samoa",
+   "population": 49710,
+   "populationDate": "2020-01-01T00:00:00Z",
+   "wikidata": "Q16641"
+  },
+  "AT": {
+   "capitals": [
+    "Vienna"
+   ],
+   "languages": [
+    "German"
+   ],
+   "name": "Austria",
+   "population": 8979894,
+   "populationDate": "2022-01-01T00:00:00Z",
+   "wikidata": "Q40"
+  },
+  "AU": {
+   "capitals": [
+    "Canberra"
+   ],
+   "languages": [
+    "English"
+   ],
+   "name": "Australia",
+   "population": 27614411,
+   "populationDate": "2025-06-30T00:00:00Z",
+   "wikidata": "Q408"
+  },
+  "AW": {
+   "capitals": [
+    "Oranjestad"
+   ],
+   "languages": [
+    "Dutch",
+    "Papiamento"
+   ],
+   "name": "Aruba",
+   "population": 106739,
+   "populationDate": "2022-01-01T00:00:00Z",
+   "wikidata": "Q21203"
+  },
+  "AX": {
+   "capitals": [
+    "Mariehamn"
+   ],
+   "languages": [
+    "Swedish"
+   ],
+   "name": "Åland",
+   "population": 30836,
+   "populationDate": "2025-12-31T00:00:00Z",
+   "wikidata": "Q5689"
+  },
+  "AZ": {
+   "capitals": [
+    "Baku"
+   ],
+   "languages": [
+    "Azerbaijani"
+   ],
+   "name": "Azerbaijan",
+   "population": 10180770,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q227"
+  },
+  "BA": {
+   "capitals": [
+    "Sarajevo"
+   ],
+   "languages": [
+    "Serbian",
+    "Croatian",
+    "Bosnian"
+   ],
+   "name": "Bosnia and Herzegovina",
+   "population": 3816459,
+   "populationDate": "2022-01-01T00:00:00Z",
+   "wikidata": "Q225"
+  },
+  "BB": {
+   "capitals": [
+    "Bridgetown"
+   ],
+   "languages": [
+    "English",
+    "Bajan Creole"
+   ],
+   "name": "Barbados",
+   "population": 303431,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q244"
+  },
+  "BD": {
+   "capitals": [
+    "Dhaka"
+   ],
+   "languages": [
+    "Bangla"
+   ],
+   "name": "Bangladesh",
+   "population": 171466990,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q902"
+  },
+  "BE": {
+   "capitals": [
+    "Brussels"
+   ],
+   "languages": [
+    "French",
+    "German",
+    "Dutch"
+   ],
+   "name": "Belgium",
+   "population": 11825551,
+   "populationDate": "2025-01-01T00:00:00Z",
+   "wikidata": "Q31"
+  },
+  "BF": {
+   "capitals": [
+    "Ouagadougou"
+   ],
+   "languages": [
+    "Mooré",
+    "Dioula",
+    "Bissa"
+   ],
+   "name": "Burkina Faso",
+   "population": 23025776,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q965"
+  },
+  "BG": {
+   "capitals": [
+    "Sofia"
+   ],
+   "languages": [
+    "Bulgarian"
+   ],
+   "name": "Bulgaria",
+   "population": 6423207,
+   "populationDate": "2025-12-31T00:00:00Z",
+   "wikidata": "Q219"
+  },
+  "BH": {
+   "capitals": [
+    "Manama"
+   ],
+   "languages": [
+    "Arabic"
+   ],
+   "name": "Bahrain",
+   "population": 1569666,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q398"
+  },
+  "BI": {
+   "capitals": [
+    "Gitega"
+   ],
+   "languages": [
+    "English",
+    "French",
+    "Kirundi"
+   ],
+   "name": "Burundi",
+   "population": 13689450,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q967"
+  },
+  "BJ": {
+   "capitals": [
+    "Porto-Novo"
+   ],
+   "languages": [
+    "French"
+   ],
+   "name": "Benin",
+   "population": 14111034,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q962"
+  },
+  "BL": {
+   "capitals": [
+    "Gustavia"
+   ],
+   "languages": [
+    "French"
+   ],
+   "name": "Saint Barthélemy",
+   "population": 10124,
+   "populationDate": "2018-01-01T00:00:00Z",
+   "wikidata": "Q25362"
+  },
+  "BM": {
+   "capitals": [
+    "Hamilton"
+   ],
+   "languages": [
+    "English"
+   ],
+   "name": "Bermuda",
+   "population": 63179,
+   "populationDate": "2024-01-01T00:00:00Z",
+   "wikidata": "Q23635"
+  },
+  "BN": {
+   "capitals": [
+    "Bandar Seri Begawan"
+   ],
+   "languages": [
+    "Malay",
+    "British English"
+   ],
+   "name": "Brunei",
+   "population": 458949,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q921"
+  },
+  "BO": {
+   "capitals": [
+    "La Paz",
+    "Sucre"
+   ],
+   "languages": [
+    "Spanish",
+    "Quechua",
+    "Guarani",
+    "Aymara"
+   ],
+   "name": "Bolivia",
+   "population": 12244159,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q750"
+  },
+  "BQ": {
+   "capitals": [],
+   "languages": [
+    "English",
+    "Dutch",
+    "Papiamento"
+   ],
+   "name": "Caribbean Netherlands",
+   "population": 29418,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q27561"
+  },
+  "BR": {
+   "capitals": [
+    "Brasília"
+   ],
+   "languages": [
+    "Portuguese"
+   ],
+   "name": "Brazil",
+   "population": 214211951,
+   "populationDate": "2026-07-01T00:00:00Z",
+   "wikidata": "Q155"
+  },
+  "BS": {
+   "capitals": [
+    "Nassau"
+   ],
+   "languages": [
+    "English"
+   ],
+   "name": "The Bahamas",
+   "population": 399440,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q778"
+  },
+  "BT": {
+   "capitals": [
+    "Thimphu"
+   ],
+   "languages": [
+    "Dzongkha"
+   ],
+   "name": "Bhutan",
+   "population": 787424,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q917"
+  },
+  "BV": {
+   "capitals": [],
+   "languages": [],
+   "name": "Bouvet Island",
+   "population": 0,
+   "populationDate": null,
+   "wikidata": "Q23408"
+  },
+  "BW": {
+   "capitals": [
+    "Gaborone"
+   ],
+   "languages": [
+    "English"
+   ],
+   "name": "Botswana",
+   "population": 2480244,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q963"
+  },
+  "BY": {
+   "capitals": [
+    "Minsk"
+   ],
+   "languages": [
+    "Russian",
+    "Belarusian"
+   ],
+   "name": "Belarus",
+   "population": 9056080,
+   "populationDate": "2026-01-01T00:00:00Z",
+   "wikidata": "Q184"
+  },
+  "BZ": {
+   "capitals": [
+    "Belmopan"
+   ],
+   "languages": [
+    "English"
+   ],
+   "name": "Belize",
+   "population": 411106,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q242"
+  },
+  "CA": {
+   "capitals": [
+    "Ottawa"
+   ],
+   "languages": [
+    "English",
+    "French"
+   ],
+   "name": "Canada",
+   "population": 36991981,
+   "populationDate": "2021-01-01T00:00:00Z",
+   "wikidata": "Q16"
+  },
+  "CC": {
+   "capitals": [
+    "West Island"
+   ],
+   "languages": [
+    "English"
+   ],
+   "name": "Cocos (Keeling) Islands",
+   "population": 602,
+   "populationDate": "2021-06-30T00:00:00Z",
+   "wikidata": "Q36004"
+  },
+  "CD": {
+   "capitals": [
+    "Kinshasa"
+   ],
+   "languages": [
+    "French"
+   ],
+   "name": "Democratic Republic of the Congo",
+   "population": 105789731,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q974"
+  },
+  "CF": {
+   "capitals": [
+    "Bangui"
+   ],
+   "languages": [
+    "French",
+    "Sango"
+   ],
+   "name": "Central African Republic",
+   "population": 5152421,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q929"
+  },
+  "CG": {
+   "capitals": [
+    "Brazzaville"
+   ],
+   "languages": [
+    "French"
+   ],
+   "name": "Republic of the Congo",
+   "population": 6142180,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q971"
+  },
+  "CH": {
+   "capitals": [
+    "Bern"
+   ],
+   "languages": [
+    "French",
+    "German",
+    "Italian",
+    "Romansh"
+   ],
+   "name": "Switzerland",
+   "population": 9104063,
+   "populationDate": "2025-09-30T00:00:00Z",
+   "wikidata": "Q39"
+  },
+  "CI": {
+   "capitals": [
+    "Yamoussoukro"
+   ],
+   "languages": [
+    "French"
+   ],
+   "name": "Ivory Coast",
+   "population": 31165654,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q1008"
+  },
+  "CK": {
+   "capitals": [
+    "Avarua"
+   ],
+   "languages": [
+    "English",
+    "Cook Islands Maori"
+   ],
+   "name": "Cook Islands",
+   "population": 14222,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q26988"
+  },
+  "CL": {
+   "capitals": [
+    "Santiago"
+   ],
+   "languages": [
+    "Spanish"
+   ],
+   "name": "Chile",
+   "population": 19458000,
+   "populationDate": "2021-01-01T00:00:00Z",
+   "wikidata": "Q298"
+  },
+  "CM": {
+   "capitals": [
+    "Yaoundé"
+   ],
+   "languages": [
+    "English",
+    "French"
+   ],
+   "name": "Cameroon",
+   "population": 28372687,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q1009"
+  },
+  "CN": {
+   "capitals": [
+    "Beijing"
+   ],
+   "languages": [
+    "Putonghua"
+   ],
+   "name": "People's Republic of China",
+   "population": 1404890000,
+   "populationDate": "2025-01-01T00:00:00Z",
+   "wikidata": "Q148"
+  },
+  "CO": {
+   "capitals": [
+    "Bogotá"
+   ],
+   "languages": [
+    "Spanish"
+   ],
+   "name": "Colombia",
+   "population": 52321152,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q739"
+  },
+  "CP": {
+   "capitals": [],
+   "languages": [],
+   "name": "Clipperton Island",
+   "population": 0,
+   "populationDate": "2025-01-01T00:00:00Z",
+   "wikidata": "Q161258"
+  },
+  "CQ": {
+   "capitals": [],
+   "languages": [
+    "English",
+    "French"
+   ],
+   "name": "Sark",
+   "population": 562,
+   "populationDate": "2022-04-27T00:00:00Z",
+   "wikidata": "Q3405693"
+  },
+  "CR": {
+   "capitals": [
+    "San José"
+   ],
+   "languages": [
+    "Spanish"
+   ],
+   "name": "Costa Rica",
+   "population": 5265575,
+   "populationDate": "2024-01-01T00:00:00Z",
+   "wikidata": "Q800"
+  },
+  "CU": {
+   "capitals": [
+    "Havana"
+   ],
+   "languages": [
+    "Spanish"
+   ],
+   "name": "Cuba",
+   "population": 10985974,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q241"
+  },
+  "CV": {
+   "capitals": [
+    "Praia"
+   ],
+   "languages": [
+    "Portuguese",
+    "Cape Verdean Creole"
+   ],
+   "name": "Cape Verde",
+   "population": 555988,
+   "populationDate": "2020-01-01T00:00:00Z",
+   "wikidata": "Q1011"
+  },
+  "CW": {
+   "capitals": [
+    "Willemstad"
+   ],
+   "languages": [
+    "English",
+    "Dutch",
+    "Papiamento"
+   ],
+   "name": "Curaçao",
+   "population": 152849,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q25279"
+  },
+  "CX": {
+   "capitals": [
+    "Flying Fish Cove"
+   ],
+   "languages": [
+    "English"
+   ],
+   "name": "Christmas Island",
+   "population": 1692,
+   "populationDate": "2021-08-10T00:00:00Z",
+   "wikidata": "Q31063"
+  },
+  "CY": {
+   "capitals": [
+    "Nicosia"
+   ],
+   "languages": [
+    "Turkish",
+    "Modern Greek",
+    "Greek"
+   ],
+   "name": "Cyprus",
+   "population": 1344976,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q644636"
+  },
+  "CZ": {
+   "capitals": [
+    "Prague"
+   ],
+   "languages": [
+    "Czech"
+   ],
+   "name": "Czech Republic",
+   "population": 10909500,
+   "populationDate": "2025-01-01T00:00:00Z",
+   "wikidata": "Q213"
+  },
+  "DE": {
+   "capitals": [
+    "Berlin"
+   ],
+   "languages": [
+    "German"
+   ],
+   "name": "Germany",
+   "population": 83467117,
+   "populationDate": "2025-12-31T00:00:00Z",
+   "wikidata": "Q183"
+  },
+  "DG": {
+   "capitals": [],
+   "languages": [],
+   "name": "Diego Garcia",
+   "population": 4202,
+   "populationDate": null,
+   "wikidata": "Q184851"
+  },
+  "DJ": {
+   "capitals": [
+    "Djibouti"
+   ],
+   "languages": [
+    "Arabic",
+    "French"
+   ],
+   "name": "Djibouti",
+   "population": 1152944,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q977"
+  },
+  "DK": {
+   "capitals": [
+    "Copenhagen"
+   ],
+   "languages": [
+    "Danish"
+   ],
+   "name": "Denmark",
+   "population": 5822863,
+   "populationDate": "2020-01-01T00:00:00Z",
+   "wikidata": "Q35"
+  },
+  "DM": {
+   "capitals": [
+    "Roseau"
+   ],
+   "languages": [
+    "English"
+   ],
+   "name": "Dominica",
+   "population": 74656,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q784"
+  },
+  "DO": {
+   "capitals": [
+    "Santo Domingo"
+   ],
+   "languages": [
+    "Spanish"
+   ],
+   "name": "Dominican Republic",
+   "population": 10760028,
+   "populationDate": "2022-01-01T00:00:00Z",
+   "wikidata": "Q786"
+  },
+  "DZ": {
+   "capitals": [
+    "Algiers"
+   ],
+   "languages": [
+    "Arabic",
+    "Standard Algerian Berber"
+   ],
+   "name": "Algeria",
+   "population": 46164219,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q262"
+  },
+  "EC": {
+   "capitals": [
+    "Quito"
+   ],
+   "languages": [
+    "Spanish",
+    "Northern Quichua",
+    "Shuar"
+   ],
+   "name": "Ecuador",
+   "population": 16938986,
+   "populationDate": "2022-01-01T00:00:00Z",
+   "wikidata": "Q736"
+  },
+  "EE": {
+   "capitals": [
+    "Tallinn"
+   ],
+   "languages": [
+    "Estonian"
+   ],
+   "name": "Estonia",
+   "population": 1369995,
+   "populationDate": "2025-01-01T00:00:00Z",
+   "wikidata": "Q191"
+  },
+  "EG": {
+   "capitals": [
+    "Cairo"
+   ],
+   "languages": [
+    "Arabic"
+   ],
+   "name": "Egypt",
+   "population": 114535772,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q79"
+  },
+  "EH": {
+   "capitals": [],
+   "languages": [
+    "Arabic"
+   ],
+   "name": "Western Sahara",
+   "population": 612000,
+   "populationDate": "2021-01-01T00:00:00Z",
+   "wikidata": "Q6250"
+  },
+  "ER": {
+   "capitals": [
+    "Asmara"
+   ],
+   "languages": [
+    "English",
+    "Arabic",
+    "Tigrinya"
+   ],
+   "name": "Eritrea",
+   "population": 3497000,
+   "populationDate": "2019-01-01T00:00:00Z",
+   "wikidata": "Q986"
+  },
+  "ES": {
+   "capitals": [
+    "Madrid"
+   ],
+   "languages": [
+    "Spanish"
+   ],
+   "name": "Spain",
+   "population": 48592909,
+   "populationDate": "2024-01-01T00:00:00Z",
+   "wikidata": "Q29"
+  },
+  "ET": {
+   "capitals": [
+    "Addis Ababa"
+   ],
+   "languages": [
+    "Amharic"
+   ],
+   "name": "Ethiopia",
+   "population": 128691692,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q115"
+  },
+  "FI": {
+   "capitals": [
+    "Helsinki"
+   ],
+   "languages": [
+    "Swedish",
+    "Finnish"
+   ],
+   "name": "Finland",
+   "population": 5652881,
+   "populationDate": "2025-12-31T00:00:00Z",
+   "wikidata": "Q33"
+  },
+  "FJ": {
+   "capitals": [
+    "Suva"
+   ],
+   "languages": [
+    "English",
+    "Fiji Hindi",
+    "Fijian"
+   ],
+   "name": "Fiji",
+   "population": 926276,
+   "populationDate": "2018-01-01T00:00:00Z",
+   "wikidata": "Q712"
+  },
+  "FK": {
+   "capitals": [
+    "Stanley"
+   ],
+   "languages": [
+    "British English"
+   ],
+   "name": "Falkland Islands",
+   "population": 3662,
+   "populationDate": "2021-01-01T00:00:00Z",
+   "wikidata": "Q9648"
+  },
+  "FM": {
+   "capitals": [
+    "Palikir"
+   ],
+   "languages": [
+    "English"
+   ],
+   "name": "Federated States of Micronesia",
+   "population": 75817,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q702"
+  },
+  "FO": {
+   "capitals": [
+    "Tórshavn"
+   ],
+   "languages": [
+    "Danish",
+    "Faroese"
+   ],
+   "name": "Faroe Islands",
+   "population": 54149,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q4628"
+  },
+  "FR": {
+   "capitals": [
+    "Paris"
+   ],
+   "languages": [
+    "French"
+   ],
+   "name": "France",
+   "population": 68605616,
+   "populationDate": "2025-01-01T00:00:00Z",
+   "wikidata": "Q142"
+  },
+  "GA": {
+   "capitals": [
+    "Libreville"
+   ],
+   "languages": [
+    "French"
+   ],
+   "name": "Gabon",
+   "population": 2025137,
+   "populationDate": "2017-01-01T00:00:00Z",
+   "wikidata": "Q1000"
+  },
+  "GB": {
+   "capitals": [
+    "London"
+   ],
+   "languages": [
+    "English"
+   ],
+   "name": "United Kingdom",
+   "population": 67326569,
+   "populationDate": "2021-01-01T00:00:00Z",
+   "wikidata": "Q145"
+  },
+  "GD": {
+   "capitals": [
+    "St. George's"
+   ],
+   "languages": [
+    "English",
+    "Grenadian Creole English"
+   ],
+   "name": "Grenada",
+   "population": 114299,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q769"
+  },
+  "GE": {
+   "capitals": [
+    "Tbilisi"
+   ],
+   "languages": [
+    "Georgian"
+   ],
+   "name": "Georgia",
+   "population": 3929581,
+   "populationDate": "2024-11-14T00:00:00Z",
+   "wikidata": "Q230"
+  },
+  "GF": {
+   "capitals": [
+    "Cayenne"
+   ],
+   "languages": [
+    "French",
+    "Guianan Creole"
+   ],
+   "name": "French Guiana",
+   "population": 293996,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q3769"
+  },
+  "GG": {
+   "capitals": [
+    "Saint Peter Port"
+   ],
+   "languages": [
+    "English",
+    "French"
+   ],
+   "name": "Guernsey",
+   "population": 67787,
+   "populationDate": "2024-01-01T00:00:00Z",
+   "wikidata": "Q25230"
+  },
+  "GH": {
+   "capitals": [
+    "Accra"
+   ],
+   "languages": [
+    "English"
+   ],
+   "name": "Ghana",
+   "population": 32833031,
+   "populationDate": "2021-01-01T00:00:00Z",
+   "wikidata": "Q117"
+  },
+  "GI": {
+   "capitals": [
+    "Gibraltar"
+   ],
+   "languages": [
+    "British English"
+   ],
+   "name": "Gibraltar",
+   "population": 34003,
+   "populationDate": "2020-01-01T00:00:00Z",
+   "wikidata": "Q1410"
+  },
+  "GL": {
+   "capitals": [
+    "Nuuk"
+   ],
+   "languages": [
+    "Greenlandic"
+   ],
+   "name": "Greenland",
+   "population": 56609,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q223"
+  },
+  "GM": {
+   "capitals": [
+    "Banjul"
+   ],
+   "languages": [
+    "English"
+   ],
+   "name": "The Gambia",
+   "population": 2639916,
+   "populationDate": "2021-01-01T00:00:00Z",
+   "wikidata": "Q1005"
+  },
+  "GN": {
+   "capitals": [
+    "Conakry"
+   ],
+   "languages": [
+    "French",
+    "languages of Guinea"
+   ],
+   "name": "Guinea",
+   "population": 17521167,
+   "populationDate": "2025-01-01T00:00:00Z",
+   "wikidata": "Q1006"
+  },
+  "GP": {
+   "capitals": [
+    "Basse-Terre"
+   ],
+   "languages": [],
+   "name": "Guadeloupe",
+   "population": 384160,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q17012"
+  },
+  "GQ": {
+   "capitals": [
+    "Ciudad de la Paz"
+   ],
+   "languages": [
+    "Spanish",
+    "Portuguese",
+    "French"
+   ],
+   "name": "Equatorial Guinea",
+   "population": 1847549,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q983"
+  },
+  "GR": {
+   "capitals": [
+    "Athens"
+   ],
+   "languages": [
+    "Greek"
+   ],
+   "name": "Greece",
+   "population": 10482487,
+   "populationDate": "2021-01-01T00:00:00Z",
+   "wikidata": "Q41"
+  },
+  "GS": {
+   "capitals": [
+    "King Edward Point"
+   ],
+   "languages": [
+    "English"
+   ],
+   "name": "South Georgia and the South Sandwich Islands",
+   "population": 35,
+   "populationDate": "2019-01-01T00:00:00Z",
+   "wikidata": "Q35086"
+  },
+  "GT": {
+   "capitals": [
+    "Guatemala City"
+   ],
+   "languages": [
+    "Spanish"
+   ],
+   "name": "Guatemala",
+   "population": 17263239,
+   "populationDate": "2018-01-01T00:00:00Z",
+   "wikidata": "Q774"
+  },
+  "GU": {
+   "capitals": [
+    "Hagåtña"
+   ],
+   "languages": [
+    "English",
+    "Chamorro"
+   ],
+   "name": "Guam",
+   "population": 153836,
+   "populationDate": "2020-01-01T00:00:00Z",
+   "wikidata": "Q16635"
+  },
+  "GW": {
+   "capitals": [
+    "Bissau"
+   ],
+   "languages": [
+    "Portuguese"
+   ],
+   "name": "Guinea-Bissau",
+   "population": 1861283,
+   "populationDate": "2017-01-01T00:00:00Z",
+   "wikidata": "Q1007"
+  },
+  "GY": {
+   "capitals": [
+    "Georgetown"
+   ],
+   "languages": [
+    "English"
+   ],
+   "name": "Guyana",
+   "population": 878674,
+   "populationDate": "2022-01-01T00:00:00Z",
+   "wikidata": "Q734"
+  },
+  "HK": {
+   "capitals": [],
+   "languages": [
+    "Standard Chinese"
+   ],
+   "name": "Hong Kong",
+   "population": 7413070,
+   "populationDate": "2021-01-01T00:00:00Z",
+   "wikidata": "Q8646"
+  },
+  "HM": {
+   "capitals": [],
+   "languages": [
+    "English"
+   ],
+   "name": "Heard Island and McDonald Islands",
+   "population": 0,
+   "populationDate": null,
+   "wikidata": "Q131198"
+  },
+  "HN": {
+   "capitals": [
+    "Tegucigalpa"
+   ],
+   "languages": [
+    "Spanish"
+   ],
+   "name": "Honduras",
+   "population": 8303771,
+   "populationDate": "2013-01-01T00:00:00Z",
+   "wikidata": "Q783"
+  },
+  "HR": {
+   "capitals": [
+    "Zagreb"
+   ],
+   "languages": [
+    "Croatian"
+   ],
+   "name": "Croatia",
+   "population": 3871833,
+   "populationDate": "2021-01-01T00:00:00Z",
+   "wikidata": "Q224"
+  },
+  "HT": {
+   "capitals": [
+    "Port-au-Prince"
+   ],
+   "languages": [
+    "French",
+    "Haitian Creole"
+   ],
+   "name": "Haiti",
+   "population": 10981229,
+   "populationDate": "2017-01-01T00:00:00Z",
+   "wikidata": "Q790"
+  },
+  "HU": {
+   "capitals": [
+    "Budapest"
+   ],
+   "languages": [
+    "Hungarian"
+   ],
+   "name": "Hungary",
+   "population": 9603634,
+   "populationDate": "2022-01-01T00:00:00Z",
+   "wikidata": "Q28"
+  },
+  "ID": {
+   "capitals": [
+    "Jakarta"
+   ],
+   "languages": [
+    "Indonesian"
+   ],
+   "name": "Indonesia",
+   "population": 275439000,
+   "populationDate": "2021-01-01T00:00:00Z",
+   "wikidata": "Q252"
+  },
+  "IE": {
+   "capitals": [
+    "Dublin"
+   ],
+   "languages": [
+    "English",
+    "Irish"
+   ],
+   "name": "Ireland",
+   "population": 5149139,
+   "populationDate": "2022-04-01T00:00:00Z",
+   "wikidata": "Q27"
+  },
+  "IL": {
+   "capitals": [
+    "Jerusalem"
+   ],
+   "languages": [
+    "Hebrew"
+   ],
+   "name": "Israel",
+   "population": 9840000,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q801"
+  },
+  "IM": {
+   "capitals": [
+    "Douglas"
+   ],
+   "languages": [
+    "English",
+    "Manx"
+   ],
+   "name": "Isle of Man",
+   "population": 84523,
+   "populationDate": "2024-01-01T00:00:00Z",
+   "wikidata": "Q9676"
+  },
+  "IN": {
+   "capitals": [
+    "New Delhi"
+   ],
+   "languages": [
+    "English",
+    "Hindi"
+   ],
+   "name": "India",
+   "population": 1326093247,
+   "populationDate": "2020-07-01T00:00:00Z",
+   "wikidata": "Q668"
+  },
+  "IO": {
+   "capitals": [
+    "Diego Garcia"
+   ],
+   "languages": [
+    "English"
+   ],
+   "name": "British Indian Ocean Territory",
+   "population": 3000,
+   "populationDate": "2018-01-01T00:00:00Z",
+   "wikidata": "Q43448"
+  },
+  "IQ": {
+   "capitals": [
+    "Baghdad"
+   ],
+   "languages": [
+    "Arabic",
+    "Kurdish language"
+   ],
+   "name": "Iraq",
+   "population": 38274618,
+   "populationDate": "2017-01-01T00:00:00Z",
+   "wikidata": "Q796"
+  },
+  "IR": {
+   "capitals": [
+    "Tehran"
+   ],
+   "languages": [
+    "Persian"
+   ],
+   "name": "Iran",
+   "population": 92417700,
+   "populationDate": "2025-01-01T00:00:00Z",
+   "wikidata": "Q794"
+  },
+  "IS": {
+   "capitals": [
+    "Reykjavík"
+   ],
+   "languages": [
+    "Icelandic"
+   ],
+   "name": "Iceland",
+   "population": 364260,
+   "populationDate": "2019-12-31T00:00:00Z",
+   "wikidata": "Q189"
+  },
+  "IT": {
+   "capitals": [
+    "Rome"
+   ],
+   "languages": [
+    "Italian"
+   ],
+   "name": "Italy",
+   "population": 58850717,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q38"
+  },
+  "JE": {
+   "capitals": [
+    "Saint Helier"
+   ],
+   "languages": [
+    "English",
+    "Jèrriais",
+    "Jersey Legal French"
+   ],
+   "name": "Jersey",
+   "population": 103267,
+   "populationDate": "2021-03-21T00:00:00Z",
+   "wikidata": "Q785"
+  },
+  "JM": {
+   "capitals": [
+    "Kingston"
+   ],
+   "languages": [
+    "English",
+    "Jamaican Patois"
+   ],
+   "name": "Jamaica",
+   "population": 2697983,
+   "populationDate": "2011-01-01T00:00:00Z",
+   "wikidata": "Q766"
+  },
+  "JO": {
+   "capitals": [
+    "Amman"
+   ],
+   "languages": [
+    "Arabic"
+   ],
+   "name": "Jordan",
+   "population": 10428241,
+   "populationDate": "2019-06-19T00:00:00Z",
+   "wikidata": "Q810"
+  },
+  "JP": {
+   "capitals": [
+    "Tokyo"
+   ],
+   "languages": [
+    "Japanese"
+   ],
+   "name": "Japan",
+   "population": 123802000,
+   "populationDate": "2024-10-01T00:00:00Z",
+   "wikidata": "Q17"
+  },
+  "KE": {
+   "capitals": [
+    "Nairobi"
+   ],
+   "languages": [
+    "English",
+    "Swahili"
+   ],
+   "name": "Kenya",
+   "population": 48468138,
+   "populationDate": "2017-01-01T00:00:00Z",
+   "wikidata": "Q114"
+  },
+  "KG": {
+   "capitals": [
+    "Bishkek"
+   ],
+   "languages": [
+    "Kyrgyz"
+   ],
+   "name": "Kyrgyzstan",
+   "population": 7281800,
+   "populationDate": "2025-01-01T00:00:00Z",
+   "wikidata": "Q813"
+  },
+  "KH": {
+   "capitals": [
+    "Phnom Penh"
+   ],
+   "languages": [
+    "Khmer"
+   ],
+   "name": "Cambodia",
+   "population": 17423880,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q424"
+  },
+  "KI": {
+   "capitals": [
+    "South Tarawa"
+   ],
+   "languages": [
+    "English",
+    "Gilbertese"
+   ],
+   "name": "Kiribati",
+   "population": 134518,
+   "populationDate": "2024-01-01T00:00:00Z",
+   "wikidata": "Q710"
+  },
+  "KM": {
+   "capitals": [
+    "Moroni"
+   ],
+   "languages": [
+    "Arabic",
+    "French",
+    "Comorian"
+   ],
+   "name": "Comoros",
+   "population": 902348,
+   "populationDate": "2022-01-01T00:00:00Z",
+   "wikidata": "Q970"
+  },
+  "KN": {
+   "capitals": [
+    "Basseterre"
+   ],
+   "languages": [
+    "English"
+   ],
+   "name": "Saint Kitts and Nevis",
+   "population": 46922,
+   "populationDate": "2025-01-01T00:00:00Z",
+   "wikidata": "Q763"
+  },
+  "KP": {
+   "capitals": [
+    "Pyongyang"
+   ],
+   "languages": [
+    "Korean",
+    "North Korean standard language"
+   ],
+   "name": "North Korea",
+   "population": 26418204,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q423"
+  },
+  "KR": {
+   "capitals": [
+    "Seoul"
+   ],
+   "languages": [
+    "Korean"
+   ],
+   "name": "South Korea",
+   "population": 51466201,
+   "populationDate": "2017-01-01T00:00:00Z",
+   "wikidata": "Q884"
+  },
+  "KW": {
+   "capitals": [
+    "Kuwait City"
+   ],
+   "languages": [
+    "Arabic"
+   ],
+   "name": "Kuwait",
+   "population": 4464000,
+   "populationDate": "2020-01-01T00:00:00Z",
+   "wikidata": "Q817"
+  },
+  "KY": {
+   "capitals": [
+    "George Town"
+   ],
+   "languages": [
+    "English"
+   ],
+   "name": "Cayman Islands",
+   "population": 88833,
+   "populationDate": "2024-12-01T00:00:00Z",
+   "wikidata": "Q5785"
+  },
+  "KZ": {
+   "capitals": [
+    "Astana"
+   ],
+   "languages": [
+    "Russian",
+    "Kazakh"
+   ],
+   "name": "Kazakhstan",
+   "population": 20139914,
+   "populationDate": "2024-06-01T00:00:00Z",
+   "wikidata": "Q232"
+  },
+  "LA": {
+   "capitals": [
+    "Vientiane"
+   ],
+   "languages": [
+    "Lao"
+   ],
+   "name": "Laos",
+   "population": 6858160,
+   "populationDate": "2017-01-01T00:00:00Z",
+   "wikidata": "Q819"
+  },
+  "LB": {
+   "capitals": [
+    "Beirut"
+   ],
+   "languages": [
+    "Arabic"
+   ],
+   "name": "Lebanon",
+   "population": 6100075,
+   "populationDate": "2018-01-01T00:00:00Z",
+   "wikidata": "Q822"
+  },
+  "LC": {
+   "capitals": [
+    "Castries"
+   ],
+   "languages": [
+    "English"
+   ],
+   "name": "Saint Lucia",
+   "population": 167591,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q760"
+  },
+  "LI": {
+   "capitals": [
+    "Vaduz"
+   ],
+   "languages": [
+    "German"
+   ],
+   "name": "Liechtenstein",
+   "population": 37922,
+   "populationDate": "2017-01-01T00:00:00Z",
+   "wikidata": "Q347"
+  },
+  "LK": {
+   "capitals": [
+    "Colombo",
+    "Sri Jayawardenepura Kotte"
+   ],
+   "languages": [
+    "Tamil",
+    "Sinhala"
+   ],
+   "name": "Sri Lanka",
+   "population": 21444000,
+   "populationDate": "2017-01-01T00:00:00Z",
+   "wikidata": "Q854"
+  },
+  "LR": {
+   "capitals": [
+    "Monrovia"
+   ],
+   "languages": [
+    "English"
+   ],
+   "name": "Liberia",
+   "population": 5214030,
+   "populationDate": "2021-01-01T00:00:00Z",
+   "wikidata": "Q1014"
+  },
+  "LS": {
+   "capitals": [
+    "Maseru"
+   ],
+   "languages": [
+    "English",
+    "Sesotho"
+   ],
+   "name": "Lesotho",
+   "population": 2007201,
+   "populationDate": "2016-01-01T00:00:00Z",
+   "wikidata": "Q1013"
+  },
+  "LT": {
+   "capitals": [
+    "Vilnius"
+   ],
+   "languages": [
+    "Lithuanian"
+   ],
+   "name": "Lithuania",
+   "population": 2860002,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q37"
+  },
+  "LU": {
+   "capitals": [
+    "Luxembourg"
+   ],
+   "languages": [
+    "French",
+    "German",
+    "Luxembourgish"
+   ],
+   "name": "Luxembourg",
+   "population": 690959,
+   "populationDate": "2026-01-01T00:00:00Z",
+   "wikidata": "Q32"
+  },
+  "LV": {
+   "capitals": [
+    "Riga"
+   ],
+   "languages": [
+    "Latvian"
+   ],
+   "name": "Latvia",
+   "population": 1845096,
+   "populationDate": "2026-01-01T00:00:00Z",
+   "wikidata": "Q211"
+  },
+  "LY": {
+   "capitals": [
+    "Tripoli"
+   ],
+   "languages": [
+    "Arabic"
+   ],
+   "name": "Libya",
+   "population": 7381023,
+   "populationDate": "2024-01-01T00:00:00Z",
+   "wikidata": "Q1016"
+  },
+  "MA": {
+   "capitals": [
+    "Rabat"
+   ],
+   "languages": [
+    "Arabic",
+    "Standard Moroccan Tamazight"
+   ],
+   "name": "Morocco",
+   "population": 36828330,
+   "populationDate": "2024-01-01T00:00:00Z",
+   "wikidata": "Q1028"
+  },
+  "MC": {
+   "capitals": [
+    "Monaco"
+   ],
+   "languages": [
+    "French"
+   ],
+   "name": "Monaco",
+   "population": 38857,
+   "populationDate": "2025-01-01T00:00:00Z",
+   "wikidata": "Q235"
+  },
+  "MD": {
+   "capitals": [
+    "Chișinău"
+   ],
+   "languages": [
+    "Romanian"
+   ],
+   "name": "Moldova",
+   "population": 2409207,
+   "populationDate": "2024-04-08T00:00:00Z",
+   "wikidata": "Q217"
+  },
+  "ME": {
+   "capitals": [
+    "Podgorica"
+   ],
+   "languages": [
+    "Montenegrin"
+   ],
+   "name": "Montenegro",
+   "population": 617213,
+   "populationDate": "2022-01-01T00:00:00Z",
+   "wikidata": "Q236"
+  },
+  "MF": {
+   "capitals": [
+    "Marigot"
+   ],
+   "languages": [
+    "French"
+   ],
+   "name": "Saint-Martin",
+   "population": 32358,
+   "populationDate": "2020-01-01T00:00:00Z",
+   "wikidata": "Q126125"
+  },
+  "MG": {
+   "capitals": [
+    "Antananarivo"
+   ],
+   "languages": [
+    "French",
+    "Malagasy"
+   ],
+   "name": "Madagascar",
+   "population": 31964956,
+   "populationDate": "2024-01-01T00:00:00Z",
+   "wikidata": "Q1019"
+  },
+  "MH": {
+   "capitals": [
+    "Majuro"
+   ],
+   "languages": [
+    "English",
+    "Marshallese"
+   ],
+   "name": "Marshall Islands",
+   "population": 53127,
+   "populationDate": "2017-01-01T00:00:00Z",
+   "wikidata": "Q709"
+  },
+  "MK": {
+   "capitals": [
+    "Skopje"
+   ],
+   "languages": [
+    "Albanian",
+    "Macedonian"
+   ],
+   "name": "North Macedonia",
+   "population": 1836713,
+   "populationDate": "2021-01-01T00:00:00Z",
+   "wikidata": "Q221"
+  },
+  "ML": {
+   "capitals": [
+    "Bamako"
+   ],
+   "languages": [
+    "Fula",
+    "Bambara",
+    "Hassaniya Arabic",
+    "Maninka",
+    "Senufo",
+    "Soninke",
+    "Tamasheq",
+    "Bobo",
+    "Bozo",
+    "Dogon",
+    "Kassonke",
+    "Minyanka",
+    "Songhay"
+   ],
+   "name": "Mali",
+   "population": 22395489,
+   "populationDate": "2022-01-01T00:00:00Z",
+   "wikidata": "Q912"
+  },
+  "MM": {
+   "capitals": [
+    "Naypyidaw"
+   ],
+   "languages": [
+    "Burmese"
+   ],
+   "name": "Myanmar",
+   "population": 53370609,
+   "populationDate": "2017-01-01T00:00:00Z",
+   "wikidata": "Q836"
+  },
+  "MN": {
+   "capitals": [
+    "Ulaanbaatar"
+   ],
+   "languages": [
+    "Mongolian"
+   ],
+   "name": "Mongolia",
+   "population": 3409939,
+   "populationDate": "2021-01-01T00:00:00Z",
+   "wikidata": "Q711"
+  },
+  "MO": {
+   "capitals": [],
+   "languages": [
+    "Standard Chinese",
+    "Portuguese",
+    "Cantonese"
+   ],
+   "name": "Macau",
+   "population": 682100,
+   "populationDate": "2021-01-01T00:00:00Z",
+   "wikidata": "Q14773"
+  },
+  "MP": {
+   "capitals": [
+    "Saipan"
+   ],
+   "languages": [
+    "English",
+    "Chamorro",
+    "Carolinian"
+   ],
+   "name": "Northern Mariana Islands",
+   "population": 47329,
+   "populationDate": "2020-01-01T00:00:00Z",
+   "wikidata": "Q16644"
+  },
+  "MQ": {
+   "capitals": [
+    "Fort-de-France"
+   ],
+   "languages": [],
+   "name": "Martinique",
+   "population": 360630,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q17054"
+  },
+  "MR": {
+   "capitals": [
+    "Nouakchott"
+   ],
+   "languages": [
+    "Arabic",
+    "French"
+   ],
+   "name": "Mauritania",
+   "population": 4736139,
+   "populationDate": "2022-01-01T00:00:00Z",
+   "wikidata": "Q1025"
+  },
+  "MS": {
+   "capitals": [
+    "Brades",
+    "Plymouth"
+   ],
+   "languages": [
+    "English"
+   ],
+   "name": "Montserrat",
+   "population": 5440,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q13353"
+  },
+  "MT": {
+   "capitals": [
+    "Valletta"
+   ],
+   "languages": [
+    "English",
+    "Maltese"
+   ],
+   "name": "Malta",
+   "population": 553214,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q233"
+  },
+  "MU": {
+   "capitals": [
+    "Port Louis"
+   ],
+   "languages": [
+    "English",
+    "French"
+   ],
+   "name": "Mauritius",
+   "population": 1264613,
+   "populationDate": "2017-01-01T00:00:00Z",
+   "wikidata": "Q1027"
+  },
+  "MV": {
+   "capitals": [
+    "Malé"
+   ],
+   "languages": [
+    "Maldivian"
+   ],
+   "name": "Maldives",
+   "population": 436330,
+   "populationDate": "2017-01-01T00:00:00Z",
+   "wikidata": "Q826"
+  },
+  "MW": {
+   "capitals": [
+    "Lilongwe"
+   ],
+   "languages": [
+    "English",
+    "Chewa",
+    "Tumbuka"
+   ],
+   "name": "Malawi",
+   "population": 17563749,
+   "populationDate": "2018-01-01T00:00:00Z",
+   "wikidata": "Q1020"
+  },
+  "MX": {
+   "capitals": [
+    "Mexico City"
+   ],
+   "languages": [
+    "Spanish",
+    "Nahuatl",
+    "Yucatec Maya"
+   ],
+   "name": "Mexico",
+   "population": 132274416,
+   "populationDate": "2024-01-01T00:00:00Z",
+   "wikidata": "Q96"
+  },
+  "MY": {
+   "capitals": [
+    "Kuala Lumpur"
+   ],
+   "languages": [
+    "Malay"
+   ],
+   "name": "Malaysia",
+   "population": 34231700,
+   "populationDate": "2025-01-01T00:00:00Z",
+   "wikidata": "Q833"
+  },
+  "MZ": {
+   "capitals": [
+    "Maputo"
+   ],
+   "languages": [
+    "Portuguese"
+   ],
+   "name": "Mozambique",
+   "population": 29668834,
+   "populationDate": "2017-01-01T00:00:00Z",
+   "wikidata": "Q1029"
+  },
+  "NA": {
+   "capitals": [
+    "Windhoek"
+   ],
+   "languages": [
+    "English"
+   ],
+   "name": "Namibia",
+   "population": 2533794,
+   "populationDate": "2017-01-01T00:00:00Z",
+   "wikidata": "Q1030"
+  },
+  "NC": {
+   "capitals": [
+    "Nouméa"
+   ],
+   "languages": [
+    "French"
+   ],
+   "name": "New Caledonia",
+   "population": 278500,
+   "populationDate": "2017-01-01T00:00:00Z",
+   "wikidata": "Q33788"
+  },
+  "NE": {
+   "capitals": [
+    "Niamey"
+   ],
+   "languages": [
+    "Hausa"
+   ],
+   "name": "Niger",
+   "population": 21477348,
+   "populationDate": "2017-01-01T00:00:00Z",
+   "wikidata": "Q1032"
+  },
+  "NF": {
+   "capitals": [
+    "Kingston"
+   ],
+   "languages": [
+    "English",
+    "Norfuk"
+   ],
+   "name": "Norfolk Island",
+   "population": 2188,
+   "populationDate": "2021-08-10T00:00:00Z",
+   "wikidata": "Q31057"
+  },
+  "NG": {
+   "capitals": [
+    "Abuja"
+   ],
+   "languages": [
+    "English"
+   ],
+   "name": "Nigeria",
+   "population": 211400708,
+   "populationDate": "2021-06-01T00:00:00Z",
+   "wikidata": "Q1033"
+  },
+  "NI": {
+   "capitals": [
+    "Managua"
+   ],
+   "languages": [
+    "Spanish"
+   ],
+   "name": "Nicaragua",
+   "population": 5142098,
+   "populationDate": "2005-01-01T00:00:00Z",
+   "wikidata": "Q811"
+  },
+  "NL": {
+   "capitals": [
+    "Amsterdam"
+   ],
+   "languages": [
+    "Dutch"
+   ],
+   "name": "Kingdom of the Netherlands",
+   "population": 17100715,
+   "populationDate": "2013-01-01T00:00:00Z",
+   "wikidata": "Q29999"
+  },
+  "NO": {
+   "capitals": [
+    "Oslo"
+   ],
+   "languages": [
+    "Norwegian",
+    "Nynorsk",
+    "Bokmål",
+    "Sámi"
+   ],
+   "name": "Norway",
+   "population": 5627400,
+   "populationDate": "2026-01-01T00:00:00Z",
+   "wikidata": "Q20"
+  },
+  "NP": {
+   "capitals": [
+    "Kathmandu"
+   ],
+   "languages": [
+    "Nepali"
+   ],
+   "name": "Nepal",
+   "population": 29164578,
+   "populationDate": "2021-01-01T00:00:00Z",
+   "wikidata": "Q837"
+  },
+  "NR": {
+   "capitals": [
+    "Yaren District"
+   ],
+   "languages": [
+    "English",
+    "Nauruan"
+   ],
+   "name": "Nauru",
+   "population": 13650,
+   "populationDate": "2017-01-01T00:00:00Z",
+   "wikidata": "Q697"
+  },
+  "NU": {
+   "capitals": [
+    "Alofi"
+   ],
+   "languages": [
+    "English",
+    "Niuean"
+   ],
+   "name": "Niue",
+   "population": 1821,
+   "populationDate": "2025-01-01T00:00:00Z",
+   "wikidata": "Q34020"
+  },
+  "NZ": {
+   "capitals": [
+    "Wellington"
+   ],
+   "languages": [
+    "English",
+    "Māori"
+   ],
+   "name": "New Zealand",
+   "population": 5307800,
+   "populationDate": "2024-12-31T00:00:00Z",
+   "wikidata": "Q664"
+  },
+  "OM": {
+   "capitals": [
+    "Muscat"
+   ],
+   "languages": [
+    "Arabic"
+   ],
+   "name": "Oman",
+   "population": 4829480,
+   "populationDate": "2018-01-01T00:00:00Z",
+   "wikidata": "Q842"
+  },
+  "PA": {
+   "capitals": [
+    "Panama City"
+   ],
+   "languages": [
+    "Spanish"
+   ],
+   "name": "Panama",
+   "population": 4570133,
+   "populationDate": "2025-01-01T00:00:00Z",
+   "wikidata": "Q804"
+  },
+  "PE": {
+   "capitals": [
+    "Lima"
+   ],
+   "languages": [
+    "Spanish",
+    "Quechua",
+    "Aymara"
+   ],
+   "name": "Peru",
+   "population": 34157732,
+   "populationDate": "2025-01-01T00:00:00Z",
+   "wikidata": "Q419"
+  },
+  "PF": {
+   "capitals": [
+    "Papeete"
+   ],
+   "languages": [
+    "French"
+   ],
+   "name": "French Polynesia",
+   "population": 278786,
+   "populationDate": "2022-01-01T00:00:00Z",
+   "wikidata": "Q30971"
+  },
+  "PG": {
+   "capitals": [
+    "Port Moresby"
+   ],
+   "languages": [
+    "English",
+    "Tok Pisin",
+    "Hiri Motu"
+   ],
+   "name": "Papua New Guinea",
+   "population": 8935000,
+   "populationDate": "2020-01-01T00:00:00Z",
+   "wikidata": "Q691"
+  },
+  "PH": {
+   "capitals": [
+    "Manila"
+   ],
+   "languages": [
+    "English",
+    "Filipino",
+    "Taglish"
+   ],
+   "name": "Philippines",
+   "population": 112729484,
+   "populationDate": "2024-07-01T00:00:00Z",
+   "wikidata": "Q928"
+  },
+  "PK": {
+   "capitals": [
+    "Islamabad"
+   ],
+   "languages": [
+    "English",
+    "Urdu"
+   ],
+   "name": "Pakistan",
+   "population": 223773700,
+   "populationDate": "2021-01-01T00:00:00Z",
+   "wikidata": "Q843"
+  },
+  "PL": {
+   "capitals": [
+    "Warsaw"
+   ],
+   "languages": [
+    "Polish"
+   ],
+   "name": "Poland",
+   "population": 37563071,
+   "populationDate": "2024-06-30T00:00:00Z",
+   "wikidata": "Q36"
+  },
+  "PM": {
+   "capitals": [
+    "Saint-Pierre"
+   ],
+   "languages": [
+    "French"
+   ],
+   "name": "Saint Pierre and Miquelon",
+   "population": 5974,
+   "populationDate": "2019-01-01T00:00:00Z",
+   "wikidata": "Q34617"
+  },
+  "PN": {
+   "capitals": [
+    "Adamstown"
+   ],
+   "languages": [
+    "English",
+    "Pitkern"
+   ],
+   "name": "Pitcairn Islands",
+   "population": 50,
+   "populationDate": "2019-01-01T00:00:00Z",
+   "wikidata": "Q35672"
+  },
+  "PR": {
+   "capitals": [
+    "San Juan"
+   ],
+   "languages": [
+    "English",
+    "Spanish"
+   ],
+   "name": "Puerto Rico",
+   "population": 3285874,
+   "populationDate": "2020-04-01T00:00:00Z",
+   "wikidata": "Q1183"
+  },
+  "PS": {
+   "capitals": [
+    "East Jerusalem",
+    "Ramallah"
+   ],
+   "languages": [
+    "Arabic"
+   ],
+   "name": "Palestine",
+   "population": 5227193,
+   "populationDate": "2021-01-01T00:00:00Z",
+   "wikidata": "Q219060"
+  },
+  "PT": {
+   "capitals": [
+    "Lisbon"
+   ],
+   "languages": [
+    "Portuguese"
+   ],
+   "name": "Portugal",
+   "population": 10347892,
+   "populationDate": "2021-01-01T00:00:00Z",
+   "wikidata": "Q45"
+  },
+  "PW": {
+   "capitals": [
+    "Ngerulmud"
+   ],
+   "languages": [
+    "English",
+    "Japanese",
+    "Palauan"
+   ],
+   "name": "Palau",
+   "population": 21729,
+   "populationDate": "2017-01-01T00:00:00Z",
+   "wikidata": "Q695"
+  },
+  "PY": {
+   "capitals": [
+    "Asunción"
+   ],
+   "languages": [
+    "Spanish",
+    "Guarani"
+   ],
+   "name": "Paraguay",
+   "population": 6811297,
+   "populationDate": "2017-01-01T00:00:00Z",
+   "wikidata": "Q733"
+  },
+  "QA": {
+   "capitals": [
+    "Doha"
+   ],
+   "languages": [
+    "Arabic"
+   ],
+   "name": "Qatar",
+   "population": 2639211,
+   "populationDate": "2017-01-01T00:00:00Z",
+   "wikidata": "Q846"
+  },
+  "RE": {
+   "capitals": [
+    "Saint-Denis"
+   ],
+   "languages": [
+    "French"
+   ],
+   "name": "Réunion",
+   "population": 889679,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q17070"
+  },
+  "RO": {
+   "capitals": [
+    "Bucharest"
+   ],
+   "languages": [
+    "Romanian"
+   ],
+   "name": "Romania",
+   "population": 19053815,
+   "populationDate": "2022-01-01T00:00:00Z",
+   "wikidata": "Q218"
+  },
+  "RS": {
+   "capitals": [
+    "Belgrade"
+   ],
+   "languages": [
+    "Serbian"
+   ],
+   "name": "Serbia",
+   "population": 6605168,
+   "populationDate": "2024-01-01T00:00:00Z",
+   "wikidata": "Q403"
+  },
+  "RU": {
+   "capitals": [
+    "Moscow"
+   ],
+   "languages": [
+    "Russian"
+   ],
+   "name": "Russia",
+   "population": 146119928,
+   "populationDate": "2025-01-01T00:00:00Z",
+   "wikidata": "Q159"
+  },
+  "RW": {
+   "capitals": [
+    "Kigali"
+   ],
+   "languages": [
+    "English",
+    "French",
+    "Swahili",
+    "Kinyarwanda"
+   ],
+   "name": "Rwanda",
+   "population": 14569341,
+   "populationDate": "2025-01-01T00:00:00Z",
+   "wikidata": "Q1037"
+  },
+  "SA": {
+   "capitals": [
+    "Riyadh"
+   ],
+   "languages": [
+    "Arabic"
+   ],
+   "name": "Saudi Arabia",
+   "population": 33000000,
+   "populationDate": "2018-01-01T00:00:00Z",
+   "wikidata": "Q851"
+  },
+  "SB": {
+   "capitals": [
+    "Honiara"
+   ],
+   "languages": [
+    "English"
+   ],
+   "name": "Solomon Islands",
+   "population": 611343,
+   "populationDate": "2017-01-01T00:00:00Z",
+   "wikidata": "Q685"
+  },
+  "SC": {
+   "capitals": [
+    "Victoria"
+   ],
+   "languages": [
+    "English",
+    "French",
+    "Seychellois Creole"
+   ],
+   "name": "Seychelles",
+   "population": 119773,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q1042"
+  },
+  "SD": {
+   "capitals": [
+    "Khartoum"
+   ],
+   "languages": [
+    "English",
+    "Arabic"
+   ],
+   "name": "Sudan",
+   "population": 40533330,
+   "populationDate": "2017-01-01T00:00:00Z",
+   "wikidata": "Q1049"
+  },
+  "SE": {
+   "capitals": [
+    "Stockholm"
+   ],
+   "languages": [
+    "Swedish"
+   ],
+   "name": "Sweden",
+   "population": 10609460,
+   "populationDate": "2025-09-01T00:00:00Z",
+   "wikidata": "Q34"
+  },
+  "SG": {
+   "capitals": [
+    "Singapore"
+   ],
+   "languages": [
+    "Standard Chinese",
+    "English",
+    "Malay",
+    "Tamil"
+   ],
+   "name": "Singapore",
+   "population": 5866139,
+   "populationDate": "2021-07-01T00:00:00Z",
+   "wikidata": "Q334"
+  },
+  "SH": {
+   "capitals": [
+    "Jamestown"
+   ],
+   "languages": [
+    "English"
+   ],
+   "name": "Saint Helena, Ascension and Tristan da Cunha",
+   "population": 5633,
+   "populationDate": "2016-01-01T00:00:00Z",
+   "wikidata": "Q192184"
+  },
+  "SI": {
+   "capitals": [
+    "Ljubljana"
+   ],
+   "languages": [
+    "Slovene"
+   ],
+   "name": "Slovenia",
+   "population": 2066880,
+   "populationDate": "2018-01-01T00:00:00Z",
+   "wikidata": "Q215"
+  },
+  "SJ": {
+   "capitals": [],
+   "languages": [
+    "Norwegian"
+   ],
+   "name": "Svalbard and Jan Mayen",
+   "population": 2905,
+   "populationDate": "2022-01-01T00:00:00Z",
+   "wikidata": "Q842829"
+  },
+  "SK": {
+   "capitals": [
+    "Bratislava"
+   ],
+   "languages": [
+    "Slovak"
+   ],
+   "name": "Slovakia",
+   "population": 5409407,
+   "populationDate": "2025-12-31T00:00:00Z",
+   "wikidata": "Q214"
+  },
+  "SL": {
+   "capitals": [
+    "Freetown"
+   ],
+   "languages": [
+    "English",
+    "Krio"
+   ],
+   "name": "Sierra Leone",
+   "population": 7557212,
+   "populationDate": "2017-01-01T00:00:00Z",
+   "wikidata": "Q1044"
+  },
+  "SM": {
+   "capitals": [
+    "San Marino"
+   ],
+   "languages": [
+    "Italian"
+   ],
+   "name": "San Marino",
+   "population": 34167,
+   "populationDate": "2026-07-01T00:00:00Z",
+   "wikidata": "Q238"
+  },
+  "SN": {
+   "capitals": [
+    "Dakar"
+   ],
+   "languages": [
+    "French",
+    "Wolof",
+    "Badyara",
+    "Balanta"
+   ],
+   "name": "Senegal",
+   "population": 16876720,
+   "populationDate": "2021-01-01T00:00:00Z",
+   "wikidata": "Q1041"
+  },
+  "SO": {
+   "capitals": [
+    "Mogadishu"
+   ],
+   "languages": [
+    "Arabic",
+    "Somali"
+   ],
+   "name": "Somalia",
+   "population": 11031386,
+   "populationDate": "2017-01-01T00:00:00Z",
+   "wikidata": "Q1045"
+  },
+  "SR": {
+   "capitals": [
+    "Paramaribo"
+   ],
+   "languages": [
+    "Dutch"
+   ],
+   "name": "Suriname",
+   "population": 563402,
+   "populationDate": "2017-01-01T00:00:00Z",
+   "wikidata": "Q730"
+  },
+  "SS": {
+   "capitals": [
+    "Juba"
+   ],
+   "languages": [
+    "English"
+   ],
+   "name": "South Sudan",
+   "population": 12575714,
+   "populationDate": "2017-01-01T00:00:00Z",
+   "wikidata": "Q958"
+  },
+  "ST": {
+   "capitals": [
+    "São Tomé"
+   ],
+   "languages": [
+    "Portuguese"
+   ],
+   "name": "São Tomé and Príncipe",
+   "population": 204327,
+   "populationDate": "2017-01-01T00:00:00Z",
+   "wikidata": "Q1039"
+  },
+  "SV": {
+   "capitals": [
+    "San Salvador"
+   ],
+   "languages": [
+    "Spanish"
+   ],
+   "name": "El Salvador",
+   "population": 6029976,
+   "populationDate": "2024-01-01T00:00:00Z",
+   "wikidata": "Q792"
+  },
+  "SX": {
+   "capitals": [
+    "Philipsburg"
+   ],
+   "languages": [
+    "English",
+    "Dutch"
+   ],
+   "name": "Sint Maarten",
+   "population": 43847,
+   "populationDate": "2020-01-01T00:00:00Z",
+   "wikidata": "Q26273"
+  },
+  "SY": {
+   "capitals": [
+    "Damascus"
+   ],
+   "languages": [
+    "Arabic"
+   ],
+   "name": "Syria",
+   "population": 23865423,
+   "populationDate": "2024-01-01T00:00:00Z",
+   "wikidata": "Q858"
+  },
+  "SZ": {
+   "capitals": [
+    "Lobamba",
+    "Mbabane"
+   ],
+   "languages": [
+    "English",
+    "Swazi"
+   ],
+   "name": "Eswatini",
+   "population": 1230506,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q1050"
+  },
+  "TA": {
+   "capitals": [
+    "Edinburgh of the Seven Seas"
+   ],
+   "languages": [],
+   "name": "Tristan da Cunha",
+   "population": null,
+   "populationDate": null,
+   "wikidata": "Q34625512"
+  },
+  "TC": {
+   "capitals": [
+    "Cockburn Town"
+   ],
+   "languages": [
+    "English"
+   ],
+   "name": "Turks and Caicos Islands",
+   "population": 44542,
+   "populationDate": "2020-01-01T00:00:00Z",
+   "wikidata": "Q18221"
+  },
+  "TD": {
+   "capitals": [
+    "N'Djamena"
+   ],
+   "languages": [
+    "Arabic",
+    "French"
+   ],
+   "name": "Chad",
+   "population": 19319064,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q657"
+  },
+  "TF": {
+   "capitals": [
+    "Port-aux-Français"
+   ],
+   "languages": [
+    "French"
+   ],
+   "name": "French Southern and Antarctic Lands",
+   "population": 196,
+   "populationDate": "2012-01-01T00:00:00Z",
+   "wikidata": "Q129003"
+  },
+  "TG": {
+   "capitals": [
+    "Lomé"
+   ],
+   "languages": [
+    "French"
+   ],
+   "name": "Togo",
+   "population": 7797694,
+   "populationDate": "2017-01-01T00:00:00Z",
+   "wikidata": "Q945"
+  },
+  "TH": {
+   "capitals": [
+    "Bangkok"
+   ],
+   "languages": [
+    "Thai"
+   ],
+   "name": "Thailand",
+   "population": 66188503,
+   "populationDate": "2017-12-31T00:00:00Z",
+   "wikidata": "Q869"
+  },
+  "TJ": {
+   "capitals": [
+    "Dushanbe"
+   ],
+   "languages": [
+    "Tajik"
+   ],
+   "name": "Tajikistan",
+   "population": 9504000,
+   "populationDate": "2021-01-01T00:00:00Z",
+   "wikidata": "Q863"
+  },
+  "TK": {
+   "capitals": [],
+   "languages": [
+    "English",
+    "Tokelauan"
+   ],
+   "name": "Tokelau",
+   "population": 1499,
+   "populationDate": "2016-01-01T00:00:00Z",
+   "wikidata": "Q36823"
+  },
+  "TL": {
+   "capitals": [
+    "Dili"
+   ],
+   "languages": [
+    "Portuguese",
+    "Tetum"
+   ],
+   "name": "Timor-Leste",
+   "population": 1400638,
+   "populationDate": "2024-01-01T00:00:00Z",
+   "wikidata": "Q574"
+  },
+  "TM": {
+   "capitals": [
+    "Ashgabat"
+   ],
+   "languages": [
+    "Turkmen"
+   ],
+   "name": "Turkmenistan",
+   "population": 6117933,
+   "populationDate": "2021-01-01T00:00:00Z",
+   "wikidata": "Q874"
+  },
+  "TN": {
+   "capitals": [
+    "Tunis"
+   ],
+   "languages": [
+    "Arabic"
+   ],
+   "name": "Tunisia",
+   "population": 11565204,
+   "populationDate": "2018-01-01T00:00:00Z",
+   "wikidata": "Q948"
+  },
+  "TO": {
+   "capitals": [
+    "Nukuʻalofa"
+   ],
+   "languages": [
+    "English",
+    "Tongan"
+   ],
+   "name": "Tonga",
+   "population": 108020,
+   "populationDate": "2017-01-01T00:00:00Z",
+   "wikidata": "Q678"
+  },
+  "TR": {
+   "capitals": [
+    "Ankara"
+   ],
+   "languages": [
+    "Turkish"
+   ],
+   "name": "Turkey",
+   "population": 85372377,
+   "populationDate": "2023-12-31T00:00:00Z",
+   "wikidata": "Q43"
+  },
+  "TT": {
+   "capitals": [
+    "Port of Spain"
+   ],
+   "languages": [
+    "English"
+   ],
+   "name": "Trinidad and Tobago",
+   "population": 1369125,
+   "populationDate": "2017-01-01T00:00:00Z",
+   "wikidata": "Q754"
+  },
+  "TV": {
+   "capitals": [
+    "Funafuti"
+   ],
+   "languages": [
+    "English",
+    "Tuvaluan"
+   ],
+   "name": "Tuvalu",
+   "population": 10643,
+   "populationDate": "2022-12-12T00:00:00Z",
+   "wikidata": "Q672"
+  },
+  "TW": {
+   "capitals": [
+    "Taipei"
+   ],
+   "languages": [
+    "Taiwanese Hokkien",
+    "Standard Taiwanese Mandarin",
+    "Amis",
+    "Paiwan",
+    "Atayal",
+    "Bunun",
+    "Seediq",
+    "Rukai",
+    "Puyuma",
+    "Saisiyat",
+    "Yami",
+    "Tsou",
+    "Sakizaya",
+    "Kavalan",
+    "Saaroa",
+    "Kanakanavu",
+    "Kinmen dialect",
+    "Matsu dialect",
+    "Taiwanese Hakka",
+    "Truku",
+    "Wuqiu dialect"
+   ],
+   "name": "Taiwan",
+   "population": 23262544,
+   "populationDate": "2026-04-01T00:00:00Z",
+   "wikidata": "Q865"
+  },
+  "TZ": {
+   "capitals": [
+    "Dodoma"
+   ],
+   "languages": [
+    "English",
+    "Swahili"
+   ],
+   "name": "Tanzania",
+   "population": 57310019,
+   "populationDate": "2017-01-01T00:00:00Z",
+   "wikidata": "Q924"
+  },
+  "UA": {
+   "capitals": [
+    "Kyiv"
+   ],
+   "languages": [
+    "Ukrainian"
+   ],
+   "name": "Ukraine",
+   "population": 41167335,
+   "populationDate": "2022-01-01T00:00:00Z",
+   "wikidata": "Q212"
+  },
+  "UG": {
+   "capitals": [
+    "Kampala"
+   ],
+   "languages": [
+    "English",
+    "Swahili"
+   ],
+   "name": "Uganda",
+   "population": 47123531,
+   "populationDate": "2021-01-01T00:00:00Z",
+   "wikidata": "Q1036"
+  },
+  "UM": {
+   "capitals": [],
+   "languages": [
+    "English"
+   ],
+   "name": "United States Minor Outlying Islands",
+   "population": 190,
+   "populationDate": "2010-01-01T00:00:00Z",
+   "wikidata": "Q16645"
+  },
+  "US": {
+   "capitals": [
+    "Washington, D.C."
+   ],
+   "languages": [
+    "Spanish",
+    "Samoan",
+    "Hawaiian",
+    "Chamorro",
+    "Carolinian"
+   ],
+   "name": "United States",
+   "population": 340110988,
+   "populationDate": "2024-07-01T00:00:00Z",
+   "wikidata": "Q30"
+  },
+  "UY": {
+   "capitals": [
+    "Montevideo"
+   ],
+   "languages": [],
+   "name": "Uruguay",
+   "population": 3444263,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q77"
+  },
+  "UZ": {
+   "capitals": [
+    "Tashkent"
+   ],
+   "languages": [
+    "Uzbek"
+   ],
+   "name": "Uzbekistan",
+   "population": 34915100,
+   "populationDate": "2021-01-01T00:00:00Z",
+   "wikidata": "Q265"
+  },
+  "VA": {
+   "capitals": [
+    "Vatican City"
+   ],
+   "languages": [
+    "Italian",
+    "Latin"
+   ],
+   "name": "Vatican City",
+   "population": 949,
+   "populationDate": "2024-12-31T00:00:00Z",
+   "wikidata": "Q237"
+  },
+  "VC": {
+   "capitals": [
+    "Kingstown"
+   ],
+   "languages": [
+    "English"
+   ],
+   "name": "Saint Vincent and the Grenadines",
+   "population": 109296,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q757"
+  },
+  "VE": {
+   "capitals": [
+    "Caracas"
+   ],
+   "languages": [
+    "Spanish"
+   ],
+   "name": "Venezuela",
+   "population": 31250306,
+   "populationDate": "2024-01-01T00:00:00Z",
+   "wikidata": "Q717"
+  },
+  "VG": {
+   "capitals": [
+    "Road Town"
+   ],
+   "languages": [
+    "English"
+   ],
+   "name": "British Virgin Islands",
+   "population": 39369,
+   "populationDate": "2023-01-01T00:00:00Z",
+   "wikidata": "Q25305"
+  },
+  "VI": {
+   "capitals": [
+    "Charlotte Amalie"
+   ],
+   "languages": [
+    "English"
+   ],
+   "name": "United States Virgin Islands",
+   "population": 87146,
+   "populationDate": "2020-01-01T00:00:00Z",
+   "wikidata": "Q11703"
+  },
+  "VN": {
+   "capitals": [
+    "Hanoi"
+   ],
+   "languages": [
+    "Vietnamese"
+   ],
+   "name": "Vietnam",
+   "population": 96208984,
+   "populationDate": "2019-04-01T00:00:00Z",
+   "wikidata": "Q881"
+  },
+  "VU": {
+   "capitals": [
+    "Port Vila"
+   ],
+   "languages": [
+    "English",
+    "French",
+    "Bislama"
+   ],
+   "name": "Vanuatu",
+   "population": 300019,
+   "populationDate": "2020-01-01T00:00:00Z",
+   "wikidata": "Q686"
+  },
+  "WF": {
+   "capitals": [
+    "Mata-Utu"
+   ],
+   "languages": [
+    "French",
+    "Futunan",
+    "Wallisian"
+   ],
+   "name": "Wallis and Futuna",
+   "population": 11558,
+   "populationDate": "2018-01-01T00:00:00Z",
+   "wikidata": "Q35555"
+  },
+  "WS": {
+   "capitals": [
+    "Apia"
+   ],
+   "languages": [
+    "English",
+    "Samoan"
+   ],
+   "name": "Samoa",
+   "population": 200010,
+   "populationDate": "2021-01-01T00:00:00Z",
+   "wikidata": "Q683"
+  },
+  "XK": {
+   "capitals": [
+    "Pristina"
+   ],
+   "languages": [
+    "Serbian",
+    "Albanian"
+   ],
+   "name": "Kosovo",
+   "population": 1586659,
+   "populationDate": "2024-01-01T00:00:00Z",
+   "wikidata": "Q1246"
+  },
+  "YE": {
+   "capitals": [
+    "Aden",
+    "Sanaa"
+   ],
+   "languages": [
+    "Arabic"
+   ],
+   "name": "Yemen",
+   "population": 28250420,
+   "populationDate": "2017-01-01T00:00:00Z",
+   "wikidata": "Q805"
+  },
+  "YT": {
+   "capitals": [
+    "Dzaoudzi",
+    "Mamoudzou"
+   ],
+   "languages": [
+    "French",
+    "Maore",
+    "Bushi"
+   ],
+   "name": "Mayotte",
+   "population": 320901,
+   "populationDate": "2024-01-01T00:00:00Z",
+   "wikidata": "Q17063"
+  },
+  "ZA": {
+   "capitals": [
+    "Bloemfontein",
+    "Cape Town",
+    "Pretoria"
+   ],
+   "languages": [
+    "English",
+    "Tsonga",
+    "Zulu",
+    "Afrikaans",
+    "Xhosa",
+    "Sesotho",
+    "Tswana",
+    "Northern Sotho",
+    "Swazi",
+    "Venda",
+    "Southern Ndebele"
+   ],
+   "name": "South Africa",
+   "population": 62027503,
+   "populationDate": "2022-02-02T00:00:00Z",
+   "wikidata": "Q258"
+  },
+  "ZM": {
+   "capitals": [
+    "Lusaka"
+   ],
+   "languages": [
+    "English"
+   ],
+   "name": "Zambia",
+   "population": 19610769,
+   "populationDate": "2022-01-01T00:00:00Z",
+   "wikidata": "Q953"
+  },
+  "ZW": {
+   "capitals": [
+    "Harare"
+   ],
+   "languages": [
+    "English",
+    "Tsonga",
+    "Chewa",
+    "Shona",
+    "Xhosa",
+    "Sesotho",
+    "Tswana",
+    "Northern Ndebele",
+    "Venda",
+    "Tonga",
+    "Khoisan",
+    "Barwe",
+    "Kalanga",
+    "Nambya",
+    "Ndau"
+   ],
+   "name": "Zimbabwe",
+   "population": 15178979,
+   "populationDate": "2022-01-01T00:00:00Z",
+   "wikidata": "Q954"
+  }
+ }
+}

@@ -23,8 +23,24 @@ use serde_json::Value;
 /// full-width iPad map.
 const COARSE_TOLERANCE: f32 = 0.002;
 
-/// Display names where Natural Earth's NAME_EN is the formal name.
-const NAME_OVERRIDES: &[(&str, &str)] = &[("CHN", "China"), ("CYN", "Northern Cyprus")];
+/// Display names: the plain, common English name a kid will meet, where
+/// Natural Earth's NAME_EN is formal or dated. Keyed by ADM0_A3.
+const NAME_OVERRIDES: &[(&str, &str)] = &[
+    ("CHN", "China"),
+    ("CYN", "Northern Cyprus"),
+    ("CIV", "Côte d'Ivoire"),
+    ("TLS", "Timor-Leste"),
+    ("MAC", "Macao"),
+    ("CPV", "Cabo Verde"),
+    ("USA", "United States"),
+    ("FSM", "Micronesia"),
+    ("CZE", "Czechia"),
+    ("IOA", "Christmas and Cocos Islands"),
+];
+
+/// Features whose ISO_A2_EH points at a *different* country's facts (both
+/// carry "AU"), so tapping them showed Australia's card. "-99" = name only.
+const ISO_OVERRIDES: &[(&str, &str)] = &[("IOA", "-99"), ("ATC", "-99")];
 
 fn main() -> ExitCode {
     let args: Vec<String> = std::env::args().collect();
@@ -74,8 +90,13 @@ fn run(coarse_path: &str, fine_path: &str, out_path: &str) -> Result<String, Str
             .map(|(_, name)| name.to_string())
             .map_or_else(|| prop_str(feature, "NAME_EN"), Ok)?;
         let (lx, ly) = equal_earth(prop_f64(feature, "LABEL_X")?, prop_f64(feature, "LABEL_Y")?);
+        let iso2 = ISO_OVERRIDES
+            .iter()
+            .find(|(code, _)| *code == id)
+            .map(|(_, iso2)| iso2.to_string())
+            .map_or_else(|| prop_str(feature, "ISO_A2_EH"), Ok)?;
         countries.push(CountryData {
-            iso2: prop_str(feature, "ISO_A2_EH")?,
+            iso2,
             name,
             continent: prop_str(feature, "CONTINENT")?,
             color_group: prop_f64(feature, "MAPCOLOR7")? as u8,

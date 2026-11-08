@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Builds the map data the app bundles, from the raw downloads in data/raw/
-# (run tools/fetch-data.sh and tools/fetch-facts.py first):
+# (run tools/fetch-data.sh first) and the committed Wikidata snapshot
+# tools/wikidata-facts.json (refresh it with tools/fetch-facts.py):
 #
 #   apple/MiMundo/Resources/World.bin        country outlines (Rust mapgen)
 #   apple/MiMundo/Resources/Countries.json   capitals, population, languages
@@ -29,7 +30,8 @@ echo "==> World.bin"
 echo "==> Countries.json"
 python3 -I "$ROOT/tools/build-countries.py" \
   "$RAW/naturalearth/ne_50m_admin_0_countries.geojson" \
-  "$RAW/wikidata/facts.json" \
+  "$ROOT/tools/wikidata-facts.json" \
+  "$ROOT/tools/facts-overrides.json" \
   "$OUT/Countries.json"
 
 echo "==> Flags.xcassets"
@@ -44,13 +46,22 @@ for iso2 in $(python3 -I -c 'import json,sys; print(" ".join(sorted(json.load(op
   [[ -f "$svg" ]] || { echo "  (no flag for $iso2)"; continue; }
   set_dir="$FLAGS/flag-$code.imageset"
   mkdir -p "$set_dir"
-  inkscape "$svg" -w "$FLAG_WIDTH" -h $((FLAG_WIDTH * 3 / 4)) --export-png-color-mode=RGB_8 \
-    -o "$set_dir/flag-$code.png" 2>/dev/null
+  log="$(mktemp -t inkscape)"
+  if ! inkscape "$svg" -w "$FLAG_WIDTH" -h $((FLAG_WIDTH * 3 / 4)) --export-png-color-mode=RGB_8 \
+      -o "$set_dir/flag-$code.png" 2>"$log" || [[ ! -s "$set_dir/flag-$code.png" ]]; then
+    echo "error: rendering flag $iso2 failed:" >&2
+    cat "$log" >&2
+    exit 1
+  fi
+  rm -f "$log"
   printf '{\n  "images" : [ { "filename" : "flag-%s.png", "idiom" : "universal" } ],\n  "info" : { "author" : "xcode", "version" : 1 }\n}\n' \
     "$code" > "$set_dir/Contents.json"
   count=$((count + 1))
 done
 echo "  $count flags"
+
+echo "==> Checking the map against known places (core/tests/world_bin.rs)"
+(cd "$ROOT/core" && cargo test -q --test world_bin)
 
 echo "==> Done. Sizes:"
 du -sh "$OUT/World.bin" "$OUT/Countries.json" "$FLAGS"

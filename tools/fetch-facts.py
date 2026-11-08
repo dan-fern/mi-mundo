@@ -1,14 +1,22 @@
-#!/usr/bin/env python3 -I
-"""Fetches country facts from Wikidata (CC0) into data/raw/wikidata/facts.json.
+#!/usr/bin/env -S python3 -I
+"""Fetches country facts from Wikidata (CC0) into tools/wikidata-facts.json.
 
-For every item with an ISO 3166-1 alpha-2 code (P297): English name, capital(s)
-(P36), latest population (P1082 with its P585 date), and official languages
-(P37). tools/build-data.sh then joins this with the Natural Earth countries.
+The snapshot is committed, so builds are reproducible and fact changes show
+up as their own reviewable diff. Hand fixes are NOT applied here: they live
+in tools/facts-overrides.json and are applied by build-countries.py, so
+content fixes never need the network.
+
+For every item with an ISO 3166-1 alpha-2 code (P297): English name,
+capital(s) (P36), population (P1082, best-ranked statement, most recent by
+date), and official languages (P37, sign languages dropped), ranked by
+worldwide speakers (P1098) as a starting point for the overrides.
 
 Usage: python3 -I tools/fetch-facts.py <repo root>
 """
 
+import datetime
 import json
+import re
 import sys
 import urllib.parse
 import urllib.request
@@ -23,8 +31,9 @@ SELECT ?iso2 ?country ?countryLabel ?capitalLabel ?pop ?popDate ?langLabel ?spea
   FILTER NOT EXISTS { ?country wdt:P576 ?dissolved . }
   OPTIONAL { ?country wdt:P36 ?capital . }
   OPTIONAL {
+    # Best rank only (preferred, else normal): never deprecated figures.
     ?country p:P1082 ?popStatement .
-    ?popStatement ps:P1082 ?pop .
+    ?popStatement ps:P1082 ?pop ; a wikibase:BestRank .
     OPTIONAL { ?popStatement pq:P585 ?popDate . }
   }
   OPTIONAL {
@@ -35,6 +44,10 @@ SELECT ?iso2 ?country ?countryLabel ?capitalLabel ?pop ?popDate ?langLabel ?spea
   SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
 }
 """
+
+# A label that's just an item id means Wikidata had no English label; fail
+# loudly instead of showing "Q36262" to a kid.
+BARE_ID = re.compile(r"^Q\d+$")
 
 
 def run_query():
@@ -50,47 +63,54 @@ def value(row, key):
 
 def main():
     root = Path(sys.argv[1])
-    rows = run_query()
-    facts = {}
-    for row in rows:
+    facts, bare_ids = {}, set()
+    for row in run_query():
         iso2 = value(row, "iso2").upper()
         entry = facts.setdefault(iso2, {
             "wikidata": value(row, "country").rsplit("/", 1)[-1],
             "name": value(row, "countryLabel"),
-            "capitals": [],
-            "languages": [],
-            "population": None,
-            "populationDate": None,
+            "capitals": set(),
+            "_speakers": {},
+            "_populations": set(),
         })
         capital = value(row, "capitalLabel")
-        if capital and capital not in entry["capitals"]:
-            entry["capitals"].append(capital)
+        if capital:
+            (bare_ids.add(f"{iso2} capital {capital}") if BARE_ID.match(capital)
+             else entry["capitals"].add(capital))
         language = value(row, "langLabel")
         if language:
-            speakers = int(float(value(row, "speakers") or 0))
-            ranked = entry.setdefault("_speakers", {})
-            ranked[language] = max(ranked.get(language, 0), speakers)
-        pop, pop_date = value(row, "pop"), value(row, "popDate") or ""
-        if pop is not None:
-            # Keep the most recent figure (undated ones lose to dated ones).
-            if entry["population"] is None or pop_date > (entry["populationDate"] or ""):
-                entry["population"] = int(float(pop))
-                entry["populationDate"] = pop_date or None
+            if BARE_ID.match(language):
+                bare_ids.add(f"{iso2} language {language}")
+            else:
+                speakers = int(float(value(row, "speakers") or 0))
+                entry["_speakers"][language] = max(entry["_speakers"].get(language, 0), speakers)
+        if value(row, "pop") is not None:
+            entry["_populations"].add((value(row, "popDate") or "", int(float(value(row, "pop")))))
 
-    # Most-spoken languages first (worldwide speakers), then apply hand
-    # overrides for countries where Wikidata's "official languages" list
-    # misleads a kid (tools/facts-overrides.json, keyed by ISO alpha-2).
-    overrides = json.loads((root / "tools" / "facts-overrides.json").read_text())
-    for iso2, entry in facts.items():
-        ranked = entry.pop("_speakers", {})
+    for entry in facts.values():
+        # Deterministic: capitals alphabetical (overrides set a preferred
+        # order), languages by speakers then name, population = most recent
+        # dated figure, ties broken by the larger value.
+        entry["capitals"] = sorted(entry["capitals"])
+        ranked = entry.pop("_speakers")
         entry["languages"] = sorted(ranked, key=lambda name: (-ranked[name], name))
-        for key, replacement in overrides.get(iso2, {}).items():
-            if not key.startswith("_"):
-                entry[key] = replacement
+        populations = sorted(entry.pop("_populations"))
+        entry["population"], entry["populationDate"] = (
+            (populations[-1][1], populations[-1][0] or None) if populations else (None, None)
+        )
 
-    out = root / "data" / "raw" / "wikidata" / "facts.json"
-    out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(json.dumps(facts, ensure_ascii=False, indent=1, sort_keys=True))
+    if bare_ids:
+        print("Labels missing in English (add overrides):", *sorted(bare_ids), sep="\n  ")
+
+    snapshot = {
+        "_meta": {
+            "fetched": datetime.date.today().isoformat(),
+            "source": "Wikidata (CC0) via query.wikidata.org; see QUERY in tools/fetch-facts.py",
+        },
+        "countries": facts,
+    }
+    out = root / "tools" / "wikidata-facts.json"
+    out.write_text(json.dumps(snapshot, ensure_ascii=False, indent=1, sort_keys=True) + "\n")
     print(f"==> {len(facts)} countries -> {out.relative_to(root)}")
 
 

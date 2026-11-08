@@ -24,6 +24,13 @@ done
 echo "==> flag-icons $FLAG_ICONS_VERSION"
 curl -fsSL "https://registry.npmjs.org/flag-icons/-/flag-icons-$FLAG_ICONS_VERSION.tgz" \
   -o "$RAW/flag-icons/flag-icons.tgz"
+
+echo "==> Verifying checksums (tools/data.sha256)"
+# Pinned versions can still be re-tagged or re-published; fail on any change,
+# before unpacking anything. After deliberately bumping a version:
+#   (cd data/raw && shasum -a 256 <files> > ../../tools/data.sha256)
+(cd "$RAW" && shasum -a 256 -c "$ROOT/tools/data.sha256")
+
 rm -rf "$RAW/flag-icons/package"
 tar -xzf "$RAW/flag-icons/flag-icons.tgz" -C "$RAW/flag-icons" package/flags/4x3 package/LICENSE
 

@@ -1,16 +1,19 @@
 # Third-party data and notices
 
 Mi Mundo's own code is MIT-licensed (see LICENSE). The app also ships data
-from these projects:
+from these projects. This file is bundled into the app and shown under
+Parent home → Credits.
+
+Made with Natural Earth. Free vector and raster map data @ naturalearthdata.com.
 
 | Data | Used for | License |
 |---|---|---|
 | [Natural Earth](https://www.naturalearthdata.com) admin-0 countries, 1:110m and 1:50m (v5.1.2) | Country outlines (`apple/MiMundo/Resources/World.bin`) | Public domain |
-| [Wikidata](https://www.wikidata.org) | Capitals, population, languages (`Countries.json`) | CC0 1.0 |
+| [Wikidata](https://www.wikidata.org) | Capitals, population, languages (`Countries.json`; snapshot in `tools/wikidata-facts.json`, hand fixes in `tools/facts-overrides.json`) | CC0 1.0 |
 | [flag-icons](https://github.com/lipis/flag-icons) 7.2.3 | Flags (`Flags.xcassets`) | MIT, notice below |
 
-Rebuild instructions: `tools/fetch-data.sh`, `tools/fetch-facts.py`, then
-`tools/build-data.sh`.
+Rebuild instructions: `tools/fetch-data.sh`, then `tools/build-data.sh`
+(`tools/fetch-facts.py` refreshes the Wikidata snapshot).
 
 ## flag-icons
 

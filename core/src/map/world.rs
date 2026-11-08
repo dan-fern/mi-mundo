@@ -183,8 +183,12 @@ impl World {
 fn distance_to_rings(rings: &[Vec<f32>], x: f32, y: f32) -> f32 {
     let mut best = f32::INFINITY;
     for ring in rings {
-        for seg in ring.windows(4).step_by(2) {
-            let (ax, ay, bx, by) = (seg[0], seg[1], seg[2], seg[3]);
+        let n = ring.len() / 2;
+        // Every edge including the closing one (last point back to first),
+        // matching point_in_rings, so open rings are handled too.
+        for i in 0..n {
+            let j = (i + 1) % n;
+            let (ax, ay, bx, by) = (ring[2 * i], ring[2 * i + 1], ring[2 * j], ring[2 * j + 1]);
             let (dx, dy) = (bx - ax, by - ay);
             let len2 = dx * dx + dy * dy;
             let t = if len2 == 0.0 {
@@ -205,20 +209,21 @@ pub fn encode(countries: &[CountryData]) -> Vec<u8> {
     let mut out = Vec::new();
     out.extend_from_slice(MAGIC);
     out.extend_from_slice(&VERSION.to_le_bytes());
-    out.extend_from_slice(&(countries.len() as u32).to_le_bytes());
+    out.extend_from_slice(&len_u32(countries.len()).to_le_bytes());
     for c in countries {
         for s in [&c.id, &c.iso2, &c.name, &c.continent] {
             let bytes = s.as_bytes();
-            out.extend_from_slice(&(bytes.len() as u16).to_le_bytes());
+            let len = u16::try_from(bytes.len()).expect("string longer than 65535 bytes");
+            out.extend_from_slice(&len.to_le_bytes());
             out.extend_from_slice(bytes);
         }
         out.push(c.color_group);
         out.extend_from_slice(&c.label.0.to_le_bytes());
         out.extend_from_slice(&c.label.1.to_le_bytes());
         for rings in [&c.coarse, &c.fine] {
-            out.extend_from_slice(&(rings.len() as u32).to_le_bytes());
+            out.extend_from_slice(&len_u32(rings.len()).to_le_bytes());
             for ring in rings {
-                out.extend_from_slice(&((ring.len() / 2) as u32).to_le_bytes());
+                out.extend_from_slice(&len_u32(ring.len() / 2).to_le_bytes());
                 for v in ring {
                     out.extend_from_slice(&v.to_le_bytes());
                 }
@@ -226,6 +231,10 @@ pub fn encode(countries: &[CountryData]) -> Vec<u8> {
         }
     }
     out
+}
+
+fn len_u32(n: usize) -> u32 {
+    u32::try_from(n).expect("count too large for World.bin")
 }
 
 struct Reader<'a> {
@@ -291,7 +300,7 @@ pub fn decode(bytes: &[u8]) -> Result<Vec<CountryData>, MapError> {
     let count = r.u32()? as usize;
     let mut countries = Vec::with_capacity(count.min(1_000));
     for _ in 0..count {
-        countries.push(CountryData {
+        let country = CountryData {
             id: r.string()?,
             iso2: r.string()?,
             name: r.string()?,
@@ -300,12 +309,38 @@ pub fn decode(bytes: &[u8]) -> Result<Vec<CountryData>, MapError> {
             label: (r.f32()?, r.f32()?),
             coarse: r.rings()?,
             fine: r.rings()?,
-        });
+        };
+        validate(&country)?;
+        countries.push(country);
     }
     if r.pos != bytes.len() {
         return Err(bad("trailing bytes"));
     }
     Ok(countries)
+}
+
+/// Rejects values that would draw or hit-test wrongly instead of failing
+/// loudly: non-finite coordinates, color groups outside 1–7, empty shapes.
+fn validate(c: &CountryData) -> Result<(), MapError> {
+    let who = &c.id;
+    if !(1..=7).contains(&c.color_group) {
+        return Err(bad(&format!(
+            "{who}: color group {} not in 1–7",
+            c.color_group
+        )));
+    }
+    if !c.label.0.is_finite() || !c.label.1.is_finite() {
+        return Err(bad(&format!("{who}: label is not finite")));
+    }
+    for rings in [&c.coarse, &c.fine] {
+        if rings.is_empty() {
+            return Err(bad(&format!("{who}: no outline")));
+        }
+        if rings.iter().flatten().any(|v| !v.is_finite()) {
+            return Err(bad(&format!("{who}: outline has a non-finite coordinate")));
+        }
+    }
+    Ok(())
 }
 
 #[cfg(test)]
@@ -384,6 +419,30 @@ mod tests {
         let mut wrong_version = encode(&sample());
         wrong_version[4] = 9;
         assert!(World::new(wrong_version).is_err());
+    }
+
+    #[test]
+    fn rejects_non_finite_coordinates_and_bad_colors() {
+        let mut nan = sample();
+        nan[0].fine[0][3] = f32::NAN;
+        assert!(World::new(encode(&nan)).is_err());
+        let mut inf = sample();
+        inf[1].label.0 = f32::INFINITY;
+        assert!(World::new(encode(&inf)).is_err());
+        let mut color = sample();
+        color[2].color_group = 0;
+        assert!(World::new(encode(&color)).is_err());
+        let mut empty = sample();
+        empty[2].coarse.clear();
+        assert!(World::new(encode(&empty)).is_err());
+    }
+
+    #[test]
+    fn nearest_distance_includes_the_closing_edge_of_open_rings() {
+        // Open triangle (no repeated first point): the left edge only exists
+        // as the closing segment.
+        let open = vec![vec![0.0, 0.0, 10.0, 0.0, 0.0, 10.0]];
+        assert!((distance_to_rings(&open, -1.0, 5.0) - 1.0).abs() < 1e-6);
     }
 
     #[test]

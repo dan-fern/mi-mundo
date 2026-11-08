@@ -5,6 +5,8 @@ edition = "2024"
 rust-version = "1.85"
 license = "MIT"
 description = "Game logic for Mi Mundo, shared with the SwiftUI app through UniFFI."
+# Tests read ../apple/MiMundo/Resources/World.bin; this crate isn't published.
+publish = false
 
 [lib]
 # staticlib: linked into the iPad app.
