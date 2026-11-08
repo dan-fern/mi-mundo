@@ -15,10 +15,18 @@ pub const DAY_START_HOUR_ET: i64 = 22;
 
 const EPOCH: NaiveDate = NaiveDate::from_ymd_opt(1970, 1, 1).expect("valid date");
 
-/// Game day number for an instant given as Unix seconds.
+/// Earliest and latest instants we accept (1900-01-01 and 9999-12-31 UTC).
+/// A device clock can't sensibly be outside this; clamping keeps the date
+/// math far from chrono's limits so nothing here can panic.
+const MIN_UNIX_SECONDS: i64 = -2_208_988_800;
+const MAX_UNIX_SECONDS: i64 = 253_402_300_799;
+
+/// Game day number for an instant given as Unix seconds. Out-of-range
+/// instants are clamped (see [`MIN_UNIX_SECONDS`]).
 #[uniffi::export]
 pub fn game_day(unix_seconds: i64) -> i32 {
-    let utc = DateTime::from_timestamp(unix_seconds, 0).unwrap_or(DateTime::UNIX_EPOCH);
+    let clamped = unix_seconds.clamp(MIN_UNIX_SECONDS, MAX_UNIX_SECONDS);
+    let utc = DateTime::from_timestamp(clamped, 0).expect("clamped into chrono's range");
     let eastern = utc.with_timezone(&New_York).naive_local();
     // Shift so 10 pm lands on midnight of the next calendar date.
     let shifted = eastern + Duration::hours(24 - DAY_START_HOUR_ET);
@@ -26,11 +34,13 @@ pub fn game_day(unix_seconds: i64) -> i32 {
 }
 
 /// ISO date (YYYY-MM-DD) naming a game day, for parent screens and logs.
+/// Never panics: a day number chrono can't represent comes back as "day N".
 #[uniffi::export]
 pub fn game_day_label(day: i32) -> String {
-    (EPOCH + Duration::days(i64::from(day)))
-        .format("%Y-%m-%d")
-        .to_string()
+    EPOCH
+        .checked_add_signed(Duration::days(i64::from(day)))
+        .map(|date| date.format("%Y-%m-%d").to_string())
+        .unwrap_or_else(|| format!("day {day}"))
 }
 
 #[cfg(test)]
@@ -101,5 +111,35 @@ mod tests {
     #[test]
     fn epoch_label() {
         assert_eq!(game_day_label(0), "1970-01-01");
+    }
+
+    /// Day numbers are stored on the iPad, so their values must never shift.
+    #[test]
+    fn day_numbers_are_pinned() {
+        assert_eq!(game_day(et(2026, 11, 9, 12, 0)), 20_766);
+        assert_eq!(game_day_label(20_766), "2026-11-09");
+        // 1970-01-01 00:00 UTC is 7 pm ET on Dec 31, 1969: before 10 pm.
+        assert_eq!(game_day(0), -1);
+    }
+
+    #[test]
+    fn repeated_hour_on_fall_back_day_is_one_day() {
+        // Nov 1 2026, 1:30 am happens twice (EDT then EST); both are Nov 1.
+        let first = New_York
+            .with_ymd_and_hms(2026, 11, 1, 1, 30, 0)
+            .earliest()
+            .unwrap()
+            .timestamp();
+        let second = first + 3600;
+        assert_eq!(label_at(first), "2026-11-01");
+        assert_eq!(label_at(second), "2026-11-01");
+    }
+
+    #[test]
+    fn extreme_inputs_do_not_panic() {
+        assert_eq!(game_day(i64::MIN), game_day(MIN_UNIX_SECONDS));
+        assert_eq!(game_day(i64::MAX), game_day(MAX_UNIX_SECONDS));
+        assert_eq!(game_day_label(i32::MAX), format!("day {}", i32::MAX));
+        assert_eq!(game_day_label(i32::MIN), format!("day {}", i32::MIN));
     }
 }

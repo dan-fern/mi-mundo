@@ -65,6 +65,28 @@ pub fn day_streak(visit_days: Vec<i32>, today: i32) -> u32 {
     streak
 }
 
+/// Everything a screen needs about one child's attendance, in one FFI call.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, uniffi::Record)]
+pub struct AttendanceSummary {
+    /// Gauge level, 0 to `max_level`.
+    pub level: u32,
+    pub max_level: u32,
+    pub days_played_last_7: u32,
+    pub streak: u32,
+}
+
+#[uniffi::export]
+pub fn attendance_summary(visit_days: Vec<i32>, today: i32) -> AttendanceSummary {
+    let streak = day_streak(visit_days.clone(), today);
+    let days_played_last_7 = days_played_last_7(visit_days, today);
+    AttendanceSummary {
+        level: attendance_level(days_played_last_7),
+        max_level: ATTENDANCE_MAX,
+        days_played_last_7,
+        streak,
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -121,6 +143,20 @@ mod tests {
     fn streak_ignores_future_and_empty() {
         assert_eq!(day_streak(vec![], TODAY), 0);
         assert_eq!(day_streak(vec![TODAY + 1], TODAY), 0);
+    }
+
+    #[test]
+    fn summary_combines_everything() {
+        let days = vec![TODAY, TODAY - 1, TODAY - 2, TODAY - 4, TODAY - 5, TODAY - 6];
+        assert_eq!(
+            attendance_summary(days, TODAY),
+            AttendanceSummary {
+                level: 5,
+                max_level: 5,
+                days_played_last_7: 6,
+                streak: 3,
+            }
+        );
     }
 
     #[test]

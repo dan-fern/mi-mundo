@@ -1,6 +1,6 @@
 # Mi Mundo — Requirements
 
-_Status: draft v0.2 · 2026-11-08_
+_Status: draft v0.3 · 2026-11-08_
 
 A gamified geography app for a family: kids explore and get quizzed on a
 world map, parents choose what to practise, set rewards and track progress.
@@ -25,11 +25,23 @@ Age-agnostic — fun for a young child, still useful for an adult.
 - On launch the app asks **who's playing**. Picking a child goes straight to
   the explore worldview and logs attendance for that child (§3.7); picking a
   parent asks for the PIN and does not log attendance.
-- After the app has been in the background for 10 minutes or more, it asks
-  who's playing again. Coming back sooner keeps the same player (and logs
+- **Parent mode locks as soon as the app leaves the screen.** A kid's
+  session survives up to 10 minutes in the background; after that the app
+  asks who's playing again. Coming back sooner keeps the same kid (and logs
   attendance again if a new day has started).
 - First launch sets up the parent (name, avatar, PIN entered twice); the
   parent then adds kids (name + avatar) from parent mode.
+- **PIN:** 4 digits, stored as a salted hash. Wrong guesses lock the PIN pad
+  for 30 s after 3, 2 min after 5, and 10 min after 7 or more (survives
+  restarts). **Forgot PIN?** uses the iPad's own Touch ID / Face ID /
+  passcode, then sets a new PIN.
+- **Kids can be edited** (name, avatar) and **archived**: hidden from
+  "Who's playing?" with all progress kept, and restorable. Deleting a kid
+  forever is a separate, confirmed action on an archived kid.
+- **Sessions** are recorded for every player (who, game day, start, end) so
+  the parent stats (§5.2) have usage history from day one.
+- Parent home shows the day-start rule; build details ("Diagnostics") are
+  tucked away in a collapsed section.
 - Children never compete with each other (no head-to-head rankings for now).
 
 ## 3. Child mode

@@ -55,6 +55,8 @@ targets:
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_FILE: Info.plist
         INFOPLIST_KEY_CFBundleDisplayName: Mi Mundo
+        # "Forgot PIN?" uses the iPad's Face ID / Touch ID / passcode.
+        INFOPLIST_KEY_NSFaceIDUsageDescription: Unlock parent mode if you forget your Mi Mundo PIN.
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: >-
           UIInterfaceOrientationPortrait

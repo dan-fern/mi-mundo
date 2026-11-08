@@ -7,20 +7,25 @@ struct ChildHomeView: View {
     let child: Profile
     let onSwitchPlayer: () -> Void
 
-    @Query private var visits: [Visit]
-
     var body: some View {
-        let attendance = Attendance.summary(for: child.id, visits: visits)
         VStack(spacing: 0) {
             HStack(spacing: 16) {
                 ProfileAvatar(emoji: child.emoji, size: 64)
                 Text(child.name).font(.title.bold())
-                AttendanceGauge(level: attendance.level, maxLevel: attendance.maxLevel)
-                Spacer()
-                if attendance.streak > 1 {
-                    Label("\(attendance.streak) days in a row!", systemImage: "flame.fill")
+                WithAttendance(childID: child.id) { summary in
+                    AttendanceGauge(summary: summary)
+                    Spacer()
+                    if summary.streak > 1 {
+                        Label {
+                            Text("\(summary.streak) days in a row!")
+                        } icon: {
+                            Image(systemName: "star.fill").foregroundStyle(.yellow)
+                        }
                         .font(.headline)
-                        .foregroundStyle(.orange)
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 8)
+                        .background(.background.secondary, in: .capsule)
+                    }
                 }
                 Button(action: onSwitchPlayer) {
                     Label("Switch player", systemImage: "person.2.fill")

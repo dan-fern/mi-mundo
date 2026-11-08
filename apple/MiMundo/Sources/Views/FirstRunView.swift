@@ -77,7 +77,7 @@ struct FirstRunView: View {
         )
         PIN.set(pin, on: parent)
         context.insert(parent)
-        try? context.save()
+        guard context.saveOrRollback("create parent") else { return }
         onCreated(parent)
     }
 }

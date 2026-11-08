@@ -3,6 +3,8 @@ import SwiftUI
 
 @main
 struct MiMundoApp: App {
+    private let container = Persistence.makeContainer()
+
     var body: some Scene {
         WindowGroup {
             RootView()
@@ -10,6 +12,6 @@ struct MiMundoApp: App {
                 // so everything scales with the iPad's text-size setting.
                 .fontDesign(.rounded)
         }
-        .modelContainer(for: [Profile.self, Visit.self])
+        .modelContainer(container)
     }
 }

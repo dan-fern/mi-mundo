@@ -10,37 +10,73 @@ struct ParentHomeView: View {
 
     @Environment(\.modelContext) private var context
     @Query(sort: \Profile.createdAt) private var profiles: [Profile]
-    @Query private var visits: [Visit]
-    @State private var addingChild = false
-    @State private var childToDelete: Profile?
+    @State private var addingKid = false
+    @State private var editingKid: Profile?
+    @State private var kidToDelete: Profile?
+    @State private var showDiagnostics = false
 
-    private var children: [Profile] { profiles.filter { !$0.isParent } }
+    private var kids: [Profile] { profiles.filter { !$0.isParent && !$0.isArchived } }
+    private var archivedKids: [Profile] { profiles.filter { !$0.isParent && $0.isArchived } }
 
     var body: some View {
         NavigationStack {
             List {
                 Section("Kids") {
-                    if children.isEmpty {
+                    if kids.isEmpty {
                         Text("No kids yet. Add one to get started.")
                             .foregroundStyle(.secondary)
                     }
-                    ForEach(children) { child in
-                        ChildRow(child: child, attendance: Attendance.summary(for: child.id, visits: visits))
-                            .swipeActions {
-                                Button("Remove", role: .destructive) { childToDelete = child }
-                            }
+                    ForEach(kids) { kid in
+                        Button {
+                            editingKid = kid
+                        } label: {
+                            KidRow(kid: kid)
+                        }
+                        .buttonStyle(.plain)
+                        .swipeActions {
+                            Button("Archive", systemImage: "archivebox") { archive(kid) }
+                                .tint(.orange)
+                            Button("Edit", systemImage: "pencil") { editingKid = kid }
+                                .tint(.blue)
+                        }
                     }
                     Button {
-                        addingChild = true
+                        addingKid = true
                     } label: {
                         Label("Add a kid", systemImage: "plus.circle.fill")
                     }
                 }
 
+                if !archivedKids.isEmpty {
+                    Section {
+                        ForEach(archivedKids) { kid in
+                            HStack(spacing: 16) {
+                                ProfileAvatar(emoji: kid.emoji, size: 40)
+                                Text(kid.name).foregroundStyle(.secondary)
+                                Spacer()
+                                Button("Restore") { restore(kid) }
+                                    .buttonStyle(.bordered)
+                            }
+                            .swipeActions {
+                                Button("Delete forever", systemImage: "trash", role: .destructive) {
+                                    kidToDelete = kid
+                                }
+                            }
+                        }
+                    } header: {
+                        Text("Archived")
+                    } footer: {
+                        Text("Archived kids are hidden from \u{201C}Who's playing?\u{201D} but keep all their progress. Swipe to delete one forever.")
+                    }
+                }
+
                 Section("About") {
-                    LabeledContent("Today's game day", value: gameDayLabel(day: Attendance.today()))
-                    LabeledContent("Days start at", value: "10 pm US Eastern")
-                    LabeledContent("Rust core", value: coreVersion())
+                    LabeledContent("New days start at", value: "10 pm US Eastern")
+                    DisclosureGroup("Diagnostics", isExpanded: $showDiagnostics) {
+                        LabeledContent("Today's game day", value: gameDayLabel(day: Attendance.today()))
+                        LabeledContent("Rust core", value: coreVersion())
+                    }
+                    .foregroundStyle(.secondary)
                 }
             }
             .navigationTitle("Hi, \(parent.name)")
@@ -51,64 +87,112 @@ struct ParentHomeView: View {
                     }
                 }
             }
-            .sheet(isPresented: $addingChild) {
-                AddChildView { name, emoji in
+            .sheet(isPresented: $addingKid) {
+                KidEditor(title: "Add a kid", saveTitle: "Add") { name, emoji in
                     context.insert(Profile(name: name, emoji: emoji, role: .child))
-                    try? context.save()
+                    context.saveOrRollback("add kid")
+                }
+            }
+            .sheet(item: $editingKid) { kid in
+                KidEditor(title: "Edit \(kid.name)", saveTitle: "Save", name: kid.name, emoji: kid.emoji) { name, emoji in
+                    kid.name = name
+                    kid.emoji = emoji
+                    context.saveOrRollback("edit kid")
                 }
             }
             .confirmationDialog(
-                "Remove \(childToDelete?.name ?? "")?",
+                "Delete \(kidToDelete?.name ?? "") forever?",
                 isPresented: Binding(
-                    get: { childToDelete != nil },
-                    set: { if !$0 { childToDelete = nil } }
+                    get: { kidToDelete != nil },
+                    set: { if !$0 { kidToDelete = nil } }
                 ),
                 titleVisibility: .visible
             ) {
-                Button("Remove", role: .destructive) {
-                    if let childToDelete { remove(childToDelete) }
+                Button("Delete forever", role: .destructive) {
+                    if let kidToDelete { deleteForever(kidToDelete) }
                 }
             } message: {
-                Text("This deletes their profile and attendance on this iPad. It can't be undone.")
+                Text("This permanently deletes their profile, attendance and history on this iPad. It can't be undone.")
             }
         }
     }
 
-    private func remove(_ child: Profile) {
-        let childID = child.id
-        try? context.delete(model: Visit.self, where: #Predicate { $0.childID == childID })
-        context.delete(child)
-        try? context.save()
-        childToDelete = nil
+    private func archive(_ kid: Profile) {
+        kid.archivedAt = .now
+        context.saveOrRollback("archive kid")
+    }
+
+    private func restore(_ kid: Profile) {
+        kid.archivedAt = nil
+        context.saveOrRollback("restore kid")
+    }
+
+    /// All-or-nothing: if anything fails, nothing is deleted.
+    private func deleteForever(_ kid: Profile) {
+        let kidID = kid.id
+        do {
+            try context.delete(model: Visit.self, where: #Predicate { $0.childID == kidID })
+            try context.delete(model: Session.self, where: #Predicate { $0.profileID == kidID })
+            context.delete(kid)
+            try context.save()
+        } catch {
+            dataLog.error("Delete kid failed: \(error, privacy: .public)")
+            context.rollback()
+        }
+        kidToDelete = nil
     }
 }
 
-private struct ChildRow: View {
-    let child: Profile
-    let attendance: AttendanceSummary
+private struct KidRow: View {
+    let kid: Profile
 
     var body: some View {
         HStack(spacing: 16) {
-            ProfileAvatar(emoji: child.emoji, size: 48)
-            VStack(alignment: .leading, spacing: 4) {
-                Text(child.name).font(.headline)
-                Text("Played \(attendance.daysPlayedLast7) of the last 7 days · streak \(attendance.streak)")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+            ProfileAvatar(emoji: kid.emoji, size: 48)
+            WithAttendance(childID: kid.id) { summary in
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(kid.name).font(.headline)
+                    Text("Played \(summary.daysPlayedLast7) of the last 7 days · streak \(summary.streak)")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                Spacer()
+                AttendanceGauge(summary: summary)
             }
-            Spacer()
-            AttendanceGauge(level: attendance.level, maxLevel: attendance.maxLevel)
+            Image(systemName: "chevron.right")
+                .font(.footnote.bold())
+                .foregroundStyle(.tertiary)
         }
         .padding(.vertical, 4)
+        .contentShape(.rect)
     }
 }
 
-private struct AddChildView: View {
-    let onAdd: (String, String) -> Void
+/// Name + avatar editor for adding or editing a kid.
+private struct KidEditor: View {
+    let title: String
+    let saveTitle: String
+    let onSave: (String, String) -> Void
 
     @Environment(\.dismiss) private var dismiss
-    @State private var name = ""
-    @State private var emoji = Profile.emojiChoices[0]
+    @State private var name: String
+    @State private var emoji: String
+
+    init(
+        title: String,
+        saveTitle: String,
+        name: String = "",
+        emoji: String = Profile.emojiChoices[0],
+        onSave: @escaping (String, String) -> Void
+    ) {
+        self.title = title
+        self.saveTitle = saveTitle
+        self.onSave = onSave
+        _name = State(initialValue: name)
+        _emoji = State(initialValue: emoji)
+    }
+
+    private var trimmedName: String { name.trimmingCharacters(in: .whitespaces) }
 
     var body: some View {
         NavigationStack {
@@ -116,18 +200,18 @@ private struct AddChildView: View {
                 ProfileDetailsForm(name: $name, emoji: $emoji, namePrompt: "Kid's name")
                     .padding(32)
             }
-            .navigationTitle("Add a kid")
+            .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Add") {
-                        onAdd(name.trimmingCharacters(in: .whitespaces), emoji)
+                    Button(saveTitle) {
+                        onSave(trimmedName, emoji)
                         dismiss()
                     }
-                    .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
+                    .disabled(trimmedName.isEmpty)
                 }
             }
         }

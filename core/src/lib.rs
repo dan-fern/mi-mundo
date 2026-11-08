@@ -6,7 +6,10 @@ pub mod attendance;
 pub mod days;
 pub mod scoring;
 
-pub use attendance::{attendance_level, attendance_level_for, day_streak, days_played_last_7};
+pub use attendance::{
+    AttendanceSummary, attendance_level, attendance_level_for, attendance_summary, day_streak,
+    days_played_last_7,
+};
 pub use days::{game_day, game_day_label};
 pub use scoring::points_for_attempt;
 
