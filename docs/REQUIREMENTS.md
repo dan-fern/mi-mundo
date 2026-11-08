@@ -25,6 +25,11 @@ Age-agnostic — fun for a young child, still useful for an adult.
 - On launch the app asks **who's playing**. Picking a child goes straight to
   the explore worldview and logs attendance for that child (§3.7); picking a
   parent asks for the PIN and does not log attendance.
+- After the app has been in the background for 10 minutes or more, it asks
+  who's playing again. Coming back sooner keeps the same player (and logs
+  attendance again if a new day has started).
+- First launch sets up the parent (name, avatar, PIN entered twice); the
+  parent then adds kids (name + avatar) from parent mode.
 - Children never compete with each other (no head-to-head rankings for now).
 
 ## 3. Child mode

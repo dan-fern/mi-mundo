@@ -24,6 +24,8 @@ path = "src/bin/uniffi-bindgen.rs"
 required-features = ["cli"]
 
 [dependencies]
+chrono = { version = "0.4.45", default-features = false, features = ["std"] }
+chrono-tz = { version = "0.10.4", default-features = false, features = ["std"] }
 uniffi = "0.32.2"
 
 [profile.release]
