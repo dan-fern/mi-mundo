@@ -17,17 +17,25 @@ crate-type = ["lib", "staticlib", "cdylib"]
 # the default build keeps clap/askama/bindgen out of the iPad static library
 # (~20 MB instead of ~80 MB).
 cli = ["uniffi/cli"]
+# Mac-side map data builder (tools/build-data.sh). Never in the app.
+mapgen = ["dep:serde_json"]
 
 [[bin]]
 name = "uniffi-bindgen"
 path = "src/bin/uniffi-bindgen.rs"
 required-features = ["cli"]
 
+[[bin]]
+name = "mapgen"
+path = "src/bin/mapgen.rs"
+required-features = ["mapgen"]
+
 [dependencies]
 chrono = { version = "0.4.45", default-features = false, features = ["std"] }
 # filter-by-regex embeds only the zones in CHRONO_TZ_TIMEZONE_FILTER
 # (core/.cargo/config.toml): ~49 KB instead of ~1.1 MB of tz data.
 chrono-tz = { version = "0.10.4", default-features = false, features = ["std", "filter-by-regex"] }
+serde_json = { version = "1", optional = true }
 uniffi = "0.32.2"
 
 [profile.release]

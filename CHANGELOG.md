@@ -10,6 +10,18 @@ Versions: [Semantic Versioning](https://semver.org/).
 ## [Unreleased]
 
 ### Added
+- Explore map in the kid home (requirements §3.1): Equal Earth projection,
+  pan, pinch and double-tap zoom, coarse outlines zoomed out and detailed
+  ones zoomed in, no country labels so quiz answers stay hidden. Tap a
+  country for a card with its flag, capital, population and languages.
+  Projection, map format and tap-testing live in the Rust core with tests
+  against real places, so the map can't silently drift.
+- Data pipeline (`tools/`): Natural Earth outlines, Wikidata facts (with
+  hand overrides) and flag-icons flags, built into committed bundle files;
+  `THIRD_PARTY_NOTICES.md` credits the sources.
+- Each kid's map position is remembered while the app runs, and "Switch
+  player" asks first, so a stray tap doesn't lose a kid's place (PR #4
+  review).
 - Pastel globe-in-a-graduation-cap app icon, drawn as an SVG in
   `apple/MiMundo/Design/` (original artwork, so no licensing questions).
 - GitHub Actions CI on every PR and push to `main` (fmt, clippy, Rust tests,

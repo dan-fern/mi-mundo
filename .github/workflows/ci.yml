@@ -50,7 +50,7 @@ jobs:
 
       - name: Clippy
         working-directory: core
-        run: cargo clippy --all-targets --features cli -- -D warnings
+        run: cargo clippy --all-targets --features cli,mapgen -- -D warnings
 
       - name: Rust tests
         working-directory: core

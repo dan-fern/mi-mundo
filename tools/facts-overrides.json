@@ -1,0 +1,65 @@
+{
+  "_comment": "Hand fixes on top of Wikidata, keyed by ISO 3166-1 alpha-2. Each value replaces that field. Keep this short and say why.",
+  "US": {
+    "languages": [
+      "English",
+      "Spanish"
+    ],
+    "_why": "Wikidata's P37 lists only territorial languages"
+  },
+  "TW": {
+    "languages": [
+      "Mandarin Chinese",
+      "Taiwanese Hokkien",
+      "Hakka"
+    ],
+    "_why": "P37 lists 22 national languages"
+  },
+  "UY": {
+    "languages": [
+      "Spanish"
+    ],
+    "_why": "no P37 on Wikidata"
+  },
+  "GP": {
+    "languages": [
+      "French"
+    ],
+    "_why": "no P37 on Wikidata"
+  },
+  "MQ": {
+    "languages": [
+      "French"
+    ],
+    "_why": "no P37 on Wikidata"
+  },
+  "AF": {
+    "languages": [
+      "Pashto",
+      "Dari"
+    ],
+    "_why": "speaker ranking puts Arabic first"
+  },
+  "ZA": {
+    "languages": [
+      "Zulu",
+      "Xhosa",
+      "English"
+    ],
+    "_why": "rank by speakers in the country, not worldwide"
+  },
+  "ZW": {
+    "languages": [
+      "Shona",
+      "Ndebele",
+      "English"
+    ],
+    "_why": "rank by speakers in the country, not worldwide"
+  },
+  "NO": {
+    "languages": [
+      "Norwegian"
+    ],
+    "_why": "Nynorsk/Bokmål are written forms of Norwegian"
+  }
+}
