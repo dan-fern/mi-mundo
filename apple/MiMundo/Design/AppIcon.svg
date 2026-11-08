@@ -12,9 +12,9 @@
       <stop offset="1" stop-color="#FFE4D2"/>
     </linearGradient>
     <radialGradient id="ocean" cx="0.38" cy="0.32" r="0.8">
-      <stop offset="0" stop-color="#D3EEFF"/>
-      <stop offset="0.6" stop-color="#A9D8F7"/>
-      <stop offset="1" stop-color="#86C2EE"/>
+      <stop offset="0" stop-color="#BDE2FA"/>
+      <stop offset="0.6" stop-color="#8CC6EF"/>
+      <stop offset="1" stop-color="#68ACE2"/>
     </radialGradient>
     <linearGradient id="board" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#AAB4F0"/>
@@ -51,7 +51,7 @@
   <circle cx="512" cy="620" r="290" fill="url(#ocean)"/>
   <g clip-path="url(#globeClip)">
     <!-- Continents (stylized Americas, Europe/Africa edge, Greenland) -->
-    <g fill="#BFE8B5" stroke="#9ED39A" stroke-width="6" stroke-linejoin="round">
+    <g fill="#A3D995" stroke="#7BBF73" stroke-width="6" stroke-linejoin="round">
       <path d="M268 450 C330 400 450 400 515 440 C560 470 548 515 505 535 C475 550 474 575 450 600 C425 618 403 598 392 572 C372 535 322 525 280 495 C262 482 258 462 268 450 Z"/>
       <path d="M455 612 C488 622 528 652 552 702 C572 748 548 802 516 852 C500 878 484 864 482 832 C478 782 458 742 444 702 C433 666 433 626 455 612 Z"/>
       <path d="M648 478 C690 455 752 466 806 498 L834 572 C812 612 770 622 750 662 C734 702 708 734 686 714 C664 684 656 632 636 600 C616 568 616 508 648 478 Z"/>
@@ -66,7 +66,7 @@
     <!-- Shine -->
     <ellipse cx="420" cy="470" rx="120" ry="70" fill="#FFFFFF" opacity="0.28" transform="rotate(-30 420 470)"/>
   </g>
-  <circle cx="512" cy="620" r="290" fill="none" stroke="#7FB6E3" stroke-width="10"/>
+  <circle cx="512" cy="620" r="290" fill="none" stroke="#5C9DD3" stroke-width="10"/>
 
   <!-- Graduation cap, tilted -->
   <g transform="rotate(-10 512 300)">
