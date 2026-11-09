@@ -49,6 +49,9 @@ fn capitals_land_in_their_countries() {
         (179.0, 68.0, "RUS"),      // Chukotka, east of the seam
         (178.0, -17.8, "FJI"),     // Fiji straddles the seam
         (12.4578, 43.9424, "SMR"), // San Marino, an enclave in Italy
+        (34.10, 44.95, "UKR"),     // Simferopol: Crimea is part of Ukraine (§4)
+        (33.52, 44.60, "UKR"),     // Sevastopol
+        (37.62, 47.10, "UKR"),     // Mariupol
     ];
     for (lon, lat, expected) in cases {
         assert_eq!(

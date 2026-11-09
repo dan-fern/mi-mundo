@@ -42,6 +42,15 @@ const NAME_OVERRIDES: &[(&str, &str)] = &[
 /// carry "AU"), so tapping them showed Australia's card. "-99" = name only.
 const ISO_OVERRIDES: &[(&str, &str)] = &[("IOA", "-99"), ("ATC", "-99")];
 
+/// Territory the family map assigns differently from Natural Earth's
+/// default (de facto) layer: (from ADM0_A3, to ADM0_A3, a lon/lat inside the
+/// territory, name). The territory must be a separate polygon of `from` in
+/// both layers; mapgen fails if it isn't, so a data update can't silently
+/// undo this. Policy: docs/REQUIREMENTS.md §4.
+const TRANSFERS: &[(&str, &str, (f64, f64), &str)] = &[
+    ("RUS", "UKR", (34.10, 44.95), "Crimea"), // point: Simferopol
+];
+
 fn main() -> ExitCode {
     let args: Vec<String> = std::env::args().collect();
     if args.len() != 4 {
@@ -61,8 +70,10 @@ fn main() -> ExitCode {
 }
 
 fn run(coarse_path: &str, fine_path: &str, out_path: &str) -> Result<String, String> {
-    let coarse = read_features(coarse_path)?;
-    let fine = read_features(fine_path)?;
+    let mut coarse = read_features(coarse_path)?;
+    let mut fine = read_features(fine_path)?;
+    apply_transfers(&mut coarse, coarse_path)?;
+    apply_transfers(&mut fine, fine_path)?;
 
     let coarse_by_id: HashMap<String, Vec<Vec<f32>>> = coarse
         .iter()
@@ -122,6 +133,58 @@ fn run(coarse_path: &str, fine_path: &str, out_path: &str) -> Result<String, Str
         bytes.len() / 1024,
         out_path
     ))
+}
+
+/// Moves each TRANSFERS territory polygon from one country's MultiPolygon
+/// to the other's (turning a Polygon into a MultiPolygon if needed).
+fn apply_transfers(features: &mut [Value], path: &str) -> Result<(), String> {
+    for &(from, to, (lon, lat), name) in TRANSFERS {
+        let index_of = |code: &str| {
+            features
+                .iter()
+                .position(|f| f["properties"]["ADM0_A3"] == code)
+                .ok_or_else(|| format!("{path}: no feature {code} for the {name} transfer"))
+        };
+        let (from_i, to_i) = (index_of(from)?, index_of(to)?);
+        if features[from_i]["geometry"]["type"] != "MultiPolygon" {
+            return Err(format!("{path}: {from} is not a MultiPolygon"));
+        }
+        let polygons = features[from_i]["geometry"]["coordinates"]
+            .as_array_mut()
+            .ok_or_else(|| format!("{path}: {from} has no coordinates"))?;
+        let hit = polygons
+            .iter()
+            .position(|polygon| outer_ring_contains(polygon, lon, lat))
+            .ok_or_else(|| format!("{path}: {name} is not a separate polygon of {from}"))?;
+        let moved = polygons.remove(hit);
+        let geometry = &mut features[to_i]["geometry"];
+        if geometry["type"] == "Polygon" {
+            let single = geometry["coordinates"].take();
+            geometry["type"] = Value::from("MultiPolygon");
+            geometry["coordinates"] = Value::Array(vec![single]);
+        }
+        geometry["coordinates"]
+            .as_array_mut()
+            .ok_or_else(|| format!("{path}: {to} has no coordinates"))?
+            .push(moved);
+    }
+    Ok(())
+}
+
+fn outer_ring_contains(polygon: &Value, lon: f64, lat: f64) -> bool {
+    let Some(ring) = polygon.get(0).and_then(Value::as_array) else {
+        return false;
+    };
+    let flat: Vec<f32> = ring
+        .iter()
+        .flat_map(|p| {
+            [
+                p[0].as_f64().unwrap_or(f64::NAN) as f32,
+                p[1].as_f64().unwrap_or(f64::NAN) as f32,
+            ]
+        })
+        .collect();
+    mimundo_core::map::geometry::point_in_rings(&[flat], lon as f32, lat as f32)
 }
 
 fn read_features(path: &str) -> Result<Vec<Value>, String> {
