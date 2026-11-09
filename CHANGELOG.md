@@ -10,6 +10,34 @@ Versions: [Semantic Versioning](https://semver.org/).
 ## [Unreleased]
 
 ### Added
+- Explore map in the kid home (requirements §3.1): Equal Earth projection,
+  pan, pinch and double-tap zoom, coarse outlines zoomed out and detailed
+  ones zoomed in, no country labels so quiz answers stay hidden. Tap a
+  country for a card with its flag, capital, population and languages.
+  Projection, map format and tap-testing live in the Rust core with tests
+  against real places, so the map can't silently drift.
+- Data pipeline (`tools/`): Natural Earth outlines, Wikidata facts (with
+  hand overrides) and flag-icons flags, built into committed bundle files;
+  `THIRD_PARTY_NOTICES.md` credits the sources.
+- Each kid's map position is remembered while the app runs, and "Switch
+  player" asks first, so a stray tap doesn't lose a kid's place (PR #4
+  review).
+- From the PR #8 review: zoom-in / zoom-out / whole-world buttons; select
+  on the first tap (no double-tap delay); the card opens on the side away
+  from the country; a high-contrast highlight with a ring for tiny islands;
+  smooth animated zooms; the world can't be dragged off screen; the map
+  fits below the real height of the top bar; a Credits screen in parent
+  mode (flag-icons MIT notice, "Made with Natural Earth").
+- Places with no permanent residents (Antarctica, South Georgia, French
+  Southern Lands, British Indian Ocean Territory) show no People row,
+  instead of counting visiting researchers or base staff.
+- Border policy (requirements §4): Crimea is drawn as part of Ukraine;
+  Western Sahara's Moroccan-administered part stays Morocco; Israel and
+  Palestine both list Jerusalem; Taiwan's capital is Taipei.
+- Country facts: a committed, dated Wikidata snapshot; best-rank
+  populations; ~110 hand fixes (capitals, language order, stale
+  populations) applied offline; download checksums; CI checks the
+  committed map data matches the tools.
 - Pastel globe-in-a-graduation-cap app icon, drawn as an SVG in
   `apple/MiMundo/Design/` (original artwork, so no licensing questions).
 - GitHub Actions CI on every PR and push to `main` (fmt, clippy, Rust tests,

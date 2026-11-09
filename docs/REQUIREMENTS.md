@@ -1,6 +1,6 @@
 # Mi Mundo — Requirements
 
-_Status: draft v0.4 · 2026-11-08_
+_Status: draft v0.5 · 2026-11-08_
 
 A gamified geography app for a family: kids explore and get quizzed on a
 world map, parents choose what to practise, set rewards and track progress.
@@ -144,6 +144,17 @@ Shows the child's own:
 - Flags: open-source SVG flag set (MIT-licensed or similar).
 - Country facts: Wikidata (CC0), bundled with the app and refreshed when online.
 - Everything needed for explore and quiz modes ships with the app.
+- **Borders and disputed places** (Dan's decisions; the map otherwise follows
+  Natural Earth's default, de facto borders):
+  - **Crimea is part of Ukraine** (moved from Russia by `mapgen`'s TRANSFERS
+    table, with a test).
+  - **Western Sahara**: the Moroccan-administered part is shown as Morocco;
+    the strip east of the Berm stays "Western Sahara".
+  - **Israel and Palestine** may both list Jerusalem as a capital
+    (Israel: Jerusalem; Palestine: East Jerusalem, Ramallah).
+  - **Taiwan** is shown as its own country with its capital, Taipei.
+  - Other disputed places (Kosovo, Northern Cyprus, Somaliland) are shown as
+    in Natural Earth / Wikidata.
 
 ## 5. Parent mode
 

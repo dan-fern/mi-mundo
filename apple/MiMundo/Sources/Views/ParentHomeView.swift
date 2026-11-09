@@ -72,6 +72,7 @@ struct ParentHomeView: View {
 
                 Section("About") {
                     LabeledContent("New days start at", value: "10 pm US Eastern")
+                    NavigationLink("Credits") { CreditsView() }
                     DisclosureGroup("Diagnostics", isExpanded: $showDiagnostics) {
                         LabeledContent("Today's game day", value: gameDayLabel(day: Attendance.today()))
                         LabeledContent("Rust core", value: coreVersion())
@@ -215,5 +216,28 @@ private struct KidEditor: View {
                 }
             }
         }
+    }
+}
+
+/// Licenses and credits for the bundled map data and flags (the flag-icons
+/// MIT notice must ship with the app). Shows THIRD_PARTY_NOTICES.md.
+private struct CreditsView: View {
+    private let text: String = {
+        guard let url = Bundle.main.url(forResource: "THIRD_PARTY_NOTICES", withExtension: "md"),
+              let text = try? String(contentsOf: url, encoding: .utf8)
+        else { return "Credits are missing from this build." }
+        return text
+    }()
+
+    var body: some View {
+        ScrollView {
+            Text(text)
+                .font(.callout.monospaced())
+                .textSelection(.enabled)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding()
+        }
+        .navigationTitle("Credits")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }

@@ -24,6 +24,8 @@ targets:
     sources:
       - path: Sources
       - path: Resources # Assets.xcassets (app icon)
+      - path: ../../THIRD_PARTY_NOTICES.md # shown in Parent home → Credits
+        buildPhase: resources
     dependencies:
       - package: MiMundoCore
     # Safety net: the scheme pre-action below rebuilds the Rust core and fails

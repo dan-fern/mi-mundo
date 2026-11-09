@@ -5,7 +5,8 @@ countries, capitals and flags, and earn points for real-world rewards.
 
 Built with SwiftUI and a Rust core. Works offline.
 
-**Status:** planning. See [docs/REQUIREMENTS.md](docs/REQUIREMENTS.md)
+**Status:** in development — profiles, attendance and the explore map work.
+See [docs/REQUIREMENTS.md](docs/REQUIREMENTS.md)
 and [CHANGELOG.md](CHANGELOG.md).
 
 ## Layout
@@ -16,6 +17,8 @@ and [CHANGELOG.md](CHANGELOG.md).
 | `apple/MiMundoCore/` | Swift package wrapping the Rust core as an XCFramework |
 | `apple/MiMundo/` | SwiftUI iPad app; `project.yml` is the XcodeGen spec |
 | `scripts/build-core.sh` | Builds Rust for iPad + simulator, generates bindings and the Xcode project |
+| `tools/` | Map/flag/facts data pipeline (see "Map data" below) |
+| `apple/MiMundo/Resources/` | Bundled data: `World.bin`, `Countries.json`, `Flags.xcassets` |
 
 ## Getting started
 
@@ -45,6 +48,26 @@ CI (`.github/workflows/ci.yml`) runs on every PR and push to `main`:
 To run on a real iPad, copy `apple/MiMundo/Config/Local.xcconfig.example` to
 `Local.xcconfig` (gitignored) and put in your Apple Team ID.
 
+## Map data
+
+The bundled map data is committed, so normal builds don't need this. To
+refresh it (needs Inkscape: `brew install --cask inkscape`):
+
+```bash
+./tools/fetch-data.sh   # Natural Earth + flag-icons -> data/raw/ (checksums in tools/data.sha256)
+./tools/build-data.sh   # -> apple/MiMundo/Resources/, then runs core/tests/world_bin.rs
+```
+
+Country facts come from a committed Wikidata snapshot,
+`tools/wikidata-facts.json` (refresh with `python3 -I tools/fetch-facts.py "$PWD"`
+and review the diff). Hand fixes go in `tools/facts-overrides.json` and apply
+offline. CI rebuilds `World.bin` and `Countries.json` from the pinned sources
+and fails if the committed files differ. `core/tests/world_bin.rs` checks the
+map against known places (capitals, open ocean, the ±180° seam, enclaves,
+tiny islands).
+
 ## License
 
-Licensed under the [MIT License](LICENSE).
+Licensed under the [MIT License](LICENSE). Bundled map data and flags come
+from Natural Earth, Wikidata and flag-icons; see
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

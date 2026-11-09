@@ -1,0 +1,720 @@
+{
+  "_comment": "Hand fixes on top of the Wikidata snapshot (tools/wikidata-facts.json), keyed by ISO 3166-1 alpha-2. Each field replaces Wikidata's; say why in _why. Applied offline by build-countries.py.",
+  "AF": {
+    "languages": [
+      "Pashto",
+      "Dari"
+    ],
+    "_why": "speaker ranking puts Arabic first"
+  },
+  "AG": {
+    "capitals": [
+      "St. John's"
+    ],
+    "languages": [
+      "English"
+    ],
+    "_why": "capital label fell back to QID Q36262; Spanish is not official"
+  },
+  "AL": {
+    "population": 2400000,
+    "_why": "2023 census 2,402,113"
+  },
+  "AM": {
+    "population": 3000000,
+    "_why": "Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate"
+  },
+  "AQ": {
+    "population": null,
+    "_why": "no permanent residents (only visiting researchers or base staff), so the card shows no People row"
+  },
+  "AS": {
+    "languages": [
+      "Samoan",
+      "English"
+    ],
+    "_why": "local language first"
+  },
+  "AW": {
+    "languages": [
+      "Papiamento",
+      "Dutch"
+    ],
+    "_why": "everyday language first"
+  },
+  "BA": {
+    "languages": [
+      "Bosnian",
+      "Serbian",
+      "Croatian"
+    ],
+    "_why": "rank by speakers in country"
+  },
+  "BD": {
+    "languages": [
+      "Bengali"
+    ],
+    "_why": "English name kids will see elsewhere"
+  },
+  "BE": {
+    "languages": [
+      "Dutch",
+      "French",
+      "German"
+    ],
+    "_why": "rank by speakers in country"
+  },
+  "BI": {
+    "languages": [
+      "Kirundi",
+      "French",
+      "English"
+    ],
+    "_why": "Kirundi is spoken by nearly everyone"
+  },
+  "BN": {
+    "languages": [
+      "Malay",
+      "English"
+    ],
+    "_why": "'British English' label"
+  },
+  "CF": {
+    "languages": [
+      "Sango",
+      "French"
+    ],
+    "_why": "Sango is spoken by nearly everyone"
+  },
+  "CH": {
+    "languages": [
+      "German",
+      "French",
+      "Italian"
+    ],
+    "_why": "rank by speakers in country"
+  },
+  "CM": {
+    "languages": [
+      "French",
+      "English"
+    ],
+    "_why": "~80% francophone"
+  },
+  "CN": {
+    "population": 1408000000,
+    "languages": [
+      "Mandarin Chinese"
+    ],
+    "_why": "'Putonghua' -> name kids know; NBS end-2024"
+  },
+  "CW": {
+    "languages": [
+      "Papiamento",
+      "Dutch",
+      "English"
+    ],
+    "_why": "everyday language first"
+  },
+  "CY": {
+    "languages": [
+      "Greek",
+      "Turkish"
+    ],
+    "_why": "duplicate 'Modern Greek'/'Greek'; Greek is majority"
+  },
+  "DJ": {
+    "languages": [
+      "Somali",
+      "French",
+      "Arabic"
+    ],
+    "_why": "Somali is most spoken"
+  },
+  "DZ": {
+    "languages": [
+      "Arabic",
+      "Tamazight"
+    ],
+    "_why": "'Standard Algerian Berber' -> common name"
+  },
+  "EC": {
+    "languages": [
+      "Spanish",
+      "Kichwa",
+      "Shuar"
+    ],
+    "_why": "'Northern Quichua' -> Kichwa"
+  },
+  "ER": {
+    "languages": [
+      "Tigrinya",
+      "Arabic",
+      "English"
+    ],
+    "_why": "Tigrinya is most spoken; Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate",
+    "population": 3500000
+  },
+  "FI": {
+    "languages": [
+      "Finnish",
+      "Swedish"
+    ],
+    "_why": "~87% Finnish"
+  },
+  "FJ": {
+    "population": 930000,
+    "_why": "Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate"
+  },
+  "FK": {
+    "languages": [
+      "English"
+    ],
+    "_why": "'British English' label; disputed-territory policy (see review)"
+  },
+  "FM": {
+    "population": 105000,
+    "_why": "2020 census ~105k"
+  },
+  "GA": {
+    "population": 2500000,
+    "_why": "Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate"
+  },
+  "GD": {
+    "languages": [
+      "English"
+    ],
+    "_why": "creole label outranks official language"
+  },
+  "GN": {
+    "languages": [
+      "French"
+    ],
+    "_why": "'languages of Guinea' is a category, not a language"
+  },
+  "GS": {
+    "population": null,
+    "_why": "no permanent residents (only visiting researchers or base staff), so the card shows no People row"
+  },
+  "GT": {
+    "population": 18400000,
+    "_why": "Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate"
+  },
+  "GW": {
+    "population": 2200000,
+    "_why": "Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate"
+  },
+  "HK": {
+    "languages": [
+      "Cantonese",
+      "English"
+    ],
+    "_why": "'Standard Chinese' hides Cantonese, the everyday language"
+  },
+  "HM": {
+    "population": null,
+    "_why": "uninhabited; '2 people' is wrong"
+  },
+  "HN": {
+    "population": 10800000,
+    "_why": "Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate"
+  },
+  "HT": {
+    "languages": [
+      "Haitian Creole",
+      "French"
+    ],
+    "_why": "everyone speaks Creole; Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate",
+    "population": 11800000
+  },
+  "IN": {
+    "population": 1460000000,
+    "languages": [
+      "Hindi",
+      "English"
+    ],
+    "_why": "Wikidata latest-dated value is a 2020 figure; India is now more populous than China"
+  },
+  "IO": {
+    "population": null,
+    "_why": "no permanent residents (only visiting researchers or base staff), so the card shows no People row"
+  },
+  "IQ": {
+    "languages": [
+      "Arabic",
+      "Kurdish"
+    ],
+    "_why": "'Kurdish language' label; Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate",
+    "population": 46000000
+  },
+  "IS": {
+    "population": 390000,
+    "_why": "Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate"
+  },
+  "JE": {
+    "languages": [
+      "English",
+      "French"
+    ],
+    "_why": "'Jersey Legal French' label"
+  },
+  "JM": {
+    "population": 2800000,
+    "_why": "Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate"
+  },
+  "JO": {
+    "population": 11600000,
+    "_why": "Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate"
+  },
+  "KE": {
+    "population": 53000000,
+    "languages": [
+      "Swahili",
+      "English"
+    ],
+    "_why": "2019 census figure"
+  },
+  "KI": {
+    "languages": [
+      "Gilbertese",
+      "English"
+    ],
+    "_why": "local language first"
+  },
+  "KM": {
+    "languages": [
+      "Comorian",
+      "French",
+      "Arabic"
+    ],
+    "_why": "Comorian is most spoken"
+  },
+  "KP": {
+    "languages": [
+      "Korean"
+    ],
+    "_why": "'North Korean standard language' is a dialect label"
+  },
+  "KR": {
+    "population": 51700000,
+    "_why": "Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate"
+  },
+  "KZ": {
+    "languages": [
+      "Kazakh",
+      "Russian"
+    ],
+    "_why": "Kazakh is the state language"
+  },
+  "LA": {
+    "population": 7700000,
+    "_why": "Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate"
+  },
+  "LB": {
+    "population": 5800000,
+    "_why": "Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate"
+  },
+  "LI": {
+    "population": 40000,
+    "_why": "Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate"
+  },
+  "LK": {
+    "capitals": [
+      "Sri Jayawardenepura Kotte",
+      "Colombo"
+    ],
+    "languages": [
+      "Sinhala",
+      "Tamil"
+    ],
+    "_why": "official capital first; majority language first; Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate",
+    "population": 21900000
+  },
+  "LS": {
+    "languages": [
+      "Sesotho",
+      "English"
+    ],
+    "_why": "national language first; Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate",
+    "population": 2300000
+  },
+  "LU": {
+    "languages": [
+      "Luxembourgish",
+      "French",
+      "German"
+    ],
+    "_why": "national language first"
+  },
+  "MA": {
+    "languages": [
+      "Arabic",
+      "Tamazight"
+    ],
+    "_why": "'Standard Moroccan Tamazight' -> common name"
+  },
+  "MG": {
+    "languages": [
+      "Malagasy",
+      "French"
+    ],
+    "_why": "national language first"
+  },
+  "MH": {
+    "population": 42000,
+    "languages": [
+      "Marshallese",
+      "English"
+    ],
+    "_why": "2021 census 42,418"
+  },
+  "MK": {
+    "languages": [
+      "Macedonian",
+      "Albanian"
+    ],
+    "_why": "majority language first"
+  },
+  "ML": {
+    "languages": [
+      "Bambara",
+      "Fula",
+      "French"
+    ],
+    "_why": "Bambara is most spoken; French is a working language since 2023"
+  },
+  "MM": {
+    "population": 54500000,
+    "_why": "Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate"
+  },
+  "MO": {
+    "languages": [
+      "Cantonese",
+      "Portuguese"
+    ],
+    "_why": "everyday language first"
+  },
+  "MS": {
+    "capitals": [
+      "Brades"
+    ],
+    "_why": "Plymouth was abandoned after the 1995-97 volcano"
+  },
+  "MT": {
+    "languages": [
+      "Maltese",
+      "English"
+    ],
+    "_why": "national language first"
+  },
+  "MU": {
+    "languages": [
+      "Mauritian Creole",
+      "English",
+      "French"
+    ],
+    "_why": "Creole is the everyday language; Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate",
+    "population": 1270000
+  },
+  "MV": {
+    "languages": [
+      "Dhivehi"
+    ],
+    "_why": "'Maldivian' -> the language's name; Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate",
+    "population": 530000
+  },
+  "MW": {
+    "population": 21500000,
+    "languages": [
+      "Chichewa",
+      "English",
+      "Tumbuka"
+    ],
+    "_why": "2018 census figure"
+  },
+  "MZ": {
+    "population": 34000000,
+    "_why": "2017-era figure"
+  },
+  "NA": {
+    "population": 3000000,
+    "_why": "Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate"
+  },
+  "NE": {
+    "population": 27000000,
+    "languages": [
+      "Hausa",
+      "Zarma",
+      "French"
+    ],
+    "_why": "2017 figure; ~27M now"
+  },
+  "NI": {
+    "population": 7000000,
+    "_why": "Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate"
+  },
+  "NL": {
+    "population": 17900000,
+    "_why": "Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate"
+  },
+  "NO": {
+    "languages": [
+      "Norwegian"
+    ],
+    "_why": "Nynorsk/Bokmål are written forms of Norwegian"
+  },
+  "NR": {
+    "capitals": [
+      "Yaren"
+    ],
+    "languages": [
+      "Nauruan",
+      "English"
+    ],
+    "_why": "'Yaren District' -> place name; local language first; Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate",
+    "population": 12000
+  },
+  "OM": {
+    "population": 5300000,
+    "_why": "Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate"
+  },
+  "PG": {
+    "languages": [
+      "Tok Pisin",
+      "English",
+      "Hiri Motu"
+    ],
+    "_why": "Tok Pisin is most spoken"
+  },
+  "PH": {
+    "languages": [
+      "Filipino",
+      "English"
+    ],
+    "_why": "'Taglish' is code-switching, not a language"
+  },
+  "PK": {
+    "population": 241500000,
+    "languages": [
+      "Urdu",
+      "English"
+    ],
+    "_why": "2023 census"
+  },
+  "PW": {
+    "population": 17600,
+    "languages": [
+      "Palauan",
+      "English"
+    ],
+    "_why": "2020 census 17,614; Japanese is official only on Angaur"
+  },
+  "PY": {
+    "population": 6900000,
+    "_why": "Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate"
+  },
+  "QA": {
+    "population": 3000000,
+    "_why": "Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate"
+  },
+  "RW": {
+    "languages": [
+      "Kinyarwanda",
+      "English",
+      "French"
+    ],
+    "_why": "Kinyarwanda was missing entirely"
+  },
+  "SA": {
+    "population": 35300000,
+    "_why": "Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate"
+  },
+  "SB": {
+    "population": 760000,
+    "_why": "2019 census was 721k"
+  },
+  "SC": {
+    "languages": [
+      "Seychellois Creole",
+      "English",
+      "French"
+    ],
+    "_why": "Creole is the everyday language"
+  },
+  "SD": {
+    "languages": [
+      "Arabic",
+      "English"
+    ],
+    "_why": "Arabic is the main language; Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate",
+    "population": 50400000
+  },
+  "SG": {
+    "languages": [
+      "English",
+      "Mandarin Chinese",
+      "Malay"
+    ],
+    "_why": "'Standard Chinese' label; English is the working language"
+  },
+  "SI": {
+    "population": 2100000,
+    "_why": "Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate"
+  },
+  "SL": {
+    "population": 8600000,
+    "_why": "Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate"
+  },
+  "SN": {
+    "languages": [
+      "Wolof",
+      "French"
+    ],
+    "_why": "'Badyara' is a small minority language"
+  },
+  "SO": {
+    "languages": [
+      "Somali",
+      "Arabic"
+    ],
+    "_why": "Somali is the main language; Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate",
+    "population": 19000000
+  },
+  "SR": {
+    "population": 630000,
+    "_why": "Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate"
+  },
+  "SS": {
+    "population": 11900000,
+    "_why": "Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate"
+  },
+  "ST": {
+    "population": 230000,
+    "_why": "Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate"
+  },
+  "SZ": {
+    "languages": [
+      "Swazi",
+      "English"
+    ],
+    "_why": "national language first"
+  },
+  "TF": {
+    "population": null,
+    "_why": "no permanent residents (only visiting researchers or base staff), so the card shows no People row"
+  },
+  "TG": {
+    "population": 9700000,
+    "_why": "Wikidata's 2026-dated 12.4M is a projection ~30% above UN/2022 census"
+  },
+  "TH": {
+    "population": 71700000,
+    "_why": "Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate"
+  },
+  "TN": {
+    "population": 12300000,
+    "_why": "Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate"
+  },
+  "TO": {
+    "languages": [
+      "Tongan",
+      "English"
+    ],
+    "_why": "local language first; Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate",
+    "population": 104000
+  },
+  "TT": {
+    "population": 1500000,
+    "_why": "Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate"
+  },
+  "TV": {
+    "languages": [
+      "Tuvaluan",
+      "English"
+    ],
+    "_why": "local language first"
+  },
+  "TW": {
+    "languages": [
+      "Mandarin Chinese",
+      "Taiwanese Hokkien",
+      "Hakka"
+    ],
+    "_why": "P37 lists 22 national languages"
+  },
+  "TZ": {
+    "languages": [
+      "Swahili",
+      "English"
+    ],
+    "_why": "national language first; Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate",
+    "population": 68500000
+  },
+  "UA": {
+    "population": 38000000,
+    "_why": "2022 pre-war figure; UN 2024 est ~38M (sensitive: keep approximate)"
+  },
+  "US": {
+    "languages": [
+      "English",
+      "Spanish"
+    ],
+    "_why": "Wikidata's P37 lists only territorial languages"
+  },
+  "UY": {
+    "languages": [
+      "Spanish"
+    ],
+    "_why": "no P37 on Wikidata"
+  },
+  "VI": {
+    "population": 87000,
+    "_why": "2020 census 87,146"
+  },
+  "VN": {
+    "population": 100900000,
+    "_why": "Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate"
+  },
+  "VU": {
+    "languages": [
+      "Bislama",
+      "English",
+      "French"
+    ],
+    "_why": "Bislama is the national language"
+  },
+  "WS": {
+    "languages": [
+      "Samoan",
+      "English"
+    ],
+    "_why": "local language first"
+  },
+  "XK": {
+    "languages": [
+      "Albanian",
+      "Serbian"
+    ],
+    "_why": "~90% Albanian speakers; disputed-territory policy (see review)"
+  },
+  "YE": {
+    "population": 40600000,
+    "_why": "Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate"
+  },
+  "ZA": {
+    "languages": [
+      "Zulu",
+      "Xhosa",
+      "English"
+    ],
+    "_why": "rank by speakers in the country, not worldwide"
+  },
+  "ZW": {
+    "languages": [
+      "Shona",
+      "Ndebele",
+      "English"
+    ],
+    "_why": "rank by speakers in the country, not worldwide"
+  }
+}

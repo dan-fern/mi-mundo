@@ -50,11 +50,34 @@ jobs:
 
       - name: Clippy
         working-directory: core
-        run: cargo clippy --all-targets --features cli -- -D warnings
+        run: cargo clippy --all-targets --features cli,mapgen -- -D warnings
 
       - name: Rust tests
         working-directory: core
         run: cargo test
+
+      # The committed map data must be exactly what the tools produce from the
+      # pinned, checksummed sources, so a change to mapgen / overrides can't
+      # ship stale data. (Flags need Inkscape and are checked locally by
+      # tools/build-data.sh instead.)
+      - name: Committed map data matches the tools
+        run: |
+          RAW="$RUNNER_TEMP/raw"
+          mkdir -p "$RAW/naturalearth"
+          for layer in ne_110m_admin_0_countries ne_50m_admin_0_countries; do
+            curl -fsSL "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/$layer.geojson" \
+              -o "$RAW/naturalearth/$layer.geojson"
+          done
+          (cd "$RAW" && grep naturalearth "$GITHUB_WORKSPACE/tools/data.sha256" | shasum -a 256 -c)
+          (cd core && cargo run -q --features mapgen --bin mapgen -- \
+            "$RAW/naturalearth/ne_110m_admin_0_countries.geojson" \
+            "$RAW/naturalearth/ne_50m_admin_0_countries.geojson" \
+            "$RUNNER_TEMP/World.bin")
+          cmp "$RUNNER_TEMP/World.bin" apple/MiMundo/Resources/World.bin
+          python3 -I tools/build-countries.py \
+            "$RAW/naturalearth/ne_50m_admin_0_countries.geojson" \
+            tools/wikidata-facts.json tools/facts-overrides.json "$RUNNER_TEMP/Countries.json"
+          cmp "$RUNNER_TEMP/Countries.json" apple/MiMundo/Resources/Countries.json
 
       # Same path as a fresh clone: builds the XCFramework, bindings and the
       # Xcode project from scratch.

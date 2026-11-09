@@ -4,6 +4,7 @@
 
 pub mod attendance;
 pub mod days;
+pub mod map;
 pub mod scoring;
 
 pub use attendance::{
