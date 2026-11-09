@@ -90,6 +90,7 @@ pub fn attendance_summary(visit_days: Vec<i32>, today: i32) -> AttendanceSummary
 #[cfg(test)]
 mod tests {
     use super::*;
+    use proptest::prelude::*;
 
     const TODAY: i32 = 20_000;
 
@@ -163,5 +164,46 @@ mod tests {
     fn extreme_day_numbers_do_not_overflow() {
         assert_eq!(days_played_last_7(vec![i32::MIN], i32::MIN), 1);
         assert_eq!(day_streak(vec![i32::MIN], i32::MIN), 1);
+    }
+
+    proptest! {
+        #[test]
+        fn days_played_is_at_most_seven_and_the_distinct_visits(
+            visits in prop::collection::vec(19_990i32..20_010, 0..40),
+        ) {
+            let distinct = visits.iter().collect::<BTreeSet<_>>().len() as u32;
+            let played = days_played_last_7(visits, TODAY);
+            prop_assert!(played <= 7 && played <= distinct);
+        }
+
+        #[test]
+        fn summary_agrees_with_the_single_functions(
+            visits in prop::collection::vec(19_980i32..20_010, 0..40),
+        ) {
+            let s = attendance_summary(visits.clone(), TODAY);
+            prop_assert_eq!(s.streak, day_streak(visits.clone(), TODAY));
+            prop_assert_eq!(s.days_played_last_7, days_played_last_7(visits.clone(), TODAY));
+            prop_assert_eq!(s.level, attendance_level_for(visits, TODAY));
+            prop_assert!(s.level <= s.max_level);
+        }
+
+        #[test]
+        fn order_and_duplicates_never_change_the_streak(
+            visits in prop::collection::vec(19_980i32..20_010, 0..40),
+        ) {
+            let mut shuffled = visits.clone();
+            shuffled.reverse();
+            shuffled.extend(visits.iter().take(5));
+            prop_assert_eq!(day_streak(shuffled, TODAY), day_streak(visits, TODAY));
+        }
+    }
+
+    #[test]
+    fn a_year_long_streak_counts_every_day() {
+        let year: Vec<i32> = (TODAY - 364..=TODAY).collect();
+        assert_eq!(day_streak(year.clone(), TODAY), 365);
+        // Missing one day in the middle cuts it back to the days since.
+        let gap: Vec<i32> = year.into_iter().filter(|&d| d != TODAY - 100).collect();
+        assert_eq!(day_streak(gap, TODAY), 100);
     }
 }

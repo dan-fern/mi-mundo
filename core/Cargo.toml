@@ -49,6 +49,12 @@ libm = "0.2"
 serde_json = { version = "1", optional = true }
 uniffi = "0.32.2"
 
+[dev-dependencies]
+# Property tests: CI runs 64 cases each (PROPTEST_CASES in ci.yml).
+proptest = { version = "1", default-features = false, features = ["std"] }
+# Reads the bundled Countries.json in tests/countries_json.rs.
+serde_json = "1"
+
 [profile.release]
 lto = true
 strip = true

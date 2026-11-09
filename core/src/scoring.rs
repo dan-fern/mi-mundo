@@ -29,6 +29,7 @@ pub fn points_for_attempt(base_points: u32, attempt: u32, used_multiple_choice: 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use proptest::prelude::*;
 
     #[test]
     fn attempts_halve_then_quarter_then_stop() {
@@ -88,5 +89,24 @@ mod tests {
     #[should_panic(expected = "attempt numbers start at 1")]
     fn attempt_zero_asserts_in_debug() {
         points_for_attempt(100, 0, false);
+    }
+
+    proptest! {
+        #[test]
+        fn later_attempts_never_earn_more(base in 0u32..10_000, mc: bool) {
+            for attempt in 1..=5 {
+                prop_assert!(points_for_attempt(base, attempt + 1, mc) <= points_for_attempt(base, attempt, mc));
+            }
+        }
+
+        #[test]
+        fn multiple_choice_never_earns_more(base in 0u32..10_000, attempt in 1u32..6) {
+            prop_assert!(points_for_attempt(base, attempt, true) <= points_for_attempt(base, attempt, false));
+        }
+
+        #[test]
+        fn never_more_than_the_question_is_worth(base: u32, attempt in 1u32..6, mc: bool) {
+            prop_assert!(points_for_attempt(base, attempt, mc) <= base);
+        }
     }
 }

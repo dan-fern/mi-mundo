@@ -710,7 +710,14 @@
         "lat": 31.5
       }
     ],
-    "_why": "hand-picked kid-recognizable landmarks (UNESCO ranking alone misses icons like the Eiffel Tower or Machu Picchu)"
+    "_why": "hand-picked kid-recognizable landmarks (UNESCO ranking alone misses icons like the Eiffel Tower or Machu Picchu); Jerusalem's star at the Knesset (West Jerusalem): Wikidata's point is in the Old City, which the map draws as Palestine",
+    "capitalPoints": [
+      {
+        "name": "Jerusalem",
+        "lon": 35.19,
+        "lat": 31.7767
+      }
+    ]
   },
   "IN": {
     "population": 1460000000,
@@ -999,6 +1006,16 @@
         "lat": 33.6086
       }
     ]
+  },
+  "MF": {
+    "capitalPoints": [
+      {
+        "name": "Marigot",
+        "lon": -63.0847,
+        "lat": 18.072
+      }
+    ],
+    "_why": "Marigot's point nudged 600 m north: the 1:50m border puts the real one in Sint Maarten"
   },
   "MG": {
     "languages": [
@@ -1766,16 +1783,23 @@
     "landmarks": [
       {
         "name": "St. Peter's Basilica",
-        "lon": 12.4539,
+        "lon": 12.4345,
         "lat": 41.9022
       },
       {
         "name": "Sistine Chapel",
-        "lon": 12.4545,
+        "lon": 12.4325,
         "lat": 41.9029
       }
     ],
-    "_why": "hand-picked kid-recognizable landmarks (UNESCO ranking alone misses icons like the Eiffel Tower or Machu Picchu)"
+    "_why": "hand-picked kid-recognizable landmarks (UNESCO ranking alone misses icons like the Eiffel Tower or Machu Picchu); points moved onto Natural Earth's Vatican outline, which sits ~1.7 km west of the real one",
+    "capitalPoints": [
+      {
+        "name": "Vatican City",
+        "lon": 12.4335,
+        "lat": 41.902
+      }
+    ]
   },
   "VI": {
     "population": 87000,

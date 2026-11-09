@@ -67,6 +67,7 @@ pub fn world_outline() -> Vec<f32> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use proptest::prelude::*;
 
     fn close(a: f64, b: f64) -> bool {
         (a - b).abs() < 1e-4
@@ -126,5 +127,105 @@ mod tests {
         let max_x = xs.iter().cloned().fold(f32::MIN, f32::max);
         assert!((max_x - 2.7066).abs() < 1e-3);
         assert_eq!(outline.len() % 2, 0);
+    }
+
+    #[test]
+    fn mirror_in_longitude() {
+        for (lon, lat) in [(10.0, 20.0), (120.0, -45.0), (179.0, 80.0)] {
+            let (x1, y1) = equal_earth(lon, lat);
+            let (x2, y2) = equal_earth(-lon, lat);
+            assert!(close(x1, -x2) && close(y1, y2), "{lon},{lat}");
+        }
+    }
+
+    #[test]
+    fn mirror_in_latitude() {
+        for (lon, lat) in [(10.0, 20.0), (-120.0, 45.0), (179.0, 80.0)] {
+            let (x1, y1) = equal_earth(lon, lat);
+            let (x2, y2) = equal_earth(lon, -lat);
+            assert!(close(x1, x2) && close(y1, -y2), "{lon},{lat}");
+        }
+    }
+
+    proptest! {
+        #[test]
+        fn x_grows_eastward(lat in -89.0f64..89.0, lon in -179.0f64..179.0, step in 0.01f64..1.0) {
+            prop_assert!(equal_earth(lon + step, lat).0 > equal_earth(lon, lat).0);
+        }
+
+        #[test]
+        fn y_grows_southward(lon in -180.0f64..180.0, lat in -89.0f64..89.0, step in 0.01f64..1.0) {
+            prop_assert!(equal_earth(lon, lat - step).1 > equal_earth(lon, lat).1);
+        }
+    }
+
+    #[test]
+    fn pole_line_is_about_half_the_equator() {
+        // Equal Earth's flat poles are a bit over half the equator's width.
+        let ratio = equal_earth(180.0, 90.0).0 / equal_earth(180.0, 0.0).0;
+        assert!((0.45..0.65).contains(&ratio), "ratio {ratio}");
+    }
+
+    /// Projected area of a lon/lat cell, with curved edges sampled finely.
+    fn cell_area(lon0: f64, lat0: f64, size: f64) -> f64 {
+        let n = 200;
+        let mut pts = Vec::new();
+        for i in 0..n {
+            pts.push(equal_earth(lon0 + size * i as f64 / n as f64, lat0));
+        }
+        for i in 0..n {
+            pts.push(equal_earth(lon0 + size, lat0 + size * i as f64 / n as f64));
+        }
+        for i in 0..n {
+            pts.push(equal_earth(
+                lon0 + size - size * i as f64 / n as f64,
+                lat0 + size,
+            ));
+        }
+        for i in 0..n {
+            pts.push(equal_earth(lon0, lat0 + size - size * i as f64 / n as f64));
+        }
+        let mut a = 0.0;
+        for i in 0..pts.len() {
+            let (x0, y0) = pts[i];
+            let (x1, y1) = pts[(i + 1) % pts.len()];
+            a += x0 * y1 - x1 * y0;
+        }
+        (a / 2.0).abs()
+    }
+
+    #[test]
+    fn equal_area_cells_keep_their_true_size() {
+        // On the sphere, a 10°×10° cell's area is proportional to the
+        // difference of the sines of its edge latitudes.
+        let band = |lat: f64| (lat + 10.0).to_radians().sin() - lat.to_radians().sin();
+        let base = cell_area(0.0, 0.0, 10.0) / band(0.0);
+        for lat in [30.0, 60.0, -50.0] {
+            let ratio = cell_area(40.0, lat, 10.0) / band(lat) / base;
+            assert!((ratio - 1.0).abs() < 1e-3, "lat {lat}: {ratio}");
+        }
+    }
+
+    #[test]
+    fn project_is_equal_earth_in_f32() {
+        let (x, y) = equal_earth(12.5, -33.0);
+        assert_eq!(
+            project(12.5, -33.0),
+            MapPoint {
+                x: x as f32,
+                y: y as f32
+            }
+        );
+    }
+
+    #[test]
+    fn outline_encloses_the_world_and_nothing_beyond() {
+        use crate::map::geometry::point_in_rings;
+        let outline = vec![world_outline()];
+        let (x, y) = equal_earth(179.0, 0.0);
+        assert!(point_in_rings(&outline, 0.0, 0.0));
+        assert!(point_in_rings(&outline, x as f32, y as f32));
+        assert!(!point_in_rings(&outline, 2.75, 0.0));
+        assert!(!point_in_rings(&outline, 0.0, 1.35));
     }
 }

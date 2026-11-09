@@ -394,6 +394,7 @@ pub fn camera_zoom_from_web(web_zoom: f64) -> f32 {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use proptest::prelude::*;
 
     fn sample() -> Vec<PhysicalFeature> {
         vec![
@@ -527,5 +528,130 @@ mod tests {
         assert_eq!(camera_zoom_from_web(2.0), 1.0);
         assert_eq!(camera_zoom_from_web(3.0), 2.0);
         assert_eq!(camera_zoom_from_web(5.0), 8.0);
+    }
+
+    fn arb_feature() -> impl Strategy<Value = PhysicalFeature> {
+        let point = (-3.0f32..3.0, -1.5f32..1.5);
+        (
+            0u8..5,
+            "\\PC{0,24}",
+            1.0f32..64.0,
+            0.0f32..8.0,
+            point.clone(),
+            -1.5f32..1.5,
+            0i32..9000,
+            prop::collection::vec(prop::collection::vec(point, 3..12), 1..4),
+        )
+            .prop_map(
+                |(kind, name, min_zoom, extra, (lx, ly), angle, elevation, parts)| {
+                    let kind = FeatureKind::from_code(kind).unwrap();
+                    let flat = |p: &Vec<(f32, f32)>| {
+                        p.iter().flat_map(|&(x, y)| [x, y]).collect::<Vec<_>>()
+                    };
+                    let parts = if kind == FeatureKind::Peak {
+                        vec![vec![lx, ly]]
+                    } else {
+                        parts.iter().map(flat).collect()
+                    };
+                    PhysicalFeature {
+                        kind,
+                        name,
+                        min_zoom,
+                        label_min_zoom: min_zoom + extra,
+                        label_x: lx,
+                        label_y: ly,
+                        label_angle: angle,
+                        elevation_m: elevation,
+                        parts,
+                    }
+                },
+            )
+    }
+
+    proptest! {
+        #[test]
+        fn any_valid_feature_list_round_trips(features in prop::collection::vec(arb_feature(), 0..8)) {
+            prop_assert_eq!(decode(&encode(&features)).unwrap(), features);
+        }
+    }
+
+    #[test]
+    fn an_empty_list_round_trips() {
+        assert_eq!(decode(&encode(&[])).unwrap(), vec![]);
+    }
+
+    #[test]
+    fn a_file_cut_short_anywhere_is_an_error_not_a_panic() {
+        let bytes = encode(&sample());
+        for len in 0..bytes.len() {
+            assert!(decode(&bytes[..len]).is_err(), "cut at {len}");
+        }
+    }
+
+    #[test]
+    fn wrong_version_is_rejected() {
+        let mut bytes = encode(&sample());
+        bytes[4] = 2;
+        assert!(decode(&bytes).is_err());
+    }
+
+    #[test]
+    fn names_must_be_utf8() {
+        let mut bytes = encode(&sample());
+        bytes[15] = 0xFF; // inside the first feature's name
+        assert!(decode(&bytes).is_err());
+    }
+
+    #[test]
+    fn steep_rivers_are_labelled_upright() {
+        // Flowing straight down the screen, or down and to the left: the
+        // text angle is turned to read left-to-right or bottom-to-top.
+        for line in [
+            vec![0.0, 0.0, 0.0, 1.0],
+            vec![0.0, 1.0, 0.0, 0.0],
+            vec![1.0, 0.0, 0.0, 1.0],
+            vec![0.0, 0.0, -1.0, -0.1],
+        ] {
+            let (_, _, angle) = polyline_label(std::slice::from_ref(&line)).unwrap();
+            assert!(
+                angle.abs() <= std::f32::consts::FRAC_PI_2 + 1e-6,
+                "{line:?}: {angle}"
+            );
+        }
+    }
+
+    #[test]
+    fn multipart_rivers_are_labelled_on_their_longest_part() {
+        let short = vec![10.0, 10.0, 10.5, 10.0];
+        let long = vec![0.0, 0.0, 4.0, 0.0];
+        let (x, y, _) = polyline_label(&[short, long]).unwrap();
+        assert_eq!((x, y), (2.0, 0.0));
+    }
+
+    #[test]
+    fn rivers_with_no_length_have_no_label() {
+        assert_eq!(polyline_label(&[]), None);
+        assert_eq!(polyline_label(&[vec![1.0, 1.0]]), None);
+        assert_eq!(polyline_label(&[vec![1.0, 1.0, 1.0, 1.0]]), None);
+    }
+
+    #[test]
+    fn shapes_with_no_area_have_no_label() {
+        assert_eq!(ring_label(&[]), None);
+        assert_eq!(ring_label(&[vec![0.0, 0.0, 1.0, 1.0]]), None); // too few points
+        assert_eq!(
+            ring_label(&[vec![0.0, 0.0, 1.0, 1.0, 2.0, 2.0, 0.0, 0.0]]),
+            None
+        ); // a line
+    }
+
+    #[test]
+    fn web_zoom_conversion_is_monotonic_and_never_below_one() {
+        assert_eq!(camera_zoom_from_web(-3.0), 1.0);
+        let zooms: Vec<f32> = (0..=20)
+            .map(|z| camera_zoom_from_web(f64::from(z) / 2.0))
+            .collect();
+        assert!(zooms.windows(2).all(|w| w[0] <= w[1]));
+        assert_eq!(camera_zoom_from_web(8.0), 64.0);
     }
 }
