@@ -28,6 +28,9 @@ Versions: [Semantic Versioning](https://semver.org/).
   smooth animated zooms; the world can't be dragged off screen; the map
   fits below the real height of the top bar; a Credits screen in parent
   mode (flag-icons MIT notice, "Made with Natural Earth").
+- Places with no permanent residents (Antarctica, South Georgia, French
+  Southern Lands, British Indian Ocean Territory) show no People row,
+  instead of counting visiting researchers or base staff.
 - Border policy (requirements §4): Crimea is drawn as part of Ukraine;
   Western Sahara's Moroccan-administered part stays Morocco; Israel and
   Palestine both list Jerusalem; Taiwan's capital is Taipei.

@@ -24,6 +24,10 @@
     "population": 3000000,
     "_why": "Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate"
   },
+  "AQ": {
+    "population": null,
+    "_why": "no permanent residents (only visiting researchers or base staff), so the card shows no People row"
+  },
   "AS": {
     "languages": [
       "Samoan",
@@ -188,6 +192,10 @@
     ],
     "_why": "'languages of Guinea' is a category, not a language"
   },
+  "GS": {
+    "population": null,
+    "_why": "no permanent residents (only visiting researchers or base staff), so the card shows no People row"
+  },
   "GT": {
     "population": 18400000,
     "_why": "Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate"
@@ -226,6 +234,10 @@
       "English"
     ],
     "_why": "Wikidata latest-dated value is a 2020 figure; India is now more populous than China"
+  },
+  "IO": {
+    "population": null,
+    "_why": "no permanent residents (only visiting researchers or base staff), so the card shows no People row"
   },
   "IQ": {
     "languages": [
@@ -586,6 +598,10 @@
       "English"
     ],
     "_why": "national language first"
+  },
+  "TF": {
+    "population": null,
+    "_why": "no permanent residents (only visiting researchers or base staff), so the card shows no People row"
   },
   "TG": {
     "population": 9700000,

@@ -83,7 +83,7 @@
  "AQ": {
   "capitals": [],
   "languages": [],
-  "population": 4400,
+  "population": null,
   "wikidata": "Q10372207"
  },
  "AR": {
@@ -861,7 +861,7 @@
   "languages": [
    "English"
   ],
-  "population": 35,
+  "population": null,
   "wikidata": "Q35086"
  },
  "GT": {
@@ -1023,7 +1023,7 @@
   "languages": [
    "English"
   ],
-  "population": 3000,
+  "population": null,
   "wikidata": "Q43448"
  },
  "IQ": {
@@ -2152,7 +2152,7 @@
   "languages": [
    "French"
   ],
-  "population": 196,
+  "population": null,
   "wikidata": "Q129003"
  },
  "TG": {
