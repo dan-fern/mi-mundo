@@ -85,7 +85,7 @@ jobs:
           cmp "$RUNNER_TEMP/Features.bin" apple/MiMundo/Resources/Features.bin
           python3 -I tools/build-countries.py \
             "$RAW/naturalearth/ne_50m_admin_0_countries.geojson" \
-            tools/wikidata-facts.json tools/wikidata-landmarks.json tools/facts-overrides.json \
+            tools/wikidata-facts.json tools/wikidata-landmarks.json tools/wikidata-capitals.json tools/facts-overrides.json \
             "$RUNNER_TEMP/Countries.json"
           cmp "$RUNNER_TEMP/Countries.json" apple/MiMundo/Resources/Countries.json
 

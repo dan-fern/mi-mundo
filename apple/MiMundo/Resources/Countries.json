@@ -1,5 +1,12 @@
 {
  "AD": {
+  "capitalPoints": [
+   {
+    "lat": 42.5072,
+    "lon": 1.5222,
+    "name": "Andorra la Vella"
+   }
+  ],
   "capitals": [
    "Andorra la Vella"
   ],
@@ -17,6 +24,13 @@
   "wikidata": "Q228"
  },
  "AE": {
+  "capitalPoints": [
+   {
+    "lat": 24.4511,
+    "lon": 54.3969,
+    "name": "Abu Dhabi"
+   }
+  ],
   "capitals": [
    "Abu Dhabi"
   ],
@@ -44,6 +58,13 @@
   "wikidata": "Q878"
  },
  "AF": {
+  "capitalPoints": [
+   {
+    "lat": 34.5328,
+    "lon": 69.1658,
+    "name": "Kabul"
+   }
+  ],
   "capitals": [
    "Kabul"
   ],
@@ -56,6 +77,13 @@
   "wikidata": "Q889"
  },
  "AG": {
+  "capitalPoints": [
+   {
+    "lat": 17.1274,
+    "lon": -61.8468,
+    "name": "St. John's"
+   }
+  ],
   "capitals": [
    "St. John's"
   ],
@@ -83,6 +111,13 @@
   "wikidata": "Q781"
  },
  "AI": {
+  "capitalPoints": [
+   {
+    "lat": 18.2208,
+    "lon": -63.0517,
+    "name": "The Valley"
+   }
+  ],
   "capitals": [
    "The Valley"
   ],
@@ -94,6 +129,13 @@
   "wikidata": "Q25228"
  },
  "AL": {
+  "capitalPoints": [
+   {
+    "lat": 41.3283,
+    "lon": 19.8181,
+    "name": "Tirana"
+   }
+  ],
   "capitals": [
    "Tirana"
   ],
@@ -116,6 +158,13 @@
   "wikidata": "Q222"
  },
  "AM": {
+  "capitalPoints": [
+   {
+    "lat": 40.1814,
+    "lon": 44.5144,
+    "name": "Yerevan"
+   }
+  ],
   "capitals": [
    "Yerevan"
   ],
@@ -133,6 +182,13 @@
   "wikidata": "Q399"
  },
  "AO": {
+  "capitalPoints": [
+   {
+    "lat": -8.8383,
+    "lon": 13.2344,
+    "name": "Luanda"
+   }
+  ],
   "capitals": [
    "Luanda"
   ],
@@ -150,6 +206,7 @@
   "wikidata": "Q916"
  },
  "AQ": {
+  "capitalPoints": [],
   "capitals": [],
   "landmarks": [],
   "languages": [],
@@ -157,6 +214,13 @@
   "wikidata": "Q10372207"
  },
  "AR": {
+  "capitalPoints": [
+   {
+    "lat": -34.5997,
+    "lon": -58.3819,
+    "name": "Buenos Aires"
+   }
+  ],
   "capitals": [
    "Buenos Aires"
   ],
@@ -184,6 +248,13 @@
   "wikidata": "Q414"
  },
  "AS": {
+  "capitalPoints": [
+   {
+    "lat": -14.2794,
+    "lon": -170.7006,
+    "name": "Pago Pago"
+   }
+  ],
   "capitals": [
    "Pago Pago"
   ],
@@ -196,6 +267,13 @@
   "wikidata": "Q16641"
  },
  "AT": {
+  "capitalPoints": [
+   {
+    "lat": 48.2083,
+    "lon": 16.3725,
+    "name": "Vienna"
+   }
+  ],
   "capitals": [
    "Vienna"
   ],
@@ -223,6 +301,13 @@
   "wikidata": "Q40"
  },
  "AU": {
+  "capitalPoints": [
+   {
+    "lat": -35.2931,
+    "lon": 149.1269,
+    "name": "Canberra"
+   }
+  ],
   "capitals": [
    "Canberra"
   ],
@@ -250,6 +335,13 @@
   "wikidata": "Q408"
  },
  "AW": {
+  "capitalPoints": [
+   {
+    "lat": 12.5186,
+    "lon": -70.0358,
+    "name": "Oranjestad"
+   }
+  ],
   "capitals": [
    "Oranjestad"
   ],
@@ -262,6 +354,13 @@
   "wikidata": "Q21203"
  },
  "AX": {
+  "capitalPoints": [
+   {
+    "lat": 60.0986,
+    "lon": 19.9444,
+    "name": "Mariehamn"
+   }
+  ],
   "capitals": [
    "Mariehamn"
   ],
@@ -273,6 +372,13 @@
   "wikidata": "Q5689"
  },
  "AZ": {
+  "capitalPoints": [
+   {
+    "lat": 40.3667,
+    "lon": 49.8352,
+    "name": "Baku"
+   }
+  ],
   "capitals": [
    "Baku"
   ],
@@ -295,6 +401,13 @@
   "wikidata": "Q227"
  },
  "BA": {
+  "capitalPoints": [
+   {
+    "lat": 43.8564,
+    "lon": 18.4131,
+    "name": "Sarajevo"
+   }
+  ],
   "capitals": [
    "Sarajevo"
   ],
@@ -319,6 +432,13 @@
   "wikidata": "Q225"
  },
  "BB": {
+  "capitalPoints": [
+   {
+    "lat": 13.0975,
+    "lon": -59.6167,
+    "name": "Bridgetown"
+   }
+  ],
   "capitals": [
    "Bridgetown"
   ],
@@ -337,6 +457,13 @@
   "wikidata": "Q244"
  },
  "BD": {
+  "capitalPoints": [
+   {
+    "lat": 23.7289,
+    "lon": 90.3944,
+    "name": "Dhaka"
+   }
+  ],
   "capitals": [
    "Dhaka"
   ],
@@ -359,6 +486,13 @@
   "wikidata": "Q902"
  },
  "BE": {
+  "capitalPoints": [
+   {
+    "lat": 50.8467,
+    "lon": 4.3517,
+    "name": "Brussels"
+   }
+  ],
   "capitals": [
    "Brussels"
   ],
@@ -388,6 +522,13 @@
   "wikidata": "Q31"
  },
  "BF": {
+  "capitalPoints": [
+   {
+    "lat": 12.3686,
+    "lon": -1.5275,
+    "name": "Ouagadougou"
+   }
+  ],
   "capitals": [
    "Ouagadougou"
   ],
@@ -417,6 +558,13 @@
   "wikidata": "Q965"
  },
  "BG": {
+  "capitalPoints": [
+   {
+    "lat": 42.6979,
+    "lon": 23.3217,
+    "name": "Sofia"
+   }
+  ],
   "capitals": [
    "Sofia"
   ],
@@ -444,6 +592,13 @@
   "wikidata": "Q219"
  },
  "BH": {
+  "capitalPoints": [
+   {
+    "lat": 26.2167,
+    "lon": 50.5833,
+    "name": "Manama"
+   }
+  ],
   "capitals": [
    "Manama"
   ],
@@ -471,6 +626,13 @@
   "wikidata": "Q398"
  },
  "BI": {
+  "capitalPoints": [
+   {
+    "lat": -3.4283,
+    "lon": 29.925,
+    "name": "Gitega"
+   }
+  ],
   "capitals": [
    "Gitega"
   ],
@@ -484,6 +646,13 @@
   "wikidata": "Q967"
  },
  "BJ": {
+  "capitalPoints": [
+   {
+    "lat": 6.4833,
+    "lon": 2.6167,
+    "name": "Porto-Novo"
+   }
+  ],
   "capitals": [
    "Porto-Novo"
   ],
@@ -511,6 +680,13 @@
   "wikidata": "Q962"
  },
  "BL": {
+  "capitalPoints": [
+   {
+    "lat": 17.8986,
+    "lon": -62.8492,
+    "name": "Gustavia"
+   }
+  ],
   "capitals": [
    "Gustavia"
   ],
@@ -522,6 +698,13 @@
   "wikidata": "Q25362"
  },
  "BM": {
+  "capitalPoints": [
+   {
+    "lat": 32.295,
+    "lon": -64.7831,
+    "name": "Hamilton"
+   }
+  ],
   "capitals": [
    "Hamilton"
   ],
@@ -533,6 +716,13 @@
   "wikidata": "Q23635"
  },
  "BN": {
+  "capitalPoints": [
+   {
+    "lat": 4.9167,
+    "lon": 114.9167,
+    "name": "Bandar Seri Begawan"
+   }
+  ],
   "capitals": [
    "Bandar Seri Begawan"
   ],
@@ -545,6 +735,18 @@
   "wikidata": "Q921"
  },
  "BO": {
+  "capitalPoints": [
+   {
+    "lat": -16.4958,
+    "lon": -68.1333,
+    "name": "La Paz"
+   },
+   {
+    "lat": -19.0475,
+    "lon": -65.26,
+    "name": "Sucre"
+   }
+  ],
   "capitals": [
    "La Paz",
    "Sucre"
@@ -575,6 +777,13 @@
   "wikidata": "Q750"
  },
  "BR": {
+  "capitalPoints": [
+   {
+    "lat": -15.7939,
+    "lon": -47.8828,
+    "name": "Brasília"
+   }
+  ],
   "capitals": [
    "Brasília"
   ],
@@ -602,6 +811,13 @@
   "wikidata": "Q155"
  },
  "BS": {
+  "capitalPoints": [
+   {
+    "lat": 25.0781,
+    "lon": -77.3386,
+    "name": "Nassau"
+   }
+  ],
   "capitals": [
    "Nassau"
   ],
@@ -613,6 +829,13 @@
   "wikidata": "Q778"
  },
  "BT": {
+  "capitalPoints": [
+   {
+    "lat": 27.4714,
+    "lon": 89.6337,
+    "name": "Thimphu"
+   }
+  ],
   "capitals": [
    "Thimphu"
   ],
@@ -624,6 +847,13 @@
   "wikidata": "Q917"
  },
  "BW": {
+  "capitalPoints": [
+   {
+    "lat": -24.6569,
+    "lon": 25.9086,
+    "name": "Gaborone"
+   }
+  ],
   "capitals": [
    "Gaborone"
   ],
@@ -646,6 +876,13 @@
   "wikidata": "Q963"
  },
  "BY": {
+  "capitalPoints": [
+   {
+    "lat": 53.9022,
+    "lon": 27.5618,
+    "name": "Minsk"
+   }
+  ],
   "capitals": [
    "Minsk"
   ],
@@ -674,6 +911,13 @@
   "wikidata": "Q184"
  },
  "BZ": {
+  "capitalPoints": [
+   {
+    "lat": 17.25,
+    "lon": -88.7675,
+    "name": "Belmopan"
+   }
+  ],
   "capitals": [
    "Belmopan"
   ],
@@ -691,6 +935,13 @@
   "wikidata": "Q242"
  },
  "CA": {
+  "capitalPoints": [
+   {
+    "lat": 45.4247,
+    "lon": -75.695,
+    "name": "Ottawa"
+   }
+  ],
   "capitals": [
    "Ottawa"
   ],
@@ -719,6 +970,13 @@
   "wikidata": "Q16"
  },
  "CD": {
+  "capitalPoints": [
+   {
+    "lat": -4.3219,
+    "lon": 15.3119,
+    "name": "Kinshasa"
+   }
+  ],
   "capitals": [
    "Kinshasa"
   ],
@@ -746,6 +1004,13 @@
   "wikidata": "Q974"
  },
  "CF": {
+  "capitalPoints": [
+   {
+    "lat": 4.3732,
+    "lon": 18.5628,
+    "name": "Bangui"
+   }
+  ],
   "capitals": [
    "Bangui"
   ],
@@ -764,6 +1029,13 @@
   "wikidata": "Q929"
  },
  "CG": {
+  "capitalPoints": [
+   {
+    "lat": -4.2694,
+    "lon": 15.2711,
+    "name": "Brazzaville"
+   }
+  ],
   "capitals": [
    "Brazzaville"
   ],
@@ -786,6 +1058,13 @@
   "wikidata": "Q971"
  },
  "CH": {
+  "capitalPoints": [
+   {
+    "lat": 46.948,
+    "lon": 7.4474,
+    "name": "Bern"
+   }
+  ],
   "capitals": [
    "Bern"
   ],
@@ -815,6 +1094,13 @@
   "wikidata": "Q39"
  },
  "CI": {
+  "capitalPoints": [
+   {
+    "lat": 6.8161,
+    "lon": -5.2742,
+    "name": "Yamoussoukro"
+   }
+  ],
   "capitals": [
    "Yamoussoukro"
   ],
@@ -842,6 +1128,13 @@
   "wikidata": "Q1008"
  },
  "CK": {
+  "capitalPoints": [
+   {
+    "lat": -21.207,
+    "lon": -159.771,
+    "name": "Avarua"
+   }
+  ],
   "capitals": [
    "Avarua"
   ],
@@ -854,6 +1147,13 @@
   "wikidata": "Q26988"
  },
  "CL": {
+  "capitalPoints": [
+   {
+    "lat": -33.4375,
+    "lon": -70.65,
+    "name": "Santiago"
+   }
+  ],
   "capitals": [
    "Santiago"
   ],
@@ -881,6 +1181,13 @@
   "wikidata": "Q298"
  },
  "CM": {
+  "capitalPoints": [
+   {
+    "lat": 3.8578,
+    "lon": 11.5181,
+    "name": "Yaoundé"
+   }
+  ],
   "capitals": [
    "Yaoundé"
   ],
@@ -909,6 +1216,13 @@
   "wikidata": "Q1009"
  },
  "CN": {
+  "capitalPoints": [
+   {
+    "lat": 39.904,
+    "lon": 116.4075,
+    "name": "Beijing"
+   }
+  ],
   "capitals": [
    "Beijing"
   ],
@@ -936,6 +1250,13 @@
   "wikidata": "Q148"
  },
  "CO": {
+  "capitalPoints": [
+   {
+    "lat": 4.6097,
+    "lon": -74.0817,
+    "name": "Bogotá"
+   }
+  ],
   "capitals": [
    "Bogotá"
   ],
@@ -963,6 +1284,13 @@
   "wikidata": "Q739"
  },
  "CR": {
+  "capitalPoints": [
+   {
+    "lat": 9.9327,
+    "lon": -84.0796,
+    "name": "San José"
+   }
+  ],
   "capitals": [
    "San José"
   ],
@@ -985,6 +1313,13 @@
   "wikidata": "Q800"
  },
  "CU": {
+  "capitalPoints": [
+   {
+    "lat": 23.1367,
+    "lon": -82.3589,
+    "name": "Havana"
+   }
+  ],
   "capitals": [
    "Havana"
   ],
@@ -1012,6 +1347,13 @@
   "wikidata": "Q241"
  },
  "CV": {
+  "capitalPoints": [
+   {
+    "lat": 14.9177,
+    "lon": -23.5092,
+    "name": "Praia"
+   }
+  ],
   "capitals": [
    "Praia"
   ],
@@ -1030,6 +1372,13 @@
   "wikidata": "Q1011"
  },
  "CW": {
+  "capitalPoints": [
+   {
+    "lat": 12.108,
+    "lon": -68.935,
+    "name": "Willemstad"
+   }
+  ],
   "capitals": [
    "Willemstad"
   ],
@@ -1049,6 +1398,13 @@
   "wikidata": "Q25279"
  },
  "CY": {
+  "capitalPoints": [
+   {
+    "lat": 35.1725,
+    "lon": 33.365,
+    "name": "Nicosia"
+   }
+  ],
   "capitals": [
    "Nicosia"
   ],
@@ -1061,6 +1417,13 @@
   "wikidata": "Q644636"
  },
  "CZ": {
+  "capitalPoints": [
+   {
+    "lat": 50.0875,
+    "lon": 14.4214,
+    "name": "Prague"
+   }
+  ],
   "capitals": [
    "Prague"
   ],
@@ -1088,6 +1451,13 @@
   "wikidata": "Q213"
  },
  "DE": {
+  "capitalPoints": [
+   {
+    "lat": 52.5167,
+    "lon": 13.3833,
+    "name": "Berlin"
+   }
+  ],
   "capitals": [
    "Berlin"
   ],
@@ -1115,6 +1485,13 @@
   "wikidata": "Q183"
  },
  "DJ": {
+  "capitalPoints": [
+   {
+    "lat": 11.595,
+    "lon": 43.1481,
+    "name": "Djibouti"
+   }
+  ],
   "capitals": [
    "Djibouti"
   ],
@@ -1128,6 +1505,13 @@
   "wikidata": "Q977"
  },
  "DK": {
+  "capitalPoints": [
+   {
+    "lat": 55.6761,
+    "lon": 12.5689,
+    "name": "Copenhagen"
+   }
+  ],
   "capitals": [
    "Copenhagen"
   ],
@@ -1155,6 +1539,13 @@
   "wikidata": "Q35"
  },
  "DM": {
+  "capitalPoints": [
+   {
+    "lat": 15.3,
+    "lon": -61.3833,
+    "name": "Roseau"
+   }
+  ],
   "capitals": [
    "Roseau"
   ],
@@ -1172,6 +1563,13 @@
   "wikidata": "Q784"
  },
  "DO": {
+  "capitalPoints": [
+   {
+    "lat": 18.4625,
+    "lon": -69.9361,
+    "name": "Santo Domingo"
+   }
+  ],
   "capitals": [
    "Santo Domingo"
   ],
@@ -1189,6 +1587,13 @@
   "wikidata": "Q786"
  },
  "DZ": {
+  "capitalPoints": [
+   {
+    "lat": 36.7764,
+    "lon": 3.0586,
+    "name": "Algiers"
+   }
+  ],
   "capitals": [
    "Algiers"
   ],
@@ -1217,6 +1622,13 @@
   "wikidata": "Q262"
  },
  "EC": {
+  "capitalPoints": [
+   {
+    "lat": -0.22,
+    "lon": -78.5125,
+    "name": "Quito"
+   }
+  ],
   "capitals": [
    "Quito"
   ],
@@ -1246,6 +1658,13 @@
   "wikidata": "Q736"
  },
  "EE": {
+  "capitalPoints": [
+   {
+    "lat": 59.4372,
+    "lon": 24.745,
+    "name": "Tallinn"
+   }
+  ],
   "capitals": [
    "Tallinn"
   ],
@@ -1263,6 +1682,13 @@
   "wikidata": "Q191"
  },
  "EG": {
+  "capitalPoints": [
+   {
+    "lat": 30.0444,
+    "lon": 31.2358,
+    "name": "Cairo"
+   }
+  ],
   "capitals": [
    "Cairo"
   ],
@@ -1290,6 +1716,7 @@
   "wikidata": "Q79"
  },
  "EH": {
+  "capitalPoints": [],
   "capitals": [],
   "landmarks": [],
   "languages": [
@@ -1299,6 +1726,13 @@
   "wikidata": "Q6250"
  },
  "ER": {
+  "capitalPoints": [
+   {
+    "lat": 15.3333,
+    "lon": 38.9167,
+    "name": "Asmara"
+   }
+  ],
   "capitals": [
    "Asmara"
   ],
@@ -1318,6 +1752,13 @@
   "wikidata": "Q986"
  },
  "ES": {
+  "capitalPoints": [
+   {
+    "lat": 40.4169,
+    "lon": -3.7033,
+    "name": "Madrid"
+   }
+  ],
   "capitals": [
    "Madrid"
   ],
@@ -1345,6 +1786,13 @@
   "wikidata": "Q29"
  },
  "ET": {
+  "capitalPoints": [
+   {
+    "lat": 9.0358,
+    "lon": 38.7525,
+    "name": "Addis Ababa"
+   }
+  ],
   "capitals": [
    "Addis Ababa"
   ],
@@ -1372,6 +1820,13 @@
   "wikidata": "Q115"
  },
  "FI": {
+  "capitalPoints": [
+   {
+    "lat": 60.1708,
+    "lon": 24.9375,
+    "name": "Helsinki"
+   }
+  ],
   "capitals": [
    "Helsinki"
   ],
@@ -1400,6 +1855,13 @@
   "wikidata": "Q33"
  },
  "FJ": {
+  "capitalPoints": [
+   {
+    "lat": -18.1333,
+    "lon": 178.4333,
+    "name": "Suva"
+   }
+  ],
   "capitals": [
    "Suva"
   ],
@@ -1419,6 +1881,13 @@
   "wikidata": "Q712"
  },
  "FK": {
+  "capitalPoints": [
+   {
+    "lat": -51.6939,
+    "lon": -57.8496,
+    "name": "Stanley"
+   }
+  ],
   "capitals": [
    "Stanley"
   ],
@@ -1430,6 +1899,13 @@
   "wikidata": "Q9648"
  },
  "FM": {
+  "capitalPoints": [
+   {
+    "lat": 6.9178,
+    "lon": 158.185,
+    "name": "Palikir"
+   }
+  ],
   "capitals": [
    "Palikir"
   ],
@@ -1447,6 +1923,13 @@
   "wikidata": "Q702"
  },
  "FO": {
+  "capitalPoints": [
+   {
+    "lat": 62.0098,
+    "lon": -6.7713,
+    "name": "Tórshavn"
+   }
+  ],
   "capitals": [
    "Tórshavn"
   ],
@@ -1459,6 +1942,13 @@
   "wikidata": "Q4628"
  },
  "FR": {
+  "capitalPoints": [
+   {
+    "lat": 48.8567,
+    "lon": 2.3522,
+    "name": "Paris"
+   }
+  ],
   "capitals": [
    "Paris"
   ],
@@ -1486,6 +1976,13 @@
   "wikidata": "Q142"
  },
  "GA": {
+  "capitalPoints": [
+   {
+    "lat": 0.4078,
+    "lon": 9.4403,
+    "name": "Libreville"
+   }
+  ],
   "capitals": [
    "Libreville"
   ],
@@ -1503,6 +2000,13 @@
   "wikidata": "Q1000"
  },
  "GB": {
+  "capitalPoints": [
+   {
+    "lat": 51.5072,
+    "lon": -0.1275,
+    "name": "London"
+   }
+  ],
   "capitals": [
    "London"
   ],
@@ -1530,6 +2034,13 @@
   "wikidata": "Q145"
  },
  "GD": {
+  "capitalPoints": [
+   {
+    "lat": 12.0525,
+    "lon": -61.7531,
+    "name": "St. George's"
+   }
+  ],
   "capitals": [
    "St. George's"
   ],
@@ -1541,6 +2052,13 @@
   "wikidata": "Q769"
  },
  "GE": {
+  "capitalPoints": [
+   {
+    "lat": 41.7225,
+    "lon": 44.7925,
+    "name": "Tbilisi"
+   }
+  ],
   "capitals": [
    "Tbilisi"
   ],
@@ -1568,6 +2086,13 @@
   "wikidata": "Q230"
  },
  "GG": {
+  "capitalPoints": [
+   {
+    "lat": 49.46,
+    "lon": -2.5519,
+    "name": "Saint Peter Port"
+   }
+  ],
   "capitals": [
    "Saint Peter Port"
   ],
@@ -1580,6 +2105,13 @@
   "wikidata": "Q25230"
  },
  "GH": {
+  "capitalPoints": [
+   {
+    "lat": 5.556,
+    "lon": -0.1969,
+    "name": "Accra"
+   }
+  ],
   "capitals": [
    "Accra"
   ],
@@ -1597,6 +2129,13 @@
   "wikidata": "Q117"
  },
  "GL": {
+  "capitalPoints": [
+   {
+    "lat": 64.175,
+    "lon": -51.7333,
+    "name": "Nuuk"
+   }
+  ],
   "capitals": [
    "Nuuk"
   ],
@@ -1624,6 +2163,13 @@
   "wikidata": "Q223"
  },
  "GM": {
+  "capitalPoints": [
+   {
+    "lat": 13.4531,
+    "lon": -16.5775,
+    "name": "Banjul"
+   }
+  ],
   "capitals": [
    "Banjul"
   ],
@@ -1641,6 +2187,13 @@
   "wikidata": "Q1005"
  },
  "GN": {
+  "capitalPoints": [
+   {
+    "lat": 9.5092,
+    "lon": -13.7122,
+    "name": "Conakry"
+   }
+  ],
   "capitals": [
    "Conakry"
   ],
@@ -1658,6 +2211,13 @@
   "wikidata": "Q1006"
  },
  "GQ": {
+  "capitalPoints": [
+   {
+    "lat": 1.5917,
+    "lon": 10.8222,
+    "name": "Ciudad de la Paz"
+   }
+  ],
   "capitals": [
    "Ciudad de la Paz"
   ],
@@ -1671,6 +2231,13 @@
   "wikidata": "Q983"
  },
  "GR": {
+  "capitalPoints": [
+   {
+    "lat": 37.9842,
+    "lon": 23.7281,
+    "name": "Athens"
+   }
+  ],
   "capitals": [
    "Athens"
   ],
@@ -1698,6 +2265,13 @@
   "wikidata": "Q41"
  },
  "GS": {
+  "capitalPoints": [
+   {
+    "lat": -54.2833,
+    "lon": -36.4942,
+    "name": "King Edward Point"
+   }
+  ],
   "capitals": [
    "King Edward Point"
   ],
@@ -1709,6 +2283,13 @@
   "wikidata": "Q35086"
  },
  "GT": {
+  "capitalPoints": [
+   {
+    "lat": 14.6417,
+    "lon": -90.5133,
+    "name": "Guatemala City"
+   }
+  ],
   "capitals": [
    "Guatemala City"
   ],
@@ -1736,6 +2317,13 @@
   "wikidata": "Q774"
  },
  "GU": {
+  "capitalPoints": [
+   {
+    "lat": 13.4833,
+    "lon": 144.75,
+    "name": "Hagåtña"
+   }
+  ],
   "capitals": [
    "Hagåtña"
   ],
@@ -1748,6 +2336,13 @@
   "wikidata": "Q16635"
  },
  "GW": {
+  "capitalPoints": [
+   {
+    "lat": 11.86,
+    "lon": -15.5833,
+    "name": "Bissau"
+   }
+  ],
   "capitals": [
    "Bissau"
   ],
@@ -1759,6 +2354,13 @@
   "wikidata": "Q1007"
  },
  "GY": {
+  "capitalPoints": [
+   {
+    "lat": 6.8058,
+    "lon": -58.1508,
+    "name": "Georgetown"
+   }
+  ],
   "capitals": [
    "Georgetown"
   ],
@@ -1770,6 +2372,7 @@
   "wikidata": "Q734"
  },
  "HK": {
+  "capitalPoints": [],
   "capitals": [],
   "landmarks": [],
   "languages": [
@@ -1780,6 +2383,7 @@
   "wikidata": "Q8646"
  },
  "HM": {
+  "capitalPoints": [],
   "capitals": [],
   "landmarks": [],
   "languages": [
@@ -1789,6 +2393,13 @@
   "wikidata": "Q131198"
  },
  "HN": {
+  "capitalPoints": [
+   {
+    "lat": 14.1058,
+    "lon": -87.2047,
+    "name": "Tegucigalpa"
+   }
+  ],
   "capitals": [
    "Tegucigalpa"
   ],
@@ -1811,6 +2422,13 @@
   "wikidata": "Q783"
  },
  "HR": {
+  "capitalPoints": [
+   {
+    "lat": 45.8131,
+    "lon": 15.9772,
+    "name": "Zagreb"
+   }
+  ],
   "capitals": [
    "Zagreb"
   ],
@@ -1838,6 +2456,13 @@
   "wikidata": "Q224"
  },
  "HT": {
+  "capitalPoints": [
+   {
+    "lat": 18.5469,
+    "lon": -72.3403,
+    "name": "Port-au-Prince"
+   }
+  ],
   "capitals": [
    "Port-au-Prince"
   ],
@@ -1866,6 +2491,13 @@
   "wikidata": "Q790"
  },
  "HU": {
+  "capitalPoints": [
+   {
+    "lat": 47.4983,
+    "lon": 19.0408,
+    "name": "Budapest"
+   }
+  ],
   "capitals": [
    "Budapest"
   ],
@@ -1893,6 +2525,13 @@
   "wikidata": "Q28"
  },
  "ID": {
+  "capitalPoints": [
+   {
+    "lat": -6.1753,
+    "lon": 106.8269,
+    "name": "Jakarta"
+   }
+  ],
   "capitals": [
    "Jakarta"
   ],
@@ -1920,6 +2559,13 @@
   "wikidata": "Q252"
  },
  "IE": {
+  "capitalPoints": [
+   {
+    "lat": 53.3497,
+    "lon": -6.2603,
+    "name": "Dublin"
+   }
+  ],
   "capitals": [
    "Dublin"
   ],
@@ -1948,6 +2594,13 @@
   "wikidata": "Q27"
  },
  "IL": {
+  "capitalPoints": [
+   {
+    "lat": 31.7767,
+    "lon": 35.2342,
+    "name": "Jerusalem"
+   }
+  ],
   "capitals": [
    "Jerusalem"
   ],
@@ -1975,6 +2628,13 @@
   "wikidata": "Q801"
  },
  "IM": {
+  "capitalPoints": [
+   {
+    "lat": 54.15,
+    "lon": -4.4775,
+    "name": "Douglas"
+   }
+  ],
   "capitals": [
    "Douglas"
   ],
@@ -1987,6 +2647,13 @@
   "wikidata": "Q9676"
  },
  "IN": {
+  "capitalPoints": [
+   {
+    "lat": 28.6139,
+    "lon": 77.2089,
+    "name": "New Delhi"
+   }
+  ],
   "capitals": [
    "New Delhi"
   ],
@@ -2015,6 +2682,13 @@
   "wikidata": "Q668"
  },
  "IO": {
+  "capitalPoints": [
+   {
+    "lat": -7.3133,
+    "lon": 72.4111,
+    "name": "Diego Garcia"
+   }
+  ],
   "capitals": [
    "Diego Garcia"
   ],
@@ -2026,6 +2700,13 @@
   "wikidata": "Q43448"
  },
  "IQ": {
+  "capitalPoints": [
+   {
+    "lat": 33.3153,
+    "lon": 44.3661,
+    "name": "Baghdad"
+   }
+  ],
   "capitals": [
    "Baghdad"
   ],
@@ -2054,6 +2735,13 @@
   "wikidata": "Q796"
  },
  "IR": {
+  "capitalPoints": [
+   {
+    "lat": 35.6889,
+    "lon": 51.3897,
+    "name": "Tehran"
+   }
+  ],
   "capitals": [
    "Tehran"
   ],
@@ -2081,6 +2769,13 @@
   "wikidata": "Q794"
  },
  "IS": {
+  "capitalPoints": [
+   {
+    "lat": 64.1475,
+    "lon": -21.935,
+    "name": "Reykjavík"
+   }
+  ],
   "capitals": [
    "Reykjavík"
   ],
@@ -2108,6 +2803,13 @@
   "wikidata": "Q189"
  },
  "IT": {
+  "capitalPoints": [
+   {
+    "lat": 41.8931,
+    "lon": 12.4828,
+    "name": "Rome"
+   }
+  ],
   "capitals": [
    "Rome"
   ],
@@ -2135,6 +2837,13 @@
   "wikidata": "Q38"
  },
  "JE": {
+  "capitalPoints": [
+   {
+    "lat": 49.1858,
+    "lon": -2.11,
+    "name": "Saint Helier"
+   }
+  ],
   "capitals": [
    "Saint Helier"
   ],
@@ -2147,6 +2856,13 @@
   "wikidata": "Q785"
  },
  "JM": {
+  "capitalPoints": [
+   {
+    "lat": 17.9714,
+    "lon": -76.7931,
+    "name": "Kingston"
+   }
+  ],
   "capitals": [
    "Kingston"
   ],
@@ -2175,6 +2891,13 @@
   "wikidata": "Q766"
  },
  "JO": {
+  "capitalPoints": [
+   {
+    "lat": 31.931,
+    "lon": 35.9261,
+    "name": "Amman"
+   }
+  ],
   "capitals": [
    "Amman"
   ],
@@ -2202,6 +2925,13 @@
   "wikidata": "Q810"
  },
  "JP": {
+  "capitalPoints": [
+   {
+    "lat": 35.6894,
+    "lon": 139.6917,
+    "name": "Tokyo"
+   }
+  ],
   "capitals": [
    "Tokyo"
   ],
@@ -2229,6 +2959,13 @@
   "wikidata": "Q17"
  },
  "KE": {
+  "capitalPoints": [
+   {
+    "lat": -1.2864,
+    "lon": 36.8172,
+    "name": "Nairobi"
+   }
+  ],
   "capitals": [
    "Nairobi"
   ],
@@ -2257,6 +2994,13 @@
   "wikidata": "Q114"
  },
  "KG": {
+  "capitalPoints": [
+   {
+    "lat": 42.8667,
+    "lon": 74.5667,
+    "name": "Bishkek"
+   }
+  ],
   "capitals": [
    "Bishkek"
   ],
@@ -2284,6 +3028,13 @@
   "wikidata": "Q813"
  },
  "KH": {
+  "capitalPoints": [
+   {
+    "lat": 11.5696,
+    "lon": 104.921,
+    "name": "Phnom Penh"
+   }
+  ],
   "capitals": [
    "Phnom Penh"
   ],
@@ -2311,6 +3062,13 @@
   "wikidata": "Q424"
  },
  "KI": {
+  "capitalPoints": [
+   {
+    "lat": 1.3333,
+    "lon": 172.9667,
+    "name": "South Tarawa"
+   }
+  ],
   "capitals": [
    "South Tarawa"
   ],
@@ -2329,6 +3087,13 @@
   "wikidata": "Q710"
  },
  "KM": {
+  "capitalPoints": [
+   {
+    "lat": -11.7036,
+    "lon": 43.2536,
+    "name": "Moroni"
+   }
+  ],
   "capitals": [
    "Moroni"
   ],
@@ -2342,6 +3107,13 @@
   "wikidata": "Q970"
  },
  "KN": {
+  "capitalPoints": [
+   {
+    "lat": 17.2983,
+    "lon": -62.7342,
+    "name": "Basseterre"
+   }
+  ],
   "capitals": [
    "Basseterre"
   ],
@@ -2353,6 +3125,13 @@
   "wikidata": "Q763"
  },
  "KP": {
+  "capitalPoints": [
+   {
+    "lat": 39.0167,
+    "lon": 125.7475,
+    "name": "Pyongyang"
+   }
+  ],
   "capitals": [
    "Pyongyang"
   ],
@@ -2375,6 +3154,13 @@
   "wikidata": "Q423"
  },
  "KR": {
+  "capitalPoints": [
+   {
+    "lat": 37.56,
+    "lon": 126.99,
+    "name": "Seoul"
+   }
+  ],
   "capitals": [
    "Seoul"
   ],
@@ -2402,6 +3188,13 @@
   "wikidata": "Q884"
  },
  "KW": {
+  "capitalPoints": [
+   {
+    "lat": 29.375,
+    "lon": 47.98,
+    "name": "Kuwait City"
+   }
+  ],
   "capitals": [
    "Kuwait City"
   ],
@@ -2413,6 +3206,13 @@
   "wikidata": "Q817"
  },
  "KY": {
+  "capitalPoints": [
+   {
+    "lat": 19.2964,
+    "lon": -81.3817,
+    "name": "George Town"
+   }
+  ],
   "capitals": [
    "George Town"
   ],
@@ -2424,6 +3224,13 @@
   "wikidata": "Q5785"
  },
  "KZ": {
+  "capitalPoints": [
+   {
+    "lat": 51.1333,
+    "lon": 71.4333,
+    "name": "Astana"
+   }
+  ],
   "capitals": [
    "Astana"
   ],
@@ -2452,6 +3259,13 @@
   "wikidata": "Q232"
  },
  "LA": {
+  "capitalPoints": [
+   {
+    "lat": 17.98,
+    "lon": 102.63,
+    "name": "Vientiane"
+   }
+  ],
   "capitals": [
    "Vientiane"
   ],
@@ -2479,6 +3293,13 @@
   "wikidata": "Q819"
  },
  "LB": {
+  "capitalPoints": [
+   {
+    "lat": 33.8869,
+    "lon": 35.5131,
+    "name": "Beirut"
+   }
+  ],
   "capitals": [
    "Beirut"
   ],
@@ -2506,6 +3327,13 @@
   "wikidata": "Q822"
  },
  "LC": {
+  "capitalPoints": [
+   {
+    "lat": 14.0108,
+    "lon": -60.9894,
+    "name": "Castries"
+   }
+  ],
   "capitals": [
    "Castries"
   ],
@@ -2523,6 +3351,13 @@
   "wikidata": "Q760"
  },
  "LI": {
+  "capitalPoints": [
+   {
+    "lat": 47.1406,
+    "lon": 9.5222,
+    "name": "Vaduz"
+   }
+  ],
   "capitals": [
    "Vaduz"
   ],
@@ -2534,6 +3369,18 @@
   "wikidata": "Q347"
  },
  "LK": {
+  "capitalPoints": [
+   {
+    "lat": 6.9,
+    "lon": 79.9164,
+    "name": "Sri Jayawardenepura Kotte"
+   },
+   {
+    "lat": 6.9267,
+    "lon": 79.8606,
+    "name": "Colombo"
+   }
+  ],
   "capitals": [
    "Sri Jayawardenepura Kotte",
    "Colombo"
@@ -2563,6 +3410,13 @@
   "wikidata": "Q854"
  },
  "LR": {
+  "capitalPoints": [
+   {
+    "lat": 6.3106,
+    "lon": -10.8047,
+    "name": "Monrovia"
+   }
+  ],
   "capitals": [
    "Monrovia"
   ],
@@ -2574,6 +3428,13 @@
   "wikidata": "Q1014"
  },
  "LS": {
+  "capitalPoints": [
+   {
+    "lat": -29.31,
+    "lon": 27.48,
+    "name": "Maseru"
+   }
+  ],
   "capitals": [
    "Maseru"
   ],
@@ -2592,6 +3453,13 @@
   "wikidata": "Q1013"
  },
  "LT": {
+  "capitalPoints": [
+   {
+    "lat": 54.6872,
+    "lon": 25.28,
+    "name": "Vilnius"
+   }
+  ],
   "capitals": [
    "Vilnius"
   ],
@@ -2619,6 +3487,13 @@
   "wikidata": "Q37"
  },
  "LU": {
+  "capitalPoints": [
+   {
+    "lat": 49.6114,
+    "lon": 6.13,
+    "name": "Luxembourg"
+   }
+  ],
   "capitals": [
    "Luxembourg"
   ],
@@ -2632,6 +3507,13 @@
   "wikidata": "Q32"
  },
  "LV": {
+  "capitalPoints": [
+   {
+    "lat": 56.9475,
+    "lon": 24.1069,
+    "name": "Riga"
+   }
+  ],
   "capitals": [
    "Riga"
   ],
@@ -2654,6 +3536,13 @@
   "wikidata": "Q211"
  },
  "LY": {
+  "capitalPoints": [
+   {
+    "lat": 32.8875,
+    "lon": 13.1875,
+    "name": "Tripoli"
+   }
+  ],
   "capitals": [
    "Tripoli"
   ],
@@ -2681,6 +3570,13 @@
   "wikidata": "Q1016"
  },
  "MA": {
+  "capitalPoints": [
+   {
+    "lat": 34.0211,
+    "lon": -6.8414,
+    "name": "Rabat"
+   }
+  ],
   "capitals": [
    "Rabat"
   ],
@@ -2709,6 +3605,13 @@
   "wikidata": "Q1028"
  },
  "MC": {
+  "capitalPoints": [
+   {
+    "lat": 43.7311,
+    "lon": 7.42,
+    "name": "Monaco"
+   }
+  ],
   "capitals": [
    "Monaco"
   ],
@@ -2720,6 +3623,13 @@
   "wikidata": "Q235"
  },
  "MD": {
+  "capitalPoints": [
+   {
+    "lat": 47.0228,
+    "lon": 28.8353,
+    "name": "Chișinău"
+   }
+  ],
   "capitals": [
    "Chișinău"
   ],
@@ -2731,6 +3641,13 @@
   "wikidata": "Q217"
  },
  "ME": {
+  "capitalPoints": [
+   {
+    "lat": 42.4414,
+    "lon": 19.2628,
+    "name": "Podgorica"
+   }
+  ],
   "capitals": [
    "Podgorica"
   ],
@@ -2748,6 +3665,13 @@
   "wikidata": "Q236"
  },
  "MF": {
+  "capitalPoints": [
+   {
+    "lat": 18.0667,
+    "lon": -63.0847,
+    "name": "Marigot"
+   }
+  ],
   "capitals": [
    "Marigot"
   ],
@@ -2759,6 +3683,13 @@
   "wikidata": "Q126125"
  },
  "MG": {
+  "capitalPoints": [
+   {
+    "lat": -18.91,
+    "lon": 47.525,
+    "name": "Antananarivo"
+   }
+  ],
   "capitals": [
    "Antananarivo"
   ],
@@ -2782,6 +3713,13 @@
   "wikidata": "Q1019"
  },
  "MH": {
+  "capitalPoints": [
+   {
+    "lat": 7.0918,
+    "lon": 171.3802,
+    "name": "Majuro"
+   }
+  ],
   "capitals": [
    "Majuro"
   ],
@@ -2800,6 +3738,13 @@
   "wikidata": "Q709"
  },
  "MK": {
+  "capitalPoints": [
+   {
+    "lat": 41.9961,
+    "lon": 21.4317,
+    "name": "Skopje"
+   }
+  ],
   "capitals": [
    "Skopje"
   ],
@@ -2828,6 +3773,13 @@
   "wikidata": "Q221"
  },
  "ML": {
+  "capitalPoints": [
+   {
+    "lat": 12.6458,
+    "lon": -7.9922,
+    "name": "Bamako"
+   }
+  ],
   "capitals": [
    "Bamako"
   ],
@@ -2857,6 +3809,13 @@
   "wikidata": "Q912"
  },
  "MM": {
+  "capitalPoints": [
+   {
+    "lat": 19.7475,
+    "lon": 96.115,
+    "name": "Naypyidaw"
+   }
+  ],
   "capitals": [
    "Naypyidaw"
   ],
@@ -2879,6 +3838,13 @@
   "wikidata": "Q836"
  },
  "MN": {
+  "capitalPoints": [
+   {
+    "lat": 47.9214,
+    "lon": 106.9055,
+    "name": "Ulaanbaatar"
+   }
+  ],
   "capitals": [
    "Ulaanbaatar"
   ],
@@ -2906,6 +3872,7 @@
   "wikidata": "Q711"
  },
  "MO": {
+  "capitalPoints": [],
   "capitals": [],
   "landmarks": [],
   "languages": [
@@ -2916,6 +3883,13 @@
   "wikidata": "Q14773"
  },
  "MP": {
+  "capitalPoints": [
+   {
+    "lat": 15.2123,
+    "lon": 145.7545,
+    "name": "Saipan"
+   }
+  ],
   "capitals": [
    "Saipan"
   ],
@@ -2929,6 +3903,13 @@
   "wikidata": "Q16644"
  },
  "MR": {
+  "capitalPoints": [
+   {
+    "lat": 18.0858,
+    "lon": -15.9785,
+    "name": "Nouakchott"
+   }
+  ],
   "capitals": [
    "Nouakchott"
   ],
@@ -2947,6 +3928,13 @@
   "wikidata": "Q1025"
  },
  "MS": {
+  "capitalPoints": [
+   {
+    "lat": 16.7928,
+    "lon": -62.2106,
+    "name": "Brades"
+   }
+  ],
   "capitals": [
    "Brades"
   ],
@@ -2958,6 +3946,13 @@
   "wikidata": "Q13353"
  },
  "MT": {
+  "capitalPoints": [
+   {
+    "lat": 35.8978,
+    "lon": 14.5125,
+    "name": "Valletta"
+   }
+  ],
   "capitals": [
    "Valletta"
   ],
@@ -2986,6 +3981,13 @@
   "wikidata": "Q233"
  },
  "MU": {
+  "capitalPoints": [
+   {
+    "lat": -20.1619,
+    "lon": 57.4989,
+    "name": "Port Louis"
+   }
+  ],
   "capitals": [
    "Port Louis"
   ],
@@ -3010,6 +4012,13 @@
   "wikidata": "Q1027"
  },
  "MV": {
+  "capitalPoints": [
+   {
+    "lat": 4.175,
+    "lon": 73.5083,
+    "name": "Malé"
+   }
+  ],
   "capitals": [
    "Malé"
   ],
@@ -3021,6 +4030,13 @@
   "wikidata": "Q826"
  },
  "MW": {
+  "capitalPoints": [
+   {
+    "lat": -13.9864,
+    "lon": 33.7681,
+    "name": "Lilongwe"
+   }
+  ],
   "capitals": [
    "Lilongwe"
   ],
@@ -3050,6 +4066,13 @@
   "wikidata": "Q1020"
  },
  "MX": {
+  "capitalPoints": [
+   {
+    "lat": 19.3538,
+    "lon": -99.1359,
+    "name": "Mexico City"
+   }
+  ],
   "capitals": [
    "Mexico City"
   ],
@@ -3079,6 +4102,13 @@
   "wikidata": "Q96"
  },
  "MY": {
+  "capitalPoints": [
+   {
+    "lat": 3.1478,
+    "lon": 101.6953,
+    "name": "Kuala Lumpur"
+   }
+  ],
   "capitals": [
    "Kuala Lumpur"
   ],
@@ -3106,6 +4136,13 @@
   "wikidata": "Q833"
  },
  "MZ": {
+  "capitalPoints": [
+   {
+    "lat": -25.9689,
+    "lon": 32.5733,
+    "name": "Maputo"
+   }
+  ],
   "capitals": [
    "Maputo"
   ],
@@ -3128,6 +4165,13 @@
   "wikidata": "Q1029"
  },
  "NA": {
+  "capitalPoints": [
+   {
+    "lat": -22.57,
+    "lon": 17.0836,
+    "name": "Windhoek"
+   }
+  ],
   "capitals": [
    "Windhoek"
   ],
@@ -3150,6 +4194,13 @@
   "wikidata": "Q1030"
  },
  "NC": {
+  "capitalPoints": [
+   {
+    "lat": -22.2667,
+    "lon": 166.45,
+    "name": "Nouméa"
+   }
+  ],
   "capitals": [
    "Nouméa"
   ],
@@ -3161,6 +4212,13 @@
   "wikidata": "Q33788"
  },
  "NE": {
+  "capitalPoints": [
+   {
+    "lat": 13.515,
+    "lon": 2.1175,
+    "name": "Niamey"
+   }
+  ],
   "capitals": [
    "Niamey"
   ],
@@ -3185,6 +4243,13 @@
   "wikidata": "Q1032"
  },
  "NF": {
+  "capitalPoints": [
+   {
+    "lat": -29.05,
+    "lon": 167.9667,
+    "name": "Kingston"
+   }
+  ],
   "capitals": [
    "Kingston"
   ],
@@ -3197,6 +4262,13 @@
   "wikidata": "Q31057"
  },
  "NG": {
+  "capitalPoints": [
+   {
+    "lat": 9.0556,
+    "lon": 7.4914,
+    "name": "Abuja"
+   }
+  ],
   "capitals": [
    "Abuja"
   ],
@@ -3224,6 +4296,13 @@
   "wikidata": "Q1033"
  },
  "NI": {
+  "capitalPoints": [
+   {
+    "lat": 12.1547,
+    "lon": -86.2737,
+    "name": "Managua"
+   }
+  ],
   "capitals": [
    "Managua"
   ],
@@ -3246,6 +4325,13 @@
   "wikidata": "Q811"
  },
  "NL": {
+  "capitalPoints": [
+   {
+    "lat": 52.3667,
+    "lon": 4.8833,
+    "name": "Amsterdam"
+   }
+  ],
   "capitals": [
    "Amsterdam"
   ],
@@ -3273,6 +4359,13 @@
   "wikidata": "Q29999"
  },
  "NO": {
+  "capitalPoints": [
+   {
+    "lat": 59.9133,
+    "lon": 10.7389,
+    "name": "Oslo"
+   }
+  ],
   "capitals": [
    "Oslo"
   ],
@@ -3300,6 +4393,13 @@
   "wikidata": "Q20"
  },
  "NP": {
+  "capitalPoints": [
+   {
+    "lat": 27.71,
+    "lon": 85.32,
+    "name": "Kathmandu"
+   }
+  ],
   "capitals": [
    "Kathmandu"
   ],
@@ -3327,6 +4427,13 @@
   "wikidata": "Q837"
  },
  "NR": {
+  "capitalPoints": [
+   {
+    "lat": -0.5477,
+    "lon": 166.9209,
+    "name": "Yaren"
+   }
+  ],
   "capitals": [
    "Yaren"
   ],
@@ -3339,6 +4446,13 @@
   "wikidata": "Q697"
  },
  "NU": {
+  "capitalPoints": [
+   {
+    "lat": -19.056,
+    "lon": -169.921,
+    "name": "Alofi"
+   }
+  ],
   "capitals": [
    "Alofi"
   ],
@@ -3351,6 +4465,13 @@
   "wikidata": "Q34020"
  },
  "NZ": {
+  "capitalPoints": [
+   {
+    "lat": -41.2889,
+    "lon": 174.7772,
+    "name": "Wellington"
+   }
+  ],
   "capitals": [
    "Wellington"
   ],
@@ -3379,6 +4500,13 @@
   "wikidata": "Q664"
  },
  "OM": {
+  "capitalPoints": [
+   {
+    "lat": 23.6139,
+    "lon": 58.5922,
+    "name": "Muscat"
+   }
+  ],
   "capitals": [
    "Muscat"
   ],
@@ -3406,6 +4534,13 @@
   "wikidata": "Q842"
  },
  "PA": {
+  "capitalPoints": [
+   {
+    "lat": 8.9711,
+    "lon": -79.5347,
+    "name": "Panama City"
+   }
+  ],
   "capitals": [
    "Panama City"
   ],
@@ -3433,6 +4568,13 @@
   "wikidata": "Q804"
  },
  "PE": {
+  "capitalPoints": [
+   {
+    "lat": -12.06,
+    "lon": -77.0375,
+    "name": "Lima"
+   }
+  ],
   "capitals": [
    "Lima"
   ],
@@ -3462,6 +4604,13 @@
   "wikidata": "Q419"
  },
  "PF": {
+  "capitalPoints": [
+   {
+    "lat": -17.5397,
+    "lon": -149.5689,
+    "name": "Papeete"
+   }
+  ],
   "capitals": [
    "Papeete"
   ],
@@ -3473,6 +4622,13 @@
   "wikidata": "Q30971"
  },
  "PG": {
+  "capitalPoints": [
+   {
+    "lat": -9.4789,
+    "lon": 147.1494,
+    "name": "Port Moresby"
+   }
+  ],
   "capitals": [
    "Port Moresby"
   ],
@@ -3492,6 +4648,13 @@
   "wikidata": "Q691"
  },
  "PH": {
+  "capitalPoints": [
+   {
+    "lat": 14.5958,
+    "lon": 120.9772,
+    "name": "Manila"
+   }
+  ],
   "capitals": [
    "Manila"
   ],
@@ -3520,6 +4683,13 @@
   "wikidata": "Q928"
  },
  "PK": {
+  "capitalPoints": [
+   {
+    "lat": 33.6989,
+    "lon": 73.0369,
+    "name": "Islamabad"
+   }
+  ],
   "capitals": [
    "Islamabad"
   ],
@@ -3548,6 +4718,13 @@
   "wikidata": "Q843"
  },
  "PL": {
+  "capitalPoints": [
+   {
+    "lat": 52.23,
+    "lon": 21.0111,
+    "name": "Warsaw"
+   }
+  ],
   "capitals": [
    "Warsaw"
   ],
@@ -3575,6 +4752,13 @@
   "wikidata": "Q36"
  },
  "PM": {
+  "capitalPoints": [
+   {
+    "lat": 46.7778,
+    "lon": -56.1778,
+    "name": "Saint-Pierre"
+   }
+  ],
   "capitals": [
    "Saint-Pierre"
   ],
@@ -3586,6 +4770,13 @@
   "wikidata": "Q34617"
  },
  "PN": {
+  "capitalPoints": [
+   {
+    "lat": -25.0667,
+    "lon": -130.1,
+    "name": "Adamstown"
+   }
+  ],
   "capitals": [
    "Adamstown"
   ],
@@ -3598,6 +4789,13 @@
   "wikidata": "Q35672"
  },
  "PR": {
+  "capitalPoints": [
+   {
+    "lat": 18.4653,
+    "lon": -66.1167,
+    "name": "San Juan"
+   }
+  ],
   "capitals": [
    "San Juan"
   ],
@@ -3610,6 +4808,18 @@
   "wikidata": "Q1183"
  },
  "PS": {
+  "capitalPoints": [
+   {
+    "lat": 31.7834,
+    "lon": 35.2339,
+    "name": "East Jerusalem"
+   },
+   {
+    "lat": 31.8969,
+    "lon": 35.2017,
+    "name": "Ramallah"
+   }
+  ],
   "capitals": [
    "East Jerusalem",
    "Ramallah"
@@ -3638,6 +4848,13 @@
   "wikidata": "Q219060"
  },
  "PT": {
+  "capitalPoints": [
+   {
+    "lat": 38.708,
+    "lon": -9.139,
+    "name": "Lisbon"
+   }
+  ],
   "capitals": [
    "Lisbon"
   ],
@@ -3665,6 +4882,13 @@
   "wikidata": "Q45"
  },
  "PW": {
+  "capitalPoints": [
+   {
+    "lat": 7.5006,
+    "lon": 134.6242,
+    "name": "Ngerulmud"
+   }
+  ],
   "capitals": [
    "Ngerulmud"
   ],
@@ -3683,6 +4907,13 @@
   "wikidata": "Q695"
  },
  "PY": {
+  "capitalPoints": [
+   {
+    "lat": -25.28,
+    "lon": -57.6344,
+    "name": "Asunción"
+   }
+  ],
   "capitals": [
    "Asunción"
   ],
@@ -3695,6 +4926,13 @@
   "wikidata": "Q733"
  },
  "QA": {
+  "capitalPoints": [
+   {
+    "lat": 25.2861,
+    "lon": 51.5294,
+    "name": "Doha"
+   }
+  ],
   "capitals": [
    "Doha"
   ],
@@ -3712,6 +4950,13 @@
   "wikidata": "Q846"
  },
  "RO": {
+  "capitalPoints": [
+   {
+    "lat": 44.4134,
+    "lon": 26.0978,
+    "name": "Bucharest"
+   }
+  ],
   "capitals": [
    "Bucharest"
   ],
@@ -3739,6 +4984,13 @@
   "wikidata": "Q218"
  },
  "RS": {
+  "capitalPoints": [
+   {
+    "lat": 44.8178,
+    "lon": 20.4569,
+    "name": "Belgrade"
+   }
+  ],
   "capitals": [
    "Belgrade"
   ],
@@ -3766,6 +5018,13 @@
   "wikidata": "Q403"
  },
  "RU": {
+  "capitalPoints": [
+   {
+    "lat": 55.7506,
+    "lon": 37.6175,
+    "name": "Moscow"
+   }
+  ],
   "capitals": [
    "Moscow"
   ],
@@ -3793,6 +5052,13 @@
   "wikidata": "Q159"
  },
  "RW": {
+  "capitalPoints": [
+   {
+    "lat": -1.9525,
+    "lon": 30.115,
+    "name": "Kigali"
+   }
+  ],
   "capitals": [
    "Kigali"
   ],
@@ -3822,6 +5088,13 @@
   "wikidata": "Q1037"
  },
  "SA": {
+  "capitalPoints": [
+   {
+    "lat": 24.6383,
+    "lon": 46.715,
+    "name": "Riyadh"
+   }
+  ],
   "capitals": [
    "Riyadh"
   ],
@@ -3849,6 +5122,13 @@
   "wikidata": "Q851"
  },
  "SB": {
+  "capitalPoints": [
+   {
+    "lat": -9.4333,
+    "lon": 159.95,
+    "name": "Honiara"
+   }
+  ],
   "capitals": [
    "Honiara"
   ],
@@ -3866,6 +5146,13 @@
   "wikidata": "Q685"
  },
  "SC": {
+  "capitalPoints": [
+   {
+    "lat": -4.6236,
+    "lon": 55.4544,
+    "name": "Victoria"
+   }
+  ],
   "capitals": [
    "Victoria"
   ],
@@ -3890,6 +5177,13 @@
   "wikidata": "Q1042"
  },
  "SD": {
+  "capitalPoints": [
+   {
+    "lat": 15.6031,
+    "lon": 32.5265,
+    "name": "Khartoum"
+   }
+  ],
   "capitals": [
    "Khartoum"
   ],
@@ -3902,6 +5196,13 @@
   "wikidata": "Q1049"
  },
  "SE": {
+  "capitalPoints": [
+   {
+    "lat": 59.3294,
+    "lon": 18.0686,
+    "name": "Stockholm"
+   }
+  ],
   "capitals": [
    "Stockholm"
   ],
@@ -3929,6 +5230,13 @@
   "wikidata": "Q34"
  },
  "SG": {
+  "capitalPoints": [
+   {
+    "lat": 1.3,
+    "lon": 103.8,
+    "name": "Singapore"
+   }
+  ],
   "capitals": [
    "Singapore"
   ],
@@ -3948,6 +5256,13 @@
   "wikidata": "Q334"
  },
  "SH": {
+  "capitalPoints": [
+   {
+    "lat": -15.9251,
+    "lon": -5.7179,
+    "name": "Jamestown"
+   }
+  ],
   "capitals": [
    "Jamestown"
   ],
@@ -3959,6 +5274,13 @@
   "wikidata": "Q192184"
  },
  "SI": {
+  "capitalPoints": [
+   {
+    "lat": 46.0514,
+    "lon": 14.5061,
+    "name": "Ljubljana"
+   }
+  ],
   "capitals": [
    "Ljubljana"
   ],
@@ -3976,6 +5298,13 @@
   "wikidata": "Q215"
  },
  "SK": {
+  "capitalPoints": [
+   {
+    "lat": 48.1517,
+    "lon": 17.1093,
+    "name": "Bratislava"
+   }
+  ],
   "capitals": [
    "Bratislava"
   ],
@@ -4003,6 +5332,13 @@
   "wikidata": "Q214"
  },
  "SL": {
+  "capitalPoints": [
+   {
+    "lat": 8.4872,
+    "lon": -13.2356,
+    "name": "Freetown"
+   }
+  ],
   "capitals": [
    "Freetown"
   ],
@@ -4026,6 +5362,13 @@
   "wikidata": "Q1044"
  },
  "SM": {
+  "capitalPoints": [
+   {
+    "lat": 43.932,
+    "lon": 12.4484,
+    "name": "San Marino"
+   }
+  ],
   "capitals": [
    "San Marino"
   ],
@@ -4037,6 +5380,13 @@
   "wikidata": "Q238"
  },
  "SN": {
+  "capitalPoints": [
+   {
+    "lat": 14.6726,
+    "lon": -17.432,
+    "name": "Dakar"
+   }
+  ],
   "capitals": [
    "Dakar"
   ],
@@ -4065,6 +5415,13 @@
   "wikidata": "Q1041"
  },
  "SO": {
+  "capitalPoints": [
+   {
+    "lat": 2.0392,
+    "lon": 45.3419,
+    "name": "Mogadishu"
+   }
+  ],
   "capitals": [
    "Mogadishu"
   ],
@@ -4077,6 +5434,13 @@
   "wikidata": "Q1045"
  },
  "SR": {
+  "capitalPoints": [
+   {
+    "lat": 5.8667,
+    "lon": -55.1667,
+    "name": "Paramaribo"
+   }
+  ],
   "capitals": [
    "Paramaribo"
   ],
@@ -4104,6 +5468,13 @@
   "wikidata": "Q730"
  },
  "SS": {
+  "capitalPoints": [
+   {
+    "lat": 4.8539,
+    "lon": 31.5825,
+    "name": "Juba"
+   }
+  ],
   "capitals": [
    "Juba"
   ],
@@ -4121,6 +5492,13 @@
   "wikidata": "Q958"
  },
  "ST": {
+  "capitalPoints": [
+   {
+    "lat": 0.3375,
+    "lon": 6.7283,
+    "name": "São Tomé"
+   }
+  ],
   "capitals": [
    "São Tomé"
   ],
@@ -4132,6 +5510,13 @@
   "wikidata": "Q1039"
  },
  "SV": {
+  "capitalPoints": [
+   {
+    "lat": 13.6976,
+    "lon": -89.1912,
+    "name": "San Salvador"
+   }
+  ],
   "capitals": [
    "San Salvador"
   ],
@@ -4149,6 +5534,13 @@
   "wikidata": "Q792"
  },
  "SX": {
+  "capitalPoints": [
+   {
+    "lat": 18.0242,
+    "lon": -63.0433,
+    "name": "Philipsburg"
+   }
+  ],
   "capitals": [
    "Philipsburg"
   ],
@@ -4161,6 +5553,13 @@
   "wikidata": "Q26273"
  },
  "SY": {
+  "capitalPoints": [
+   {
+    "lat": 33.5131,
+    "lon": 36.2919,
+    "name": "Damascus"
+   }
+  ],
   "capitals": [
    "Damascus"
   ],
@@ -4188,6 +5587,18 @@
   "wikidata": "Q858"
  },
  "SZ": {
+  "capitalPoints": [
+   {
+    "lat": -26.4465,
+    "lon": 31.2064,
+    "name": "Lobamba"
+   },
+   {
+    "lat": -26.3167,
+    "lon": 31.1333,
+    "name": "Mbabane"
+   }
+  ],
   "capitals": [
    "Lobamba",
    "Mbabane"
@@ -4201,6 +5612,13 @@
   "wikidata": "Q1050"
  },
  "TC": {
+  "capitalPoints": [
+   {
+    "lat": 21.4603,
+    "lon": -71.1414,
+    "name": "Cockburn Town"
+   }
+  ],
   "capitals": [
    "Cockburn Town"
   ],
@@ -4212,6 +5630,13 @@
   "wikidata": "Q18221"
  },
  "TD": {
+  "capitalPoints": [
+   {
+    "lat": 12.11,
+    "lon": 15.05,
+    "name": "N'Djamena"
+   }
+  ],
   "capitals": [
    "N'Djamena"
   ],
@@ -4235,6 +5660,13 @@
   "wikidata": "Q657"
  },
  "TF": {
+  "capitalPoints": [
+   {
+    "lat": -49.35,
+    "lon": 70.2167,
+    "name": "Port-aux-Français"
+   }
+  ],
   "capitals": [
    "Port-aux-Français"
   ],
@@ -4246,6 +5678,13 @@
   "wikidata": "Q129003"
  },
  "TG": {
+  "capitalPoints": [
+   {
+    "lat": 6.13,
+    "lon": 1.2158,
+    "name": "Lomé"
+   }
+  ],
   "capitals": [
    "Lomé"
   ],
@@ -4263,6 +5702,13 @@
   "wikidata": "Q945"
  },
  "TH": {
+  "capitalPoints": [
+   {
+    "lat": 13.75,
+    "lon": 100.5167,
+    "name": "Bangkok"
+   }
+  ],
   "capitals": [
    "Bangkok"
   ],
@@ -4290,6 +5736,13 @@
   "wikidata": "Q869"
  },
  "TJ": {
+  "capitalPoints": [
+   {
+    "lat": 38.5731,
+    "lon": 68.7864,
+    "name": "Dushanbe"
+   }
+  ],
   "capitals": [
    "Dushanbe"
   ],
@@ -4317,6 +5770,13 @@
   "wikidata": "Q863"
  },
  "TL": {
+  "capitalPoints": [
+   {
+    "lat": -8.5536,
+    "lon": 125.5783,
+    "name": "Dili"
+   }
+  ],
   "capitals": [
    "Dili"
   ],
@@ -4329,6 +5789,13 @@
   "wikidata": "Q574"
  },
  "TM": {
+  "capitalPoints": [
+   {
+    "lat": 37.95,
+    "lon": 58.3833,
+    "name": "Ashgabat"
+   }
+  ],
   "capitals": [
    "Ashgabat"
   ],
@@ -4356,6 +5823,13 @@
   "wikidata": "Q874"
  },
  "TN": {
+  "capitalPoints": [
+   {
+    "lat": 36.8008,
+    "lon": 10.18,
+    "name": "Tunis"
+   }
+  ],
   "capitals": [
    "Tunis"
   ],
@@ -4383,6 +5857,13 @@
   "wikidata": "Q948"
  },
  "TO": {
+  "capitalPoints": [
+   {
+    "lat": -21.1343,
+    "lon": -175.2018,
+    "name": "Nukuʻalofa"
+   }
+  ],
   "capitals": [
    "Nukuʻalofa"
   ],
@@ -4395,6 +5876,13 @@
   "wikidata": "Q678"
  },
  "TR": {
+  "capitalPoints": [
+   {
+    "lat": 39.9358,
+    "lon": 32.8387,
+    "name": "Ankara"
+   }
+  ],
   "capitals": [
    "Ankara"
   ],
@@ -4422,6 +5910,13 @@
   "wikidata": "Q43"
  },
  "TT": {
+  "capitalPoints": [
+   {
+    "lat": 10.6667,
+    "lon": -61.5167,
+    "name": "Port of Spain"
+   }
+  ],
   "capitals": [
    "Port of Spain"
   ],
@@ -4433,6 +5928,13 @@
   "wikidata": "Q754"
  },
  "TV": {
+  "capitalPoints": [
+   {
+    "lat": -8.5048,
+    "lon": 179.1174,
+    "name": "Funafuti"
+   }
+  ],
   "capitals": [
    "Funafuti"
   ],
@@ -4445,6 +5947,13 @@
   "wikidata": "Q672"
  },
  "TW": {
+  "capitalPoints": [
+   {
+    "lat": 25.0375,
+    "lon": 121.5625,
+    "name": "Taipei"
+   }
+  ],
   "capitals": [
    "Taipei"
   ],
@@ -4458,6 +5967,13 @@
   "wikidata": "Q865"
  },
  "TZ": {
+  "capitalPoints": [
+   {
+    "lat": -6.1835,
+    "lon": 35.746,
+    "name": "Dodoma"
+   }
+  ],
   "capitals": [
    "Dodoma"
   ],
@@ -4486,6 +6002,13 @@
   "wikidata": "Q924"
  },
  "UA": {
+  "capitalPoints": [
+   {
+    "lat": 50.45,
+    "lon": 30.5236,
+    "name": "Kyiv"
+   }
+  ],
   "capitals": [
    "Kyiv"
   ],
@@ -4513,6 +6036,13 @@
   "wikidata": "Q212"
  },
  "UG": {
+  "capitalPoints": [
+   {
+    "lat": 0.3136,
+    "lon": 32.5811,
+    "name": "Kampala"
+   }
+  ],
   "capitals": [
    "Kampala"
   ],
@@ -4541,6 +6071,13 @@
   "wikidata": "Q1036"
  },
  "US": {
+  "capitalPoints": [
+   {
+    "lat": 38.895,
+    "lon": -77.0367,
+    "name": "Washington, D.C."
+   }
+  ],
   "capitals": [
    "Washington, D.C."
   ],
@@ -4569,6 +6106,13 @@
   "wikidata": "Q30"
  },
  "UY": {
+  "capitalPoints": [
+   {
+    "lat": -34.9059,
+    "lon": -56.1913,
+    "name": "Montevideo"
+   }
+  ],
   "capitals": [
    "Montevideo"
   ],
@@ -4586,6 +6130,13 @@
   "wikidata": "Q77"
  },
  "UZ": {
+  "capitalPoints": [
+   {
+    "lat": 41.3111,
+    "lon": 69.2797,
+    "name": "Tashkent"
+   }
+  ],
   "capitals": [
    "Tashkent"
   ],
@@ -4613,6 +6164,13 @@
   "wikidata": "Q265"
  },
  "VA": {
+  "capitalPoints": [
+   {
+    "lat": 41.904,
+    "lon": 12.453,
+    "name": "Vatican City"
+   }
+  ],
   "capitals": [
    "Vatican City"
   ],
@@ -4631,6 +6189,13 @@
   "wikidata": "Q237"
  },
  "VC": {
+  "capitalPoints": [
+   {
+    "lat": 13.1553,
+    "lon": -61.2274,
+    "name": "Kingstown"
+   }
+  ],
   "capitals": [
    "Kingstown"
   ],
@@ -4642,6 +6207,13 @@
   "wikidata": "Q757"
  },
  "VE": {
+  "capitalPoints": [
+   {
+    "lat": 10.5061,
+    "lon": -66.9144,
+    "name": "Caracas"
+   }
+  ],
   "capitals": [
    "Caracas"
   ],
@@ -4669,6 +6241,13 @@
   "wikidata": "Q717"
  },
  "VG": {
+  "capitalPoints": [
+   {
+    "lat": 18.4333,
+    "lon": -64.6167,
+    "name": "Road Town"
+   }
+  ],
   "capitals": [
    "Road Town"
   ],
@@ -4680,6 +6259,13 @@
   "wikidata": "Q25305"
  },
  "VI": {
+  "capitalPoints": [
+   {
+    "lat": 18.35,
+    "lon": -64.95,
+    "name": "Charlotte Amalie"
+   }
+  ],
   "capitals": [
    "Charlotte Amalie"
   ],
@@ -4691,6 +6277,13 @@
   "wikidata": "Q11703"
  },
  "VN": {
+  "capitalPoints": [
+   {
+    "lat": 21.0245,
+    "lon": 105.8412,
+    "name": "Hanoi"
+   }
+  ],
   "capitals": [
    "Hanoi"
   ],
@@ -4718,6 +6311,13 @@
   "wikidata": "Q881"
  },
  "VU": {
+  "capitalPoints": [
+   {
+    "lat": -17.7333,
+    "lon": 168.3167,
+    "name": "Port Vila"
+   }
+  ],
   "capitals": [
    "Port Vila"
   ],
@@ -4737,6 +6337,13 @@
   "wikidata": "Q686"
  },
  "WF": {
+  "capitalPoints": [
+   {
+    "lat": -13.2827,
+    "lon": -176.1737,
+    "name": "Mata-Utu"
+   }
+  ],
   "capitals": [
    "Mata-Utu"
   ],
@@ -4750,6 +6357,13 @@
   "wikidata": "Q35555"
  },
  "WS": {
+  "capitalPoints": [
+   {
+    "lat": -13.8333,
+    "lon": -171.8333,
+    "name": "Apia"
+   }
+  ],
   "capitals": [
    "Apia"
   ],
@@ -4762,6 +6376,13 @@
   "wikidata": "Q683"
  },
  "XK": {
+  "capitalPoints": [
+   {
+    "lat": 42.6667,
+    "lon": 21.1667,
+    "name": "Pristina"
+   }
+  ],
   "capitals": [
    "Pristina"
   ],
@@ -4774,6 +6395,18 @@
   "wikidata": "Q1246"
  },
  "YE": {
+  "capitalPoints": [
+   {
+    "lat": 12.8,
+    "lon": 45.0333,
+    "name": "Aden"
+   },
+   {
+    "lat": 15.35,
+    "lon": 44.2,
+    "name": "Sanaa"
+   }
+  ],
   "capitals": [
    "Aden",
    "Sanaa"
@@ -4802,6 +6435,23 @@
   "wikidata": "Q805"
  },
  "ZA": {
+  "capitalPoints": [
+   {
+    "lat": -29.1,
+    "lon": 26.2167,
+    "name": "Bloemfontein"
+   },
+   {
+    "lat": -33.9253,
+    "lon": 18.4239,
+    "name": "Cape Town"
+   },
+   {
+    "lat": -25.7464,
+    "lon": 28.1881,
+    "name": "Pretoria"
+   }
+  ],
   "capitals": [
    "Bloemfontein",
    "Cape Town",
@@ -4833,6 +6483,13 @@
   "wikidata": "Q258"
  },
  "ZM": {
+  "capitalPoints": [
+   {
+    "lat": -15.4167,
+    "lon": 28.2833,
+    "name": "Lusaka"
+   }
+  ],
   "capitals": [
    "Lusaka"
   ],
@@ -4855,6 +6512,13 @@
   "wikidata": "Q953"
  },
  "ZW": {
+  "capitalPoints": [
+   {
+    "lat": -17.8292,
+    "lon": 31.0522,
+    "name": "Harare"
+   }
+  ],
   "capitals": [
    "Harare"
   ],

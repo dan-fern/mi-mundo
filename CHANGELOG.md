@@ -21,6 +21,11 @@ Versions: [Semantic Versioning](https://semver.org/).
   prisons) never picked automatically.
 - Country card: read-aloud button and a one-to-five-people population
   picture, for kids who can't read yet (PR #8 review).
+- A star marks the capital (each capital, for countries with several) of the
+  selected country; the card's Capital row uses the same star. Capital
+  locations come from a new committed Wikidata snapshot
+  (`tools/wikidata-capitals.json`, `tools/fetch-capitals.py`), and the build
+  fails if a capital has no location or lies outside its country.
 - Quiz label mode (requirements §3.2): feature and landmark names stay
   hidden until the country they sit in is guessed; the quiz PR switches it
   on.

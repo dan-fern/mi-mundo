@@ -334,6 +334,21 @@ struct MapCanvas: View, Animatable {
     private static let waterText = Color(red: 0.10, green: 0.30, blue: 0.58)
     private static let landText = Color(red: 0.42, green: 0.27, blue: 0.12)
 
+    private static let capitalStar = Color(red: 1.0, green: 0.84, blue: 0.20)
+
+    /// Five-pointed star, point up, centered on `center` (screen points).
+    static func star(at center: CGPoint, radius: CGFloat) -> Path {
+        var path = Path()
+        for i in 0..<10 {
+            let r = i.isMultiple(of: 2) ? radius : radius * 0.45
+            let a = -CGFloat.pi / 2 + CGFloat(i) * .pi / 5
+            let point = CGPoint(x: center.x + r * cos(a), y: center.y + r * sin(a))
+            i == 0 ? path.move(to: point) : path.addLine(to: point)
+        }
+        path.closeSubpath()
+        return path
+    }
+
     /// Zoom from which landmarks appear (a pin is only drawn when its name
     /// fits too, so there are never mystery dots).
     static let landmarkZoom: CGFloat = 4
@@ -367,6 +382,19 @@ struct MapCanvas: View, Animatable {
                             height: max(layout.size.height - layout.insets.top, 0))
         var placed: [CGRect] = []
         var named: Set<String> = []
+
+        // Capital star(s) of the selected country, drawn first so no label
+        // covers them.
+        if let selection {
+            for capital in selection.capitals {
+                let p = capital.applying(toScreen)
+                guard screen.contains(p) else { continue }
+                let star = Self.star(at: p, radius: 11)
+                context.fill(star, with: .color(Self.capitalStar))
+                context.stroke(star, with: .color(Self.highlightEdge), style: StrokeStyle(lineWidth: 2, lineJoin: .round))
+                placed.append(CGRect(x: p.x - 13, y: p.y - 13, width: 26, height: 26))
+            }
+        }
 
         func place(_ text: Text, at point: CGPoint, angle: Angle = .zero, padding: CGFloat = 4) -> Bool {
             let resolved = context.resolve(text)

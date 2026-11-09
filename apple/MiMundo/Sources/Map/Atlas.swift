@@ -11,6 +11,8 @@ struct CountryFacts: Decodable, Sendable {
     let population: Int?
     let languages: [String]
     let landmarks: [Landmark]
+    /// Where each capital is, in the same order as `capitals`.
+    let capitalPoints: [Landmark]
 
     struct Landmark: Decodable, Sendable, Hashable {
         let name: String
@@ -68,6 +70,8 @@ struct AtlasCountry: Identifiable, Sendable {
     let coarse: Path
     let fine: Path
     let facts: CountryFacts?
+    /// Capitals in map coordinates; starred when the country is selected.
+    let capitals: [CGPoint]
 
     var id: UInt32 { meta.index }
     var name: String { meta.name }
@@ -128,11 +132,16 @@ final class Atlas: Sendable {
             let coarse = world.shapes(detail: .coarse)
             let fine = world.shapes(detail: .fine)
             let countries = world.countries().map { meta in
-                AtlasCountry(
+                let countryFacts = facts[meta.iso2]
+                return AtlasCountry(
                     meta: meta,
                     coarse: path(rings: coarse[Int(meta.index)].rings),
                     fine: path(rings: fine[Int(meta.index)].rings),
-                    facts: facts[meta.iso2]
+                    facts: countryFacts,
+                    capitals: (countryFacts?.capitalPoints ?? []).map {
+                        let p = project(lonDeg: $0.lon, latDeg: $0.lat)
+                        return CGPoint(x: CGFloat(p.x), y: CGFloat(p.y))
+                    }
                 )
             }
             // Each feature belongs to the country under its label (for

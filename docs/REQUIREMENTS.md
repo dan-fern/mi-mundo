@@ -58,6 +58,8 @@ Age-agnostic — fun for a young child, still useful for an adult.
 - When zoomed in far enough, show major rivers, lakes, mountain ranges,
   peaks, deserts and landmarks, with their names. Bigger features appear
   first (Natural Earth's own zoom hints); landmarks from closer in.
+- The selected country's capital is marked with a **star** (every capital,
+  where a country has more than one).
 - The card has a **read-aloud** button and shows population as a picture
   (one to five people) for kids who can't read numbers yet.
 - Low word count, large child-friendly fonts.

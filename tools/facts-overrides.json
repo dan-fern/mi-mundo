@@ -34,7 +34,14 @@
     "languages": [
       "English"
     ],
-    "_why": "capital label fell back to QID Q36262; Spanish is not official"
+    "_why": "capital label fell back to QID Q36262; Spanish is not official",
+    "capitalPoints": [
+      {
+        "name": "St. John's",
+        "lon": -61.8468,
+        "lat": 17.1274
+      }
+    ]
   },
   "AL": {
     "population": 2400000,
@@ -1159,7 +1166,14 @@
       "English"
     ],
     "_why": "'Yaren District' -> place name; local language first; Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate",
-    "population": 12000
+    "population": 12000,
+    "capitalPoints": [
+      {
+        "name": "Yaren",
+        "lon": 166.9209,
+        "lat": -0.5477
+      }
+    ]
   },
   "NZ": {
     "landmarks": [

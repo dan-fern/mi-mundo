@@ -41,6 +41,7 @@ python3 -I "$ROOT/tools/build-countries.py" \
   "$RAW/naturalearth/ne_50m_admin_0_countries.geojson" \
   "$ROOT/tools/wikidata-facts.json" \
   "$ROOT/tools/wikidata-landmarks.json" \
+  "$ROOT/tools/wikidata-capitals.json" \
   "$ROOT/tools/facts-overrides.json" \
   "$OUT/Countries.json"
 

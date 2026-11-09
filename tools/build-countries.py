@@ -2,7 +2,8 @@
 """Writes Countries.json: facts for every country on the map.
 
 Usage: build-countries.py <ne_50m_admin_0_countries.geojson> <wikidata-facts.json>
-                          <wikidata-landmarks.json> <facts-overrides.json> <out Countries.json>
+                          <wikidata-landmarks.json> <wikidata-capitals.json>
+                          <facts-overrides.json> <out Countries.json>
 
 Starts from the committed Wikidata snapshots (facts, and UNESCO landmarks:
 the top 3 by fame unless hand-picked), applies the hand fixes in
@@ -10,8 +11,11 @@ facts-overrides.json (offline), and keeps only what the country card shows.
 Output is keyed by ISO 3166-1 alpha-2 (matches CountryMeta.iso2):
   { "FR": { "capitals": ["Paris"], "population": 68605616,
             "languages": ["French"], "wikidata": "Q142",
-            "landmarks": [{"name": "Eiffel Tower", "lon": 2.29, "lat": 48.86}] }, ... }
-Capitals, languages and landmarks are capped at 3.
+            "landmarks": [{"name": "Eiffel Tower", "lon": 2.29, "lat": 48.86}],
+            "capitalPoints": [{"name": "Paris", "lon": 2.35, "lat": 48.86}] }, ... }
+Capitals, languages and landmarks are capped at 3. capitalPoints has one
+entry per capital, in the same order; every capital must have one and it
+must lie in (or within CAPITAL_SLACK of) the country's outline.
 """
 
 import json
@@ -31,7 +35,39 @@ OBSCURE = re.compile(r"Struve Geodetic Arc", re.IGNORECASE)
 # Long official UNESCO names ("Ancient and Primeval Beech Forests of the
 # Carpathians and Other Regions…") don't fit a map label or a kid's memory.
 MAX_AUTO_NAME = 34
-OVERRIDABLE = FIELDS + ("landmarks",)
+OVERRIDABLE = FIELDS + ("landmarks", "capitalPoints")
+# How far (degrees) a capital may sit outside the 1:50m outline: coastal
+# capitals on small islands can fall just off the simplified coastline.
+CAPITAL_SLACK = 0.15
+# The 1:50m outlines leave out the capital's own island here (Pitcairn
+# Island; Grand Turk), so the star sits, correctly, just off the drawn land.
+CAPITAL_ISLAND_MISSING = {"PN", "TC"}
+
+
+def rings_of(geometry):
+    polys = [geometry["coordinates"]] if geometry["type"] == "Polygon" else geometry["coordinates"]
+    return [ring for poly in polys for ring in poly]
+
+
+def inside(rings, lon, lat):
+    """Even-odd point-in-polygon over every ring (holes included)."""
+    hit = False
+    for ring in rings:
+        for (x1, y1), (x2, y2) in zip(ring, ring[1:] + ring[:1]):
+            if (y1 > lat) != (y2 > lat) and lon < x1 + (lat - y1) * (x2 - x1) / (y2 - y1):
+                hit = not hit
+    return hit
+
+
+def distance(rings, lon, lat):
+    """Shortest distance (degrees, flat) from a point to any ring edge."""
+    best = float("inf")
+    for ring in rings:
+        for (x1, y1), (x2, y2) in zip(ring, ring[1:] + ring[:1]):
+            dx, dy = x2 - x1, y2 - y1
+            t = 0.0 if dx == dy == 0 else max(0.0, min(1.0, ((lon - x1) * dx + (lat - y1) * dy) / (dx * dx + dy * dy)))
+            best = min(best, ((lon - x1 - t * dx) ** 2 + (lat - y1 - t * dy) ** 2) ** 0.5)
+    return best
 
 
 def check_landmarks(iso2, landmarks):
@@ -43,10 +79,14 @@ def check_landmarks(iso2, landmarks):
 
 
 def main():
-    ne_path, facts_path, landmarks_path, overrides_path, out_path = sys.argv[1:6]
+    ne_path, facts_path, landmarks_path, capitals_path, overrides_path, out_path = sys.argv[1:7]
     features = json.load(open(ne_path))["features"]
     facts = json.load(open(facts_path))["countries"]
     unesco = json.load(open(landmarks_path))["countries"]
+    capital_points = json.load(open(capitals_path))["countries"]
+    outlines = {}
+    for f in features:
+        outlines.setdefault(f["properties"]["ISO_A2_EH"], []).extend(rings_of(f["geometry"]))
     overrides = {k: v for k, v in json.load(open(overrides_path)).items() if not k.startswith("_")}
 
     on_map = {f["properties"]["ISO_A2_EH"] for f in features} - {"-99"}
@@ -58,6 +98,7 @@ def main():
         if bad:
             sys.exit(f"error: override {iso2} has unknown fields {bad}")
         check_landmarks(iso2, fix.get("landmarks", []))
+        check_landmarks(iso2, fix.get("capitalPoints", []))
 
     # Population figures older than this (and not hand-fixed) are listed so
     # each refresh gets a look; Wikidata lags for some countries.
@@ -84,6 +125,19 @@ def main():
         entry["capitals"] = entry["capitals"][:3]
         entry["languages"] = entry["languages"][:3]
         entry["landmarks"] = entry["landmarks"][:3]
+        known = {c["name"]: c for c in capital_points.get(iso2, []) + entry.pop("capitalPoints", [])}
+        entry["capitalPoints"] = []
+        for name in entry["capitals"]:
+            point = known.get(name)
+            if point is None:
+                sys.exit(f"error: no location for {iso2} capital {name!r} "
+                         "(add it to the override's capitalPoints)")
+            rings = outlines[iso2]
+            if iso2 not in CAPITAL_ISLAND_MISSING and not inside(rings, point["lon"], point["lat"]) and \
+                    distance(rings, point["lon"], point["lat"]) > CAPITAL_SLACK:
+                sys.exit(f"error: {iso2} capital {name} at {point['lon']}, {point['lat']} "
+                         "is outside the country")
+            entry["capitalPoints"].append({"name": name, "lon": point["lon"], "lat": point["lat"]})
         out[iso2] = entry
 
     with open(out_path, "w") as f:

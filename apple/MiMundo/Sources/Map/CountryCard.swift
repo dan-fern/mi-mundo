@@ -70,7 +70,7 @@ struct CountryCard: View {
             if let facts = country.facts {
                 VStack(alignment: .leading, spacing: 14) {
                     if !facts.capitals.isEmpty {
-                        FactRow(symbol: "building.columns.fill", color: .purple,
+                        FactRow(symbol: "star.fill", color: .orange, // matches the capital star on the map
                                 label: facts.capitals.count > 1 ? "Capitals" : "Capital",
                                 value: facts.capitals.formatted(.list(type: .and)))
                     }
@@ -86,7 +86,7 @@ struct CountryCard: View {
                                 value: facts.languages.formatted(.list(type: .and)))
                     }
                     if !facts.landmarks.isEmpty {
-                        FactRow(symbol: "star.circle.fill", color: .orange,
+                        FactRow(symbol: "mappin.circle.fill", color: .red, // matches the landmark pins
                                 label: "Famous places",
                                 value: facts.landmarks.map(\.name).joined(separator: "\n"))
                     }
