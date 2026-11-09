@@ -96,8 +96,10 @@ struct WorldMapView: View {
 
     /// Where the zoom buttons sit (bottom left), so labels avoid them.
     static func controlsRect(in size: CGSize) -> CGRect {
-        let width: CGFloat = 20 + 56 + 20
-        let height: CGFloat = 3 * 56 + 2 * 12 + 20 + 32
+        // 56 pt buttons, 12 pt apart, 20 pt padding (+12 pt more below).
+        let button: CGFloat = 56
+        let width: CGFloat = button + 40
+        let height: CGFloat = button * 3 + 24 + 52
         return CGRect(x: 0, y: size.height - height, width: width, height: height)
     }
 
