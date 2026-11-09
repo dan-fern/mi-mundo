@@ -1,5 +1,6 @@
 import AVFoundation
 import SwiftUI
+import UIKit
 
 /// Big, low-text card about a tapped country: flag, name, capital,
 /// population (as a picture scale too), languages and famous places, with a
@@ -10,6 +11,7 @@ struct CountryCard: View {
     let onClose: () -> Void
 
     @State private var speaker = CardSpeaker()
+    @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
         // Scrolls rather than clipping at the largest text sizes; text is
@@ -24,6 +26,11 @@ struct CountryCard: View {
         .shadow(color: .black.opacity(0.2), radius: 16, y: 6)
         .dynamicTypeSize(...DynamicTypeSize.accessibility2)
         .onDisappear { speaker.stop() }
+        // The card can stay up while the app is in the background (the kid
+        // grace period), so onDisappear alone wouldn't stop the voice.
+        .onChange(of: scenePhase) { _, phase in
+            if phase != .active { speaker.stop() }
+        }
     }
 
     private var content: some View {
@@ -39,17 +46,6 @@ struct CountryCard: View {
                         .accessibilityLabel("Flag of \(country.name)")
                 }
                 Spacer()
-                Button {
-                    speaker.toggle(Self.spokenText(for: country))
-                } label: {
-                    Image(systemName: speaker.isSpeaking ? "stop.circle.fill" : "speaker.wave.2.circle.fill")
-                        .font(.largeTitle)
-                        .symbolRenderingMode(.hierarchical)
-                        .foregroundStyle(.tint)
-                        .frame(minWidth: 44, minHeight: 44)
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel(speaker.isSpeaking ? "Stop reading" : "Read aloud")
                 Button(action: onClose) {
                     Image(systemName: "xmark.circle.fill")
                         .font(.largeTitle)
@@ -61,34 +57,55 @@ struct CountryCard: View {
                 .accessibilityLabel("Close")
             }
 
-            Text(country.name)
-                .font(.largeTitle.bold())
-                .lineLimit(3)
-                .minimumScaleFactor(0.6)
-                .fixedSize(horizontal: false, vertical: true)
+            // Read aloud sits by the name, well away from Close, and is the
+            // biggest target on the card: pre-readers rely on it.
+            HStack(alignment: .center, spacing: 12) {
+                Text(country.name)
+                    .font(.largeTitle.bold())
+                    .lineLimit(3)
+                    .minimumScaleFactor(0.6)
+                    .fixedSize(horizontal: false, vertical: true)
+                Spacer(minLength: 8)
+                Button {
+                    speaker.toggle(Self.spokenSentences(for: country))
+                } label: {
+                    Image(systemName: speaker.isSpeaking ? "stop.circle.fill" : "speaker.wave.2.circle.fill")
+                        .font(.system(size: 52))
+                        .symbolRenderingMode(.hierarchical)
+                        .foregroundStyle(.tint)
+                        .frame(minWidth: 64, minHeight: 64)
+                        .contentShape(.rect)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(speaker.isSpeaking ? "Stop reading" : "Read aloud")
+            }
 
             if let facts = country.facts {
                 VStack(alignment: .leading, spacing: 14) {
                     if !facts.capitals.isEmpty {
-                        FactRow(symbol: "star.fill", color: .orange, // matches the capital star on the map
-                                label: facts.capitals.count > 1 ? "Capitals" : "Capital",
-                                value: facts.capitals.formatted(.list(type: .and)))
+                        FactRow(label: facts.capitals.count > 1 ? "Capitals" : "Capital",
+                                value: facts.capitals.formatted(.list(type: .and))) {
+                            CapitalStarIcon() // the same star as on the map
+                        }
                     }
                     if let population = facts.population {
-                        FactRow(symbol: "person.3.fill", color: .blue,
-                                label: "People", value: Self.friendly(population)) {
+                        FactRow(label: "People", value: Self.friendly(population)) {
+                            SymbolIcon(name: "person.3.fill", color: .blue)
+                        } extra: {
                             PopulationScale(population: population)
                         }
                     }
                     if !facts.languages.isEmpty {
-                        FactRow(symbol: "bubble.left.and.bubble.right.fill", color: .green,
-                                label: facts.languages.count > 1 ? "Languages" : "Language",
-                                value: facts.languages.formatted(.list(type: .and)))
+                        FactRow(label: facts.languages.count > 1 ? "Languages" : "Language",
+                                value: facts.languages.formatted(.list(type: .and))) {
+                            SymbolIcon(name: "bubble.left.and.bubble.right.fill", color: .green)
+                        }
                     }
                     if !facts.landmarks.isEmpty {
-                        FactRow(symbol: "mappin.circle.fill", color: .red, // matches the landmark pins
-                                label: "Famous places",
-                                value: facts.landmarks.map(\.name).joined(separator: "\n"))
+                        FactRow(label: "Famous places",
+                                value: facts.landmarks.map(\.name).joined(separator: "\n")) {
+                            LandmarkPinIcon() // the same pin as on the map
+                        }
                     }
                 }
             }
@@ -111,8 +128,9 @@ struct CountryCard: View {
         }
     }
 
-    /// What the read-aloud button says: short, complete sentences.
-    static func spokenText(for country: AtlasCountry) -> String {
+    /// What the read-aloud button says: short, complete sentences, spoken
+    /// one at a time with a pause between.
+    static func spokenSentences(for country: AtlasCountry) -> [String] {
         var sentences = [country.name + "."]
         if let facts = country.facts {
             switch facts.capitals.count {
@@ -127,15 +145,24 @@ struct CountryCard: View {
                 sentences.append("People speak \(facts.languages.formatted(.list(type: .and))).")
             }
             if !facts.landmarks.isEmpty {
-                sentences.append("Famous places: \(facts.landmarks.map(\.name).formatted(.list(type: .and))).")
+                let names = facts.landmarks.map { speakable($0.name) }
+                sentences.append("Famous places: \(names.formatted(.list(type: .and))).")
             }
         }
-        return sentences.joined(separator: " ")
+        return sentences
+    }
+
+    /// "Volcanoes National Park (mountain gorillas)" reads as "Volcanoes
+    /// National Park, mountain gorillas": brackets aren't spoken well.
+    static func speakable(_ name: String) -> String {
+        name.replacingOccurrences(of: " (", with: ", ").replacingOccurrences(of: ")", with: "")
     }
 }
 
 /// One to five people, so "how many" is visible before a kid can read
-/// numbers: each extra person is roughly ten times more people.
+/// numbers: each extra person means ten times more people (under a
+/// million, millions, tens of millions, hundreds of millions, over a
+/// billion: only China and India get five).
 struct PopulationScale: View {
     let population: Int
 
@@ -143,8 +170,8 @@ struct PopulationScale: View {
         switch population {
         case ..<1_000_000: 1
         case ..<10_000_000: 2
-        case ..<50_000_000: 3
-        case ..<200_000_000: 4
+        case ..<100_000_000: 3
+        case ..<1_000_000_000: 4
         default: 5
         }
     }
@@ -158,33 +185,40 @@ struct PopulationScale: View {
                     .foregroundStyle(i < count ? Color.blue : Color.blue.opacity(0.15))
             }
         }
-        .accessibilityElement()
-        .accessibilityLabel("\(count) of 5 people")
+        // The row already says "About 68 million"; the picture is for eyes.
+        .accessibilityHidden(true)
     }
 }
 
-private struct FactRow<Extra: View>: View {
-    let symbol: String
+/// An SF Symbol sized to sit in a fact row's icon column.
+private struct SymbolIcon: View {
+    let name: String
     let color: Color
+    var body: some View {
+        Image(systemName: name).font(.title2).foregroundStyle(color)
+    }
+}
+
+private struct FactRow<Icon: View, Extra: View>: View {
     let label: String
     let value: String
+    let icon: Icon
     let extra: Extra
 
-    init(symbol: String, color: Color, label: String, value: String,
+    init(label: String, value: String,
+         @ViewBuilder icon: () -> Icon,
          @ViewBuilder extra: () -> Extra = { EmptyView() }) {
-        self.symbol = symbol
-        self.color = color
         self.label = label
         self.value = value
+        self.icon = icon()
         self.extra = extra()
     }
 
     var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: 14) {
-            Image(systemName: symbol)
-                .font(.title2)
-                .foregroundStyle(color)
+            icon
                 .frame(width: 36)
+                .alignmentGuide(.firstTextBaseline) { $0[VerticalAlignment.center] + 6 }
                 .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 4) {
                 Text(label).font(.headline).foregroundStyle(Color(uiColor: .secondaryLabel))
@@ -197,40 +231,80 @@ private struct FactRow<Extra: View>: View {
     }
 }
 
-/// Reads the card aloud with the system voice; tapping again stops it.
+/// Reads the card aloud, one sentence at a time; tapping again stops it.
+///
+/// - Speaks even with the silent switch on (a pre-reader tapping the
+///   speaker must hear something): `.playback` / `.spokenAudio`, ducking
+///   other audio, released when done.
+/// - Uses the device's language and the user's chosen voice settings.
+/// - Only callbacks for the utterance in progress count, so a late
+///   "cancelled" from a reading that was stopped can't flip the button
+///   back while a new reading plays.
+/// - An interruption (Siri, an alarm) ends the reading rather than leaving
+///   it paused with a "stop" button showing.
 @MainActor
 @Observable
 final class CardSpeaker: NSObject, AVSpeechSynthesizerDelegate {
     private(set) var isSpeaking = false
-    @ObservationIgnored private let synthesizer = AVSpeechSynthesizer()
+    /// Made on first use: the card view is rebuilt often (every pan frame
+    /// while it's open), and SwiftUI discards all but the first instance.
+    @ObservationIgnored private var synthesizer: AVSpeechSynthesizer?
+    @ObservationIgnored private var lastUtterance: ObjectIdentifier?
 
-    override init() {
-        super.init()
-        synthesizer.delegate = self
-    }
-
-    func toggle(_ text: String) {
+    func toggle(_ sentences: [String]) {
         if isSpeaking {
             stop()
             return
         }
-        let utterance = AVSpeechUtterance(string: text)
-        utterance.rate = AVSpeechUtteranceDefaultSpeechRate * 0.9 // a touch slower for kids
-        utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
-        isSpeaking = true
-        synthesizer.speak(utterance)
+        let synthesizer = self.synthesizer ?? {
+            let s = AVSpeechSynthesizer()
+            s.delegate = self
+            self.synthesizer = s
+            return s
+        }()
+        let session = AVAudioSession.sharedInstance()
+        try? session.setCategory(.playback, mode: .spokenAudio, options: [.duckOthers])
+        try? session.setActive(true)
+        let voice = AVSpeechSynthesisVoice(language: AVSpeechSynthesisVoice.currentLanguageCode())
+        var last: AVSpeechUtterance?
+        for (i, sentence) in sentences.enumerated() {
+            let utterance = AVSpeechUtterance(string: sentence)
+            utterance.voice = voice
+            utterance.prefersAssistiveTechnologySettings = true
+            utterance.rate = AVSpeechUtteranceDefaultSpeechRate * 0.9 // a touch slower for kids
+            utterance.postUtteranceDelay = 0.3
+            // Let VoiceOver finish announcing the button first.
+            if i == 0, UIAccessibility.isVoiceOverRunning { utterance.preUtteranceDelay = 1.0 }
+            synthesizer.speak(utterance)
+            last = utterance
+        }
+        lastUtterance = last.map(ObjectIdentifier.init)
+        isSpeaking = last != nil
     }
 
     func stop() {
-        synthesizer.stopSpeaking(at: .immediate)
+        lastUtterance = nil
+        synthesizer?.stopSpeaking(at: .immediate)
+        finish()
+    }
+
+    private func finish() {
+        guard isSpeaking else { return }
         isSpeaking = false
+        try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
     }
 
     nonisolated func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
-        Task { @MainActor in self.isSpeaking = false }
+        let id = ObjectIdentifier(utterance)
+        Task { @MainActor in
+            if self.lastUtterance == id {
+                self.lastUtterance = nil
+                self.finish()
+            }
+        }
     }
 
-    nonisolated func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didCancel utterance: AVSpeechUtterance) {
-        Task { @MainActor in self.isSpeaking = false }
+    nonisolated func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didPause utterance: AVSpeechUtterance) {
+        Task { @MainActor in self.stop() }
     }
 }

@@ -16,6 +16,8 @@ import datetime
 import json
 import re
 import sys
+import time
+import urllib.error
 import urllib.parse
 import urllib.request
 from pathlib import Path
@@ -46,12 +48,26 @@ POINT = re.compile(r"Point\(([-0-9.eE]+) ([-0-9.eE]+)\)")
 BARE_ID = re.compile(r"^Q\d+$")
 
 
-def sparql(query):
+def sparql(query, attempts=5):
+    """Runs a query, retrying the query service's frequent 429/5xx answers
+    with backoff (honouring Retry-After)."""
     body = urllib.parse.urlencode({"query": query, "format": "json"}).encode()
-    request = urllib.request.Request(ENDPOINT, data=body, headers={
-        "User-Agent": USER_AGENT, "Content-Type": "application/x-www-form-urlencoded"})
-    with urllib.request.urlopen(request, timeout=180) as response:
-        return json.load(response)["results"]["bindings"]
+    for attempt in range(1, attempts + 1):
+        request = urllib.request.Request(ENDPOINT, data=body, headers={
+            "User-Agent": USER_AGENT, "Content-Type": "application/x-www-form-urlencoded"})
+        try:
+            with urllib.request.urlopen(request, timeout=180) as response:
+                return json.load(response)["results"]["bindings"]
+        except urllib.error.HTTPError as e:
+            if attempt == attempts or (e.code != 429 and e.code < 500):
+                raise
+            wait = int(e.headers.get("Retry-After") or 0) or 10 * attempt
+        except (urllib.error.URLError, TimeoutError):
+            if attempt == attempts:
+                raise
+            wait = 10 * attempt
+        print(f"  query failed (attempt {attempt}), retrying in {wait} s", file=sys.stderr)
+        time.sleep(wait)
 
 
 def main():
@@ -92,7 +108,7 @@ def main():
         lon, lat = sorted(site.pop("points"))[0]
         by_country.setdefault(iso2, []).append({**site, "lon": lon, "lat": lat})
     for iso2 in by_country:
-        by_country[iso2].sort(key=lambda s: (-s["sitelinks"], s["name"]))
+        by_country[iso2].sort(key=lambda s: (-s["sitelinks"], s["name"], s["wikidata"]))
         by_country[iso2] = by_country[iso2][:KEEP_PER_COUNTRY]
 
     snapshot = {

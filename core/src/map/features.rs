@@ -175,14 +175,8 @@ pub fn decode(bytes: &[u8]) -> Result<Vec<PhysicalFeature>, MapError> {
             elevation_m,
             parts,
         };
-        if !floats.iter().all(|v| v.is_finite())
-            || feature.parts.iter().flatten().any(|v| !v.is_finite())
-            || feature.parts.is_empty()
-        {
-            return Err(bad(format!(
-                "Features.bin: {} has bad geometry",
-                feature.name
-            )));
+        if let Err(reason) = validate(&feature) {
+            return Err(bad(format!("Features.bin: {:?} {reason}", feature.name)));
         }
         features.push(feature);
     }
@@ -190,6 +184,45 @@ pub fn decode(bytes: &[u8]) -> Result<Vec<PhysicalFeature>, MapError> {
         return Err(bad("Features.bin: trailing bytes".into()));
     }
     Ok(features)
+}
+
+/// Checks one decoded feature: finite numbers, zooms that make sense, a
+/// readable angle and geometry of the right shape for its kind.
+fn validate(f: &PhysicalFeature) -> Result<(), &'static str> {
+    let numbers = [
+        f.min_zoom,
+        f.label_min_zoom,
+        f.label_x,
+        f.label_y,
+        f.label_angle,
+    ];
+    if !numbers
+        .iter()
+        .chain(f.parts.iter().flatten())
+        .all(|v| v.is_finite())
+    {
+        return Err("has a non-finite number");
+    }
+    if f.min_zoom < 1.0 || f.label_min_zoom < f.min_zoom {
+        return Err("has zooms out of order (need 1 ≤ min_zoom ≤ label_min_zoom)");
+    }
+    if f.label_angle.abs() > std::f32::consts::FRAC_PI_2 + 1e-4 {
+        return Err("has an upside-down label angle");
+    }
+    let min_points = match f.kind {
+        FeatureKind::Peak => {
+            return match f.parts.as_slice() {
+                [p] if p.len() == 2 => Ok(()),
+                _ => Err("must be exactly one point"),
+            };
+        }
+        FeatureKind::River => 2,
+        FeatureKind::Lake | FeatureKind::Desert | FeatureKind::Range => 3,
+    };
+    if f.parts.is_empty() || f.parts.iter().any(|p| p.len() < 2 * min_points) {
+        return Err("has a part with too few points");
+    }
+    Ok(())
 }
 
 // ---- label placement (used by featuregen) --------------------------------
@@ -213,7 +246,9 @@ pub fn polyline_label(parts: &[Vec<f32>]) -> Option<(f32, f32, f32)> {
         let seg = ((b[0] - a[0]).powi(2) + (b[1] - a[1]).powi(2)).sqrt();
         if walked + seg >= half && seg > 0.0 {
             let t = (half - walked) / seg;
-            let mut angle = (b[1] - a[1]).atan2(b[0] - a[0]);
+            // libm, not the platform's maths library: the generated file
+            // must be byte-identical on every machine (CI compares it).
+            let mut angle = libm::atan2f(b[1] - a[1], b[0] - a[0]);
             if angle > std::f32::consts::FRAC_PI_2 {
                 angle -= std::f32::consts::PI;
             } else if angle < -std::f32::consts::FRAC_PI_2 {
@@ -226,42 +261,134 @@ pub fn polyline_label(parts: &[Vec<f32>]) -> Option<(f32, f32, f32)> {
     None
 }
 
-/// Area-weighted centroid of the largest ring (good enough for the rough,
-/// blob-like Natural Earth region polygons and lakes).
+/// A point inside the shape to put its name on: the area-weighted centroid
+/// of the largest ring when that lies inside the shape (blob-like regions),
+/// otherwise the point deepest inside it (a "pole of inaccessibility", for
+/// crescent or branching lakes like Balkhash and Tanganyika). Holes count.
+///
+/// Sums run in f64 relative to the ring's first vertex: in f32 on raw map
+/// coordinates the cross terms (~1) swamp a small lake's area (~1e-6).
 pub fn ring_label(rings: &[Vec<f32>]) -> Option<(f32, f32)> {
-    let signed_area = |r: &Vec<f32>| -> f32 {
-        let n = r.len() / 2;
-        (0..n)
-            .map(|i| {
-                let j = (i + 1) % n;
-                r[2 * i] * r[2 * j + 1] - r[2 * j] * r[2 * i + 1]
-            })
-            .sum::<f32>()
-            / 2.0
-    };
-    let ring = rings
+    let rings64: Vec<Vec<(f64, f64)>> = rings
         .iter()
         .filter(|r| r.len() >= 6)
+        .map(|r| {
+            r.chunks_exact(2)
+                .map(|p| (f64::from(p[0]), f64::from(p[1])))
+                .collect()
+        })
+        .collect();
+    let ring = rings64
+        .iter()
         .max_by(|a, b| signed_area(a).abs().total_cmp(&signed_area(b).abs()))?;
     let area = signed_area(ring);
-    if area.abs() < f32::EPSILON {
+    if area == 0.0 || !area.is_finite() {
         return None;
     }
-    let n = ring.len() / 2;
+    let (ox, oy) = ring[0];
     let (mut cx, mut cy) = (0.0, 0.0);
-    for i in 0..n {
-        let j = (i + 1) % n;
-        let cross = ring[2 * i] * ring[2 * j + 1] - ring[2 * j] * ring[2 * i + 1];
-        cx += (ring[2 * i] + ring[2 * j]) * cross;
-        cy += (ring[2 * i + 1] + ring[2 * j + 1]) * cross;
+    for (i, &(x0, y0)) in ring.iter().enumerate() {
+        let (x1, y1) = ring[(i + 1) % ring.len()];
+        let (x0, y0, x1, y1) = (x0 - ox, y0 - oy, x1 - ox, y1 - oy);
+        let cross = x0 * y1 - x1 * y0;
+        cx += (x0 + x1) * cross;
+        cy += (y0 + y1) * cross;
     }
-    Some((cx / (6.0 * area), cy / (6.0 * area)))
+    let centroid = (ox + cx / (6.0 * area), oy + cy / (6.0 * area));
+    let point = if inside(&rings64, centroid) {
+        centroid
+    } else {
+        deepest_point(&rings64, ring)
+    };
+    Some((point.0 as f32, point.1 as f32))
+}
+
+/// Shoelace area, relative to the first vertex for precision.
+fn signed_area(ring: &[(f64, f64)]) -> f64 {
+    let (ox, oy) = ring[0];
+    (0..ring.len())
+        .map(|i| {
+            let (x0, y0) = ring[i];
+            let (x1, y1) = ring[(i + 1) % ring.len()];
+            (x0 - ox) * (y1 - oy) - (x1 - ox) * (y0 - oy)
+        })
+        .sum::<f64>()
+        / 2.0
+}
+
+/// Even-odd point-in-polygon over all rings (so holes are outside).
+fn inside(rings: &[Vec<(f64, f64)>], (px, py): (f64, f64)) -> bool {
+    let mut hit = false;
+    for ring in rings {
+        for (i, &(x0, y0)) in ring.iter().enumerate() {
+            let (x1, y1) = ring[(i + 1) % ring.len()];
+            if (y0 > py) != (y1 > py) && px < x0 + (py - y0) * (x1 - x0) / (y1 - y0) {
+                hit = !hit;
+            }
+        }
+    }
+    hit
+}
+
+/// Distance from a point to the nearest edge of any ring.
+fn edge_distance(rings: &[Vec<(f64, f64)>], (px, py): (f64, f64)) -> f64 {
+    let mut best = f64::INFINITY;
+    for ring in rings {
+        for (i, &(x0, y0)) in ring.iter().enumerate() {
+            let (x1, y1) = ring[(i + 1) % ring.len()];
+            let (dx, dy) = (x1 - x0, y1 - y0);
+            let len2 = dx * dx + dy * dy;
+            let t = if len2 == 0.0 {
+                0.0
+            } else {
+                (((px - x0) * dx + (py - y0) * dy) / len2).clamp(0.0, 1.0)
+            };
+            let (ex, ey) = (px - x0 - t * dx, py - y0 - t * dy);
+            best = best.min(ex * ex + ey * ey);
+        }
+    }
+    best.sqrt()
+}
+
+/// Point inside the shape farthest from any edge, by a coarse grid over the
+/// largest ring's bounds refined a few times around the best cell
+/// (deterministic; precise enough for placing a label).
+fn deepest_point(rings: &[Vec<(f64, f64)>], outer: &[(f64, f64)]) -> (f64, f64) {
+    const GRID: usize = 24;
+    let (mut x0, mut y0, mut x1, mut y1) = outer.iter().fold(
+        (
+            f64::INFINITY,
+            f64::INFINITY,
+            f64::NEG_INFINITY,
+            f64::NEG_INFINITY,
+        ),
+        |(a, b, c, d), &(x, y)| (a.min(x), b.min(y), c.max(x), d.max(y)),
+    );
+    let mut best = (outer[0], -1.0);
+    for _ in 0..6 {
+        let (sx, sy) = ((x1 - x0) / GRID as f64, (y1 - y0) / GRID as f64);
+        for i in 0..=GRID {
+            for j in 0..=GRID {
+                let p = (x0 + sx * i as f64, y0 + sy * j as f64);
+                if inside(rings, p) {
+                    let d = edge_distance(rings, p);
+                    if d > best.1 {
+                        best = (p, d);
+                    }
+                }
+            }
+        }
+        // Zoom the grid in around the best point so far.
+        let (bx, by) = best.0;
+        (x0, x1, y0, y1) = (bx - 2.0 * sx, bx + 2.0 * sx, by - 2.0 * sy, by + 2.0 * sy);
+    }
+    best.0
 }
 
 /// Natural Earth's web-map zoom levels (0 = one 256 px tile for the world)
 /// to MapCamera zoom (1 = the world fills the iPad, about web zoom 2).
 pub fn camera_zoom_from_web(web_zoom: f64) -> f32 {
-    2f64.powf(web_zoom - 2.0).max(1.0) as f32
+    libm::pow(2.0, web_zoom - 2.0).max(1.0) as f32
 }
 
 #[cfg(test)]
@@ -336,6 +463,62 @@ mod tests {
         let big = vec![0.0, 0.0, 4.0, 0.0, 4.0, 2.0, 0.0, 2.0, 0.0, 0.0];
         let (x, y) = ring_label(&[small, big]).unwrap();
         assert!((x - 2.0).abs() < 1e-5 && (y - 1.0).abs() < 1e-5);
+    }
+
+    #[test]
+    fn ring_label_is_precise_for_tiny_lakes_far_from_the_origin() {
+        // A 0.001-wide square at x ≈ 2.5 (area 1e-6): f32 sums on raw
+        // coordinates would lose it.
+        let (x0, y0, d) = (2.5f32, -1.1f32, 0.001f32);
+        let lake = vec![x0, y0, x0 + d, y0, x0 + d, y0 + d, x0, y0 + d, x0, y0];
+        let (x, y) = ring_label(&[lake]).unwrap();
+        assert!((x - (x0 + d / 2.0)).abs() < d / 10.0, "{x}");
+        assert!((y - (y0 + d / 2.0)).abs() < d / 10.0, "{y}");
+    }
+
+    #[test]
+    fn ring_label_stays_inside_concave_shapes_and_out_of_holes() {
+        // A C shape: the centroid falls in the gap, so the label must move
+        // into one of the arms.
+        let c = vec![
+            0.0, 0.0, 3.0, 0.0, 3.0, 1.0, 1.0, 1.0, 1.0, 2.0, 3.0, 2.0, 3.0, 3.0, 0.0, 3.0, 0.0,
+            0.0,
+        ];
+        let (x, y) = ring_label(std::slice::from_ref(&c)).unwrap();
+        let rings: Vec<Vec<(f64, f64)>> = vec![
+            c.chunks_exact(2)
+                .map(|p| (f64::from(p[0]), f64::from(p[1])))
+                .collect(),
+        ];
+        assert!(inside(&rings, (f64::from(x), f64::from(y))), "({x}, {y})");
+        // A square with a square hole in the middle: not in the hole.
+        let outer = vec![0.0, 0.0, 4.0, 0.0, 4.0, 4.0, 0.0, 4.0, 0.0, 0.0];
+        let hole = vec![1.0, 1.0, 3.0, 1.0, 3.0, 3.0, 1.0, 3.0, 1.0, 1.0];
+        let (x, y) = ring_label(&[outer, hole]).unwrap();
+        assert!(
+            !((1.0..=3.0).contains(&x) && (1.0..=3.0).contains(&y)),
+            "({x}, {y})"
+        );
+    }
+
+    #[test]
+    fn rejects_features_that_make_no_sense() {
+        let check = |edit: fn(&mut PhysicalFeature)| {
+            let mut features = sample();
+            edit(&mut features[0]);
+            decode(&encode(&features)).is_err()
+        };
+        assert!(check(|f| f.min_zoom = 0.5));
+        assert!(check(|f| f.label_min_zoom = 0.9));
+        assert!(check(|f| f.label_angle = 3.0));
+        assert!(check(|f| f.parts = vec![vec![0.0, 0.0]])); // 1-point river
+        assert!(check(|f| f.parts.push(vec![]))); // empty part
+        assert!(check(|f| {
+            f.kind = FeatureKind::Lake; // 2-point ring
+        }));
+        assert!(check(|f| {
+            f.kind = FeatureKind::Peak; // a peak must be one point
+        }));
     }
 
     #[test]

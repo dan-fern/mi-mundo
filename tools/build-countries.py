@@ -28,7 +28,8 @@ FIELDS = ("capitals", "population", "languages")
 # should lead with. The next most famous site is used instead; hand-picked
 # lists in facts-overrides.json are never filtered.
 HEAVY_TOPICS = re.compile(
-    r"genocide|memorial|concentration|auschwitz|birkenau|massacre|prison|slave|cemetery|skogskyrkog",
+    r"genocide|memorial|concentration|auschwitz|birkenau|massacre|prison|slave|cemetery|skogskyrkog"
+    r"|bikini|nuclear",
     re.IGNORECASE)
 # Sites that span many countries but mean nothing to a kid (survey markers).
 OBSCURE = re.compile(r"Struve Geodetic Arc", re.IGNORECASE)
@@ -70,12 +71,47 @@ def distance(rings, lon, lat):
     return best
 
 
+def is_number(v):
+    return isinstance(v, (int, float)) and not isinstance(v, bool)
+
+
 def check_landmarks(iso2, landmarks):
     for lm in landmarks:
         ok = (isinstance(lm, dict) and isinstance(lm.get("name"), str) and lm["name"].strip()
-              and -180 <= lm.get("lon", 999) <= 180 and -90 <= lm.get("lat", 999) <= 90)
+              and is_number(lm.get("lon")) and is_number(lm.get("lat"))
+              and -180 <= lm["lon"] <= 180 and -90 <= lm["lat"] <= 90)
         if not ok:
             sys.exit(f"error: bad landmark for {iso2}: {lm!r}")
+
+
+def auto_landmarks(sites, capitals, iso2, outlines):
+    """Up to 3 UNESCO picks, most famous first, without: heavy or obscure
+    topics, names too long for a label, the capital itself (Vatican City,
+    Valletta), sites that lie in another country (cross-border or
+    mis-tagged; a point at sea is fine, as small islands are missing from
+    the 1:50m outlines), and repeats of the same site under another name."""
+    rings = outlines[iso2]
+
+    def elsewhere(lon, lat):
+        if inside(rings, lon, lat) or distance(rings, lon, lat) <= CAPITAL_SLACK:
+            return False
+        return any(inside(other, lon, lat) for code, other in outlines.items() if code != iso2)
+
+    picks, seen_names, seen_points = [], set(), set()
+    for s in sorted(sites, key=lambda s: (-s["sitelinks"], s["name"], s["wikidata"])):
+        name = s["name"][:1].upper() + s["name"][1:]  # "historical city centre of Odesa"
+        point = (round(s["lon"], 2), round(s["lat"], 2))
+        if (HEAVY_TOPICS.search(name) or OBSCURE.search(name) or len(name) > MAX_AUTO_NAME
+                or name in capitals or name.casefold() in seen_names or point in seen_points
+                or elsewhere(s["lon"], s["lat"])):
+            continue
+        # "John Crow Mountains" vs "Blue and John Crow Mountains".
+        if any(name.casefold() in other or other in name.casefold() for other in seen_names):
+            continue
+        seen_names.add(name.casefold())
+        seen_points.add(point)
+        picks.append({"name": name, "lon": s["lon"], "lat": s["lat"]})
+    return picks[:3]
 
 
 def main():
@@ -117,11 +153,9 @@ def main():
             missing.append(iso2)
             continue
         entry = {"wikidata": fact["wikidata"], **{k: fact[k] for k in FIELDS}}
-        entry["landmarks"] = [{"name": s["name"], "lon": s["lon"], "lat": s["lat"]}
-                              for s in unesco.get(iso2, [])
-                              if not HEAVY_TOPICS.search(s["name"]) and not OBSCURE.search(s["name"])
-                              and len(s["name"]) <= MAX_AUTO_NAME]
         entry.update({k: v for k, v in overrides.get(iso2, {}).items() if not k.startswith("_")})
+        if "landmarks" not in overrides.get(iso2, {}):
+            entry["landmarks"] = auto_landmarks(unesco.get(iso2, []), entry["capitals"], iso2, outlines)
         entry["capitals"] = entry["capitals"][:3]
         entry["languages"] = entry["languages"][:3]
         entry["landmarks"] = entry["landmarks"][:3]

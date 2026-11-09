@@ -88,3 +88,93 @@ fn big_features_show_early_and_small_ones_later() {
     );
     assert!(all.iter().all(|f| f.label_min_zoom >= f.min_zoom));
 }
+
+#[test]
+fn area_labels_sit_inside_their_own_shape() {
+    use mimundo_core::map::geometry::point_in_rings;
+    let all = features();
+    let outside: Vec<&str> = all
+        .iter()
+        .filter(|f| {
+            matches!(
+                f.kind,
+                FeatureKind::Lake | FeatureKind::Desert | FeatureKind::Range
+            )
+        })
+        .filter(|f| !point_in_rings(&f.parts, f.label_x, f.label_y))
+        .map(|f| f.name.as_str())
+        .collect();
+    assert!(
+        outside.is_empty(),
+        "labels outside their shape: {outside:?}"
+    );
+}
+
+#[test]
+fn names_are_tidy_english() {
+    let all = features();
+    for f in &all {
+        assert_eq!(f.name.trim(), f.name, "untrimmed name {:?}", f.name);
+        assert!(!f.name.contains("  "), "double space in {:?}", f.name);
+        assert!(f.label_angle.abs() <= std::f32::consts::FRAC_PI_2 + 1e-4);
+    }
+    // Local or headwater names that must have been renamed or dropped.
+    for local in [
+        "Amazonas",
+        "Rhein",
+        "Firat",
+        "Al Furat",
+        "Huang",
+        "Tongtian",
+        "Damqogkanbab",
+        "Madison",
+        "Punjab",
+        "Ahag",
+        "Appennino Ligure",
+        "Gora Elbrus",
+    ] {
+        assert!(
+            all.iter().all(|f| f.name != local),
+            "{local} is still in Features.bin"
+        );
+    }
+    for (kind, name) in [
+        (FeatureKind::River, "Amazon"),
+        (FeatureKind::River, "Euphrates"),
+        (FeatureKind::River, "Mississippi"),
+        (FeatureKind::River, "Yangtze"),
+        (FeatureKind::River, "Danube"),
+        (FeatureKind::Range, "Apennines"),
+        (FeatureKind::Desert, "Gobi Desert"),
+        (FeatureKind::Peak, "Mount Fuji"),
+        (FeatureKind::Peak, "Matterhorn"),
+    ] {
+        find(&all, kind, name);
+    }
+}
+
+#[test]
+fn quiz_reveals_go_to_the_right_country() {
+    use mimundo_core::map::World;
+    let path = concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/../apple/MiMundo/Resources/World.bin"
+    );
+    let world = World::new(std::fs::read(path).unwrap()).unwrap();
+    let countries = world.countries();
+    let all = features();
+    // The app reveals a feature's name with the country under its label.
+    for (kind, name, iso2) in [
+        (FeatureKind::Lake, "Lake Malawi", "MW"),
+        (FeatureKind::Lake, "Lake Titicaca", "PE"),
+        (FeatureKind::Peak, "Mount Fuji", "JP"),
+        (FeatureKind::Peak, "Matterhorn", "CH"),
+        (FeatureKind::Peak, "Mount Everest", "NP"),
+    ] {
+        let f = find(&all, kind, name);
+        let at = world
+            .country_at(f.label_x, f.label_y, 0.01)
+            .map(|i| countries[i as usize].iso2.clone());
+        assert_eq!(at.as_deref(), Some(iso2), "{name}");
+    }
+}

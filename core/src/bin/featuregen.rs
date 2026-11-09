@@ -26,22 +26,130 @@ const LAKE_NAMES: &[&str] = &["label", "name", "name_en"];
 const REGION_NAMES: &[&str] = &["NAME_EN", "NAME"];
 const PEAK_NAMES: &[&str] = &["name_en", "name"];
 
-/// Plain English names where Natural Earth keeps a local form that a kid
-/// wouldn't recognize from school (most local names, like Vänern or Paraná,
-/// are also the English name and stay).
+/// English names a kid would know from school, where Natural Earth keeps
+/// a local form, a headwater or delta-branch name, or a typo (most local
+/// names, like Vänern or Paraná, are also the English name and stay).
+/// Whitespace runs are collapsed before this lookup.
 const RENAMES: &[(&str, &str)] = &[
+    // Rivers: one English name per river, so a river split into segments
+    // isn't labelled twice under different names.
+    ("Amazonas", "Amazon"),
     ("Rhein", "Rhine"),
     ("Bénoué", "Benue"),
     ("Sénégal", "Senegal"),
-    ("São  Francisco", "São Francisco"),
+    ("Al Furat", "Euphrates"),
+    ("Firat", "Euphrates"),
+    ("Dicle", "Tigris"),
+    ("Ertis", "Irtysh"),
+    ("Dnepre", "Dnieper"),
+    ("Abay", "Blue Nile"),
+    ("Huang", "Yellow River"),
+    ("Yellow", "Yellow River"),
+    ("Nu", "Salween"),
+    ("Ayeyarwady", "Irrawaddy"),
+    ("Irrawaddy Delta", "Irrawaddy"),
+    ("Nmai", "Irrawaddy"),
+    ("Tongtian", "Yangtze"),
+    ("Tuotuo", "Yangtze"),
+    ("Za", "Mekong"),
+    ("Damqogkanbab", "Brahmaputra"),
+    ("Dihang", "Brahmaputra"),
+    ("Shiquan", "Indus"),
+    ("Teslin", "Yukon"),
+    ("Ideriyn", "Selenga"),
+    ("Selenge (Selenga)", "Selenga"),
+    // Lakes.
     ("Lago Titicaca", "Lake Titicaca"),
     ("Lago de Nicaragua", "Lake Nicaragua"),
     ("Qinghai Hu", "Qinghai Lake"),
     ("Poyang Hu", "Poyang Lake"),
     ("Tai Hu", "Lake Tai"),
     ("Khövsgöl Nuur", "Lake Khövsgöl"),
-    ("Appennino Ligure", "Ligurian Apennines"),
+    ("Lagoa Minim", "Lagoa Mirim"),
+    ("Lac Île-á-la-Crosse", "Lac Île-à-la-Crosse"),
+    ("Lac Moeru", "Lake Mweru"),
+    ("Buhayrat ath Tharthar", "Lake Tharthar"),
+    ("Pskov", "Lake Pskov"),
+    ("Kaliningradskiy Zaliv", "Vistula Lagoon"),
+    ("Zalev Wislany", "Vistula Lagoon"),
+    // Ranges.
+    ("Appennino Ligure", "Apennines"), // the polygon covers the whole chain
+    ("Ahag", "Ahaggar Mountains"),
+    ("Serra da Mantiquiera", "Serra da Mantiqueira"),
+    ("Pamir mountains", "Pamir Mountains"),
+    ("Kolyma mountains", "Kolyma Mountains"),
+    ("Naga hills", "Naga Hills"),
+    ("Tannu-Ola mountains", "Tannu-Ola Mountains"),
+    ("Crystal Mountain", "Crystal Mountains"),
+    ("Columbia Kootenay Mountain", "Columbia Mountains"),
+    // Peaks.
+    ("Gora Elbrus", "Mount Elbrus"),
+    ("Cerro Aconcagua", "Aconcagua"),
+    ("Gunung Kinabalu", "Mount Kinabalu"),
+    ("Pik Imeni Ismail Samani", "Ismoil Somoni Peak"),
 ];
+
+/// Left out: river delta channels and stubs that showed as mystery labels
+/// at whole-world zoom, regions that aren't deserts (Punjab is farmland,
+/// Caatinga is dry shrubland), and minor US state high points that crowded
+/// out world-famous peaks.
+const DROP: &[(FeatureKind, &str)] = &[
+    (FeatureKind::River, "Madison"),
+    (FeatureKind::River, "Weir"),
+    (FeatureKind::River, "Borcea"),
+    (FeatureKind::River, "Bratul Chillia"),
+    (FeatureKind::River, "Bratul Sulina"),
+    (FeatureKind::River, "Bratul Sfintu Gheorghe"),
+    (FeatureKind::River, "Bykovskaya Protoka"),
+    (FeatureKind::River, "Olenekskaya Protoka"),
+    (FeatureKind::Desert, "Punjab"),
+    (FeatureKind::Desert, "Caatinga"),
+    (FeatureKind::Peak, "Spruce Knob"),
+    (FeatureKind::Peak, "Trapper Peak"),
+    (FeatureKind::Peak, "Sacajawea Peak"),
+    (FeatureKind::Peak, "Mount Rogers"),
+    (FeatureKind::Peak, "Clingmans Dome"),
+    (FeatureKind::Peak, "Uncompahgre Peak"),
+    (FeatureKind::Peak, "Borah Peak"),
+    (FeatureKind::Peak, "Wheeler Peak"),
+    (FeatureKind::Peak, "King's Peak"),
+    (FeatureKind::Peak, "Mount Katahdin"),
+    (FeatureKind::Peak, "Mount Chamberlin"),
+];
+
+/// Renames that depend on where the feature is: (name, lon range, lat
+/// range of its first point, new name; empty = drop).
+type Located = (&'static str, (f64, f64), (f64, f64), &'static str);
+const LOCATED: &[Located] = &[
+    // Natural Earth names Colombia's central range "Cordillera Blanca" too.
+    (
+        "Cordillera Blanca",
+        (-80.0, -70.0),
+        (0.0, 12.0),
+        "Cordillera Central",
+    ),
+    // Bolivia's Río Grande, easily confused with the US/Mexico Rio Grande.
+    ("Grande", (-70.0, -55.0), (-25.0, -10.0), ""),
+];
+
+/// World-famous peaks Natural Earth's 1:50m points leave out:
+/// (name, lon, lat, elevation m). Shown from web zoom 5, like most peaks.
+const EXTRA_PEAKS: &[(&str, f64, f64, i32)] = &[
+    ("Mount Fuji", 138.7274, 35.3606, 3776),
+    ("Matterhorn", 7.6586, 45.9763, 4478),
+    ("Aoraki / Mount Cook", 170.1418, -43.5950, 3724),
+    ("Mauna Kea", -155.4681, 19.8207, 4207),
+    ("Mount Etna", 14.9934, 37.7510, 3357),
+    ("Mount Vesuvius", 14.4261, 40.8214, 1281),
+    ("Mount Olympus", 22.3583, 40.0857, 2918),
+    ("Mount Ararat", 44.2983, 39.7016, 5137),
+    ("Mount Rainier", -121.7603, 46.8529, 4392),
+];
+
+/// Label points moved by hand (name, lon, lat) where the computed one lands
+/// in the wrong country for quiz reveals: Lake Malawi's fell in
+/// Mozambique's part of the lake.
+const LABEL_AT: &[(&str, f64, f64)] = &[("Lake Malawi", 34.4, -11.5)];
 
 fn main() -> ExitCode {
     let args: Vec<String> = std::env::args().collect();
@@ -65,42 +173,49 @@ fn main() -> ExitCode {
 
 fn run(rivers: &str, lakes: &str, regions: &str, peaks: &str, out: &str) -> Result<String, String> {
     let mut features = Vec::new();
+    let mut skipped = Skipped::default();
 
     for f in read_features(rivers)? {
         if prop_str(&f, &["featurecla"]).as_deref() != Some("River") {
             continue;
         }
-        let parts = project_lines(&f)?;
-        let Some((x, y, angle)) = polyline_label(&parts) else {
+        let Some(name) = clean_name(FeatureKind::River, &f, RIVER_NAMES, &mut skipped)? else {
             continue;
         };
+        let parts = project_lines(&f)?;
+        let Some((x, y, angle)) = polyline_label(&parts) else {
+            skipped.no_label += 1;
+            continue;
+        };
+        let zooms = zooms(&f, "min_zoom", "min_label")?;
         features.push(feature(
             FeatureKind::River,
-            &f,
-            prop_str(&f, RIVER_NAMES).unwrap_or_default(),
+            name,
             parts,
             (x, y, angle),
             0,
-            "min_zoom",
-            "min_label",
-        )?);
+            zooms,
+        ));
     }
 
     for f in read_features(lakes)? {
-        let parts = project_rings(&f)?;
-        let Some((x, y)) = ring_label(&parts) else {
+        let Some(name) = clean_name(FeatureKind::Lake, &f, LAKE_NAMES, &mut skipped)? else {
             continue;
         };
+        let parts = project_rings(&f)?;
+        let Some((x, y)) = ring_label(&parts) else {
+            skipped.no_label += 1;
+            continue;
+        };
+        let zooms = zooms(&f, "min_zoom", "min_label")?;
         features.push(feature(
             FeatureKind::Lake,
-            &f,
-            prop_str(&f, LAKE_NAMES).unwrap_or_default(),
+            name,
             parts,
             (x, y, 0.0),
             0,
-            "min_zoom",
-            "min_label",
-        )?);
+            zooms,
+        ));
     }
 
     for f in read_features(regions)? {
@@ -109,39 +224,61 @@ fn run(rivers: &str, lakes: &str, regions: &str, peaks: &str, out: &str) -> Resu
             Some("Range/mtn") => FeatureKind::Range,
             _ => continue,
         };
-        let parts = project_rings(&f)?;
-        let Some((x, y)) = ring_label(&parts) else {
+        let Some(name) = clean_name(kind, &f, REGION_NAMES, &mut skipped)? else {
             continue;
         };
-        features.push(feature(
-            kind,
-            &f,
-            prop_str(&f, REGION_NAMES).unwrap_or_default(),
-            parts,
-            (x, y, 0.0),
-            0,
-            "MIN_LABEL",
-            "MIN_LABEL",
-        )?);
+        let parts = project_rings(&f)?;
+        let Some((x, y)) = ring_label(&parts) else {
+            skipped.no_label += 1;
+            continue;
+        };
+        let zooms = zooms(&f, "MIN_LABEL", "MIN_LABEL")?;
+        features.push(feature(kind, name, parts, (x, y, 0.0), 0, zooms));
     }
 
     for f in read_features(peaks)? {
         if prop_str(&f, &["featurecla"]).as_deref() != Some("mountain") {
             continue;
         }
-        let coords = &f["geometry"]["coordinates"];
-        let (x, y) = project_point(coords)?;
-        let elevation = f["properties"]["elevation"].as_f64().unwrap_or(0.0).round() as i32;
+        let Some(name) = clean_name(FeatureKind::Peak, &f, PEAK_NAMES, &mut skipped)? else {
+            continue;
+        };
+        let (x, y) = project_point(&f["geometry"]["coordinates"])?;
+        let elevation = f["properties"]["elevation"]
+            .as_f64()
+            .ok_or_else(|| format!("peak {name} has no elevation"))?
+            .round() as i32;
+        let zooms = zooms(&f, "min_zoom", "min_zoom")?;
         features.push(feature(
             FeatureKind::Peak,
-            &f,
-            prop_str(&f, PEAK_NAMES).unwrap_or_default(),
+            name,
             vec![vec![x, y]],
             (x, y, 0.0),
             elevation,
-            "min_zoom",
-            "min_zoom",
-        )?);
+            zooms,
+        ));
+    }
+    for &(name, lon, lat, elevation) in EXTRA_PEAKS {
+        let (x, y) = equal_earth(lon, lat);
+        let (x, y) = (x as f32, y as f32);
+        let zoom = camera_zoom_from_web(5.0);
+        features.push(feature(
+            FeatureKind::Peak,
+            name.into(),
+            vec![vec![x, y]],
+            (x, y, 0.0),
+            elevation,
+            (zoom, zoom),
+        ));
+    }
+
+    for &(name, lon, lat) in LABEL_AT {
+        let (x, y) = equal_earth(lon, lat);
+        let f = features
+            .iter_mut()
+            .find(|f| f.name == name)
+            .ok_or_else(|| format!("LABEL_AT: no feature named {name}"))?;
+        (f.label_x, f.label_y) = (x as f32, y as f32);
     }
 
     // Deterministic order: kind, then when it appears, then name.
@@ -158,40 +295,98 @@ fn run(rivers: &str, lakes: &str, regions: &str, peaks: &str, out: &str) -> Resu
     std::fs::write(out, &bytes).map_err(|e| format!("writing {out}: {e}"))?;
     let count = |k: FeatureKind| features.iter().filter(|f| f.kind == k).count();
     Ok(format!(
-        "==> {} rivers, {} lakes, {} deserts, {} ranges, {} peaks, {} KB -> {out}",
+        "==> {} rivers, {} lakes, {} deserts, {} ranges, {} peaks, {} KB -> {out}\n    \
+         ({} nameless kept to draw, {} dropped by DROP/LOCATED, {} with no usable geometry)",
         count(FeatureKind::River),
         count(FeatureKind::Lake),
         count(FeatureKind::Desert),
         count(FeatureKind::Range),
         count(FeatureKind::Peak),
-        bytes.len() / 1024
+        bytes.len() / 1024,
+        features.iter().filter(|f| f.name.is_empty()).count(),
+        skipped.dropped,
+        skipped.no_label,
     ))
 }
 
-#[allow(clippy::too_many_arguments)]
-fn feature(
+#[derive(Default)]
+struct Skipped {
+    dropped: usize,
+    no_label: usize,
+}
+
+/// The feature's display name after RENAMES, LOCATED and DROP; `None` if it
+/// is left out. Nameless features are kept on purpose (85 small lakes and
+/// a few river stubs): they still draw, the app just never labels them.
+fn clean_name(
     kind: FeatureKind,
     f: &Value,
+    keys: &[&str],
+    skipped: &mut Skipped,
+) -> Result<Option<String>, String> {
+    let mut name = prop_str(f, keys).unwrap_or_default();
+    if let Some((lon, lat)) = first_point(&f["geometry"]["coordinates"]) {
+        for &(from, (lon0, lon1), (lat0, lat1), to) in LOCATED {
+            if name == from && (lon0..=lon1).contains(&lon) && (lat0..=lat1).contains(&lat) {
+                name = to.to_string();
+                if name.is_empty() {
+                    skipped.dropped += 1;
+                    return Ok(None);
+                }
+            }
+        }
+    }
+    if DROP.iter().any(|&(k, n)| k == kind && n == name) {
+        skipped.dropped += 1;
+        return Ok(None);
+    }
+    Ok(Some(name))
+}
+
+/// First coordinate pair anywhere in a GeoJSON coordinates array.
+fn first_point(c: &Value) -> Option<(f64, f64)> {
+    match c.as_array()?.as_slice() {
+        [Value::Number(lon), Value::Number(lat), ..] => Some((lon.as_f64()?, lat.as_f64()?)),
+        [first, ..] => first_point(first),
+        [] => None,
+    }
+}
+
+/// (min_zoom, label_min_zoom) in camera units from Natural Earth's web zoom
+/// keys. A missing key is an error: defaulting would silently move every
+/// feature if a Natural Earth update renamed a field.
+fn zooms(f: &Value, min_zoom_key: &str, label_key: &str) -> Result<(f32, f32), String> {
+    let web = |key: &str| {
+        f["properties"][key]
+            .as_f64()
+            .ok_or_else(|| format!("feature {:?} has no numeric {key}", f["properties"]["name"]))
+    };
+    let min_zoom = camera_zoom_from_web(web(min_zoom_key)?);
+    Ok((
+        min_zoom,
+        camera_zoom_from_web(web(label_key)?).max(min_zoom),
+    ))
+}
+
+fn feature(
+    kind: FeatureKind,
     name: String,
     parts: Vec<Vec<f32>>,
     (label_x, label_y, label_angle): (f32, f32, f32),
     elevation_m: i32,
-    min_zoom_key: &str,
-    label_key: &str,
-) -> Result<PhysicalFeature, String> {
-    let web = |key: &str| f["properties"][key].as_f64().unwrap_or(5.0);
-    let min_zoom = camera_zoom_from_web(web(min_zoom_key));
-    Ok(PhysicalFeature {
+    (min_zoom, label_min_zoom): (f32, f32),
+) -> PhysicalFeature {
+    PhysicalFeature {
         kind,
         name,
         min_zoom,
-        label_min_zoom: camera_zoom_from_web(web(label_key)).max(min_zoom),
+        label_min_zoom,
         label_x,
         label_y,
         label_angle,
         elevation_m,
         parts,
-    })
+    }
 }
 
 fn read_features(path: &str) -> Result<Vec<Value>, String> {
@@ -203,18 +398,18 @@ fn read_features(path: &str) -> Result<Vec<Value>, String> {
         .ok_or_else(|| format!("{path}: no features array"))
 }
 
-/// First non-empty string among `keys`, with RENAMES applied.
+/// First non-empty string among `keys`, whitespace collapsed, with RENAMES
+/// applied.
 fn prop_str(f: &Value, keys: &[&str]) -> Option<String> {
     keys.iter()
         .filter_map(|k| f["properties"][*k].as_str())
         .find(|s| !s.trim().is_empty())
         .map(|s| {
-            let s = s.trim();
+            let s = s.split_whitespace().collect::<Vec<_>>().join(" ");
             RENAMES
                 .iter()
                 .find(|(from, _)| *from == s)
-                .map_or(s, |(_, to)| to)
-                .to_string()
+                .map_or(s, |(_, to)| to.to_string())
         })
 }
 

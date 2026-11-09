@@ -362,7 +362,14 @@
       "Greek",
       "Turkish"
     ],
-    "_why": "duplicate 'Modern Greek'/'Greek'; Greek is majority"
+    "_why": "duplicate 'Modern Greek'/'Greek'; Greek is majority; Wikidata's Nicosia point falls north of the Green Line",
+    "capitalPoints": [
+      {
+        "name": "Nicosia",
+        "lon": 33.36,
+        "lat": 35.15
+      }
+    ]
   },
   "CZ": {
     "landmarks": [
@@ -625,6 +632,26 @@
     "_why": "everyone speaks Creole; Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate",
     "population": 11800000
   },
+  "HU": {
+    "landmarks": [
+      {
+        "name": "Hungarian Parliament",
+        "lon": 19.0457,
+        "lat": 47.5071
+      },
+      {
+        "name": "Buda Castle",
+        "lon": 19.0396,
+        "lat": 47.4962
+      },
+      {
+        "name": "Lake Balaton",
+        "lon": 17.75,
+        "lat": 46.83
+      }
+    ],
+    "_why": "hand-picked kid-recognizable landmarks (UNESCO ranking alone misses icons like the Eiffel Tower or Machu Picchu)"
+  },
   "ID": {
     "landmarks": [
       {
@@ -653,9 +680,9 @@
         "lat": 52.9715
       },
       {
-        "name": "Giant's Causeway",
-        "lon": -6.5116,
-        "lat": 55.2408
+        "name": "Rock of Cashel",
+        "lon": -7.8909,
+        "lat": 52.5201
       },
       {
         "name": "Newgrange",
@@ -663,7 +690,7 @@
         "lat": 53.6947
       }
     ],
-    "_why": "hand-picked kid-recognizable landmarks (UNESCO ranking alone misses icons like the Eiffel Tower or Machu Picchu)"
+    "_why": "hand-picked kid-recognizable landmarks (UNESCO ranking alone misses icons like the Eiffel Tower or Machu Picchu); Giant's Causeway is in Northern Ireland (UK), not Ireland"
   },
   "IL": {
     "landmarks": [
@@ -993,7 +1020,19 @@
       "Macedonian",
       "Albanian"
     ],
-    "_why": "majority language first"
+    "_why": "majority language first; hand-picked kid-recognizable landmarks (UNESCO ranking alone misses icons like the Eiffel Tower or Machu Picchu)",
+    "landmarks": [
+      {
+        "name": "Lake Ohrid",
+        "lon": 20.75,
+        "lat": 41.05
+      },
+      {
+        "name": "Stone Bridge, Skopje",
+        "lon": 21.433,
+        "lat": 41.9981
+      }
+    ]
   },
   "ML": {
     "languages": [
@@ -1068,6 +1107,33 @@
         "name": "Palenque",
         "lon": -92.0465,
         "lat": 17.4838
+      }
+    ],
+    "_why": "hand-picked kid-recognizable landmarks (UNESCO ranking alone misses icons like the Eiffel Tower or Machu Picchu); Mexico City point moved to the Zócalo (Wikidata's is in Coyoacán)",
+    "capitalPoints": [
+      {
+        "name": "Mexico City",
+        "lon": -99.1332,
+        "lat": 19.4326
+      }
+    ]
+  },
+  "MY": {
+    "landmarks": [
+      {
+        "name": "Petronas Towers",
+        "lon": 101.7118,
+        "lat": 3.1579
+      },
+      {
+        "name": "Mount Kinabalu",
+        "lon": 116.5583,
+        "lat": 6.075
+      },
+      {
+        "name": "Batu Caves",
+        "lon": 101.6841,
+        "lat": 3.2379
       }
     ],
     "_why": "hand-picked kid-recognizable landmarks (UNESCO ranking alone misses icons like the Eiffel Tower or Machu Picchu)"
@@ -1198,6 +1264,26 @@
   "OM": {
     "population": 5300000,
     "_why": "Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate"
+  },
+  "PA": {
+    "landmarks": [
+      {
+        "name": "Panama Canal",
+        "lon": -79.591,
+        "lat": 8.997
+      },
+      {
+        "name": "Casco Viejo",
+        "lon": -79.535,
+        "lat": 8.952
+      },
+      {
+        "name": "Coiba",
+        "lon": -81.79,
+        "lat": 7.47
+      }
+    ],
+    "_why": "hand-picked kid-recognizable landmarks (UNESCO ranking alone misses icons like the Eiffel Tower or Machu Picchu)"
   },
   "PE": {
     "landmarks": [
@@ -1418,8 +1504,20 @@
       "Arabic",
       "English"
     ],
-    "_why": "Arabic is the main language; Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate",
-    "population": 50400000
+    "_why": "Arabic is the main language; Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate; hand-picked kid-recognizable landmarks (UNESCO ranking alone misses icons like the Eiffel Tower or Machu Picchu)",
+    "population": 50400000,
+    "landmarks": [
+      {
+        "name": "Pyramids of Meroë",
+        "lon": 33.749,
+        "lat": 16.938
+      },
+      {
+        "name": "Jebel Barkal",
+        "lon": 31.828,
+        "lat": 18.536
+      }
+    ]
   },
   "SE": {
     "landmarks": [
@@ -1447,7 +1545,24 @@
       "Mandarin Chinese",
       "Malay"
     ],
-    "_why": "'Standard Chinese' label; English is the working language"
+    "_why": "'Standard Chinese' label; English is the working language; hand-picked kid-recognizable landmarks (UNESCO ranking alone misses icons like the Eiffel Tower or Machu Picchu)",
+    "landmarks": [
+      {
+        "name": "Merlion",
+        "lon": 103.8545,
+        "lat": 1.2868
+      },
+      {
+        "name": "Marina Bay Sands",
+        "lon": 103.8607,
+        "lat": 1.2834
+      },
+      {
+        "name": "Singapore Botanic Gardens",
+        "lon": 103.8159,
+        "lat": 1.3138
+      }
+    ]
   },
   "SI": {
     "population": 2100000,
@@ -1647,6 +1762,21 @@
     ],
     "_why": "no P37 on Wikidata"
   },
+  "VA": {
+    "landmarks": [
+      {
+        "name": "St. Peter's Basilica",
+        "lon": 12.4539,
+        "lat": 41.9022
+      },
+      {
+        "name": "Sistine Chapel",
+        "lon": 12.4545,
+        "lat": 41.9029
+      }
+    ],
+    "_why": "hand-picked kid-recognizable landmarks (UNESCO ranking alone misses icons like the Eiffel Tower or Machu Picchu)"
+  },
   "VI": {
     "population": 87000,
     "_why": "2020 census 87,146"
@@ -1696,7 +1826,11 @@
   },
   "YE": {
     "population": 40600000,
-    "_why": "Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate"
+    "_why": "Wikidata figure predates 2020; approximate UN World Population Prospects 2024 estimate; Sanaa is the constitutional capital, Aden the government's temporary seat",
+    "capitals": [
+      "Sanaa",
+      "Aden"
+    ]
   },
   "ZA": {
     "languages": [

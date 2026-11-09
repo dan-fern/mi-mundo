@@ -26,6 +26,29 @@ Versions: [Semantic Versioning](https://semver.org/).
   locations come from a new committed Wikidata snapshot
   (`tools/wikidata-capitals.json`, `tools/fetch-capitals.py`), and the build
   fails if a capital has no location or lies outside its country.
+- From the PR #9 review:
+  - Lake, desert and range labels now always sit inside their shape. The
+    label maths had lost precision, and concave lakes now use their deepest
+    point. A test checks every label.
+  - English river and range names (Amazon, Euphrates, Apennines…), with
+    delta channels, non-deserts and minor US peaks dropped and Fuji, the
+    Matterhorn and other famous peaks added.
+  - Landmarks: no automatic picks that sit in another country, repeat a
+    site or are named after the capital. Hand-picked lists for Ireland,
+    Panama, Vatican City, North Macedonia, Hungary, Sudan, Malaysia and
+    Singapore. Capital fixes for Cyprus, Mexico and Yemen.
+  - In quiz mode, names that name a country not yet guessed (the Niger,
+    Lake Chad) stay hidden, and so does the capital star.
+  - Read-aloud works with the silent switch on, uses the device language,
+    pauses between sentences, stops when the app goes to the background,
+    and has a bigger button away from Close. The star and pin on the card
+    match the map's, and the population picture uses true powers of ten.
+  - Smoother map: one shared label halo instead of one per label, steadier
+    label placement, only the visible part of each river drawn, and
+    nothing placed under the zoom buttons or the card.
+  - Generated map files use pure-Rust maths (`libm`) so they rebuild
+    byte-for-byte on any machine; featuregen fails on missing data
+    instead of guessing; Wikidata fetches retry.
 - Quiz label mode (requirements §3.2): feature and landmark names stay
   hidden until the country they sit in is guessed; the quiz PR switches it
   on.

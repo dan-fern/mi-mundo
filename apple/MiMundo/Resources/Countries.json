@@ -97,11 +97,6 @@
     "lat": 17.0044,
     "lon": -61.7633,
     "name": "Fort Berkeley"
-   },
-   {
-    "lat": 17.01,
-    "lon": -61.7622,
-    "name": "Clarence House"
    }
   ],
   "languages": [
@@ -387,11 +382,6 @@
     "lat": 40.125,
     "lon": 49.375,
     "name": "Gobustan Rock Art"
-   },
-   {
-    "lat": 37.4215,
-    "lon": 55.7243,
-    "name": "Hyrcanian Forests"
    }
   ],
   "languages": [
@@ -1198,14 +1188,14 @@
     "name": "Dja Faunal Reserve"
    },
    {
-    "lat": 2.6667,
-    "lon": 16.3333,
-    "name": "Sangha Trinational"
-   },
-   {
     "lat": 10.9167,
     "lon": 13.8333,
     "name": "Diy-Gid-Biy"
+   },
+   {
+    "lat": 5.7327,
+    "lon": 10.9016,
+    "name": "Museum of the Bamoun Kings"
    }
   ],
   "languages": [
@@ -1400,8 +1390,8 @@
  "CY": {
   "capitalPoints": [
    {
-    "lat": 35.1725,
-    "lon": 33.365,
+    "lat": 35.15,
+    "lon": 33.36,
     "name": "Nicosia"
    }
   ],
@@ -2476,11 +2466,6 @@
     "lat": 19.6047,
     "lon": -72.2186,
     "name": "Sans-Souci Palace"
-   },
-   {
-    "lat": 19.5736,
-    "lon": -72.2439,
-    "name": "National History Park"
    }
   ],
   "languages": [
@@ -2503,19 +2488,19 @@
   ],
   "landmarks": [
    {
-    "lat": 47.8333,
-    "lon": 16.75,
-    "name": "Neusiedl Lake"
+    "lat": 47.5071,
+    "lon": 19.0457,
+    "name": "Hungarian Parliament"
    },
    {
-    "lat": 47.5946,
-    "lon": 21.1568,
-    "name": "Hortobágy National Park"
+    "lat": 47.4962,
+    "lon": 19.0396,
+    "name": "Buda Castle"
    },
    {
-    "lat": 47.9961,
-    "lon": 19.5917,
-    "name": "Hollókő"
+    "lat": 46.83,
+    "lon": 17.75,
+    "name": "Lake Balaton"
    }
   ],
   "languages": [
@@ -2576,9 +2561,9 @@
     "name": "Cliffs of Moher"
    },
    {
-    "lat": 55.2408,
-    "lon": -6.5116,
-    "name": "Giant's Causeway"
+    "lat": 52.5201,
+    "lon": -7.8909,
+    "name": "Rock of Cashel"
    },
    {
     "lat": 53.6947,
@@ -2876,11 +2861,6 @@
     "lat": 18.0535,
     "lon": -76.3546,
     "name": "John Crow Mountains"
-   },
-   {
-    "lat": 18.0775,
-    "lon": -76.5711,
-    "name": "Blue and John Crow Mountains"
    }
   ],
   "languages": [
@@ -3723,13 +3703,7 @@
   "capitals": [
    "Majuro"
   ],
-  "landmarks": [
-   {
-    "lat": 11.6,
-    "lon": 165.4,
-    "name": "Bikini Atoll"
-   }
-  ],
+  "landmarks": [],
   "languages": [
    "Marshallese",
    "English"
@@ -3750,19 +3724,14 @@
   ],
   "landmarks": [
    {
-    "lat": 41.3616,
-    "lon": 21.5385,
-    "name": "Markovi Kuli"
+    "lat": 41.05,
+    "lon": 20.75,
+    "name": "Lake Ohrid"
    },
    {
-    "lat": 42.2636,
-    "lon": 21.9536,
-    "name": "Kokino"
-   },
-   {
-    "lat": 41.5753,
-    "lon": 21.2169,
-    "name": "Slatinski Izvor"
+    "lat": 41.9981,
+    "lon": 21.433,
+    "name": "Stone Bridge, Skopje"
    }
   ],
   "languages": [
@@ -3958,11 +3927,6 @@
   ],
   "landmarks": [
    {
-    "lat": 35.8978,
-    "lon": 14.5125,
-    "name": "Valletta"
-   },
-   {
     "lat": 35.8696,
     "lon": 14.5069,
     "name": "Hypogeum of Ħal Saflieni"
@@ -4068,8 +4032,8 @@
  "MX": {
   "capitalPoints": [
    {
-    "lat": 19.3538,
-    "lon": -99.1359,
+    "lat": 19.4326,
+    "lon": -99.1332,
     "name": "Mexico City"
    }
   ],
@@ -4114,19 +4078,19 @@
   ],
   "landmarks": [
    {
-    "lat": 6.15,
-    "lon": 116.65,
-    "name": "Kinabalu Park"
+    "lat": 3.1579,
+    "lon": 101.7118,
+    "name": "Petronas Towers"
    },
    {
-    "lat": 4.0425,
-    "lon": 114.8125,
-    "name": "Gunung Mulu National Park"
+    "lat": 6.075,
+    "lon": 116.5583,
+    "name": "Mount Kinabalu"
    },
    {
-    "lat": 3.8139,
-    "lon": 113.7814,
-    "name": "Niah National Park"
+    "lat": 3.2379,
+    "lon": 101.6841,
+    "name": "Batu Caves"
    }
   ],
   "languages": [
@@ -4223,11 +4187,6 @@
    "Niamey"
   ],
   "landmarks": [
-   {
-    "lat": 11.53,
-    "lon": 2.29,
-    "name": "W-Arly-Pendjari Complex"
-   },
    {
     "lat": 16.9744,
     "lon": 7.9896,
@@ -4546,18 +4505,18 @@
   ],
   "landmarks": [
    {
-    "lat": 7.48,
+    "lat": 8.997,
+    "lon": -79.591,
+    "name": "Panama Canal"
+   },
+   {
+    "lat": 8.952,
+    "lon": -79.535,
+    "name": "Casco Viejo"
+   },
+   {
+    "lat": 7.47,
     "lon": -81.79,
-    "name": "Coiba"
-   },
-   {
-    "lat": 7.7361,
-    "lon": -77.5472,
-    "name": "Darién National Park"
-   },
-   {
-    "lat": 7.4333,
-    "lon": -81.7667,
     "name": "Coiba"
    }
   ],
@@ -4974,7 +4933,7 @@
    {
     "lat": 47.8194,
     "lon": 24.0558,
-    "name": "wooden churches of Maramureș"
+    "name": "Wooden churches of Maramureș"
    }
   ],
   "languages": [
@@ -5006,9 +4965,9 @@
     "name": "Gamzigrad"
    },
    {
-    "lat": 42.5469,
-    "lon": 20.2664,
-    "name": "Visoki Dečani"
+    "lat": 43.1189,
+    "lon": 20.4228,
+    "name": "Stari Ras and Sopoćani"
    }
   ],
   "languages": [
@@ -5187,7 +5146,18 @@
   "capitals": [
    "Khartoum"
   ],
-  "landmarks": [],
+  "landmarks": [
+   {
+    "lat": 16.938,
+    "lon": 33.749,
+    "name": "Pyramids of Meroë"
+   },
+   {
+    "lat": 18.536,
+    "lon": 31.828,
+    "name": "Jebel Barkal"
+   }
+  ],
   "languages": [
    "Arabic",
    "English"
@@ -5242,8 +5212,18 @@
   ],
   "landmarks": [
    {
-    "lat": 1.3151,
-    "lon": 103.8162,
+    "lat": 1.2868,
+    "lon": 103.8545,
+    "name": "Merlion"
+   },
+   {
+    "lat": 1.2834,
+    "lon": 103.8607,
+    "name": "Marina Bay Sands"
+   },
+   {
+    "lat": 1.3138,
+    "lon": 103.8159,
     "name": "Singapore Botanic Gardens"
    }
   ],
@@ -6014,11 +5994,6 @@
   ],
   "landmarks": [
    {
-    "lat": 45.2,
-    "lon": 29.5,
-    "name": "Danube Delta"
-   },
-   {
     "lat": 50.4528,
     "lon": 30.5144,
     "name": "Saint Sophia Cathedral"
@@ -6027,6 +6002,11 @@
     "lat": 49.8417,
     "lon": 24.0319,
     "name": "Old Town of Lviv"
+   },
+   {
+    "lat": 46.485,
+    "lon": 30.741,
+    "name": "Historical city centre of Odesa"
    }
   ],
   "languages": [
@@ -6152,9 +6132,9 @@
     "name": "Itchan Kala"
    },
    {
-    "lat": 44.0258,
-    "lon": 79.0342,
-    "name": "Cold Winter Deserts of Turan"
+    "lat": 39.7667,
+    "lon": 64.4333,
+    "name": "Historic Centre of Bukhara"
    }
   ],
   "languages": [
@@ -6176,9 +6156,14 @@
   ],
   "landmarks": [
    {
-    "lat": 41.904,
-    "lon": 12.453,
-    "name": "Vatican City"
+    "lat": 41.9022,
+    "lon": 12.4539,
+    "name": "St. Peter's Basilica"
+   },
+   {
+    "lat": 41.9029,
+    "lon": 12.4545,
+    "name": "Sistine Chapel"
    }
   ],
   "languages": [
@@ -6397,19 +6382,19 @@
  "YE": {
   "capitalPoints": [
    {
-    "lat": 12.8,
-    "lon": 45.0333,
-    "name": "Aden"
-   },
-   {
     "lat": 15.35,
     "lon": 44.2,
     "name": "Sanaa"
+   },
+   {
+    "lat": 12.8,
+    "lon": 45.0333,
+    "name": "Aden"
    }
   ],
   "capitals": [
-   "Aden",
-   "Sanaa"
+   "Sanaa",
+   "Aden"
   ],
   "landmarks": [
    {
