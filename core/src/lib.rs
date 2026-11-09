@@ -3,6 +3,8 @@
 //! Everything marked `#[uniffi::export]` is callable from Swift.
 
 pub mod attendance;
+#[cfg(feature = "mapgen")]
+pub mod datagen;
 pub mod days;
 pub mod map;
 pub mod scoring;

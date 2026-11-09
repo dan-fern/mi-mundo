@@ -111,6 +111,7 @@ fn perpendicular_distance(px: f32, py: f32, ax: f32, ay: f32, bx: f32, by: f32) 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use proptest::prelude::*;
 
     fn square(x0: f32, y0: f32, size: f32) -> Vec<f32> {
         vec![
@@ -180,5 +181,113 @@ mod tests {
             }
         );
         assert!(b.contains(2.0, 3.0) && !b.contains(0.0, 0.0));
+    }
+
+    #[test]
+    fn the_gap_of_a_concave_u_is_outside() {
+        // A U: arms at x 0–1 and 3–4, joined along the bottom (y 0–1).
+        let u = vec![vec![
+            0.0, 0.0, 4.0, 0.0, 4.0, 4.0, 3.0, 4.0, 3.0, 1.0, 1.0, 1.0, 1.0, 4.0, 0.0, 4.0, 0.0,
+            0.0,
+        ]];
+        assert!(point_in_rings(&u, 0.5, 3.0));
+        assert!(point_in_rings(&u, 3.5, 3.0));
+        assert!(point_in_rings(&u, 2.0, 0.5));
+        assert!(!point_in_rings(&u, 2.0, 3.0));
+    }
+
+    #[test]
+    fn degenerate_rings_contain_nothing() {
+        assert!(!point_in_rings(&[], 0.0, 0.0));
+        assert!(!point_in_rings(&[vec![]], 0.0, 0.0));
+        assert!(!point_in_rings(&[vec![0.0, 0.0, 1.0, 1.0]], 0.5, 0.5));
+    }
+
+    #[test]
+    fn an_island_in_a_lake_is_inside() {
+        let rings = vec![
+            square(0.0, 0.0, 10.0),
+            square(2.0, 2.0, 6.0),
+            square(4.0, 4.0, 2.0),
+        ];
+        assert!(point_in_rings(&rings, 1.0, 1.0));
+        assert!(!point_in_rings(&rings, 3.0, 3.0));
+        assert!(point_in_rings(&rings, 5.0, 5.0));
+    }
+
+    proptest! {
+        /// Even-odd over rectangles: inside exactly when an odd number of
+        /// rectangles contain the point (points kept off the edges).
+        #[test]
+        fn point_in_rings_matches_counting_rectangles(
+            rects in prop::collection::vec((0u8..20, 0u8..20, 1u8..10, 1u8..10), 1..6),
+            px in 0u8..30, py in 0u8..30,
+        ) {
+            let (x, y) = (f32::from(px) + 0.5, f32::from(py) + 0.5);
+            let rings: Vec<Vec<f32>> = rects.iter().map(|&(x0, y0, w, h)| {
+                let (x0, y0, x1, y1) = (f32::from(x0), f32::from(y0), f32::from(x0 + w), f32::from(y0 + h));
+                vec![x0, y0, x1, y0, x1, y1, x0, y1, x0, y0]
+            }).collect();
+            let count = rects.iter().filter(|&&(x0, y0, w, h)| {
+                (f32::from(x0)..f32::from(x0 + w)).contains(&x) && (f32::from(y0)..f32::from(y0 + h)).contains(&y)
+            }).count();
+            prop_assert_eq!(point_in_rings(&rings, x, y), count % 2 == 1);
+        }
+    }
+
+    #[test]
+    fn bounds_include_their_edges() {
+        let mut b = Bounds::EMPTY;
+        b.include_ring(&square(0.0, 0.0, 2.0));
+        assert!(b.contains(0.0, 0.0) && b.contains(2.0, 2.0) && b.contains(2.0, 1.0));
+        assert!(!b.contains(2.001, 1.0));
+        assert_eq!(b.area(), 4.0);
+    }
+
+    #[test]
+    fn empty_bounds_have_no_area_and_contain_nothing() {
+        assert_eq!(Bounds::EMPTY.area(), 0.0);
+        assert!(!Bounds::EMPTY.contains(0.0, 0.0));
+    }
+
+    #[test]
+    fn simplify_keeps_the_first_and_last_point() {
+        let ring: Vec<f32> = (0..20)
+            .flat_map(|i| {
+                let a = i as f32 / 19.0 * std::f32::consts::TAU;
+                [a.cos(), a.sin()]
+            })
+            .collect();
+        let s = simplify_ring(&ring, 0.3);
+        assert_eq!(&s[..2], &ring[..2]);
+        assert_eq!(&s[s.len() - 2..], &ring[ring.len() - 2..]);
+        assert!(s.len() < ring.len());
+    }
+
+    #[test]
+    fn simplify_with_zero_tolerance_keeps_every_corner() {
+        let zigzag = vec![
+            0.0, 0.0, 1.0, 1.0, 2.0, 0.0, 3.0, 1.0, 4.0, 0.0, 4.0, -2.0, 0.0, -2.0, 0.0, 0.0,
+        ];
+        assert_eq!(simplify_ring(&zigzag, 0.0), zigzag);
+    }
+
+    proptest! {
+        #[test]
+        fn simplify_is_idempotent_and_keeps_a_subsequence(
+            pts in prop::collection::vec((-100i16..100, -100i16..100), 5..40),
+            tolerance in 0.0f32..20.0,
+        ) {
+            let mut ring: Vec<f32> = pts.iter().flat_map(|&(x, y)| [f32::from(x), f32::from(y)]).collect();
+            ring.extend([ring[0], ring[1]]);
+            let once = simplify_ring(&ring, tolerance);
+            prop_assert_eq!(simplify_ring(&once, tolerance), once.clone());
+            prop_assert!(once.len() / 2 >= 4);
+            // Every kept point appears in the original, in order.
+            let mut it = ring.chunks_exact(2);
+            for p in once.chunks_exact(2) {
+                prop_assert!(it.any(|q| q == p));
+            }
+        }
     }
 }

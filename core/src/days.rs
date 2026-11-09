@@ -47,6 +47,7 @@ pub fn game_day_label(day: i32) -> String {
 mod tests {
     use super::*;
     use chrono::TimeZone;
+    use proptest::prelude::*;
 
     /// Unix seconds for a wall-clock time in US Eastern.
     fn et(y: i32, m: u32, d: u32, h: u32, min: u32) -> i64 {
@@ -141,5 +142,51 @@ mod tests {
         assert_eq!(game_day(i64::MAX), game_day(MAX_UNIX_SECONDS));
         assert_eq!(game_day_label(i32::MAX), format!("day {}", i32::MAX));
         assert_eq!(game_day_label(i32::MIN), format!("day {}", i32::MIN));
+    }
+
+    proptest! {
+        #[test]
+        fn noon_on_consecutive_dates_is_consecutive_days(offset in 0i64..47_000) {
+            // Any date from 1970 to ~2098.
+            let date = EPOCH + Duration::days(offset);
+            let noon = |d: NaiveDate| New_York
+                .from_local_datetime(&d.and_hms_opt(12, 0, 0).unwrap())
+                .single()
+                .unwrap()
+                .timestamp();
+            prop_assert_eq!(game_day(noon(date + Duration::days(1))) - game_day(noon(date)), 1);
+            prop_assert_eq!(game_day_label(game_day(noon(date))), date.format("%Y-%m-%d").to_string());
+        }
+    }
+
+    #[test]
+    fn leap_day_is_a_game_day_of_its_own() {
+        assert_eq!(label_at(et(2028, 2, 28, 12, 0)), "2028-02-28");
+        assert_eq!(label_at(et(2028, 2, 29, 12, 0)), "2028-02-29");
+        assert_eq!(label_at(et(2028, 3, 1, 12, 0)), "2028-03-01");
+        assert_eq!(
+            game_day(et(2028, 3, 1, 12, 0)) - game_day(et(2028, 2, 28, 12, 0)),
+            2
+        );
+    }
+
+    #[test]
+    fn rollover_is_10pm_in_every_month() {
+        for month in 1..=12 {
+            assert_eq!(
+                label_at(et(2027, month, 10, 21, 59)),
+                format!("2027-{month:02}-10")
+            );
+            assert_eq!(
+                label_at(et(2027, month, 10, 22, 0)),
+                format!("2027-{month:02}-11")
+            );
+        }
+    }
+
+    #[test]
+    fn new_year_rolls_over_at_10pm_on_new_years_eve() {
+        assert_eq!(label_at(et(2026, 12, 31, 21, 59)), "2026-12-31");
+        assert_eq!(label_at(et(2026, 12, 31, 22, 0)), "2027-01-01");
     }
 }

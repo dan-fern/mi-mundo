@@ -52,9 +52,13 @@ jobs:
         working-directory: core
         run: cargo clippy --all-targets --features cli,mapgen -- -D warnings
 
+      # --features mapgen also runs the map-data generator tests. Property
+      # tests run 64 cases each here (256 locally) to keep CI quick.
       - name: Rust tests
         working-directory: core
-        run: cargo test
+        env:
+          PROPTEST_CASES: "64"
+        run: cargo test --features mapgen
 
       # The committed map data must be exactly what the tools produce from the
       # pinned, checksummed sources, so a change to mapgen / overrides can't

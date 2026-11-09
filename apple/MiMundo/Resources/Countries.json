@@ -2582,7 +2582,7 @@
   "capitalPoints": [
    {
     "lat": 31.7767,
-    "lon": 35.2342,
+    "lon": 35.19,
     "name": "Jerusalem"
    }
   ],
@@ -3647,7 +3647,7 @@
  "MF": {
   "capitalPoints": [
    {
-    "lat": 18.0667,
+    "lat": 18.072,
     "lon": -63.0847,
     "name": "Marigot"
    }
@@ -6146,8 +6146,8 @@
  "VA": {
   "capitalPoints": [
    {
-    "lat": 41.904,
-    "lon": 12.453,
+    "lat": 41.902,
+    "lon": 12.4335,
     "name": "Vatican City"
    }
   ],
@@ -6157,12 +6157,12 @@
   "landmarks": [
    {
     "lat": 41.9022,
-    "lon": 12.4539,
+    "lon": 12.4345,
     "name": "St. Peter's Basilica"
    },
    {
     "lat": 41.9029,
-    "lon": 12.4545,
+    "lon": 12.4325,
     "name": "Sistine Chapel"
    }
   ],
