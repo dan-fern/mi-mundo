@@ -4,6 +4,7 @@
 # tools/wikidata-facts.json (refresh it with tools/fetch-facts.py):
 #
 #   apple/MiMundo/Resources/World.bin        country outlines (Rust mapgen)
+#   apple/MiMundo/Resources/Features.bin     rivers, lakes, deserts, ranges, peaks (Rust featuregen)
 #   apple/MiMundo/Resources/Countries.json   capitals, population, languages
 #   apple/MiMundo/Resources/Flags.xcassets   one PNG imageset per flag
 #
@@ -27,10 +28,20 @@ echo "==> World.bin"
   "$RAW/naturalearth/ne_50m_admin_0_countries.geojson" \
   "$OUT/World.bin")
 
+echo "==> Features.bin"
+(cd "$ROOT/core" && cargo run -q --release --features mapgen --bin featuregen -- \
+  "$RAW/naturalearth/ne_50m_rivers_lake_centerlines.geojson" \
+  "$RAW/naturalearth/ne_50m_lakes.geojson" \
+  "$RAW/naturalearth/ne_50m_geography_regions_polys.geojson" \
+  "$RAW/naturalearth/ne_50m_geography_regions_elevation_points.geojson" \
+  "$OUT/Features.bin")
+
 echo "==> Countries.json"
 python3 -I "$ROOT/tools/build-countries.py" \
   "$RAW/naturalearth/ne_50m_admin_0_countries.geojson" \
   "$ROOT/tools/wikidata-facts.json" \
+  "$ROOT/tools/wikidata-landmarks.json" \
+  "$ROOT/tools/wikidata-capitals.json" \
   "$ROOT/tools/facts-overrides.json" \
   "$OUT/Countries.json"
 
@@ -60,8 +71,8 @@ for iso2 in $(python3 -I -c 'import json,sys; print(" ".join(sorted(json.load(op
 done
 echo "  $count flags"
 
-echo "==> Checking the map against known places (core/tests/world_bin.rs)"
-(cd "$ROOT/core" && cargo test -q --test world_bin)
+echo "==> Checking the map against known places (core/tests/world_bin.rs, features_bin.rs)"
+(cd "$ROOT/core" && cargo test -q --test world_bin --test features_bin)
 
 echo "==> Done. Sizes:"
-du -sh "$OUT/World.bin" "$OUT/Countries.json" "$FLAGS"
+du -sh "$OUT/World.bin" "$OUT/Features.bin" "$OUT/Countries.json" "$FLAGS"

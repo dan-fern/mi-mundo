@@ -10,6 +10,48 @@ Versions: [Semantic Versioning](https://semver.org/).
 ## [Unreleased]
 
 ### Added
+- Physical features on the map (requirements §3.1): rivers, lakes,
+  deserts, mountain ranges and peaks from Natural Earth, with names that
+  appear as you zoom in (bigger features first), placed so they don't
+  overlap. Built by a new Rust `featuregen` into `Features.bin`, with tests
+  against known places and a CI reproducibility check.
+- Landmarks: up to three famous places per country, pinned on the map from
+  zoom 4 and listed on the card. UNESCO sites ranked by Wikipedia coverage,
+  hand-picked lists for ~55 countries, and heavy topics (memorials, camps,
+  prisons) never picked automatically.
+- Country card: read-aloud button and a one-to-five-people population
+  picture, for kids who can't read yet (PR #8 review).
+- A star marks the capital (each capital, for countries with several) of the
+  selected country; the card's Capital row uses the same star. Capital
+  locations come from a new committed Wikidata snapshot
+  (`tools/wikidata-capitals.json`, `tools/fetch-capitals.py`), and the build
+  fails if a capital has no location or lies outside its country.
+- From the PR #9 review:
+  - Lake, desert and range labels now always sit inside their shape. The
+    label maths had lost precision, and concave lakes now use their deepest
+    point. A test checks every label.
+  - English river and range names (Amazon, Euphrates, Apennines…), with
+    delta channels, non-deserts and minor US peaks dropped and Fuji, the
+    Matterhorn and other famous peaks added.
+  - Landmarks: no automatic picks that sit in another country, repeat a
+    site or are named after the capital. Hand-picked lists for Ireland,
+    Panama, Vatican City, North Macedonia, Hungary, Sudan, Malaysia and
+    Singapore. Capital fixes for Cyprus, Mexico and Yemen.
+  - In quiz mode, names that name a country not yet guessed (the Niger,
+    Lake Chad) stay hidden, and so does the capital star.
+  - Read-aloud works with the silent switch on, uses the device language,
+    pauses between sentences, stops when the app goes to the background,
+    and has a bigger button away from Close. The star and pin on the card
+    match the map's, and the population picture uses true powers of ten.
+  - Smoother map: one shared label halo instead of one per label, steadier
+    label placement, only the visible part of each river drawn, and
+    nothing placed under the zoom buttons or the card.
+  - Generated map files use pure-Rust maths (`libm`) so they rebuild
+    byte-for-byte on any machine; featuregen fails on missing data
+    instead of guessing; Wikidata fetches retry.
+- Quiz label mode (requirements §3.2): feature and landmark names stay
+  hidden until the country they sit in is guessed; the quiz PR switches it
+  on.
 - Explore map in the kid home (requirements §3.1): Equal Earth projection,
   pan, pinch and double-tap zoom, coarse outlines zoomed out and detailed
   ones zoomed in, no country labels so quiz answers stay hidden. Tap a

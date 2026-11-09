@@ -32,11 +32,20 @@ name = "mapgen"
 path = "src/bin/mapgen.rs"
 required-features = ["mapgen"]
 
+[[bin]]
+name = "featuregen"
+path = "src/bin/featuregen.rs"
+required-features = ["mapgen"]
+
 [dependencies]
 chrono = { version = "0.4.45", default-features = false, features = ["std"] }
 # filter-by-regex embeds only the zones in CHRONO_TZ_TIMEZONE_FILTER
 # (core/.cargo/config.toml): ~49 KB instead of ~1.1 MB of tz data.
 chrono-tz = { version = "0.10.4", default-features = false, features = ["std", "filter-by-regex"] }
+# Pure-Rust maths for the projection and label angles, so generated map
+# files are byte-identical on every machine (the platform libm may differ
+# in the last bit between macOS, Linux and CPU types).
+libm = "0.2"
 serde_json = { version = "1", optional = true }
 uniffi = "0.32.2"
 

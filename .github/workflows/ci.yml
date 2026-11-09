@@ -64,7 +64,9 @@ jobs:
         run: |
           RAW="$RUNNER_TEMP/raw"
           mkdir -p "$RAW/naturalearth"
-          for layer in ne_110m_admin_0_countries ne_50m_admin_0_countries; do
+          for layer in ne_110m_admin_0_countries ne_50m_admin_0_countries \
+              ne_50m_rivers_lake_centerlines ne_50m_lakes \
+              ne_50m_geography_regions_polys ne_50m_geography_regions_elevation_points; do
             curl -fsSL "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/$layer.geojson" \
               -o "$RAW/naturalearth/$layer.geojson"
           done
@@ -74,9 +76,17 @@ jobs:
             "$RAW/naturalearth/ne_50m_admin_0_countries.geojson" \
             "$RUNNER_TEMP/World.bin")
           cmp "$RUNNER_TEMP/World.bin" apple/MiMundo/Resources/World.bin
+          (cd core && cargo run -q --features mapgen --bin featuregen -- \
+            "$RAW/naturalearth/ne_50m_rivers_lake_centerlines.geojson" \
+            "$RAW/naturalearth/ne_50m_lakes.geojson" \
+            "$RAW/naturalearth/ne_50m_geography_regions_polys.geojson" \
+            "$RAW/naturalearth/ne_50m_geography_regions_elevation_points.geojson" \
+            "$RUNNER_TEMP/Features.bin")
+          cmp "$RUNNER_TEMP/Features.bin" apple/MiMundo/Resources/Features.bin
           python3 -I tools/build-countries.py \
             "$RAW/naturalearth/ne_50m_admin_0_countries.geojson" \
-            tools/wikidata-facts.json tools/facts-overrides.json "$RUNNER_TEMP/Countries.json"
+            tools/wikidata-facts.json tools/wikidata-landmarks.json tools/wikidata-capitals.json tools/facts-overrides.json \
+            "$RUNNER_TEMP/Countries.json"
           cmp "$RUNNER_TEMP/Countries.json" apple/MiMundo/Resources/Countries.json
 
       # Same path as a fresh clone: builds the XCFramework, bindings and the

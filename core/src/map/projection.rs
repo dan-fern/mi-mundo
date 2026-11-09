@@ -24,10 +24,12 @@ pub fn equal_earth(lon_deg: f64, lat_deg: f64) -> (f64, f64) {
     let lambda = lon_deg.clamp(-180.0, 180.0).to_radians();
     let phi = lat_deg.clamp(-90.0, 90.0).to_radians();
     let m = 3f64.sqrt() / 2.0;
-    let theta = (m * phi.sin()).asin();
+    // libm, not the platform's maths library, so the generated map files
+    // are byte-identical on every machine.
+    let theta = libm::asin(m * libm::sin(phi));
     let t2 = theta * theta;
     let t6 = t2 * t2 * t2;
-    let x = 2.0 * 3f64.sqrt() * lambda * theta.cos()
+    let x = 2.0 * 3f64.sqrt() * lambda * libm::cos(theta)
         / (3.0 * (9.0 * A4 * t6 * t2 + 7.0 * A3 * t6 + 3.0 * A2 * t2 + A1));
     let y = theta * (A1 + A2 * t2 + t6 * (A3 + A4 * t2));
     (x, -y) // screen orientation: north up means y decreases northward

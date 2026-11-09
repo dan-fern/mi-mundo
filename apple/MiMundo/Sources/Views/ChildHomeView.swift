@@ -17,6 +17,9 @@ struct ChildHomeView: View {
     /// Bottom edge of the floating top bar in screen coordinates, measured
     /// so the map fits below it at any text size.
     @State private var topBarBottom: CGFloat = 96
+    /// Where the country card is (global coordinates, like the full-screen
+    /// map), so map labels and stars aren't placed under it.
+    @State private var cardFrame: CGRect?
 
     var body: some View {
         ZStack {
@@ -24,7 +27,8 @@ struct ChildHomeView: View {
                 WorldMapView(
                     atlas: atlas, camera: $camera, selection: $selection,
                     cardOnLeadingSide: $cardOnLeadingSide,
-                    insets: MapInsets(top: topBarBottom + 8)
+                    insets: MapInsets(top: topBarBottom + 8,
+                                      avoid: selection == nil ? [] : cardFrame.map { [$0] } ?? [])
                 )
                 .ignoresSafeArea()
             } else if atlasStore.failed {
@@ -55,6 +59,9 @@ struct ChildHomeView: View {
                             withAnimation(.easeInOut(duration: 0.2)) { self.selection = nil }
                         }
                         .id(selection.id)
+                        .onGeometryChange(for: CGRect.self) { $0.frame(in: .global) } action: {
+                            cardFrame = $0
+                        }
                         .transition(.move(edge: cardOnLeadingSide ? .leading : .trailing)
                             .combined(with: .opacity))
                     }

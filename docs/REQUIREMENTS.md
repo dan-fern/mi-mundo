@@ -55,8 +55,13 @@ Age-agnostic — fun for a young child, still useful for an adult.
   **no built-in country labels**, so the map never gives quiz answers away.
 - Tap any country to see a card with: name, capital, flag, approximate
   population, top 1–3 languages, 1–3 major landmarks.
-- When zoomed in far enough, show major rivers, mountain ranges, deserts and
-  landmarks.
+- When zoomed in far enough, show major rivers, lakes, mountain ranges,
+  peaks, deserts and landmarks, with their names. Bigger features appear
+  first (Natural Earth's own zoom hints); landmarks from closer in.
+- The selected country's capital is marked with a **star** (every capital,
+  where a country has more than one).
+- The card has a **read-aloud** button and shows population as a picture
+  (one to five people) for kids who can't read numbers yet.
 - Low word count, large child-friendly fonts.
 
 ### 3.2 Quiz mode
@@ -65,6 +70,11 @@ Age-agnostic — fun for a young child, still useful for an adult.
 - The map zooms to that set; target countries get a coloured border.
 - The child picks targets **in any order**; no timer.
 - A corner counter shows how many countries are left.
+- **Names stay hidden until earned:** landmark pins and the names of
+  rivers, lakes, ranges, peaks and deserts are hidden in quiz mode (the
+  rivers, lakes and peaks themselves still draw). Once a country is guessed
+  correctly, the names inside it appear. A feature belongs to the country
+  its label sits in (so Lake Geneva's name shows with France).
 - Question types per country:
   1. Country name
   2. Capital
@@ -143,6 +153,10 @@ Shows the child's own:
   mountain ranges, deserts, populated places.
 - Flags: open-source SVG flag set (MIT-licensed or similar).
 - Country facts: Wikidata (CC0), bundled with the app and refreshed when online.
+- Landmarks: UNESCO World Heritage Sites from Wikidata, ranked by how many
+  Wikipedias cover them, with hand-picked lists for ~55 well-known
+  countries. Sad or heavy sites (memorials, camps, prisons) are never picked
+  automatically.
 - Everything needed for explore and quiz modes ships with the app.
 - **Borders and disputed places** (Dan's decisions; the map otherwise follows
   Natural Earth's default, de facto borders):
