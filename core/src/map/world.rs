@@ -346,6 +346,7 @@ fn validate(c: &CountryData) -> Result<(), MapError> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use proptest::prelude::*;
 
     fn square(x0: f32, y0: f32, size: f32) -> Vec<f32> {
         vec![
@@ -470,5 +471,141 @@ mod tests {
         assert_eq!((meta[0].min_x, meta[0].max_x), (0.0, 10.0));
         assert_eq!(w.shapes(Detail::Coarse)[0].rings.len(), 1);
         assert_eq!(w.shapes(Detail::Fine)[0].rings.len(), 2);
+    }
+
+    fn arb_country() -> impl Strategy<Value = CountryData> {
+        let ring = prop::collection::vec(-3.0f32..3.0, 6..20).prop_map(|mut v| {
+            if v.len() % 2 == 1 {
+                v.pop();
+            }
+            v
+        });
+        let rings = prop::collection::vec(ring, 1..4);
+        (
+            "[A-Z]{3}",
+            "[A-Z]{2}",
+            "\\PC{0,20}",
+            "[A-Za-z ]{0,12}",
+            1u8..=7,
+            (-3.0f32..3.0, -1.5f32..1.5),
+            rings.clone(),
+            rings,
+        )
+            .prop_map(
+                |(id, iso2, name, continent, color_group, label, coarse, fine)| CountryData {
+                    id,
+                    iso2,
+                    name,
+                    continent,
+                    color_group,
+                    label,
+                    coarse,
+                    fine,
+                },
+            )
+    }
+
+    proptest! {
+        #[test]
+        fn any_world_round_trips(countries in prop::collection::vec(arb_country(), 0..6)) {
+            prop_assert_eq!(decode(&encode(&countries)).unwrap(), countries);
+        }
+    }
+
+    #[test]
+    fn a_file_cut_short_anywhere_is_an_error_not_a_panic() {
+        let bytes = encode(&sample());
+        for len in 0..bytes.len() {
+            assert!(decode(&bytes[..len]).is_err(), "cut at {len}");
+        }
+    }
+
+    #[test]
+    fn huge_counts_fail_without_allocating() {
+        // One country whose coarse ring claims 4 billion points.
+        let mut one = sample();
+        one.truncate(1);
+        let bytes = encode(&one);
+        let header = 4 + 4 + 4;
+        let strings: usize = [&one[0].id, &one[0].iso2, &one[0].name, &one[0].continent]
+            .iter()
+            .map(|s| 2 + s.len())
+            .sum();
+        let points_at = header + strings + 1 + 8 + 4;
+        let mut huge = bytes.clone();
+        huge[points_at..points_at + 4].copy_from_slice(&u32::MAX.to_le_bytes());
+        assert!(decode(&huge).is_err());
+        // And a header claiming 4 billion countries.
+        let mut many = bytes;
+        many[8..12].copy_from_slice(&u32::MAX.to_le_bytes());
+        assert!(decode(&many).is_err());
+    }
+
+    #[test]
+    fn names_must_be_utf8() {
+        let mut bytes = encode(&sample());
+        // First country's id starts after the 12-byte header and a u16 length.
+        bytes[14] = 0xFF;
+        assert!(decode(&bytes).is_err());
+    }
+
+    #[test]
+    fn an_empty_world_loads_and_has_no_countries() {
+        let w = World::new(encode(&[])).unwrap();
+        assert!(w.countries().is_empty());
+        assert_eq!(w.country_at(0.0, 0.0, 1.0), None);
+    }
+
+    #[test]
+    fn indexes_match_positions_and_shapes_line_up() {
+        let w = world();
+        for (i, meta) in w.countries().iter().enumerate() {
+            assert_eq!(meta.index as usize, i);
+        }
+        let (coarse, fine) = (w.shapes(Detail::Coarse), w.shapes(Detail::Fine));
+        assert_eq!(coarse.len(), fine.len());
+        assert!(coarse.iter().zip(&fine).all(|(c, f)| c.index == f.index));
+    }
+
+    #[test]
+    fn with_tolerance_the_nearest_country_wins_not_the_first() {
+        let mut countries = sample();
+        countries[2].fine = vec![square(20.0, 20.0, 0.1), square(10.5, 0.0, 0.1)];
+        let w = World::new(encode(&countries)).unwrap();
+        // 0.3 from Bigland's edge (x = 10), 0.2 from the isle at x = 10.5.
+        assert_eq!(w.country_at(10.3, 0.05, 0.5), Some(2));
+    }
+
+    #[test]
+    fn inside_the_bounding_box_but_outside_the_shape_is_sea() {
+        let mut countries = sample();
+        // An L: the box's top-right corner is empty.
+        countries[2].fine = vec![vec![
+            20.0, 20.0, 22.0, 20.0, 22.0, 21.0, 21.0, 21.0, 21.0, 22.0, 20.0, 22.0, 20.0, 20.0,
+        ]];
+        let w = World::new(encode(&countries)).unwrap();
+        assert_eq!(w.country_at(20.5, 20.5, 0.0), Some(2));
+        assert_eq!(w.country_at(21.5, 21.5, 0.0), None);
+    }
+
+    #[test]
+    fn the_smaller_country_wins_where_outlines_overlap() {
+        let mut countries = sample();
+        countries[0].fine = vec![square(0.0, 0.0, 10.0)]; // no hole cut for Smallia
+        let w = World::new(encode(&countries)).unwrap();
+        assert_eq!(w.country_at(5.0, 5.0, 0.0), Some(1));
+    }
+
+    #[test]
+    fn color_groups_above_seven_are_rejected() {
+        let mut color = sample();
+        color[0].color_group = 8;
+        assert!(World::new(encode(&color)).is_err());
+    }
+
+    #[test]
+    fn errors_explain_themselves() {
+        let err = decode(b"XXXX").unwrap_err();
+        assert_eq!(err.to_string(), "World.bin is not valid: wrong magic");
     }
 }

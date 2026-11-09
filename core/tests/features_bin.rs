@@ -178,3 +178,116 @@ fn quiz_reveals_go_to_the_right_country() {
         assert_eq!(at.as_deref(), Some(iso2), "{name}");
     }
 }
+
+#[test]
+fn no_feature_is_listed_twice() {
+    let all = features();
+    let mut seen = std::collections::HashSet::new();
+    for f in &all {
+        let key = (
+            f.kind as u8,
+            f.name.clone(),
+            f.label_x.to_bits(),
+            f.label_y.to_bits(),
+        );
+        assert!(seen.insert(key), "{:?} {} twice", f.kind, f.name);
+    }
+}
+
+#[test]
+fn every_label_is_on_the_map() {
+    let (edge_x, _) = equal_earth(180.0, 0.0);
+    let (_, edge_y) = equal_earth(0.0, 90.0);
+    for f in features() {
+        assert!(
+            f64::from(f.label_x).abs() <= edge_x && f64::from(f.label_y).abs() <= edge_y.abs(),
+            "{}",
+            f.name
+        );
+    }
+}
+
+#[test]
+fn zooms_stay_within_the_camera_range() {
+    for f in features() {
+        assert!(
+            (1.0..=64.0).contains(&f.min_zoom),
+            "{} min {}",
+            f.name,
+            f.min_zoom
+        );
+        assert!(
+            (1.0..=64.0).contains(&f.label_min_zoom),
+            "{} label {}",
+            f.name,
+            f.label_min_zoom
+        );
+    }
+}
+
+#[test]
+fn great_lakes_are_all_there() {
+    let all = features();
+    for lake in [
+        "Lake Superior",
+        "Lake Michigan",
+        "Lake Huron",
+        "Lake Erie",
+        "Lake Ontario",
+        "Lake Baikal",
+        "Lake Tanganyika",
+        "Lake Titicaca",
+    ] {
+        find(&all, FeatureKind::Lake, lake);
+    }
+}
+
+#[test]
+fn famous_deserts_and_rivers_are_there() {
+    let all = features();
+    for desert in [
+        "Gobi Desert",
+        "Kalahari Desert",
+        "Atacama Desert",
+        "Rub' al Khali",
+        "Great Victoria Desert",
+    ] {
+        find(&all, FeatureKind::Desert, desert);
+    }
+    for river in [
+        "Congo", "Volga", "Mekong", "Ganges", "Murray", "Niger", "Zambezi", "Indus",
+    ] {
+        find(&all, FeatureKind::River, river);
+    }
+}
+
+#[test]
+fn peak_heights_match_the_textbooks() {
+    let all = features();
+    for (name, metres) in [
+        ("Mount Kilimanjaro", 5895),
+        ("Aconcagua", 6961),
+        ("Denali", 6190),
+        ("Mont Blanc", 4806),
+        ("Mount Fuji", 3776),
+    ] {
+        let peak = find(&all, FeatureKind::Peak, name);
+        assert!(
+            (peak.elevation_m - metres).abs() <= 50,
+            "{name}: {}",
+            peak.elevation_m
+        );
+    }
+}
+
+#[test]
+fn only_peaks_have_heights() {
+    for f in features() {
+        assert_eq!(
+            f.kind == FeatureKind::Peak,
+            f.elevation_m != 0,
+            "{}",
+            f.name
+        );
+    }
+}

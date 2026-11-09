@@ -10,6 +10,16 @@ Versions: [Semantic Versioning](https://semver.org/).
 ## [Unreleased]
 
 ### Added
+- About 100 more Rust tests (163 in all): property tests for the
+  projection, geometry, map file formats, scoring, game days and
+  attendance; damaged-file tests for World.bin and Features.bin; checks of
+  the real bundled map, features and country facts (every capital and
+  landmark in the right country, no overlaps, famous places present); and
+  tests for the map generators, now library code (`core/src/datagen/`)
+  behind the `mapgen` feature. CI runs them with `--features mapgen`.
+  They caught Lake Zaysan stored twice, and capital or landmark points that
+  the 1:50m borders put in the wrong country (Jerusalem, Marigot, Vatican
+  City), all fixed.
 - Physical features on the map (requirements §3.1): rivers, lakes,
   deserts, mountain ranges and peaks from Natural Earth, with names that
   appear as you zoom in (bigger features first), placed so they don't

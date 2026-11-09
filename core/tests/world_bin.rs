@@ -76,3 +76,142 @@ fn tiny_countries_are_tappable_with_tolerance() {
     assert_eq!(id_at(&w, 14.65, 35.95, 0.0), None);
     assert_eq!(id_at(&w, 14.65, 35.95, 0.01).as_deref(), Some("MLT"));
 }
+
+#[test]
+fn iso_codes_are_unique() {
+    let mut seen = std::collections::HashSet::new();
+    for c in world().countries() {
+        assert!(
+            c.iso2 == "-99" || seen.insert(c.iso2.clone()),
+            "duplicate {}",
+            c.iso2
+        );
+        assert!(
+            !c.name.trim().is_empty() && !c.continent.is_empty(),
+            "{}",
+            c.id
+        );
+    }
+}
+
+#[test]
+fn every_country_lies_inside_the_world() {
+    let (edge_x, _) = equal_earth(180.0, 0.0);
+    let (_, edge_y) = equal_earth(0.0, 90.0);
+    let (edge_x, edge_y) = (edge_x as f32 + 1e-4, edge_y.abs() as f32 + 1e-4);
+    for c in world().countries() {
+        assert!(c.min_x >= -edge_x && c.max_x <= edge_x, "{}", c.id);
+        assert!(c.min_y >= -edge_y && c.max_y <= edge_y, "{}", c.id);
+    }
+}
+
+#[test]
+fn microstates_are_tappable_with_a_fingertip() {
+    let w = world();
+    for (lon, lat, expected) in [
+        (7.42, 43.74, "MCO"),    // Monaco
+        (12.433, 41.902, "VAT"), // Vatican City (as drawn by Natural Earth)
+        (9.55, 47.15, "LIE"),    // Liechtenstein
+        (166.93, -0.52, "NRU"),  // Nauru
+        (179.2, -8.52, "TUV"),   // Tuvalu (Funafuti)
+        (1.52, 42.51, "AND"),    // Andorra
+    ] {
+        assert_eq!(
+            id_at(&w, lon, lat, 0.01).as_deref(),
+            Some(expected),
+            "{expected}"
+        );
+    }
+}
+
+#[test]
+fn enclaves_win_over_the_country_around_them() {
+    let w = world();
+    assert_eq!(id_at(&w, 12.433, 41.902, 0.0).as_deref(), Some("VAT"));
+    assert_eq!(id_at(&w, 12.49, 41.89, 0.0).as_deref(), Some("ITA")); // Rome, just outside
+    assert_eq!(id_at(&w, 28.2, -29.6, 0.0).as_deref(), Some("LSO"));
+    assert_eq!(id_at(&w, 26.0, -29.0, 0.0).as_deref(), Some("ZAF"));
+}
+
+#[test]
+fn western_sahara_follows_the_border_policy() {
+    // §4: the Moroccan-administered part is Morocco; east of the Berm stays
+    // Western Sahara.
+    let w = world();
+    assert_eq!(id_at(&w, -13.2, 27.15, 0.0).as_deref(), Some("MAR")); // Laayoune
+    assert_eq!(id_at(&w, -10.6, 26.15, 0.0).as_deref(), Some("SAH")); // Tifariti
+}
+
+#[test]
+fn inland_and_coastal_seas_are_water() {
+    let w = world();
+    assert_eq!(id_at(&w, 51.0, 41.5, 0.0), None);
+    assert_eq!(id_at(&w, 0.0, 0.0, 0.0), None); // Gulf of Guinea
+}
+
+#[test]
+fn countries_do_not_overlap() {
+    use mimundo_core::map::geometry::point_in_rings;
+    let w = world();
+    let fine = w.shapes(Detail::Fine);
+    let meta = w.countries();
+    let mut overlaps = Vec::new();
+    for lat in (-60..=80).step_by(3) {
+        for lon in (-180..180).step_by(3) {
+            let (x, y) = equal_earth(f64::from(lon) + 0.5, f64::from(lat) + 0.5);
+            let (x, y) = (x as f32, y as f32);
+            let hits = fine
+                .iter()
+                .zip(&meta)
+                .filter(|(_, m)| x >= m.min_x && x <= m.max_x && y >= m.min_y && y <= m.max_y)
+                .filter(|(s, _)| point_in_rings(&s.rings, x, y))
+                .count();
+            if hits > 1 {
+                overlaps.push((lon, lat));
+            }
+        }
+    }
+    assert!(overlaps.is_empty(), "overlaps at {overlaps:?}");
+}
+
+#[test]
+fn far_south_is_only_antarctica() {
+    let w = world();
+    for lon in (-180..180).step_by(10) {
+        let at = id_at(&w, f64::from(lon), -80.0, 0.0);
+        assert!(matches!(at.as_deref(), Some("ATA") | None), "{lon}: {at:?}");
+    }
+    assert_eq!(id_at(&w, 0.0, -80.0, 0.0).as_deref(), Some("ATA"));
+}
+
+#[test]
+fn coarse_outlines_are_never_more_detailed_than_fine_ones() {
+    let w = world();
+    let points = |s: &mimundo_core::map::CountryShape| s.rings.iter().map(Vec::len).sum::<usize>();
+    let coarse = w.shapes(Detail::Coarse);
+    let fine = w.shapes(Detail::Fine);
+    let total = |v: &[mimundo_core::map::CountryShape]| v.iter().map(points).sum::<usize>();
+    assert!(
+        total(&coarse) * 4 < total(&fine),
+        "coarse should be much lighter"
+    );
+    let heavier: Vec<String> = coarse
+        .iter()
+        .zip(&fine)
+        .filter(|(c, f)| points(c) > points(f))
+        .map(|(c, _)| w.countries()[c.index as usize].id.clone())
+        .collect();
+    assert!(heavier.len() <= 3, "coarse heavier than fine: {heavier:?}");
+}
+
+#[test]
+fn labels_sit_on_their_country() {
+    let w = world();
+    let mut off = Vec::new();
+    for c in w.countries() {
+        if w.country_at(c.label_x, c.label_y, 0.02) != Some(c.index) {
+            off.push(c.id.clone());
+        }
+    }
+    assert!(off.len() <= 3, "labels off their country: {off:?}");
+}

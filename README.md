@@ -39,7 +39,7 @@ changes (a scheme pre-action; Release builds use `--release`). If the Rust
 build fails, the Xcode build fails with the compiler error; the full log is in
 `apple/MiMundo/build/rust-core.log`. Re-run `./scripts/build-core.sh` by hand
 only after editing `project.yml`.
-Rust checks: `cd core && cargo test && cargo clippy --all-targets`.
+Rust checks: `cd core && cargo test --features mapgen && cargo clippy --all-targets --features cli,mapgen`.
 
 CI (`.github/workflows/ci.yml`) runs on every PR and push to `main`:
 `cargo fmt`, `clippy -D warnings`, `cargo test`, then a from-scratch
@@ -55,7 +55,7 @@ refresh it (needs Inkscape: `brew install --cask inkscape`):
 
 ```bash
 ./tools/fetch-data.sh   # Natural Earth + flag-icons -> data/raw/ (checksums in tools/data.sha256)
-./tools/build-data.sh   # -> apple/MiMundo/Resources/, then runs core/tests/{world,features}_bin.rs
+./tools/build-data.sh   # -> apple/MiMundo/Resources/, then runs the data tests in core/tests/
 ```
 
 Country facts come from a committed Wikidata snapshot,

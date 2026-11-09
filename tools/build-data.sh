@@ -71,8 +71,8 @@ for iso2 in $(python3 -I -c 'import json,sys; print(" ".join(sorted(json.load(op
 done
 echo "  $count flags"
 
-echo "==> Checking the map against known places (core/tests/world_bin.rs, features_bin.rs)"
-(cd "$ROOT/core" && cargo test -q --test world_bin --test features_bin)
+echo "==> Checking the data against known places (core/tests/)"
+(cd "$ROOT/core" && cargo test -q --test world_bin --test features_bin --test countries_json)
 
 echo "==> Done. Sizes:"
 du -sh "$OUT/World.bin" "$OUT/Features.bin" "$OUT/Countries.json" "$FLAGS"
