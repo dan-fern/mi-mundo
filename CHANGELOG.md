@@ -10,6 +10,20 @@ Versions: [Semantic Versioning](https://semver.org/).
 ## [Unreleased]
 
 ### Added
+- Physical features on the map (requirements §3.1): rivers, lakes,
+  deserts, mountain ranges and peaks from Natural Earth, with names that
+  appear as you zoom in (bigger features first), placed so they don't
+  overlap. Built by a new Rust `featuregen` into `Features.bin`, with tests
+  against known places and a CI reproducibility check.
+- Landmarks: up to three famous places per country, pinned on the map from
+  zoom 4 and listed on the card. UNESCO sites ranked by Wikipedia coverage,
+  hand-picked lists for ~55 countries, and heavy topics (memorials, camps,
+  prisons) never picked automatically.
+- Country card: read-aloud button and a one-to-five-people population
+  picture, for kids who can't read yet (PR #8 review).
+- Quiz label mode (requirements §3.2): feature and landmark names stay
+  hidden until the country they sit in is guessed; the quiz PR switches it
+  on.
 - Explore map in the kid home (requirements §3.1): Equal Earth projection,
   pan, pinch and double-tap zoom, coarse outlines zoomed out and detailed
   ones zoomed in, no country labels so quiz answers stay hidden. Tap a

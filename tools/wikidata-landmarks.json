@@ -1,0 +1,6024 @@
+{
+ "_meta": {
+  "fetched": "2026-11-08",
+  "source": "Wikidata (CC0): UNESCO World Heritage Sites by sitelinks; see QUERY in tools/fetch-landmarks.py"
+ },
+ "countries": {
+  "AD": [
+   {
+    "lat": 42.4921,
+    "lon": 1.5944,
+    "name": "Madriu-Perafita-Claror Valley",
+    "sitelinks": 42,
+    "wikidata": "Q332800"
+   }
+  ],
+  "AE": [
+   {
+    "lat": 25.1114,
+    "lon": 55.839,
+    "name": "Jabal Al Fayah",
+    "sitelinks": 20,
+    "wikidata": "Q6172505"
+   },
+   {
+    "lat": 25.4226,
+    "lon": 56.3635,
+    "name": "Wadi Wurayah",
+    "sitelinks": 17,
+    "wikidata": "Q2538723"
+   },
+   {
+    "lat": 24.0678,
+    "lon": 55.8064,
+    "name": "Cultural Sites of Al Ain (Hafit, Hili, Bidaa Bint Saud and Oases Areas)",
+    "sitelinks": 6,
+    "wikidata": "Q3962347"
+   }
+  ],
+  "AF": [
+   {
+    "lat": 34.832,
+    "lon": 67.8268,
+    "name": "Cultural Landscape and Archaeological Remains of the Bamiyan Valley",
+    "sitelinks": 3,
+    "wikidata": "Q50810144"
+   },
+   {
+    "lat": 34.3964,
+    "lon": 64.5159,
+    "name": "Minaret and Archaeological Remains of Jam",
+    "sitelinks": 0,
+    "wikidata": "Q65953897"
+   }
+  ],
+  "AG": [
+   {
+    "lat": 17.0083,
+    "lon": -61.7644,
+    "name": "Nelson's Dockyard",
+    "sitelinks": 24,
+    "wikidata": "Q1435206"
+   },
+   {
+    "lat": 17.0045,
+    "lon": -61.7601,
+    "name": "Antigua Naval Dockyard and Related Archaeological Sites",
+    "sitelinks": 7,
+    "wikidata": "Q124402010"
+   },
+   {
+    "lat": 17.0044,
+    "lon": -61.7633,
+    "name": "Fort Berkeley",
+    "sitelinks": 4,
+    "wikidata": "Q123376524"
+   },
+   {
+    "lat": 17.01,
+    "lon": -61.7622,
+    "name": "Clarence House",
+    "sitelinks": 3,
+    "wikidata": "Q124310652"
+   },
+   {
+    "lat": 17.0001,
+    "lon": -61.7606,
+    "name": "Fort Charlotte",
+    "sitelinks": 2,
+    "wikidata": "Q123577871"
+   },
+   {
+    "lat": 17.0025,
+    "lon": -61.7545,
+    "name": "Shirley Heights, Antigua and Barbuda",
+    "sitelinks": 2,
+    "wikidata": "Q123171178"
+   }
+  ],
+  "AL": [
+   {
+    "lat": 39.7571,
+    "lon": 20.0166,
+    "name": "Butrint",
+    "sitelinks": 62,
+    "wikidata": "Q188694"
+   },
+   {
+    "lat": 49.0,
+    "lon": 15.0,
+    "name": "Ancient and Primeval Beech Forests of the Carpathians and Other Regions of Europe",
+    "sitelinks": 56,
+    "wikidata": "Q156011"
+   },
+   {
+    "lat": 40.7079,
+    "lon": 19.9383,
+    "name": "Historic Centres of Berat and Gjirokastër",
+    "sitelinks": 17,
+    "wikidata": "Q3664670"
+   },
+   {
+    "lat": 40.9007,
+    "lon": 20.664,
+    "name": "Natural and Cultural Heritage of the Ohrid region",
+    "sitelinks": 13,
+    "wikidata": "Q2215414"
+   },
+   {
+    "lat": 39.7461,
+    "lon": 20.0199,
+    "name": "Venetian Acropolis Castle",
+    "sitelinks": 3,
+    "wikidata": "Q113827411"
+   }
+  ],
+  "AM": [
+   {
+    "lat": 40.1593,
+    "lon": 44.2951,
+    "name": "Cathedral and Churches of Echmiatsin and the Archaeological Site of Zvartnots",
+    "sitelinks": 9,
+    "wikidata": "Q22026170"
+   },
+   {
+    "lat": 41.095,
+    "lon": 44.7103,
+    "name": "Monasteries of Haghpat and Sanahin",
+    "sitelinks": 3,
+    "wikidata": "Q16910825"
+   },
+   {
+    "lat": 40.1589,
+    "lon": 44.7967,
+    "name": "Monastery of Geghard and the Upper Azat Valley",
+    "sitelinks": 2,
+    "wikidata": "Q17155656"
+   }
+  ],
+  "AO": [
+   {
+    "lat": -6.2667,
+    "lon": 14.25,
+    "name": "M'banza-Kongo",
+    "sitelinks": 60,
+    "wikidata": "Q500189"
+   }
+  ],
+  "AR": [
+   {
+    "lat": -50.3305,
+    "lon": -73.2342,
+    "name": "Los Glaciares National Park",
+    "sitelinks": 61,
+    "wikidata": "Q215992"
+   },
+   {
+    "lat": -42.5,
+    "lon": -63.9333,
+    "name": "Valdes Peninsula",
+    "sitelinks": 58,
+    "wikidata": "Q213237"
+   },
+   {
+    "lat": -47.15,
+    "lon": -70.6667,
+    "name": "Cueva de las Manos",
+    "sitelinks": 56,
+    "wikidata": "Q223385"
+   },
+   {
+    "lat": -25.6834,
+    "lon": -54.4548,
+    "name": "Iguazú National Park",
+    "sitelinks": 51,
+    "wikidata": "Q474205"
+   },
+   {
+    "lat": -18.25,
+    "lon": -69.5917,
+    "name": "Inca road system",
+    "sitelinks": 51,
+    "wikidata": "Q948975"
+   },
+   {
+    "lat": -23.1999,
+    "lon": -65.3489,
+    "name": "Quebrada de Humahuaca",
+    "sitelinks": 50,
+    "wikidata": "Q28061"
+   },
+   {
+    "lat": 46.4684,
+    "lon": 6.8293,
+    "name": "The Architectural Work of Le Corbusier",
+    "sitelinks": 43,
+    "wikidata": "Q55619850"
+   },
+   {
+    "lat": -42.8075,
+    "lon": -71.8989,
+    "name": "Los Alerces National Park",
+    "sitelinks": 34,
+    "wikidata": "Q828291"
+   }
+  ],
+  "AT": [
+   {
+    "lat": 47.8333,
+    "lon": 16.75,
+    "name": "Neusiedl Lake",
+    "sitelinks": 63,
+    "wikidata": "Q6396"
+   },
+   {
+    "lat": 48.3644,
+    "lon": 15.4342,
+    "name": "Wachau",
+    "sitelinks": 57,
+    "wikidata": "Q192201"
+   },
+   {
+    "lat": 49.0,
+    "lon": 15.0,
+    "name": "Ancient and Primeval Beech Forests of the Carpathians and Other Regions of Europe",
+    "sitelinks": 56,
+    "wikidata": "Q156011"
+   },
+   {
+    "lat": 47.6746,
+    "lon": 9.121,
+    "name": "prehistoric pile dwellings around the Alps",
+    "sitelinks": 53,
+    "wikidata": "Q4580"
+   },
+   {
+    "lat": 47.643,
+    "lon": 15.831,
+    "name": "Semmering railway",
+    "sitelinks": 50,
+    "wikidata": "Q259313"
+   },
+   {
+    "lat": 50.4922,
+    "lon": 5.8669,
+    "name": "The Great Spa Towns of Europe",
+    "sitelinks": 42,
+    "wikidata": "Q16064866"
+   },
+   {
+    "lat": 47.7997,
+    "lon": 13.0486,
+    "name": "Historic Centre of the City of Salzburg",
+    "sitelinks": 21,
+    "wikidata": "Q1621046"
+   },
+   {
+    "lat": 47.5594,
+    "lon": 13.6464,
+    "name": "Hallstatt-Dachstein Salzkammergut cultural landscape",
+    "sitelinks": 6,
+    "wikidata": "Q1033019"
+   }
+  ],
+  "AU": [
+   {
+    "lat": -16.4,
+    "lon": 145.8,
+    "name": "Great Barrier Reef",
+    "sitelinks": 158,
+    "wikidata": "Q7343"
+   },
+   {
+    "lat": -33.8571,
+    "lon": 151.2149,
+    "name": "Sydney Opera House",
+    "sitelinks": 99,
+    "wikidata": "Q45178"
+   },
+   {
+    "lat": -53.0783,
+    "lon": 73.5075,
+    "name": "Heard Island and McDonald Islands",
+    "sitelinks": 97,
+    "wikidata": "Q131198"
+   },
+   {
+    "lat": -54.63,
+    "lon": 158.86,
+    "name": "Macquarie Island",
+    "sitelinks": 67,
+    "wikidata": "Q46650"
+   },
+   {
+    "lat": -13.0055,
+    "lon": 132.5195,
+    "name": "Kakadu National Park",
+    "sitelinks": 66,
+    "wikidata": "Q189657"
+   },
+   {
+    "lat": -25.24,
+    "lon": 153.15,
+    "name": "K'gari",
+    "sitelinks": 62,
+    "wikidata": "Q134905"
+   },
+   {
+    "lat": -17.4488,
+    "lon": 128.5461,
+    "name": "Purnululu National Park",
+    "sitelinks": 48,
+    "wikidata": "Q679568"
+   },
+   {
+    "lat": -25.3221,
+    "lon": 130.9857,
+    "name": "Uluṟu-Kata Tjuṯa National Park",
+    "sitelinks": 47,
+    "wikidata": "Q251999"
+   }
+  ],
+  "AZ": [
+   {
+    "lat": 40.1056,
+    "lon": 49.3889,
+    "name": "Gobustan State Historical and Cultural Reserve",
+    "sitelinks": 51,
+    "wikidata": "Q318181"
+   },
+   {
+    "lat": 40.125,
+    "lon": 49.375,
+    "name": "Gobustan Rock Art",
+    "sitelinks": 17,
+    "wikidata": "Q4313909"
+   },
+   {
+    "lat": 40.7059,
+    "lon": 48.8854,
+    "name": "Cultural Landscape of Khinalig People and “Köç Yolu” Transhumance Route",
+    "sitelinks": 1,
+    "wikidata": "Q122852382"
+   },
+   {
+    "lat": 40.3667,
+    "lon": 49.8333,
+    "name": "Walled City of Baku with the Shirvanshahs' Palace and Maiden Tower",
+    "sitelinks": 1,
+    "wikidata": "Q29901643"
+   },
+   {
+    "lat": 41.1919,
+    "lon": 47.1706,
+    "name": "Historic Centre of Sheki with the Khan’s Palace",
+    "sitelinks": 0,
+    "wikidata": "Q106762537"
+   },
+   {
+    "lat": 37.4215,
+    "lon": 55.7243,
+    "name": "Hyrcanian Forests",
+    "sitelinks": 0,
+    "wikidata": "Q66057913"
+   }
+  ],
+  "BA": [
+   {
+    "lat": 49.0,
+    "lon": 15.0,
+    "name": "Ancient and Primeval Beech Forests of the Carpathians and Other Regions of Europe",
+    "sitelinks": 56,
+    "wikidata": "Q156011"
+   },
+   {
+    "lat": 43.7825,
+    "lon": 19.2879,
+    "name": "Mehmed Paša Sokolović Bridge",
+    "sitelinks": 52,
+    "wikidata": "Q210055"
+   },
+   {
+    "lat": 42.8458,
+    "lon": 17.9839,
+    "name": "Vjetrenica",
+    "sitelinks": 29,
+    "wikidata": "Q2880621"
+   }
+  ],
+  "BB": [
+   {
+    "lat": 13.0967,
+    "lon": -59.6139,
+    "name": "Garrison Historic Area",
+    "sitelinks": 11,
+    "wikidata": "Q629210"
+   }
+  ],
+  "BD": [
+   {
+    "lat": 22.661,
+    "lon": 89.7585,
+    "name": "Mosque City of Bagerhat",
+    "sitelinks": 51,
+    "wikidata": "Q799893"
+   },
+   {
+    "lat": 22.0333,
+    "lon": 89.5167,
+    "name": "Sundarbans Reserved Forest",
+    "sitelinks": 3,
+    "wikidata": "Q42725548"
+   }
+  ],
+  "BE": [
+   {
+    "lat": 49.0,
+    "lon": 15.0,
+    "name": "Ancient and Primeval Beech Forests of the Carpathians and Other Regions of Europe",
+    "sitelinks": 56,
+    "wikidata": "Q156011"
+   },
+   {
+    "lat": 50.8467,
+    "lon": 4.3525,
+    "name": "Grand-Place",
+    "sitelinks": 56,
+    "wikidata": "Q215429"
+   },
+   {
+    "lat": 50.6065,
+    "lon": 3.3889,
+    "name": "Tournai Cathedral",
+    "sitelinks": 49,
+    "wikidata": "Q391229"
+   },
+   {
+    "lat": 50.8351,
+    "lon": 4.4162,
+    "name": "Stoclet Palace",
+    "sitelinks": 45,
+    "wikidata": "Q239028"
+   },
+   {
+    "lat": 50.6353,
+    "lon": 3.5148,
+    "name": "Belfries of Belgium and France",
+    "sitelinks": 43,
+    "wikidata": "Q750675"
+   },
+   {
+    "lat": 46.4684,
+    "lon": 6.8293,
+    "name": "The Architectural Work of Le Corbusier",
+    "sitelinks": 43,
+    "wikidata": "Q55619850"
+   },
+   {
+    "lat": 50.4922,
+    "lon": 5.8669,
+    "name": "The Great Spa Towns of Europe",
+    "sitelinks": 42,
+    "wikidata": "Q16064866"
+   },
+   {
+    "lat": 51.2183,
+    "lon": 4.3982,
+    "name": "Museum Plantin-Moretus",
+    "sitelinks": 39,
+    "wikidata": "Q595802"
+   }
+  ],
+  "BF": [
+   {
+    "lat": 11.53,
+    "lon": 2.29,
+    "name": "W-Arly-Pendjari Complex",
+    "sitelinks": 25,
+    "wikidata": "Q25379596"
+   },
+   {
+    "lat": 10.3103,
+    "lon": -3.5631,
+    "name": "Ruins of Loropéni",
+    "sitelinks": 23,
+    "wikidata": "Q1269931"
+   },
+   {
+    "lat": 11.0897,
+    "lon": -0.9616,
+    "name": "Royal Court of Tiébélé",
+    "sitelinks": 18,
+    "wikidata": "Q65684910"
+   },
+   {
+    "lat": 12.5878,
+    "lon": -3.329,
+    "name": "Ancient ferrous metallurgy sites of Burkina Faso",
+    "sitelinks": 17,
+    "wikidata": "Q65685157"
+   }
+  ],
+  "BG": [
+   {
+    "lat": 42.6595,
+    "lon": 27.7247,
+    "name": "Nesebar",
+    "sitelinks": 62,
+    "wikidata": "Q193241"
+   },
+   {
+    "lat": 49.0,
+    "lon": 15.0,
+    "name": "Ancient and Primeval Beech Forests of the Carpathians and Other Regions of Europe",
+    "sitelinks": 56,
+    "wikidata": "Q156011"
+   },
+   {
+    "lat": 41.6722,
+    "lon": 23.4878,
+    "name": "Pirin National Park",
+    "sitelinks": 52,
+    "wikidata": "Q651314"
+   },
+   {
+    "lat": 42.6447,
+    "lon": 23.2662,
+    "name": "Boyana Church",
+    "sitelinks": 50,
+    "wikidata": "Q276553"
+   },
+   {
+    "lat": 43.2774,
+    "lon": 27.1189,
+    "name": "Madara Rider",
+    "sitelinks": 49,
+    "wikidata": "Q319296"
+   },
+   {
+    "lat": 44.1111,
+    "lon": 27.0722,
+    "name": "Srebarna Nature Reserve",
+    "sitelinks": 47,
+    "wikidata": "Q122082"
+   },
+   {
+    "lat": 43.6956,
+    "lon": 25.9881,
+    "name": "Rock-hewn Churches of Ivanovo",
+    "sitelinks": 44,
+    "wikidata": "Q503387"
+   },
+   {
+    "lat": 42.6256,
+    "lon": 25.3992,
+    "name": "Thracian Tomb of Kazanlak",
+    "sitelinks": 43,
+    "wikidata": "Q301815"
+   }
+  ],
+  "BH": [
+   {
+    "lat": 26.2336,
+    "lon": 50.5206,
+    "name": "Qal’at al Bahrain",
+    "sitelinks": 49,
+    "wikidata": "Q740104"
+   },
+   {
+    "lat": 26.1497,
+    "lon": 50.5128,
+    "name": "Dilmun Burial Mounds",
+    "sitelinks": 29,
+    "wikidata": "Q5276996"
+   },
+   {
+    "lat": 26.25,
+    "lon": 50.61,
+    "name": "Bahrain Pearling Trail",
+    "sitelinks": 28,
+    "wikidata": "Q1889313"
+   }
+  ],
+  "BJ": [
+   {
+    "lat": 10.1,
+    "lon": 1.0667,
+    "name": "Koutammakou",
+    "sitelinks": 39,
+    "wikidata": "Q508040"
+   },
+   {
+    "lat": 7.1856,
+    "lon": 1.9881,
+    "name": "Royal Palaces of Abomey",
+    "sitelinks": 39,
+    "wikidata": "Q2425839"
+   },
+   {
+    "lat": 11.53,
+    "lon": 2.29,
+    "name": "W-Arly-Pendjari Complex",
+    "sitelinks": 25,
+    "wikidata": "Q25379596"
+   },
+   {
+    "lat": 6.4695,
+    "lon": 2.6252,
+    "name": "Royal Palace Museum",
+    "sitelinks": 9,
+    "wikidata": "Q2784858"
+   }
+  ],
+  "BO": [
+   {
+    "lat": -19.5892,
+    "lon": -65.7533,
+    "name": "Potosí",
+    "sitelinks": 85,
+    "wikidata": "Q35045"
+   },
+   {
+    "lat": -16.5547,
+    "lon": -68.6733,
+    "name": "Tiwanaku",
+    "sitelinks": 70,
+    "wikidata": "Q61750"
+   },
+   {
+    "lat": -18.25,
+    "lon": -69.5917,
+    "name": "Inca road system",
+    "sitelinks": 51,
+    "wikidata": "Q948975"
+   },
+   {
+    "lat": -14.2303,
+    "lon": -60.8467,
+    "name": "Noel Kempff Mercado National Park",
+    "sitelinks": 45,
+    "wikidata": "Q650710"
+   },
+   {
+    "lat": -18.1784,
+    "lon": -63.819,
+    "name": "El Fuerte de Samaipata",
+    "sitelinks": 38,
+    "wikidata": "Q876451"
+   },
+   {
+    "lat": -16.2748,
+    "lon": -62.5072,
+    "name": "Jesuit Missions of Chiquitos",
+    "sitelinks": 32,
+    "wikidata": "Q33934"
+   },
+   {
+    "lat": -19.0479,
+    "lon": -65.2596,
+    "name": "Historic Center of Sucre",
+    "sitelinks": 1,
+    "wikidata": "Q135448360"
+   },
+   {
+    "lat": -19.048,
+    "lon": -65.2596,
+    "name": "Historic City of Sucre",
+    "sitelinks": 1,
+    "wikidata": "Q16522830"
+   }
+  ],
+  "BR": [
+   {
+    "lat": -15.7939,
+    "lon": -47.8828,
+    "name": "Brasília",
+    "sitelinks": 226,
+    "wikidata": "Q2844"
+   },
+   {
+    "lat": -12.9831,
+    "lon": -38.4928,
+    "name": "Salvador",
+    "sitelinks": 138,
+    "wikidata": "Q36947"
+   },
+   {
+    "lat": -2.1703,
+    "lon": -62.6172,
+    "name": "Jaú National Park",
+    "sitelinks": 52,
+    "wikidata": "Q332381"
+   },
+   {
+    "lat": -3.8664,
+    "lon": -33.8019,
+    "name": "Rocas Atoll",
+    "sitelinks": 52,
+    "wikidata": "Q241074"
+   },
+   {
+    "lat": -2.4833,
+    "lon": -43.1333,
+    "name": "Lençóis Maranhenses National Park",
+    "sitelinks": 48,
+    "wikidata": "Q647777"
+   },
+   {
+    "lat": -8.6667,
+    "lon": -42.55,
+    "name": "Serra da Capivara National Park",
+    "sitelinks": 47,
+    "wikidata": "Q267394"
+   },
+   {
+    "lat": -14.0057,
+    "lon": -47.6846,
+    "name": "Cerrado",
+    "sitelinks": 43,
+    "wikidata": "Q278512"
+   },
+   {
+    "lat": -25.5,
+    "lon": -53.95,
+    "name": "Iguaçu National Park",
+    "sitelinks": 42,
+    "wikidata": "Q742315"
+   }
+  ],
+  "BW": [
+   {
+    "lat": -19.4,
+    "lon": 22.9,
+    "name": "Okavango Delta",
+    "sitelinks": 66,
+    "wikidata": "Q650872"
+   },
+   {
+    "lat": -18.7717,
+    "lon": 21.7542,
+    "name": "Tsodilo",
+    "sitelinks": 53,
+    "wikidata": "Q214007"
+   }
+  ],
+  "BY": [
+   {
+    "lat": 52.2894,
+    "lon": 25.6494,
+    "name": "Struve Geodetic Arc",
+    "sitelinks": 65,
+    "wikidata": "Q192243"
+   },
+   {
+    "lat": 52.75,
+    "lon": 23.95,
+    "name": "Białowieża Forest",
+    "sitelinks": 63,
+    "wikidata": "Q192666"
+   },
+   {
+    "lat": 53.4513,
+    "lon": 26.4729,
+    "name": "Mir Castle Complex",
+    "sitelinks": 49,
+    "wikidata": "Q209643"
+   },
+   {
+    "lat": 53.2229,
+    "lon": 26.6917,
+    "name": "Nesvizh Castle",
+    "sitelinks": 47,
+    "wikidata": "Q719422"
+   },
+   {
+    "lat": 55.4863,
+    "lon": 28.7586,
+    "name": "Saint Sophia Cathedral in Polotsk",
+    "sitelinks": 26,
+    "wikidata": "Q2465016"
+   },
+   {
+    "lat": 52.4048,
+    "lon": 23.8195,
+    "name": "Tower of Kamianiec",
+    "sitelinks": 22,
+    "wikidata": "Q1710170"
+   },
+   {
+    "lat": 53.1231,
+    "lon": 25.157,
+    "name": "Church of St. Michael in Synkavičy",
+    "sitelinks": 14,
+    "wikidata": "Q2657165"
+   },
+   {
+    "lat": 55.5041,
+    "lon": 28.7807,
+    "name": "Transfiguration Church in Polack",
+    "sitelinks": 13,
+    "wikidata": "Q1661800"
+   }
+  ],
+  "BZ": [
+   {
+    "lat": 17.2625,
+    "lon": -88.0528,
+    "name": "Belize Barrier Reef",
+    "sitelinks": 47,
+    "wikidata": "Q28361"
+   }
+  ],
+  "CA": [
+   {
+    "lat": 51.5953,
+    "lon": -55.5312,
+    "name": "L'Anse aux Meadows",
+    "sitelinks": 55,
+    "wikidata": "Q189113"
+   },
+   {
+    "lat": 59.3833,
+    "lon": -112.983,
+    "name": "Wood Buffalo National Park",
+    "sitelinks": 53,
+    "wikidata": "Q391338"
+   },
+   {
+    "lat": 61.5971,
+    "lon": -125.852,
+    "name": "Nahanni National Park Reserve",
+    "sitelinks": 47,
+    "wikidata": "Q391391"
+   },
+   {
+    "lat": 49.6894,
+    "lon": -57.7381,
+    "name": "Gros Morne National Park",
+    "sitelinks": 46,
+    "wikidata": "Q257598"
+   },
+   {
+    "lat": 50.7617,
+    "lon": -111.485,
+    "name": "Dinosaur Provincial Park",
+    "sitelinks": 44,
+    "wikidata": "Q289466"
+   },
+   {
+    "lat": 48.9961,
+    "lon": -113.9042,
+    "name": "Waterton-Glacier International Peace Park",
+    "sitelinks": 39,
+    "wikidata": "Q828212"
+   },
+   {
+    "lat": 61.1975,
+    "lon": -140.992,
+    "name": "Kluane / Wrangell – St. Elias / Glacier Bay / Tatshenshini-Alsek",
+    "sitelinks": 37,
+    "wikidata": "Q604604"
+   },
+   {
+    "lat": 51.4247,
+    "lon": -116.4797,
+    "name": "Canadian Rocky Mountain Parks World Heritage Site",
+    "sitelinks": 36,
+    "wikidata": "Q72895"
+   }
+  ],
+  "CD": [
+   {
+    "lat": -0.5,
+    "lon": 29.5,
+    "name": "Virunga National Park",
+    "sitelinks": 78,
+    "wikidata": "Q223589"
+   },
+   {
+    "lat": 2.0,
+    "lon": 28.5,
+    "name": "Okapi Wildlife Reserve",
+    "sitelinks": 62,
+    "wikidata": "Q457304"
+   },
+   {
+    "lat": 4.0,
+    "lon": 29.25,
+    "name": "Garamba National Park",
+    "sitelinks": 59,
+    "wikidata": "Q308893"
+   },
+   {
+    "lat": -2.0,
+    "lon": 21.0,
+    "name": "Salonga National Park",
+    "sitelinks": 58,
+    "wikidata": "Q328488"
+   },
+   {
+    "lat": -2.3148,
+    "lon": 28.7587,
+    "name": "Kahuzi-Biéga National Park",
+    "sitelinks": 56,
+    "wikidata": "Q457324"
+   }
+  ],
+  "CF": [
+   {
+    "lat": 8.5,
+    "lon": 21.5,
+    "name": "Manovo-Gounda St. Floris National Park",
+    "sitelinks": 55,
+    "wikidata": "Q503835"
+   },
+   {
+    "lat": 2.6667,
+    "lon": 16.3333,
+    "name": "Sangha Trinational",
+    "sitelinks": 36,
+    "wikidata": "Q2580451"
+   }
+  ],
+  "CG": [
+   {
+    "lat": 2.6667,
+    "lon": 16.3333,
+    "name": "Sangha Trinational",
+    "sitelinks": 36,
+    "wikidata": "Q2580451"
+   },
+   {
+    "lat": 0.8,
+    "lon": 14.9,
+    "name": "Odzala National Park",
+    "sitelinks": 29,
+    "wikidata": "Q263883"
+   }
+  ],
+  "CH": [
+   {
+    "lat": 49.0,
+    "lon": 15.0,
+    "name": "Ancient and Primeval Beech Forests of the Carpathians and Other Regions of Europe",
+    "sitelinks": 56,
+    "wikidata": "Q156011"
+   },
+   {
+    "lat": 47.6746,
+    "lon": 9.121,
+    "name": "prehistoric pile dwellings around the Alps",
+    "sitelinks": 53,
+    "wikidata": "Q4580"
+   },
+   {
+    "lat": 45.9167,
+    "lon": 8.95,
+    "name": "Monte San Giorgio",
+    "sitelinks": 47,
+    "wikidata": "Q16648"
+   },
+   {
+    "lat": 47.4231,
+    "lon": 9.3772,
+    "name": "Abbey of Saint Gall",
+    "sitelinks": 44,
+    "wikidata": "Q155699"
+   },
+   {
+    "lat": 46.4919,
+    "lon": 6.7461,
+    "name": "Lavaux",
+    "sitelinks": 43,
+    "wikidata": "Q688060"
+   },
+   {
+    "lat": 46.4684,
+    "lon": 6.8293,
+    "name": "The Architectural Work of Le Corbusier",
+    "sitelinks": 43,
+    "wikidata": "Q55619850"
+   },
+   {
+    "lat": 46.6292,
+    "lon": 10.4478,
+    "name": "Saint John Abbey",
+    "sitelinks": 36,
+    "wikidata": "Q757067"
+   },
+   {
+    "lat": 46.9167,
+    "lon": 9.25,
+    "name": "Glarus thrust",
+    "sitelinks": 29,
+    "wikidata": "Q312118"
+   }
+  ],
+  "CI": [
+   {
+    "lat": 9.1636,
+    "lon": -3.7725,
+    "name": "Comoé National Park",
+    "sitelinks": 59,
+    "wikidata": "Q501344"
+   },
+   {
+    "lat": 5.75,
+    "lon": -7.12,
+    "name": "Taï National Park",
+    "sitelinks": 52,
+    "wikidata": "Q328577"
+   },
+   {
+    "lat": 7.603,
+    "lon": -8.391,
+    "name": "Mount Nimba Strict Nature Reserve",
+    "sitelinks": 48,
+    "wikidata": "Q924276"
+   },
+   {
+    "lat": 10.4903,
+    "lon": -6.4102,
+    "name": "Sudanese style mosques in northern Côte d'Ivoire",
+    "sitelinks": 15,
+    "wikidata": "Q65725484"
+   },
+   {
+    "lat": 5.1965,
+    "lon": -3.7368,
+    "name": "Historic town of Grand-Bassam",
+    "sitelinks": 5,
+    "wikidata": "Q17990623"
+   }
+  ],
+  "CL": [
+   {
+    "lat": -18.25,
+    "lon": -69.5917,
+    "name": "Inca road system",
+    "sitelinks": 51,
+    "wikidata": "Q948975"
+   },
+   {
+    "lat": -27.0729,
+    "lon": -109.3486,
+    "name": "Rapa Nui National Park",
+    "sitelinks": 39,
+    "wikidata": "Q1763364"
+   },
+   {
+    "lat": -34.085,
+    "lon": -70.3825,
+    "name": "Sewell",
+    "sitelinks": 34,
+    "wikidata": "Q588417"
+   },
+   {
+    "lat": -42.5,
+    "lon": -73.7667,
+    "name": "Churches of Chiloé",
+    "sitelinks": 33,
+    "wikidata": "Q27964"
+   },
+   {
+    "lat": -20.2083,
+    "lon": -69.7944,
+    "name": "Humberstone and Santa Laura Saltpeter Works",
+    "sitelinks": 33,
+    "wikidata": "Q572895"
+   },
+   {
+    "lat": -18.4806,
+    "lon": -70.3211,
+    "name": "Chinchorro mummies",
+    "sitelinks": 19,
+    "wikidata": "Q27096877"
+   },
+   {
+    "lat": -34.0853,
+    "lon": -70.3834,
+    "name": "EDIN-317-T Workshop building",
+    "sitelinks": 1,
+    "wikidata": "Q103991986"
+   },
+   {
+    "lat": -34.0845,
+    "lon": -70.3803,
+    "name": "EDIN-360-S Milling plant building",
+    "sitelinks": 1,
+    "wikidata": "Q102333772"
+   }
+  ],
+  "CM": [
+   {
+    "lat": 3.0167,
+    "lon": 12.9833,
+    "name": "Dja Faunal Reserve",
+    "sitelinks": 40,
+    "wikidata": "Q843147"
+   },
+   {
+    "lat": 2.6667,
+    "lon": 16.3333,
+    "name": "Sangha Trinational",
+    "sitelinks": 36,
+    "wikidata": "Q2580451"
+   },
+   {
+    "lat": 10.9167,
+    "lon": 13.8333,
+    "name": "Diy-Gid-Biy",
+    "sitelinks": 12,
+    "wikidata": "Q5285004"
+   },
+   {
+    "lat": 5.7327,
+    "lon": 10.9016,
+    "name": "Museum of the Bamoun Kings",
+    "sitelinks": 3,
+    "wikidata": "Q125208063"
+   }
+  ],
+  "CN": [
+   {
+    "lat": 36.2667,
+    "lon": 117.1,
+    "name": "Mount Tai",
+    "sitelinks": 71,
+    "wikidata": "Q216059"
+   },
+   {
+    "lat": 30.2614,
+    "lon": 120.2239,
+    "name": "Grand Canal",
+    "sitelinks": 70,
+    "wikidata": "Q31347"
+   },
+   {
+    "lat": 39.8822,
+    "lon": 116.4066,
+    "name": "Temple of Heaven",
+    "sitelinks": 70,
+    "wikidata": "Q125445"
+   },
+   {
+    "lat": 30.125,
+    "lon": 118.1667,
+    "name": "Huangshan",
+    "sitelinks": 67,
+    "wikidata": "Q36034"
+   },
+   {
+    "lat": 40.0372,
+    "lon": 94.8042,
+    "name": "Mogao Caves",
+    "sitelinks": 65,
+    "wikidata": "Q43286"
+   },
+   {
+    "lat": 39.9975,
+    "lon": 116.2689,
+    "name": "Summer Palace",
+    "sitelinks": 62,
+    "wikidata": "Q4132"
+   },
+   {
+    "lat": 33.2,
+    "lon": 103.9,
+    "name": "Jiuzhaigou Valley",
+    "sitelinks": 57,
+    "wikidata": "Q4111"
+   },
+   {
+    "lat": 29.3456,
+    "lon": 110.4667,
+    "name": "Wulingyuan",
+    "sitelinks": 55,
+    "wikidata": "Q4187"
+   }
+  ],
+  "CO": [
+   {
+    "lat": -18.25,
+    "lon": -69.5917,
+    "name": "Inca road system",
+    "sitelinks": 51,
+    "wikidata": "Q948975"
+   },
+   {
+    "lat": 9.2394,
+    "lon": -74.425,
+    "name": "Santa Cruz de Mompós",
+    "sitelinks": 46,
+    "wikidata": "Q740288"
+   },
+   {
+    "lat": 7.8,
+    "lon": -77.15,
+    "name": "Los Katíos National Park",
+    "sitelinks": 42,
+    "wikidata": "Q305169"
+   },
+   {
+    "lat": 0.7006,
+    "lon": -72.8054,
+    "name": "Chiribiquete National Park",
+    "sitelinks": 35,
+    "wikidata": "Q2603196"
+   },
+   {
+    "lat": 2.583,
+    "lon": -76.033,
+    "name": "Tierradentro",
+    "sitelinks": 31,
+    "wikidata": "Q179506"
+   },
+   {
+    "lat": 1.8844,
+    "lon": -76.2961,
+    "name": "San Agustin archeological park",
+    "sitelinks": 29,
+    "wikidata": "Q2887224"
+   },
+   {
+    "lat": 10.1033,
+    "lon": -75.199,
+    "name": "San Basilio de Palenque",
+    "sitelinks": 17,
+    "wikidata": "Q692174"
+   },
+   {
+    "lat": 9.2405,
+    "lon": -74.4231,
+    "name": "Historic Centre of Santa Cruz de Mompox",
+    "sitelinks": 4,
+    "wikidata": "Q8343767"
+   }
+  ],
+  "CR": [
+   {
+    "lat": 8.9114,
+    "lon": -83.4775,
+    "name": "Stone spheres of Costa Rica",
+    "sitelinks": 42,
+    "wikidata": "Q282275"
+   },
+   {
+    "lat": 10.85,
+    "lon": -85.6167,
+    "name": "Area de Conservación Guanacaste World Heritage Site",
+    "sitelinks": 27,
+    "wikidata": "Q775154"
+   },
+   {
+    "lat": 5.5333,
+    "lon": -87.0667,
+    "name": "Cocos Island National Park",
+    "sitelinks": 4,
+    "wikidata": "Q6062995"
+   },
+   {
+    "lat": 9.4069,
+    "lon": -82.9386,
+    "name": "Talamanca Range-La Amistad Reserves",
+    "sitelinks": 2,
+    "wikidata": "Q6106226"
+   },
+   {
+    "lat": 8.9385,
+    "lon": -83.5025,
+    "name": "Precolumbian Chiefdom Settlements with Stone Spheres of the Diquís",
+    "sitelinks": 0,
+    "wikidata": "Q65114170"
+   }
+  ],
+  "CU": [
+   {
+    "lat": 20.4967,
+    "lon": -74.8579,
+    "name": "Alexander von Humboldt National Park",
+    "sitelinks": 43,
+    "wikidata": "Q48153"
+   },
+   {
+    "lat": 22.6167,
+    "lon": -83.7167,
+    "name": "Viñales Valley",
+    "sitelinks": 42,
+    "wikidata": "Q48108"
+   },
+   {
+    "lat": 19.8833,
+    "lon": -77.6333,
+    "name": "Desembarco del Granma National Park",
+    "sitelinks": 38,
+    "wikidata": "Q909755"
+   },
+   {
+    "lat": 19.9687,
+    "lon": -75.8703,
+    "name": "Castillo de San Pedro de la Roca",
+    "sitelinks": 36,
+    "wikidata": "Q910189"
+   },
+   {
+    "lat": 20.03,
+    "lon": -75.3914,
+    "name": "Archaeological Landscape of the First Coffee Plantations in the South-East of Cuba",
+    "sitelinks": 33,
+    "wikidata": "Q636714"
+   },
+   {
+    "lat": 22.1456,
+    "lon": -80.4364,
+    "name": "Historic Centre of Cienfuegos",
+    "sitelinks": 11,
+    "wikidata": "Q8343758"
+   },
+   {
+    "lat": 23.1405,
+    "lon": -82.349,
+    "name": "El Templete",
+    "sitelinks": 7,
+    "wikidata": "Q8773463"
+   },
+   {
+    "lat": 21.379,
+    "lon": -77.9184,
+    "name": "Agramonte Park (Camaguey)",
+    "sitelinks": 0,
+    "wikidata": "Q110943876"
+   }
+  ],
+  "CV": [
+   {
+    "lat": 14.9167,
+    "lon": -23.6042,
+    "name": "Cidade Velha",
+    "sitelinks": 54,
+    "wikidata": "Q464913"
+   }
+  ],
+  "CW": [
+   {
+    "lat": 12.1061,
+    "lon": -68.9342,
+    "name": "Historic Area of Willemstad, Inner City and Harbour, Curaçao",
+    "sitelinks": 4,
+    "wikidata": "Q17240216"
+   },
+   {
+    "lat": 12.1045,
+    "lon": -68.9344,
+    "name": "Fortkerk",
+    "sitelinks": 3,
+    "wikidata": "Q113501274"
+   }
+  ],
+  "CZ": [
+   {
+    "lat": 49.0,
+    "lon": 15.0,
+    "name": "Ancient and Primeval Beech Forests of the Carpathians and Other Regions of Europe",
+    "sitelinks": 56,
+    "wikidata": "Q156011"
+   },
+   {
+    "lat": 50.0847,
+    "lon": 14.4203,
+    "name": "Old Town",
+    "sitelinks": 51,
+    "wikidata": "Q748211"
+   },
+   {
+    "lat": 49.2072,
+    "lon": 16.6158,
+    "name": "Villa Tugendhat",
+    "sitelinks": 47,
+    "wikidata": "Q457453"
+   },
+   {
+    "lat": 48.9667,
+    "lon": 14.2667,
+    "name": "Holašovice",
+    "sitelinks": 46,
+    "wikidata": "Q826452"
+   },
+   {
+    "lat": 50.4922,
+    "lon": 5.8669,
+    "name": "The Great Spa Towns of Europe",
+    "sitelinks": 42,
+    "wikidata": "Q16064866"
+   },
+   {
+    "lat": 49.594,
+    "lon": 17.2505,
+    "name": "Holy Trinity Column in Olomouc",
+    "sitelinks": 40,
+    "wikidata": "Q742362"
+   },
+   {
+    "lat": 49.58,
+    "lon": 15.9419,
+    "name": "Pilgrimage Church of Saint John of Nepomuk",
+    "sitelinks": 38,
+    "wikidata": "Q752318"
+   },
+   {
+    "lat": 48.7758,
+    "lon": 16.775,
+    "name": "Lednice-Valtice Cultural Landscape",
+    "sitelinks": 32,
+    "wikidata": "Q735278"
+   }
+  ],
+  "DE": [
+   {
+    "lat": 50.9414,
+    "lon": 6.9583,
+    "name": "Cologne Cathedral",
+    "sitelinks": 86,
+    "wikidata": "Q4176"
+   },
+   {
+    "lat": 51.8342,
+    "lon": 12.2461,
+    "name": "Dessau",
+    "sitelinks": 71,
+    "wikidata": "Q487070"
+   },
+   {
+    "lat": 50.7747,
+    "lon": 6.0839,
+    "name": "Aachen Cathedral",
+    "sitelinks": 64,
+    "wikidata": "Q5908"
+   },
+   {
+    "lat": 52.5214,
+    "lon": 13.3956,
+    "name": "Museum Island",
+    "sitelinks": 58,
+    "wikidata": "Q151963"
+   },
+   {
+    "lat": 50.9661,
+    "lon": 10.3064,
+    "name": "Wartburg",
+    "sitelinks": 58,
+    "wikidata": "Q151545"
+   },
+   {
+    "lat": 49.3172,
+    "lon": 8.4425,
+    "name": "Speyer Cathedral",
+    "sitelinks": 57,
+    "wikidata": "Q22720"
+   },
+   {
+    "lat": 49.0,
+    "lon": 15.0,
+    "name": "Ancient and Primeval Beech Forests of the Carpathians and Other Regions of Europe",
+    "sitelinks": 56,
+    "wikidata": "Q156011"
+   },
+   {
+    "lat": 47.6746,
+    "lon": 9.121,
+    "name": "prehistoric pile dwellings around the Alps",
+    "sitelinks": 53,
+    "wikidata": "Q4580"
+   }
+  ],
+  "DK": [
+   {
+    "lat": 56.0386,
+    "lon": 12.6219,
+    "name": "Kronborg Castle",
+    "sitelinks": 55,
+    "wikidata": "Q189358"
+   },
+   {
+    "lat": 55.6427,
+    "lon": 12.0803,
+    "name": "Roskilde Cathedral",
+    "sitelinks": 49,
+    "wikidata": "Q209705"
+   },
+   {
+    "lat": 55.3567,
+    "lon": 9.4831,
+    "name": "Christiansfeld",
+    "sitelinks": 34,
+    "wikidata": "Q3197288"
+   },
+   {
+    "lat": 55.2822,
+    "lon": 12.45,
+    "name": "Stevns Klint",
+    "sitelinks": 33,
+    "wikidata": "Q1614152"
+   },
+   {
+    "lat": 55.9136,
+    "lon": 12.3578,
+    "name": "Par force hunting landscape in North Zealand",
+    "sitelinks": 28,
+    "wikidata": "Q10620357"
+   },
+   {
+    "lat": 40.6192,
+    "lon": -75.3808,
+    "name": "Moravian Church Settlements",
+    "sitelinks": 9,
+    "wikidata": "Q128009257"
+   },
+   {
+    "lat": 55.7565,
+    "lon": 9.4197,
+    "name": "Jelling Heritage Site",
+    "sitelinks": 7,
+    "wikidata": "Q4993586"
+   },
+   {
+    "lat": 56.9953,
+    "lon": 9.2547,
+    "name": "Viking Age Ring Fortresses",
+    "sitelinks": 3,
+    "wikidata": "Q64518271"
+   }
+  ],
+  "DM": [
+   {
+    "lat": 15.2667,
+    "lon": -61.2833,
+    "name": "Morne Trois Pitons National Park",
+    "sitelinks": 36,
+    "wikidata": "Q629436"
+   }
+  ],
+  "DO": [
+   {
+    "lat": 18.473,
+    "lon": -69.883,
+    "name": "Colonial City of Santo Domingo",
+    "sitelinks": 20,
+    "wikidata": "Q2470834"
+   }
+  ],
+  "DZ": [
+   {
+    "lat": 25.6667,
+    "lon": 9.0,
+    "name": "Tassili n'Ajjer",
+    "sitelinks": 70,
+    "wikidata": "Q190048"
+   },
+   {
+    "lat": 35.4842,
+    "lon": 6.4687,
+    "name": "Timgad",
+    "sitelinks": 59,
+    "wikidata": "Q459629"
+   },
+   {
+    "lat": 36.3206,
+    "lon": 5.7367,
+    "name": "Djemila",
+    "sitelinks": 56,
+    "wikidata": "Q457362"
+   },
+   {
+    "lat": 35.8139,
+    "lon": 4.7933,
+    "name": "Qal'at Bani Hammad",
+    "sitelinks": 51,
+    "wikidata": "Q500367"
+   },
+   {
+    "lat": 32.4872,
+    "lon": 3.6814,
+    "name": "M'zab",
+    "sitelinks": 47,
+    "wikidata": "Q724484"
+   },
+   {
+    "lat": 36.7833,
+    "lon": 3.0603,
+    "name": "Casbah of Algiers",
+    "sitelinks": 44,
+    "wikidata": "Q662102"
+   },
+   {
+    "lat": 36.5951,
+    "lon": 2.4408,
+    "name": "Tipasa",
+    "sitelinks": 22,
+    "wikidata": "Q3529269"
+   }
+  ],
+  "EC": [
+   {
+    "lat": -0.22,
+    "lon": -78.5125,
+    "name": "Quito",
+    "sitelinks": 181,
+    "wikidata": "Q2900"
+   },
+   {
+    "lat": -0.6667,
+    "lon": -90.55,
+    "name": "Galapagos Islands",
+    "sitelinks": 134,
+    "wikidata": "Q38095"
+   },
+   {
+    "lat": -18.25,
+    "lon": -69.5917,
+    "name": "Inca road system",
+    "sitelinks": 51,
+    "wikidata": "Q948975"
+   },
+   {
+    "lat": -1.8333,
+    "lon": -78.3333,
+    "name": "Sangay National Park",
+    "sitelinks": 46,
+    "wikidata": "Q839603"
+   },
+   {
+    "lat": -0.22,
+    "lon": -78.5121,
+    "name": "Historic Center of Quito",
+    "sitelinks": 8,
+    "wikidata": "Q8343766"
+   },
+   {
+    "lat": -2.8979,
+    "lon": -79.0049,
+    "name": "Historic Centre of Santa Ana de los Ríos de Cuenca",
+    "sitelinks": 4,
+    "wikidata": "Q8343759"
+   },
+   {
+    "lat": -0.623,
+    "lon": -90.3612,
+    "name": "Galápagos Islands",
+    "sitelinks": 0,
+    "wikidata": "Q117188122"
+   }
+  ],
+  "EE": [
+   {
+    "lat": 52.2894,
+    "lon": 25.6494,
+    "name": "Struve Geodetic Arc",
+    "sitelinks": 65,
+    "wikidata": "Q192243"
+   },
+   {
+    "lat": 59.4372,
+    "lon": 24.7453,
+    "name": "Tallinn Old Town",
+    "sitelinks": 34,
+    "wikidata": "Q726803"
+   }
+  ],
+  "EG": [
+   {
+    "lat": 30.841,
+    "lon": 29.6635,
+    "name": "Abu Mena",
+    "sitelinks": 63,
+    "wikidata": "Q9278"
+   },
+   {
+    "lat": 29.2708,
+    "lon": 30.0439,
+    "name": "Wadi Al-Hitan",
+    "sitelinks": 48,
+    "wikidata": "Q501833"
+   },
+   {
+    "lat": 30.046,
+    "lon": 31.2627,
+    "name": "Islamic Cairo",
+    "sitelinks": 47,
+    "wikidata": "Q1100964"
+   },
+   {
+    "lat": 22.3364,
+    "lon": 31.6261,
+    "name": "Nubian Monuments from Abu Simbel to Philae",
+    "sitelinks": 11,
+    "wikidata": "Q4923872"
+   },
+   {
+    "lat": 29.976,
+    "lon": 31.1304,
+    "name": "Memphis and its Necropolis – the Pyramid Fields from Giza to Dahshur",
+    "sitelinks": 4,
+    "wikidata": "Q1175856"
+   },
+   {
+    "lat": 28.5562,
+    "lon": 33.9754,
+    "name": "Saint Catherine Area",
+    "sitelinks": 2,
+    "wikidata": "Q2468771"
+   },
+   {
+    "lat": 25.7206,
+    "lon": 32.6103,
+    "name": "Ancient Thebes with its Necropolis",
+    "sitelinks": 1,
+    "wikidata": "Q141298543"
+   }
+  ],
+  "ER": [
+   {
+    "lat": 15.3353,
+    "lon": 38.9358,
+    "name": "Asmara: A Modernist African City",
+    "sitelinks": 1,
+    "wikidata": "Q124393371"
+   }
+  ],
+  "ES": [
+   {
+    "lat": 41.4037,
+    "lon": 2.1743,
+    "name": "Basilica and Expiatory Church of the Holy Family",
+    "sitelinks": 109,
+    "wikidata": "Q48435"
+   },
+   {
+    "lat": 28.4853,
+    "lon": -16.3167,
+    "name": "San Cristóbal de La Laguna",
+    "sitelinks": 87,
+    "wikidata": "Q54898"
+   },
+   {
+    "lat": 43.3769,
+    "lon": -4.1197,
+    "name": "Cave of Altamira",
+    "sitelinks": 76,
+    "wikidata": "Q133575"
+   },
+   {
+    "lat": 37.8792,
+    "lon": -4.7797,
+    "name": "Mosque-Cathedral of Cordoba",
+    "sitelinks": 62,
+    "wikidata": "Q33200"
+   },
+   {
+    "lat": 28.2765,
+    "lon": -16.6427,
+    "name": "Teide National Park",
+    "sitelinks": 61,
+    "wikidata": "Q715124"
+   },
+   {
+    "lat": 49.0,
+    "lon": 15.0,
+    "name": "Ancient and Primeval Beech Forests of the Carpathians and Other Regions of Europe",
+    "sitelinks": 56,
+    "wikidata": "Q156011"
+   },
+   {
+    "lat": 42.3408,
+    "lon": -3.7045,
+    "name": "Burgos Cathedral",
+    "sitelinks": 55,
+    "wikidata": "Q744420"
+   },
+   {
+    "lat": 28.1262,
+    "lon": -17.2372,
+    "name": "Garajonay National Park",
+    "sitelinks": 54,
+    "wikidata": "Q464942"
+   }
+  ],
+  "ET": [
+   {
+    "lat": 14.1167,
+    "lon": 38.7333,
+    "name": "Axum",
+    "sitelinks": 88,
+    "wikidata": "Q5832"
+   },
+   {
+    "lat": 4.4969,
+    "lon": 36.0138,
+    "name": "Omo River",
+    "sitelinks": 61,
+    "wikidata": "Q273456"
+   },
+   {
+    "lat": 13.1833,
+    "lon": 38.0667,
+    "name": "Simien Mountains National Park",
+    "sitelinks": 55,
+    "wikidata": "Q504315"
+   },
+   {
+    "lat": 12.6081,
+    "lon": 37.4697,
+    "name": "Fasil Ghebbi",
+    "sitelinks": 49,
+    "wikidata": "Q464695"
+   },
+   {
+    "lat": 6.75,
+    "lon": 39.75,
+    "name": "Bale Mountains National Park",
+    "sitelinks": 37,
+    "wikidata": "Q804881"
+   },
+   {
+    "lat": 12.0294,
+    "lon": 39.0404,
+    "name": "Monolithic churches in Lalibela",
+    "sitelinks": 36,
+    "wikidata": "Q642979"
+   },
+   {
+    "lat": 8.7025,
+    "lon": 38.6083,
+    "name": "Melka Kunture",
+    "sitelinks": 21,
+    "wikidata": "Q3063392"
+   },
+   {
+    "lat": 8.4349,
+    "lon": 38.6121,
+    "name": "Tiya archaeological site",
+    "sitelinks": 16,
+    "wikidata": "Q6130080"
+   }
+  ],
+  "FI": [
+   {
+    "lat": 52.2894,
+    "lon": 25.6494,
+    "name": "Struve Geodetic Arc",
+    "sitelinks": 65,
+    "wikidata": "Q192243"
+   },
+   {
+    "lat": 60.1436,
+    "lon": 24.9844,
+    "name": "Suomenlinna",
+    "sitelinks": 54,
+    "wikidata": "Q1292442"
+   },
+   {
+    "lat": 62.2501,
+    "lon": 25.1839,
+    "name": "Petäjävesi Old Church",
+    "sitelinks": 42,
+    "wikidata": "Q435829"
+   },
+   {
+    "lat": 61.1177,
+    "lon": 21.7752,
+    "name": "Sammallahdenmäki",
+    "sitelinks": 40,
+    "wikidata": "Q239748"
+   },
+   {
+    "lat": 61.062,
+    "lon": 26.64,
+    "name": "Verla",
+    "sitelinks": 38,
+    "wikidata": "Q217447"
+   },
+   {
+    "lat": 61.1283,
+    "lon": 21.5132,
+    "name": "Old Rauma",
+    "sitelinks": 37,
+    "wikidata": "Q828417"
+   },
+   {
+    "lat": 63.0667,
+    "lon": 20.45,
+    "name": "High Coast/Kvarken Archipelago",
+    "sitelinks": 6,
+    "wikidata": "Q10532185"
+   }
+  ],
+  "FJ": [
+   {
+    "lat": -17.6834,
+    "lon": 178.8345,
+    "name": "Levuka Historical Port Town",
+    "sitelinks": 2,
+    "wikidata": "Q17304996"
+   }
+  ],
+  "FM": [
+   {
+    "lat": 6.8419,
+    "lon": 158.3322,
+    "name": "Nan Madol",
+    "sitelinks": 53,
+    "wikidata": "Q846967"
+   }
+  ],
+  "FR": [
+   {
+    "lat": 48.8047,
+    "lon": 2.1203,
+    "name": "Palace of Versailles",
+    "sitelinks": 109,
+    "wikidata": "Q2946"
+   },
+   {
+    "lat": -8.9,
+    "lon": -139.6,
+    "name": "Marquesas Islands",
+    "sitelinks": 86,
+    "wikidata": "Q172697"
+   },
+   {
+    "lat": 48.4478,
+    "lon": 1.4878,
+    "name": "Notre-Dame de Chartres",
+    "sitelinks": 73,
+    "wikidata": "Q180274"
+   },
+   {
+    "lat": 44.3881,
+    "lon": 4.4161,
+    "name": "Chauvet Cave",
+    "sitelinks": 59,
+    "wikidata": "Q374096"
+   },
+   {
+    "lat": 43.9473,
+    "lon": 4.5355,
+    "name": "Pont du Gard",
+    "sitelinks": 59,
+    "wikidata": "Q189764"
+   },
+   {
+    "lat": 43.6111,
+    "lon": 1.4183,
+    "name": "Canal du Midi",
+    "sitelinks": 58,
+    "wikidata": "Q202494"
+   },
+   {
+    "lat": 49.8946,
+    "lon": 2.3021,
+    "name": "Notre-Dame d'Amiens",
+    "sitelinks": 57,
+    "wikidata": "Q106934"
+   },
+   {
+    "lat": 49.0,
+    "lon": 15.0,
+    "name": "Ancient and Primeval Beech Forests of the Carpathians and Other Regions of Europe",
+    "sitelinks": 56,
+    "wikidata": "Q156011"
+   }
+  ],
+  "GA": [
+   {
+    "lat": 0.088,
+    "lon": 12.63,
+    "name": "Ivindo National Park",
+    "sitelinks": 32,
+    "wikidata": "Q9055979"
+   },
+   {
+    "lat": -0.5,
+    "lon": 11.5,
+    "name": "Ecosystem and Relict Cultural Landscape of Lopé-Okanda",
+    "sitelinks": 18,
+    "wikidata": "Q14223008"
+   }
+  ],
+  "GB": [
+   {
+    "lat": 51.1789,
+    "lon": -1.8261,
+    "name": "Stonehenge",
+    "sitelinks": 135,
+    "wikidata": "Q39671"
+   },
+   {
+    "lat": 51.3814,
+    "lon": -2.3597,
+    "name": "Bath",
+    "sitelinks": 112,
+    "wikidata": "Q22889"
+   },
+   {
+    "lat": 51.5082,
+    "lon": -0.0762,
+    "name": "Tower of London",
+    "sitelinks": 88,
+    "wikidata": "Q62378"
+   },
+   {
+    "lat": 55.0242,
+    "lon": -2.2925,
+    "name": "Hadrian's Wall",
+    "sitelinks": 82,
+    "wikidata": "Q57357"
+   },
+   {
+    "lat": 55.2408,
+    "lon": -6.5117,
+    "name": "Giant's Causeway",
+    "sitelinks": 75,
+    "wikidata": "Q106187"
+   },
+   {
+    "lat": 54.5,
+    "lon": -3.1667,
+    "name": "Lake District",
+    "sitelinks": 59,
+    "wikidata": "Q211778"
+   },
+   {
+    "lat": 55.9984,
+    "lon": -3.3876,
+    "name": "Forth Bridge",
+    "sitelinks": 55,
+    "wikidata": "Q275"
+   },
+   {
+    "lat": 51.8414,
+    "lon": -1.3609,
+    "name": "Blenheim Palace",
+    "sitelinks": 53,
+    "wikidata": "Q208181"
+   }
+  ],
+  "GE": [
+   {
+    "lat": 42.2947,
+    "lon": 42.7681,
+    "name": "Gelati Monastery",
+    "sitelinks": 53,
+    "wikidata": "Q679979"
+   },
+   {
+    "lat": 41.7022,
+    "lon": 41.9511,
+    "name": "Colchic Rainforests and Wetlands",
+    "sitelinks": 19,
+    "wikidata": "Q107694185"
+   },
+   {
+    "lat": 41.8439,
+    "lon": 44.7164,
+    "name": "Historical Monuments of Mtskheta",
+    "sitelinks": 3,
+    "wikidata": "Q16946829"
+   },
+   {
+    "lat": 42.9164,
+    "lon": 43.0114,
+    "name": "Upper Svaneti",
+    "sitelinks": 2,
+    "wikidata": "Q47496765"
+   }
+  ],
+  "GH": [
+   {
+    "lat": 6.4011,
+    "lon": -1.6258,
+    "name": "Asante Traditional Buildings",
+    "sitelinks": 34,
+    "wikidata": "Q1141003"
+   },
+   {
+    "lat": 5.1037,
+    "lon": -1.241,
+    "name": "Forts and Castles, Volta, Greater Accra, Central and Western Regions",
+    "sitelinks": 19,
+    "wikidata": "Q778743"
+   }
+  ],
+  "GL": [
+   {
+    "lat": 69.15,
+    "lon": -49.55,
+    "name": "Ilulissat Icefjord",
+    "sitelinks": 38,
+    "wikidata": "Q828071"
+   },
+   {
+    "lat": 61.1644,
+    "lon": -45.5981,
+    "name": "Kujataa",
+    "sitelinks": 30,
+    "wikidata": "Q32904732"
+   },
+   {
+    "lat": 67.0639,
+    "lon": -51.4332,
+    "name": "Aasivissuit–Nipisat",
+    "sitelinks": 22,
+    "wikidata": "Q16324987"
+   }
+  ],
+  "GM": [
+   {
+    "lat": 13.3175,
+    "lon": -16.3615,
+    "name": "Kunta Kinteh Island and Related Sites",
+    "sitelinks": 4,
+    "wikidata": "Q4387456"
+   },
+   {
+    "lat": 13.6955,
+    "lon": -15.5354,
+    "name": "Stone Circles of Senegambia",
+    "sitelinks": 3,
+    "wikidata": "Q98769058"
+   }
+  ],
+  "GN": [
+   {
+    "lat": 7.603,
+    "lon": -8.391,
+    "name": "Mount Nimba Strict Nature Reserve",
+    "sitelinks": 48,
+    "wikidata": "Q924276"
+   }
+  ],
+  "GR": [
+   {
+    "lat": 40.0833,
+    "lon": 22.35,
+    "name": "Mount Olympus",
+    "sitelinks": 110,
+    "wikidata": "Q80344"
+   },
+   {
+    "lat": 37.9717,
+    "lon": 23.7261,
+    "name": "Acropolis of Athens",
+    "sitelinks": 97,
+    "wikidata": "Q131013"
+   },
+   {
+    "lat": 37.6383,
+    "lon": 21.63,
+    "name": "Olympia",
+    "sitelinks": 89,
+    "wikidata": "Q38888"
+   },
+   {
+    "lat": 37.3895,
+    "lon": 25.269,
+    "name": "Delos",
+    "sitelinks": 80,
+    "wikidata": "Q173148"
+   },
+   {
+    "lat": 39.7125,
+    "lon": 21.6267,
+    "name": "Meteora",
+    "sitelinks": 71,
+    "wikidata": "Q3125051"
+   },
+   {
+    "lat": 37.074,
+    "lon": 22.3673,
+    "name": "Mystras",
+    "sitelinks": 54,
+    "wikidata": "Q19053"
+   },
+   {
+    "lat": 41.0121,
+    "lon": 24.2846,
+    "name": "Philippi",
+    "sitelinks": 51,
+    "wikidata": "Q379652"
+   },
+   {
+    "lat": 40.6386,
+    "lon": 22.9478,
+    "name": "Paleochristian and Byzantine monuments of Thessaloniki",
+    "sitelinks": 30,
+    "wikidata": "Q732708"
+   }
+  ],
+  "GT": [
+   {
+    "lat": 15.2694,
+    "lon": -89.0403,
+    "name": "Quiriguá",
+    "sitelinks": 51,
+    "wikidata": "Q318422"
+   },
+   {
+    "lat": 14.6458,
+    "lon": -91.7361,
+    "name": "Takalik Abaj",
+    "sitelinks": 33,
+    "wikidata": "Q1509537"
+   },
+   {
+    "lat": 17.2167,
+    "lon": -89.6167,
+    "name": "Tikal National Park",
+    "sitelinks": 10,
+    "wikidata": "Q6063031"
+   },
+   {
+    "lat": 14.5579,
+    "lon": -90.7354,
+    "name": "College of the Company of Jesus",
+    "sitelinks": 1,
+    "wikidata": "Q18222581"
+   },
+   {
+    "lat": 14.5565,
+    "lon": -90.7338,
+    "name": "Antigua Guatemala",
+    "sitelinks": 0,
+    "wikidata": "Q65130425"
+   }
+  ],
+  "GW": [
+   {
+    "lat": 11.25,
+    "lon": -16.0833,
+    "name": "Bijagos Archipelago Biosphere Reserve",
+    "sitelinks": 0,
+    "wikidata": "Q63353195"
+   }
+  ],
+  "HN": [
+   {
+    "lat": 14.838,
+    "lon": -89.1424,
+    "name": "Copán",
+    "sitelinks": 57,
+    "wikidata": "Q214827"
+   },
+   {
+    "lat": 15.6,
+    "lon": -84.8,
+    "name": "Río Plátano Biosphere Reserve",
+    "sitelinks": 46,
+    "wikidata": "Q752181"
+   }
+  ],
+  "HR": [
+   {
+    "lat": 44.8804,
+    "lon": 15.616,
+    "name": "Plitvice Lakes National Park",
+    "sitelinks": 71,
+    "wikidata": "Q189849"
+   },
+   {
+    "lat": 49.0,
+    "lon": 15.0,
+    "name": "Ancient and Primeval Beech Forests of the Carpathians and Other Regions of Europe",
+    "sitelinks": 56,
+    "wikidata": "Q156011"
+   },
+   {
+    "lat": 45.2286,
+    "lon": 13.5936,
+    "name": "Euphrasian Basilica",
+    "sitelinks": 40,
+    "wikidata": "Q645105"
+   },
+   {
+    "lat": 43.7356,
+    "lon": 15.8892,
+    "name": "Šibenik Cathedral",
+    "sitelinks": 40,
+    "wikidata": "Q391973"
+   },
+   {
+    "lat": 45.7033,
+    "lon": 9.6636,
+    "name": "The Venetian Works of defence between 15th and 17th centuries",
+    "sitelinks": 35,
+    "wikidata": "Q32797097"
+   },
+   {
+    "lat": 43.1817,
+    "lon": 16.6386,
+    "name": "Stari Grad Plain",
+    "sitelinks": 31,
+    "wikidata": "Q614212"
+   },
+   {
+    "lat": 42.6409,
+    "lon": 18.1091,
+    "name": "Old city (Dubrovnik)",
+    "sitelinks": 8,
+    "wikidata": "Q910661"
+   },
+   {
+    "lat": 43.5173,
+    "lon": 16.2507,
+    "name": "Garagnin-Fanfogna Palace",
+    "sitelinks": 3,
+    "wikidata": "Q97352832"
+   }
+  ],
+  "HT": [
+   {
+    "lat": 19.5736,
+    "lon": -72.2439,
+    "name": "Citadelle Laferrière",
+    "sitelinks": 32,
+    "wikidata": "Q206194"
+   },
+   {
+    "lat": 19.6047,
+    "lon": -72.2186,
+    "name": "Sans-Souci Palace",
+    "sitelinks": 25,
+    "wikidata": "Q930795"
+   },
+   {
+    "lat": 19.5736,
+    "lon": -72.2439,
+    "name": "National History Park",
+    "sitelinks": 19,
+    "wikidata": "Q12125635"
+   },
+   {
+    "lat": 19.5736,
+    "lon": -72.2442,
+    "name": "Ramiers",
+    "sitelinks": 7,
+    "wikidata": "Q2305026"
+   },
+   {
+    "lat": 19.6047,
+    "lon": -72.2208,
+    "name": "Royal Chapel of Milot",
+    "sitelinks": 2,
+    "wikidata": "Q100242002"
+   }
+  ],
+  "HU": [
+   {
+    "lat": 47.8333,
+    "lon": 16.75,
+    "name": "Neusiedl Lake",
+    "sitelinks": 63,
+    "wikidata": "Q6396"
+   },
+   {
+    "lat": 47.5946,
+    "lon": 21.1568,
+    "name": "Hortobágy National Park",
+    "sitelinks": 54,
+    "wikidata": "Q61757"
+   },
+   {
+    "lat": 47.9961,
+    "lon": 19.5917,
+    "name": "Hollókő",
+    "sitelinks": 52,
+    "wikidata": "Q622865"
+   },
+   {
+    "lat": 47.4961,
+    "lon": 19.0397,
+    "name": "Buda Castle",
+    "sitelinks": 48,
+    "wikidata": "Q46313"
+   },
+   {
+    "lat": 47.5528,
+    "lon": 17.7611,
+    "name": "Pannonhalma Archabbey",
+    "sitelinks": 40,
+    "wikidata": "Q936285"
+   },
+   {
+    "lat": 48.4718,
+    "lon": 20.4953,
+    "name": "Caves of Aggtelek Karst and Slovak Karst",
+    "sitelinks": 35,
+    "wikidata": "Q608090"
+   },
+   {
+    "lat": 46.0744,
+    "lon": 18.2278,
+    "name": "Early Christian Necropolis of Pécs",
+    "sitelinks": 20,
+    "wikidata": "Q927535"
+   },
+   {
+    "lat": 47.4824,
+    "lon": 19.0707,
+    "name": "Budapest, including the Banks of the Danube, the Buda Castle Quarter and Andrássy Avenue",
+    "sitelinks": 6,
+    "wikidata": "Q851122"
+   }
+  ],
+  "ID": [
+   {
+    "lat": -7.752,
+    "lon": 110.4912,
+    "name": "Prambanan Temple",
+    "sitelinks": 72,
+    "wikidata": "Q47721"
+   },
+   {
+    "lat": -8.6516,
+    "lon": 119.5766,
+    "name": "Komodo National Park",
+    "sitelinks": 65,
+    "wikidata": "Q4520"
+   },
+   {
+    "lat": -4.75,
+    "lon": 137.8333,
+    "name": "Lorentz National Park",
+    "sitelinks": 62,
+    "wikidata": "Q4516"
+   },
+   {
+    "lat": -2.5,
+    "lon": 101.5,
+    "name": "Tropical Rainforest Heritage of Sumatra",
+    "sitelinks": 54,
+    "wikidata": "Q4521"
+   },
+   {
+    "lat": -6.75,
+    "lon": 105.3333,
+    "name": "Ujung Kulon National Park",
+    "sitelinks": 52,
+    "wikidata": "Q4522"
+   },
+   {
+    "lat": -7.45,
+    "lon": 110.85,
+    "name": "Sangiran",
+    "sitelinks": 41,
+    "wikidata": "Q842328"
+   },
+   {
+    "lat": -0.6828,
+    "lon": 100.7783,
+    "name": "Sawahlunto",
+    "sitelinks": 33,
+    "wikidata": "Q7263"
+   },
+   {
+    "lat": -0.6833,
+    "lon": 100.767,
+    "name": "Ombilin coal mine",
+    "sitelinks": 26,
+    "wikidata": "Q16965955"
+   }
+  ],
+  "IE": [
+   {
+    "lat": 51.7711,
+    "lon": -10.5406,
+    "name": "Skellig Michael",
+    "sitelinks": 52,
+    "wikidata": "Q207193"
+   },
+   {
+    "lat": 53.6928,
+    "lon": -6.4493,
+    "name": "Brú na Bóinne",
+    "sitelinks": 44,
+    "wikidata": "Q339489"
+   }
+  ],
+  "IL": [
+   {
+    "lat": 32.9261,
+    "lon": 35.0839,
+    "name": "Acre",
+    "sitelinks": 103,
+    "wikidata": "Q126084"
+   },
+   {
+    "lat": 31.3156,
+    "lon": 35.3539,
+    "name": "Masada",
+    "sitelinks": 70,
+    "wikidata": "Q186312"
+   },
+   {
+    "lat": 32.0778,
+    "lon": 34.7739,
+    "name": "White City",
+    "sitelinks": 36,
+    "wikidata": "Q159070"
+   },
+   {
+    "lat": 31.7747,
+    "lon": 35.2278,
+    "name": "Walls of Jerusalem",
+    "sitelinks": 30,
+    "wikidata": "Q2918723"
+   },
+   {
+    "lat": 32.7042,
+    "lon": 35.1281,
+    "name": "Beit She'arim National Park",
+    "sitelinks": 29,
+    "wikidata": "Q830805"
+   },
+   {
+    "lat": 31.0975,
+    "lon": 34.6578,
+    "name": "Incense Route – Desert Cities in the Negev",
+    "sitelinks": 29,
+    "wikidata": "Q477578"
+   },
+   {
+    "lat": 31.6131,
+    "lon": 34.8983,
+    "name": "Beit Guvrin National Park",
+    "sitelinks": 24,
+    "wikidata": "Q2407530"
+   },
+   {
+    "lat": 32.8138,
+    "lon": 34.9866,
+    "name": "Bahá'í World Centre buildings",
+    "sitelinks": 18,
+    "wikidata": "Q2149036"
+   }
+  ],
+  "IN": [
+   {
+    "lat": 27.175,
+    "lon": 78.0419,
+    "name": "Taj Mahal",
+    "sitelinks": 185,
+    "wikidata": "Q9141"
+   },
+   {
+    "lat": 26.915,
+    "lon": 75.82,
+    "name": "Jaipur",
+    "sitelinks": 146,
+    "wikidata": "Q66485"
+   },
+   {
+    "lat": 27.0911,
+    "lon": 77.6611,
+    "name": "Fatehpur Sikri",
+    "sitelinks": 86,
+    "wikidata": "Q179046"
+   },
+   {
+    "lat": 20.5534,
+    "lon": 75.7005,
+    "name": "Ajanta Caves",
+    "sitelinks": 83,
+    "wikidata": "Q184427"
+   },
+   {
+    "lat": 10.1697,
+    "lon": 77.0611,
+    "name": "Western Ghats",
+    "sitelinks": 83,
+    "wikidata": "Q4527"
+   },
+   {
+    "lat": 27.1796,
+    "lon": 78.0213,
+    "name": "Agra Fort",
+    "sitelinks": 78,
+    "wikidata": "Q171857"
+   },
+   {
+    "lat": 20.0264,
+    "lon": 75.1792,
+    "name": "Ellora Caves",
+    "sitelinks": 76,
+    "wikidata": "Q189616"
+   },
+   {
+    "lat": 26.6667,
+    "lon": 93.35,
+    "name": "Kaziranga National Park",
+    "sitelinks": 76,
+    "wikidata": "Q192764"
+   }
+  ],
+  "IQ": [
+   {
+    "lat": 34.1959,
+    "lon": 43.8857,
+    "name": "Samarra",
+    "sitelinks": 92,
+    "wikidata": "Q170047"
+   },
+   {
+    "lat": 35.4567,
+    "lon": 43.2625,
+    "name": "Assur",
+    "sitelinks": 79,
+    "wikidata": "Q200200"
+   },
+   {
+    "lat": 35.5881,
+    "lon": 42.7183,
+    "name": "Hatra",
+    "sitelinks": 62,
+    "wikidata": "Q466614"
+   },
+   {
+    "lat": 36.191,
+    "lon": 44.009,
+    "name": "Citadel of Erbil",
+    "sitelinks": 35,
+    "wikidata": "Q206236"
+   },
+   {
+    "lat": 31.5622,
+    "lon": 47.6578,
+    "name": "Ahwar of Southern Iraq",
+    "sitelinks": 24,
+    "wikidata": "Q25933006"
+   },
+   {
+    "lat": 32.5418,
+    "lon": 44.4316,
+    "name": "Babylon",
+    "sitelinks": 0,
+    "wikidata": "Q100329356"
+   },
+   {
+    "lat": 31.3259,
+    "lon": 45.6374,
+    "name": "Warka",
+    "sitelinks": 0,
+    "wikidata": "Q133132919"
+   }
+  ],
+  "IR": [
+   {
+    "lat": 29.935,
+    "lon": 52.89,
+    "name": "Persepolis",
+    "sitelinks": 103,
+    "wikidata": "Q129072"
+   },
+   {
+    "lat": 32.1894,
+    "lon": 48.2561,
+    "name": "Susa",
+    "sitelinks": 79,
+    "wikidata": "Q180773"
+   },
+   {
+    "lat": 29.1061,
+    "lon": 58.3569,
+    "name": "Bam",
+    "sitelinks": 67,
+    "wikidata": "Q106636"
+   },
+   {
+    "lat": 32.6582,
+    "lon": 51.6773,
+    "name": "Naqsh-e Jahan Square",
+    "sitelinks": 67,
+    "wikidata": "Q4519"
+   },
+   {
+    "lat": 32.0083,
+    "lon": 48.5208,
+    "name": "Chogha Zanbil",
+    "sitelinks": 66,
+    "wikidata": "Q4523"
+   },
+   {
+    "lat": 30.2,
+    "lon": 53.1794,
+    "name": "Pasargadae",
+    "sitelinks": 66,
+    "wikidata": "Q230025"
+   },
+   {
+    "lat": 30.2639,
+    "lon": 59.2411,
+    "name": "Dasht-e Lut",
+    "sitelinks": 64,
+    "wikidata": "Q767128"
+   },
+   {
+    "lat": 35.6797,
+    "lon": 51.4203,
+    "name": "Golestan Palace",
+    "sitelinks": 59,
+    "wikidata": "Q210610"
+   }
+  ],
+  "IS": [
+   {
+    "lat": 63.304,
+    "lon": -20.6047,
+    "name": "Surtsey",
+    "sitelinks": 63,
+    "wikidata": "Q178124"
+   },
+   {
+    "lat": 64.2581,
+    "lon": -21.125,
+    "name": "Thingvellir National Park",
+    "sitelinks": 62,
+    "wikidata": "Q107370"
+   },
+   {
+    "lat": 64.5,
+    "lon": -17.0,
+    "name": "Vatnajökull National Park",
+    "sitelinks": 48,
+    "wikidata": "Q1353292"
+   }
+  ],
+  "IT": [
+   {
+    "lat": 45.4386,
+    "lon": 10.9928,
+    "name": "Verona",
+    "sitelinks": 142,
+    "wikidata": "Q2028"
+   },
+   {
+    "lat": 38.4967,
+    "lon": 14.9358,
+    "name": "Aeolian Islands",
+    "sitelinks": 75,
+    "wikidata": "Q179883"
+   },
+   {
+    "lat": 44.05,
+    "lon": 9.8333,
+    "name": "Porto Venere",
+    "sitelinks": 75,
+    "wikidata": "Q188315"
+   },
+   {
+    "lat": 41.8414,
+    "lon": 12.5325,
+    "name": "Appian Way",
+    "sitelinks": 63,
+    "wikidata": "Q189417"
+   },
+   {
+    "lat": 40.6333,
+    "lon": 14.6,
+    "name": "Amalfi Coast",
+    "sitelinks": 58,
+    "wikidata": "Q212214"
+   },
+   {
+    "lat": 41.0848,
+    "lon": 16.2709,
+    "name": "Castel del Monte",
+    "sitelinks": 58,
+    "wikidata": "Q215897"
+   },
+   {
+    "lat": 49.0,
+    "lon": 15.0,
+    "name": "Ancient and Primeval Beech Forests of the Carpathians and Other Regions of Europe",
+    "sitelinks": 56,
+    "wikidata": "Q156011"
+   },
+   {
+    "lat": 45.4658,
+    "lon": 9.1711,
+    "name": "Santa Maria delle Grazie",
+    "sitelinks": 55,
+    "wikidata": "Q244952"
+   }
+  ],
+  "JM": [
+   {
+    "lat": 17.9375,
+    "lon": -76.8414,
+    "name": "Port Royal",
+    "sitelinks": 45,
+    "wikidata": "Q685357"
+   },
+   {
+    "lat": 18.0535,
+    "lon": -76.3546,
+    "name": "John Crow Mountains",
+    "sitelinks": 17,
+    "wikidata": "Q6227775"
+   },
+   {
+    "lat": 18.0775,
+    "lon": -76.5711,
+    "name": "Blue and John Crow Mountains",
+    "sitelinks": 1,
+    "wikidata": "Q24082981"
+   }
+  ],
+  "JO": [
+   {
+    "lat": 30.3289,
+    "lon": 35.4403,
+    "name": "Petra",
+    "sitelinks": 117,
+    "wikidata": "Q5788"
+   },
+   {
+    "lat": 29.5765,
+    "lon": 35.4199,
+    "name": "Wadi Rum",
+    "sitelinks": 61,
+    "wikidata": "Q40729"
+   },
+   {
+    "lat": 32.0392,
+    "lon": 35.7272,
+    "name": "Salt",
+    "sitelinks": 52,
+    "wikidata": "Q867586"
+   },
+   {
+    "lat": 31.8017,
+    "lon": 36.5873,
+    "name": "Qasr Amra",
+    "sitelinks": 46,
+    "wikidata": "Q499517"
+   },
+   {
+    "lat": 31.8372,
+    "lon": 35.5503,
+    "name": "Al Maghtas",
+    "sitelinks": 41,
+    "wikidata": "Q12193567"
+   },
+   {
+    "lat": 31.4997,
+    "lon": 35.9197,
+    "name": "Umm ar-Rasas",
+    "sitelinks": 40,
+    "wikidata": "Q822842"
+   },
+   {
+    "lat": 32.3267,
+    "lon": 36.3697,
+    "name": "Umm el-Jimal",
+    "sitelinks": 26,
+    "wikidata": "Q3107493"
+   },
+   {
+    "lat": 29.4307,
+    "lon": 34.9718,
+    "name": "Aqaba Marine Reserve",
+    "sitelinks": 13,
+    "wikidata": "Q31866622"
+   }
+  ],
+  "JP": [
+   {
+    "lat": 35.021,
+    "lon": 135.7556,
+    "name": "Kyoto Prefecture",
+    "sitelinks": 106,
+    "wikidata": "Q120730"
+   },
+   {
+    "lat": 34.8394,
+    "lon": 134.6936,
+    "name": "Himeji Castle",
+    "sitelinks": 76,
+    "wikidata": "Q188754"
+   },
+   {
+    "lat": 34.3956,
+    "lon": 132.4536,
+    "name": "Hiroshima Peace Memorial",
+    "sitelinks": 72,
+    "wikidata": "Q231140"
+   },
+   {
+    "lat": 34.2958,
+    "lon": 132.3201,
+    "name": "Itsukushima Shrine",
+    "sitelinks": 70,
+    "wikidata": "Q191763"
+   },
+   {
+    "lat": 30.3586,
+    "lon": 130.5286,
+    "name": "Yakushima",
+    "sitelinks": 61,
+    "wikidata": "Q242176"
+   },
+   {
+    "lat": 40.47,
+    "lon": 140.13,
+    "name": "Shirakami-Sanchi",
+    "sitelinks": 53,
+    "wikidata": "Q501638"
+   },
+   {
+    "lat": 46.4684,
+    "lon": 6.8293,
+    "name": "The Architectural Work of Le Corbusier",
+    "sitelinks": 43,
+    "wikidata": "Q55619850"
+   },
+   {
+    "lat": 35.0603,
+    "lon": 135.7528,
+    "name": "Historic Monuments of Ancient Kyoto",
+    "sitelinks": 41,
+    "wikidata": "Q874027"
+   }
+  ],
+  "KE": [
+   {
+    "lat": -4.0712,
+    "lon": 39.6821,
+    "name": "Fort Jesus Museum",
+    "sitelinks": 48,
+    "wikidata": "Q379080"
+   },
+   {
+    "lat": -0.1239,
+    "lon": 37.3367,
+    "name": "Mount Kenya National Park",
+    "sitelinks": 45,
+    "wikidata": "Q1639468"
+   },
+   {
+    "lat": 3.0513,
+    "lon": 36.5037,
+    "name": "Lake Turkana National Parks",
+    "sitelinks": 40,
+    "wikidata": "Q1647948"
+   },
+   {
+    "lat": -3.9319,
+    "lon": 39.5961,
+    "name": "Sacred Mijikenda Kaya Forests",
+    "sitelinks": 33,
+    "wikidata": "Q1362222"
+   },
+   {
+    "lat": -0.8913,
+    "lon": 34.3261,
+    "name": "Thimlich Ohinga",
+    "sitelinks": 28,
+    "wikidata": "Q3524629"
+   },
+   {
+    "lat": 0.4425,
+    "lon": 36.24,
+    "name": "Kenya Lake System in the Great Rift Valley",
+    "sitelinks": 27,
+    "wikidata": "Q2384313"
+   },
+   {
+    "lat": -3.3092,
+    "lon": 40.0167,
+    "name": "Ruins of Gedi",
+    "sitelinks": 24,
+    "wikidata": "Q502518"
+   },
+   {
+    "lat": -2.2844,
+    "lon": 40.8525,
+    "name": "Lamu Old Town",
+    "sitelinks": 3,
+    "wikidata": "Q51100199"
+   }
+  ],
+  "KG": [
+   {
+    "lat": 40.5294,
+    "lon": 72.7833,
+    "name": "Sulaiman-Too",
+    "sitelinks": 46,
+    "wikidata": "Q750190"
+   },
+   {
+    "lat": 42.7465,
+    "lon": 75.2504,
+    "name": "Burana Tower",
+    "sitelinks": 38,
+    "wikidata": "Q852032"
+   },
+   {
+    "lat": 34.3044,
+    "lon": 108.8572,
+    "name": "Silk Roads: the Routes Network of Chang'an-Tianshan Corridor",
+    "sitelinks": 29,
+    "wikidata": "Q17277933"
+   },
+   {
+    "lat": 42.5,
+    "lon": 74.5833,
+    "name": "Western Tian Shan",
+    "sitelinks": 9,
+    "wikidata": "Q16434635"
+   }
+  ],
+  "KH": [
+   {
+    "lat": 14.3906,
+    "lon": 104.6803,
+    "name": "Preah Vihear Temple",
+    "sitelinks": 52,
+    "wikidata": "Q45949"
+   },
+   {
+    "lat": 13.7499,
+    "lon": 104.5473,
+    "name": "Koh Ker",
+    "sitelinks": 31,
+    "wikidata": "Q1778458"
+   },
+   {
+    "lat": 12.8673,
+    "lon": 105.04,
+    "name": "Sambor Prei Kuk",
+    "sitelinks": 31,
+    "wikidata": "Q1818746"
+   },
+   {
+    "lat": 11.4844,
+    "lon": 104.902,
+    "name": "Cambodian Memorial Sites: From centres of repression to places of peace and reflection",
+    "sitelinks": 9,
+    "wikidata": "Q134721311"
+   },
+   {
+    "lat": 13.4409,
+    "lon": 103.8591,
+    "name": "Angkor",
+    "sitelinks": 3,
+    "wikidata": "Q2397751"
+   }
+  ],
+  "KI": [
+   {
+    "lat": -3.6497,
+    "lon": -172.8575,
+    "name": "Phoenix Islands Protected Area",
+    "sitelinks": 23,
+    "wikidata": "Q863815"
+   }
+  ],
+  "KM": [
+   {
+    "lat": -11.7447,
+    "lon": 43.2326,
+    "name": "The Medinas of the Historic Sultanates of the Comoros",
+    "sitelinks": 5,
+    "wikidata": "Q65724639"
+   }
+  ],
+  "KN": [
+   {
+    "lat": 17.347,
+    "lon": -62.836,
+    "name": "Brimstone Hill Fortress National Park",
+    "sitelinks": 37,
+    "wikidata": "Q200521"
+   }
+  ],
+  "KP": [
+   {
+    "lat": 38.6568,
+    "lon": 128.1049,
+    "name": "Mount Kumgang",
+    "sitelinks": 41,
+    "wikidata": "Q495501"
+   },
+   {
+    "lat": 38.8631,
+    "lon": 125.415,
+    "name": "Goguryeo tombs",
+    "sitelinks": 38,
+    "wikidata": "Q277525"
+   },
+   {
+    "lat": 37.9817,
+    "lon": 126.5081,
+    "name": "Historic Monuments and Sites in Kaesong",
+    "sitelinks": 14,
+    "wikidata": "Q15726137"
+   }
+  ],
+  "KR": [
+   {
+    "lat": 37.5794,
+    "lon": 126.9917,
+    "name": "Changdeokgung",
+    "sitelinks": 51,
+    "wikidata": "Q477157"
+   },
+   {
+    "lat": 37.5747,
+    "lon": 126.9936,
+    "name": "Jongmyo",
+    "sitelinks": 45,
+    "wikidata": "Q490497"
+   },
+   {
+    "lat": 37.2807,
+    "lon": 127.0102,
+    "name": "Hwaseong Fortress",
+    "sitelinks": 40,
+    "wikidata": "Q482423"
+   },
+   {
+    "lat": 37.1972,
+    "lon": 128.4528,
+    "name": "Royal Tombs of the Joseon Dynasty",
+    "sitelinks": 40,
+    "wikidata": "Q495276"
+   },
+   {
+    "lat": 37.478,
+    "lon": 127.1842,
+    "name": "Namhansanseong",
+    "sitelinks": 36,
+    "wikidata": "Q562529"
+   },
+   {
+    "lat": 34.9667,
+    "lon": 126.9292,
+    "name": "Gochang, Hwasun and Ganghwa Dolmen Sites",
+    "sitelinks": 30,
+    "wikidata": "Q495286"
+   },
+   {
+    "lat": 33.3614,
+    "lon": 126.5325,
+    "name": "Jeju Volcanic Island and Lava Tubes",
+    "sitelinks": 28,
+    "wikidata": "Q495733"
+   },
+   {
+    "lat": 35.7889,
+    "lon": 129.2267,
+    "name": "Gyeongju Historic Areas",
+    "sitelinks": 27,
+    "wikidata": "Q495241"
+   }
+  ],
+  "KZ": [
+   {
+    "lat": 43.2976,
+    "lon": 68.271,
+    "name": "Mausoleum of Khoja Ahmed Yasawi",
+    "sitelinks": 47,
+    "wikidata": "Q46069"
+   },
+   {
+    "lat": 43.8033,
+    "lon": 75.535,
+    "name": "Tamgaly",
+    "sitelinks": 43,
+    "wikidata": "Q943327"
+   },
+   {
+    "lat": 50.4333,
+    "lon": 69.1889,
+    "name": "Saryarka – Steppe and Lakes of Northern Kazakhstan",
+    "sitelinks": 31,
+    "wikidata": "Q2559020"
+   },
+   {
+    "lat": 34.3044,
+    "lon": 108.8572,
+    "name": "Silk Roads: the Routes Network of Chang'an-Tianshan Corridor",
+    "sitelinks": 29,
+    "wikidata": "Q17277933"
+   },
+   {
+    "lat": 44.0258,
+    "lon": 79.0342,
+    "name": "Cold Winter Deserts of Turan",
+    "sitelinks": 12,
+    "wikidata": "Q122731152"
+   },
+   {
+    "lat": 42.5,
+    "lon": 74.5833,
+    "name": "Western Tian Shan",
+    "sitelinks": 9,
+    "wikidata": "Q16434635"
+   }
+  ],
+  "LA": [
+   {
+    "lat": 19.89,
+    "lon": 102.1347,
+    "name": "Luang Prabang",
+    "sitelinks": 88,
+    "wikidata": "Q190165"
+   },
+   {
+    "lat": 19.4311,
+    "lon": 103.1525,
+    "name": "Plain of Jars",
+    "sitelinks": 48,
+    "wikidata": "Q870258"
+   },
+   {
+    "lat": 17.4583,
+    "lon": 105.9333,
+    "name": "Hin Nam No National Protected Area",
+    "sitelinks": 18,
+    "wikidata": "Q5765542"
+   },
+   {
+    "lat": 14.8333,
+    "lon": 105.8,
+    "name": "Champasak cultural landscape",
+    "sitelinks": 6,
+    "wikidata": "Q3888860"
+   }
+  ],
+  "LB": [
+   {
+    "lat": 34.0154,
+    "lon": 36.2006,
+    "name": "Baalbek",
+    "sitelinks": 87,
+    "wikidata": "Q178835"
+   },
+   {
+    "lat": 34.1195,
+    "lon": 35.6468,
+    "name": "Byblos",
+    "sitelinks": 83,
+    "wikidata": "Q173532"
+   },
+   {
+    "lat": 33.7258,
+    "lon": 35.9297,
+    "name": "Anjar",
+    "sitelinks": 53,
+    "wikidata": "Q60977"
+   },
+   {
+    "lat": 33.3247,
+    "lon": 35.5321,
+    "name": "Beaufort Castle",
+    "sitelinks": 27,
+    "wikidata": "Q476801"
+   },
+   {
+    "lat": 34.0067,
+    "lon": 36.2033,
+    "name": "Temple of Jupiter",
+    "sitelinks": 14,
+    "wikidata": "Q21079381"
+   },
+   {
+    "lat": 34.4396,
+    "lon": 35.8259,
+    "name": "Rachid Karami International Fair",
+    "sitelinks": 10,
+    "wikidata": "Q116448209"
+   },
+   {
+    "lat": 33.2704,
+    "lon": 35.1951,
+    "name": "Cathedral of the Holy Cross, Tyre",
+    "sitelinks": 5,
+    "wikidata": "Q110026434"
+   },
+   {
+    "lat": 33.2737,
+    "lon": 35.1949,
+    "name": "Tyre",
+    "sitelinks": 4,
+    "wikidata": "Q3991738"
+   }
+  ],
+  "LC": [
+   {
+    "lat": 13.8071,
+    "lon": -61.0704,
+    "name": "Pitons",
+    "sitelinks": 31,
+    "wikidata": "Q639487"
+   }
+  ],
+  "LK": [
+   {
+    "lat": 7.2931,
+    "lon": 80.635,
+    "name": "Kandy",
+    "sitelinks": 88,
+    "wikidata": "Q203197"
+   },
+   {
+    "lat": 8.335,
+    "lon": 80.4108,
+    "name": "Anuradhapura",
+    "sitelinks": 81,
+    "wikidata": "Q5724"
+   },
+   {
+    "lat": 7.9569,
+    "lon": 80.7597,
+    "name": "Sigiriya",
+    "sitelinks": 63,
+    "wikidata": "Q272153"
+   },
+   {
+    "lat": 7.9333,
+    "lon": 81.0,
+    "name": "Polonnaruwa",
+    "sitelinks": 56,
+    "wikidata": "Q394443"
+   },
+   {
+    "lat": 6.24,
+    "lon": 80.28,
+    "name": "Sinharaja Forest Reserve",
+    "sitelinks": 45,
+    "wikidata": "Q375634"
+   },
+   {
+    "lat": 7.8566,
+    "lon": 80.6483,
+    "name": "Dambulla cave temple",
+    "sitelinks": 39,
+    "wikidata": "Q45690"
+   },
+   {
+    "lat": 7.4524,
+    "lon": 80.8021,
+    "name": "Central Highlands of Sri Lanka",
+    "sitelinks": 31,
+    "wikidata": "Q422941"
+   },
+   {
+    "lat": 6.0214,
+    "lon": 80.2186,
+    "name": "Old Town of Galle and its Fortifications",
+    "sitelinks": 0,
+    "wikidata": "Q15830652"
+   }
+  ],
+  "LS": [
+   {
+    "lat": -29.4665,
+    "lon": 29.3939,
+    "name": "Maloti-Drakensberg Park",
+    "sitelinks": 23,
+    "wikidata": "Q6744547"
+   }
+  ],
+  "LT": [
+   {
+    "lat": 55.2744,
+    "lon": 20.9708,
+    "name": "Curonian Spit",
+    "sitelinks": 67,
+    "wikidata": "Q5595"
+   },
+   {
+    "lat": 52.2894,
+    "lon": 25.6494,
+    "name": "Struve Geodetic Arc",
+    "sitelinks": 65,
+    "wikidata": "Q192243"
+   },
+   {
+    "lat": 54.6833,
+    "lon": 25.2833,
+    "name": "Vilnius Old Town",
+    "sitelinks": 36,
+    "wikidata": "Q445649"
+   },
+   {
+    "lat": 54.8969,
+    "lon": 23.9292,
+    "name": "Modernist Kaunas: Architecture of Optimism, 1919-1939",
+    "sitelinks": 8,
+    "wikidata": "Q64462328"
+   },
+   {
+    "lat": 54.8806,
+    "lon": 24.8417,
+    "name": "Cultural Reserve of Kernavė",
+    "sitelinks": 3,
+    "wikidata": "Q12676460"
+   }
+  ],
+  "LU": [
+   {
+    "lat": 49.6106,
+    "lon": 6.1325,
+    "name": "City of Luxembourg: its Old Quarters and Fortifications",
+    "sitelinks": 2,
+    "wikidata": "Q52112669"
+   }
+  ],
+  "LV": [
+   {
+    "lat": 52.2894,
+    "lon": 25.6494,
+    "name": "Struve Geodetic Arc",
+    "sitelinks": 65,
+    "wikidata": "Q192243"
+   },
+   {
+    "lat": 56.9485,
+    "lon": 24.1082,
+    "name": "Vecrīga",
+    "sitelinks": 38,
+    "wikidata": "Q1026415"
+   },
+   {
+    "lat": 56.9675,
+    "lon": 21.9706,
+    "name": "Old town of Kuldīga",
+    "sitelinks": 5,
+    "wikidata": "Q122772994"
+   }
+  ],
+  "LY": [
+   {
+    "lat": 32.8167,
+    "lon": 21.85,
+    "name": "Cyrene",
+    "sitelinks": 75,
+    "wikidata": "Q44112"
+   },
+   {
+    "lat": 32.6383,
+    "lon": 14.2905,
+    "name": "Leptis Magna",
+    "sitelinks": 69,
+    "wikidata": "Q191504"
+   },
+   {
+    "lat": 24.8334,
+    "lon": 10.3333,
+    "name": "Tadrart Acacus",
+    "sitelinks": 55,
+    "wikidata": "Q308807"
+   },
+   {
+    "lat": 32.8053,
+    "lon": 12.485,
+    "name": "Archaeological Site of Sabratha",
+    "sitelinks": 19,
+    "wikidata": "Q15052130"
+   },
+   {
+    "lat": 30.132,
+    "lon": 9.497,
+    "name": "Old Town of Ghadamès",
+    "sitelinks": 15,
+    "wikidata": "Q105973249"
+   }
+  ],
+  "MA": [
+   {
+    "lat": 34.0211,
+    "lon": -6.8414,
+    "name": "Rabat",
+    "sitelinks": 191,
+    "wikidata": "Q3551"
+   },
+   {
+    "lat": 31.05,
+    "lon": -7.1333,
+    "name": "Aït Benhaddou",
+    "sitelinks": 68,
+    "wikidata": "Q309436"
+   },
+   {
+    "lat": 34.04,
+    "lon": -5.5627,
+    "name": "Volubilis",
+    "sitelinks": 53,
+    "wikidata": "Q391215"
+   },
+   {
+    "lat": 34.0625,
+    "lon": -4.9725,
+    "name": "Medina of Fez",
+    "sitelinks": 15,
+    "wikidata": "Q2072102"
+   },
+   {
+    "lat": 31.5144,
+    "lon": -9.7689,
+    "name": "Medina of Essaouira",
+    "sitelinks": 14,
+    "wikidata": "Q11858823"
+   },
+   {
+    "lat": 35.5711,
+    "lon": -5.3665,
+    "name": "Medina of Tétouan",
+    "sitelinks": 14,
+    "wikidata": "Q3847588"
+   },
+   {
+    "lat": 31.6314,
+    "lon": -7.9867,
+    "name": "Medina of Marrakech",
+    "sitelinks": 13,
+    "wikidata": "Q966780"
+   },
+   {
+    "lat": 33.2566,
+    "lon": -8.5025,
+    "name": "Mazagan",
+    "sitelinks": 9,
+    "wikidata": "Q555360"
+   }
+  ],
+  "MD": [
+   {
+    "lat": 52.2894,
+    "lon": 25.6494,
+    "name": "Struve Geodetic Arc",
+    "sitelinks": 65,
+    "wikidata": "Q192243"
+   }
+  ],
+  "ME": [
+   {
+    "lat": 45.7033,
+    "lon": 9.6636,
+    "name": "The Venetian Works of defence between 15th and 17th centuries",
+    "sitelinks": 35,
+    "wikidata": "Q32797097"
+   },
+   {
+    "lat": 42.43,
+    "lon": 18.77,
+    "name": "Natural and Culturo-Historical Region of Kotor",
+    "sitelinks": 28,
+    "wikidata": "Q3511938"
+   },
+   {
+    "lat": 43.1532,
+    "lon": 19.0369,
+    "name": "Durmitor National Park",
+    "sitelinks": 19,
+    "wikidata": "Q3364446"
+   }
+  ],
+  "MG": [
+   {
+    "lat": -18.6667,
+    "lon": 44.75,
+    "name": "Tsingy de Bemaraha Strict Nature Reserve",
+    "sitelinks": 48,
+    "wikidata": "Q1405154"
+   },
+   {
+    "lat": -18.7592,
+    "lon": 47.5628,
+    "name": "Ambohimanga",
+    "sitelinks": 45,
+    "wikidata": "Q458167"
+   },
+   {
+    "lat": -14.4597,
+    "lon": 49.7025,
+    "name": "Rainforests of the Atsinanana",
+    "sitelinks": 43,
+    "wikidata": "Q564321"
+   }
+  ],
+  "MH": [
+   {
+    "lat": 11.6,
+    "lon": 165.4,
+    "name": "Bikini Atoll",
+    "sitelinks": 66,
+    "wikidata": "Q152225"
+   }
+  ],
+  "MK": [
+   {
+    "lat": 49.0,
+    "lon": 15.0,
+    "name": "Ancient and Primeval Beech Forests of the Carpathians and Other Regions of Europe",
+    "sitelinks": 56,
+    "wikidata": "Q156011"
+   },
+   {
+    "lat": 41.3616,
+    "lon": 21.5385,
+    "name": "Markovi Kuli",
+    "sitelinks": 22,
+    "wikidata": "Q1283784"
+   },
+   {
+    "lat": 42.2636,
+    "lon": 21.9536,
+    "name": "Kokino",
+    "sitelinks": 19,
+    "wikidata": "Q1326977"
+   },
+   {
+    "lat": 40.9007,
+    "lon": 20.664,
+    "name": "Natural and Cultural Heritage of the Ohrid region",
+    "sitelinks": 13,
+    "wikidata": "Q2215414"
+   },
+   {
+    "lat": 41.5753,
+    "lon": 21.2169,
+    "name": "Slatinski Izvor",
+    "sitelinks": 6,
+    "wikidata": "Q12909548"
+   }
+  ],
+  "ML": [
+   {
+    "lat": 16.7735,
+    "lon": -3.0074,
+    "name": "Timbuktu",
+    "sitelinks": 130,
+    "wikidata": "Q9427"
+   },
+   {
+    "lat": 16.2897,
+    "lon": -0.0444,
+    "name": "Tomb of Askia",
+    "sitelinks": 55,
+    "wikidata": "Q503823"
+   },
+   {
+    "lat": 14.4167,
+    "lon": -3.3167,
+    "name": "Bandiagara Escarpment",
+    "sitelinks": 46,
+    "wikidata": "Q650546"
+   },
+   {
+    "lat": 13.9064,
+    "lon": -4.555,
+    "name": "Old Towns of Djenné",
+    "sitelinks": 18,
+    "wikidata": "Q15278644"
+   }
+  ],
+  "MM": [
+   {
+    "lat": 21.1725,
+    "lon": 94.86,
+    "name": "Bagan",
+    "sitelinks": 79,
+    "wikidata": "Q29317"
+   },
+   {
+    "lat": 22.47,
+    "lon": 95.8186,
+    "name": "Pyu Ancient Cities",
+    "sitelinks": 3,
+    "wikidata": "Q17277938"
+   }
+  ],
+  "MN": [
+   {
+    "lat": 48.7833,
+    "lon": 109.1667,
+    "name": "Burkhan Khaldun",
+    "sitelinks": 45,
+    "wikidata": "Q1010335"
+   },
+   {
+    "lat": 47.5567,
+    "lon": 102.8314,
+    "name": "Orkhon Valley",
+    "sitelinks": 36,
+    "wikidata": "Q1453235"
+   },
+   {
+    "lat": 49.3339,
+    "lon": 88.3953,
+    "name": "Petroglyphic Complexes of the Mongolian Altai",
+    "sitelinks": 23,
+    "wikidata": "Q4361429"
+   },
+   {
+    "lat": 49.9302,
+    "lon": 115.4254,
+    "name": "Landscapes of Dauria",
+    "sitelinks": 12,
+    "wikidata": "Q64787456"
+   },
+   {
+    "lat": 47.7428,
+    "lon": 101.2258,
+    "name": "Deer Stone Monuments, the Heart of Bronze Age Culture",
+    "sitelinks": 2,
+    "wikidata": "Q66133349"
+   },
+   {
+    "lat": 49.6554,
+    "lon": 99.9283,
+    "name": "Uushigiin Ovor",
+    "sitelinks": 0,
+    "wikidata": "Q136659732"
+   },
+   {
+    "lat": 50.275,
+    "lon": 92.7197,
+    "name": "Uvs Nuur Basin",
+    "sitelinks": 0,
+    "wikidata": "Q64797735"
+   }
+  ],
+  "MR": [
+   {
+    "lat": 20.2347,
+    "lon": -16.1089,
+    "name": "Banc d'Arguin National Park",
+    "sitelinks": 50,
+    "wikidata": "Q539518"
+   },
+   {
+    "lat": 20.9289,
+    "lon": -11.6236,
+    "name": "Ancient Ksour of Ouadane, Chinguetti, Tichitt and Oualata",
+    "sitelinks": 16,
+    "wikidata": "Q2845953"
+   }
+  ],
+  "MT": [
+   {
+    "lat": 35.8978,
+    "lon": 14.5125,
+    "name": "Valletta",
+    "sitelinks": 181,
+    "wikidata": "Q23800"
+   },
+   {
+    "lat": 35.8696,
+    "lon": 14.5069,
+    "name": "Hypogeum of Ħal Saflieni",
+    "sitelinks": 47,
+    "wikidata": "Q755514"
+   },
+   {
+    "lat": 36.0492,
+    "lon": 14.2694,
+    "name": "Megalithic Temples of Malta",
+    "sitelinks": 46,
+    "wikidata": "Q753383"
+   }
+  ],
+  "MU": [
+   {
+    "lat": -20.1586,
+    "lon": 57.5031,
+    "name": "Aapravasi Ghat",
+    "sitelinks": 36,
+    "wikidata": "Q9276"
+   },
+   {
+    "lat": -20.4606,
+    "lon": 57.3136,
+    "name": "Le Morne Brabant",
+    "sitelinks": 36,
+    "wikidata": "Q1129992"
+   }
+  ],
+  "MW": [
+   {
+    "lat": -14.0333,
+    "lon": 34.8833,
+    "name": "Lake Malawi National Park",
+    "sitelinks": 41,
+    "wikidata": "Q1077596"
+   },
+   {
+    "lat": -15.9,
+    "lon": 35.65,
+    "name": "Mulanje Massif",
+    "sitelinks": 40,
+    "wikidata": "Q1510436"
+   },
+   {
+    "lat": -14.2933,
+    "lon": 34.2792,
+    "name": "Chongoni Rock Art Area",
+    "sitelinks": 36,
+    "wikidata": "Q832262"
+   }
+  ],
+  "MX": [
+   {
+    "lat": 20.6831,
+    "lon": -88.5686,
+    "name": "Chichen Itza",
+    "sitelinks": 110,
+    "wikidata": "Q5859"
+   },
+   {
+    "lat": 19.6925,
+    "lon": -98.8439,
+    "name": "Teotihuacan",
+    "sitelinks": 79,
+    "wikidata": "Q172613"
+   },
+   {
+    "lat": 17.4842,
+    "lon": -92.0464,
+    "name": "Palenque",
+    "sitelinks": 67,
+    "wikidata": "Q181427"
+   },
+   {
+    "lat": 18.105,
+    "lon": -89.8106,
+    "name": "Calakmul",
+    "sitelinks": 53,
+    "wikidata": "Q272771"
+   },
+   {
+    "lat": 18.8214,
+    "lon": -112.7639,
+    "name": "Revillagigedo Islands",
+    "sitelinks": 41,
+    "wikidata": "Q849318"
+   },
+   {
+    "lat": 20.4481,
+    "lon": -97.3782,
+    "name": "Tajín Veracruz",
+    "sitelinks": 41,
+    "wikidata": "Q753895"
+   },
+   {
+    "lat": 18.8043,
+    "lon": -99.2966,
+    "name": "Xochicalco",
+    "sitelinks": 41,
+    "wikidata": "Q797120"
+   },
+   {
+    "lat": 20.6829,
+    "lon": -88.5686,
+    "name": "Temple of Kukulcan",
+    "sitelinks": 40,
+    "wikidata": "Q1128327"
+   }
+  ],
+  "MY": [
+   {
+    "lat": 6.15,
+    "lon": 116.65,
+    "name": "Kinabalu Park",
+    "sitelinks": 57,
+    "wikidata": "Q834893"
+   },
+   {
+    "lat": 4.0425,
+    "lon": 114.8125,
+    "name": "Gunung Mulu National Park",
+    "sitelinks": 49,
+    "wikidata": "Q61535"
+   },
+   {
+    "lat": 3.8139,
+    "lon": 113.7814,
+    "name": "Niah National Park",
+    "sitelinks": 30,
+    "wikidata": "Q1984562"
+   },
+   {
+    "lat": 5.0679,
+    "lon": 100.972,
+    "name": "Archaeological Heritage of the Lenggong Valley",
+    "sitelinks": 10,
+    "wikidata": "Q3370009"
+   },
+   {
+    "lat": 3.2333,
+    "lon": 101.6333,
+    "name": "Forest Research Institute Malaysia Forest Park Selangor",
+    "sitelinks": 2,
+    "wikidata": "Q135315506"
+   }
+  ],
+  "MZ": [
+   {
+    "lat": -15.0367,
+    "lon": 40.7328,
+    "name": "Island of Mozambique",
+    "sitelinks": 59,
+    "wikidata": "Q331099"
+   },
+   {
+    "lat": -26.5,
+    "lon": 32.8,
+    "name": "Maputo National Park",
+    "sitelinks": 17,
+    "wikidata": "Q130019294"
+   }
+  ],
+  "NA": [
+   {
+    "lat": -20.5956,
+    "lon": 14.3726,
+    "name": "Twyfelfontein",
+    "sitelinks": 38,
+    "wikidata": "Q754791"
+   },
+   {
+    "lat": -24.8853,
+    "lon": 15.4078,
+    "name": "Namib Sand Sea",
+    "sitelinks": 1,
+    "wikidata": "Q65241628"
+   }
+  ],
+  "NE": [
+   {
+    "lat": 18.0,
+    "lon": 9.0,
+    "name": "Aïr and Ténéré National Nature Reserve",
+    "sitelinks": 36,
+    "wikidata": "Q794643"
+   },
+   {
+    "lat": 11.53,
+    "lon": 2.29,
+    "name": "W-Arly-Pendjari Complex",
+    "sitelinks": 25,
+    "wikidata": "Q25379596"
+   },
+   {
+    "lat": 16.9744,
+    "lon": 7.9896,
+    "name": "Historic Center of Agadez",
+    "sitelinks": 7,
+    "wikidata": "Q47800464"
+   }
+  ],
+  "NG": [
+   {
+    "lat": 10.7406,
+    "lon": 13.5717,
+    "name": "Sukur",
+    "sitelinks": 35,
+    "wikidata": "Q1123956"
+   },
+   {
+    "lat": 7.7549,
+    "lon": 4.5506,
+    "name": "Osun-Osogbo Grove",
+    "sitelinks": 34,
+    "wikidata": "Q621498"
+   },
+   {
+    "lat": 6.3321,
+    "lon": 5.6201,
+    "name": "Royal Palace Of Oba Of Benin",
+    "sitelinks": 3,
+    "wikidata": "Q28406792"
+   },
+   {
+    "lat": 10.737,
+    "lon": 13.5662,
+    "name": "Sukur Kingdom",
+    "sitelinks": 0,
+    "wikidata": "Q130482220"
+   }
+  ],
+  "NI": [
+   {
+    "lat": 12.435,
+    "lon": -86.8781,
+    "name": "León Cathedral",
+    "sitelinks": 34,
+    "wikidata": "Q48605"
+   },
+   {
+    "lat": 12.4005,
+    "lon": -86.6178,
+    "name": "Ruínas de León Viejo",
+    "sitelinks": 29,
+    "wikidata": "Q1422898"
+   }
+  ],
+  "NO": [
+   {
+    "lat": 52.2894,
+    "lon": 25.6494,
+    "name": "Struve Geodetic Arc",
+    "sitelinks": 65,
+    "wikidata": "Q192243"
+   },
+   {
+    "lat": 61.2981,
+    "lon": 7.3225,
+    "name": "Urnes Stave Church",
+    "sitelinks": 49,
+    "wikidata": "Q210678"
+   },
+   {
+    "lat": 60.3975,
+    "lon": 5.3233,
+    "name": "Bryggen",
+    "sitelinks": 47,
+    "wikidata": "Q153430"
+   },
+   {
+    "lat": 65.6333,
+    "lon": 11.9,
+    "name": "Vega Archipelago",
+    "sitelinks": 40,
+    "wikidata": "Q829084"
+   },
+   {
+    "lat": 69.9469,
+    "lon": 23.1878,
+    "name": "Rock carvings at Alta",
+    "sitelinks": 38,
+    "wikidata": "Q433634"
+   },
+   {
+    "lat": 59.8786,
+    "lon": 8.5936,
+    "name": "Rjukan–Notodden Industrial Heritage Site",
+    "sitelinks": 24,
+    "wikidata": "Q20643889"
+   },
+   {
+    "lat": 60.9658,
+    "lon": 6.9777,
+    "name": "West Norwegian Fjords – Geirangerfjord and Nærøyfjord",
+    "sitelinks": 10,
+    "wikidata": "Q12269990"
+   },
+   {
+    "lat": 62.5739,
+    "lon": 11.3856,
+    "name": "Røros Mining Town and the Circumference",
+    "sitelinks": 3,
+    "wikidata": "Q19387263"
+   }
+  ],
+  "NP": [
+   {
+    "lat": 27.4814,
+    "lon": 83.2758,
+    "name": "Lumbini",
+    "sitelinks": 76,
+    "wikidata": "Q9213"
+   },
+   {
+    "lat": 27.7039,
+    "lon": 85.3086,
+    "name": "Kathmandu Valley",
+    "sitelinks": 68,
+    "wikidata": "Q970717"
+   },
+   {
+    "lat": 27.5,
+    "lon": 84.3333,
+    "name": "Chitwan National Park",
+    "sitelinks": 60,
+    "wikidata": "Q1075023"
+   },
+   {
+    "lat": 27.8911,
+    "lon": 86.693,
+    "name": "Sagarmatha National Park",
+    "sitelinks": 59,
+    "wikidata": "Q2211959"
+   }
+  ],
+  "NZ": [
+   {
+    "lat": -39.2,
+    "lon": 175.5833,
+    "name": "Tongariro National Park",
+    "sitelinks": 47,
+    "wikidata": "Q202845"
+   },
+   {
+    "lat": -50.75,
+    "lon": 166.104,
+    "name": "New Zealand Subantarctic Islands",
+    "sitelinks": 41,
+    "wikidata": "Q46275"
+   },
+   {
+    "lat": -45.036,
+    "lon": 167.32,
+    "name": "Te Wahipounamu",
+    "sitelinks": 41,
+    "wikidata": "Q575398"
+   }
+  ],
+  "OM": [
+   {
+    "lat": 22.9644,
+    "lon": 57.3007,
+    "name": "Bahla Fort",
+    "sitelinks": 43,
+    "wikidata": "Q1408909"
+   },
+   {
+    "lat": 22.9989,
+    "lon": 57.5361,
+    "name": "Aflaj Irrigation System of Oman",
+    "sitelinks": 40,
+    "wikidata": "Q25495"
+   },
+   {
+    "lat": 18.2533,
+    "lon": 53.6476,
+    "name": "Land of Frankincense",
+    "sitelinks": 35,
+    "wikidata": "Q118468"
+   },
+   {
+    "lat": 22.7,
+    "lon": 59.3699,
+    "name": "Qalhat",
+    "sitelinks": 32,
+    "wikidata": "Q680322"
+   },
+   {
+    "lat": 23.27,
+    "lon": 56.745,
+    "name": "Bat, Al-Khutm and Al-Ayn archaeological sites",
+    "sitelinks": 31,
+    "wikidata": "Q25496"
+   },
+   {
+    "lat": 19.7,
+    "lon": 57.0,
+    "name": "Arabian Oryx Sanctuary",
+    "sitelinks": 25,
+    "wikidata": "Q2015257"
+   },
+   {
+    "lat": 22.6976,
+    "lon": 59.3731,
+    "name": "Bibi Maryam Mausoleum",
+    "sitelinks": 4,
+    "wikidata": "Q138719954"
+   }
+  ],
+  "PA": [
+   {
+    "lat": 7.48,
+    "lon": -81.79,
+    "name": "Coiba",
+    "sitelinks": 44,
+    "wikidata": "Q741636"
+   },
+   {
+    "lat": 7.7361,
+    "lon": -77.5472,
+    "name": "Darién National Park",
+    "sitelinks": 40,
+    "wikidata": "Q48608"
+   },
+   {
+    "lat": 9.5539,
+    "lon": -79.6558,
+    "name": "fortifications on the Caribbean Side of Panama: Portobelo-San Lorenzo",
+    "sitelinks": 22,
+    "wikidata": "Q3320082"
+   },
+   {
+    "lat": 8.9524,
+    "lon": -79.5347,
+    "name": "The Colonial Transisthmian Route of Panamá",
+    "sitelinks": 8,
+    "wikidata": "Q65508609"
+   },
+   {
+    "lat": 7.4333,
+    "lon": -81.7667,
+    "name": "Coiba",
+    "sitelinks": 4,
+    "wikidata": "Q115409303"
+   },
+   {
+    "lat": 9.4069,
+    "lon": -82.9386,
+    "name": "Talamanca Range-La Amistad Reserves",
+    "sitelinks": 2,
+    "wikidata": "Q6106226"
+   },
+   {
+    "lat": 8.9511,
+    "lon": -79.5406,
+    "name": "Archaeological Site of Panamá Viejo and Historic District of Panamá",
+    "sitelinks": 0,
+    "wikidata": "Q16886870"
+   }
+  ],
+  "PE": [
+   {
+    "lat": -13.5169,
+    "lon": -71.9786,
+    "name": "Cusco",
+    "sitelinks": 116,
+    "wikidata": "Q5582862"
+   },
+   {
+    "lat": -14.6975,
+    "lon": -75.135,
+    "name": "Nazca Lines",
+    "sitelinks": 68,
+    "wikidata": "Q2620036"
+   },
+   {
+    "lat": -8.1106,
+    "lon": -79.075,
+    "name": "Chan Chan",
+    "sitelinks": 52,
+    "wikidata": "Q277540"
+   },
+   {
+    "lat": -18.25,
+    "lon": -69.5917,
+    "name": "Inca road system",
+    "sitelinks": 51,
+    "wikidata": "Q948975"
+   },
+   {
+    "lat": -12.14,
+    "lon": -71.66,
+    "name": "Manu National Park",
+    "sitelinks": 46,
+    "wikidata": "Q390264"
+   },
+   {
+    "lat": -9.5928,
+    "lon": -77.1785,
+    "name": "Chavin de Huantar",
+    "sitelinks": 43,
+    "wikidata": "Q732554"
+   },
+   {
+    "lat": -9.4,
+    "lon": -77.4,
+    "name": "Huascarán National Park",
+    "sitelinks": 43,
+    "wikidata": "Q917369"
+   },
+   {
+    "lat": -7.75,
+    "lon": -77.25,
+    "name": "Río Abiseo National Park",
+    "sitelinks": 37,
+    "wikidata": "Q941412"
+   }
+  ],
+  "PG": [
+   {
+    "lat": -5.7825,
+    "lon": 144.33,
+    "name": "Kuk Swamp",
+    "sitelinks": 33,
+    "wikidata": "Q1165562"
+   }
+  ],
+  "PH": [
+   {
+    "lat": 10.1667,
+    "lon": 118.9167,
+    "name": "Puerto Princesa Subterranean River National Park",
+    "sitelinks": 50,
+    "wikidata": "Q824602"
+   },
+   {
+    "lat": 8.9533,
+    "lon": 119.8675,
+    "name": "Tubbataha Reef",
+    "sitelinks": 44,
+    "wikidata": "Q927108"
+   },
+   {
+    "lat": 17.3664,
+    "lon": 120.4831,
+    "name": "Baroque Churches of the Philippines",
+    "sitelinks": 35,
+    "wikidata": "Q808563"
+   },
+   {
+    "lat": 16.9339,
+    "lon": 121.1367,
+    "name": "Rice Terraces of the Philippine Cordilleras",
+    "sitelinks": 28,
+    "wikidata": "Q1503858"
+   },
+   {
+    "lat": 6.74,
+    "lon": 126.182,
+    "name": "Mount Hamiguitan Range Wildlife Sanctuary",
+    "sitelinks": 4,
+    "wikidata": "Q17494587"
+   }
+  ],
+  "PK": [
+   {
+    "lat": 27.3292,
+    "lon": 68.1389,
+    "name": "Mohenjo-daro",
+    "sitelinks": 99,
+    "wikidata": "Q5725"
+   },
+   {
+    "lat": 33.7458,
+    "lon": 72.7875,
+    "name": "Taxila",
+    "sitelinks": 74,
+    "wikidata": "Q156093"
+   },
+   {
+    "lat": 32.9653,
+    "lon": 73.5764,
+    "name": "Rohtas Fort",
+    "sitelinks": 47,
+    "wikidata": "Q155188"
+   },
+   {
+    "lat": 34.3208,
+    "lon": 71.9458,
+    "name": "Buddhist Ruins of Takht-i-Bahi and Neighbouring City Remains at Sahr-i-Bahlol",
+    "sitelinks": 3,
+    "wikidata": "Q15240737"
+   },
+   {
+    "lat": 31.5903,
+    "lon": 74.3097,
+    "name": "Fort and Shalamar Gardens in Lahore",
+    "sitelinks": 3,
+    "wikidata": "Q155727"
+   },
+   {
+    "lat": 24.7564,
+    "lon": 67.8986,
+    "name": "Historical Monuments at Makli, Thatta",
+    "sitelinks": 2,
+    "wikidata": "Q10332177"
+   }
+  ],
+  "PL": [
+   {
+    "lat": 50.0358,
+    "lon": 19.1783,
+    "name": "Auschwitz",
+    "sitelinks": 128,
+    "wikidata": "Q7341"
+   },
+   {
+    "lat": 52.75,
+    "lon": 23.95,
+    "name": "Białowieża Forest",
+    "sitelinks": 63,
+    "wikidata": "Q192666"
+   },
+   {
+    "lat": 54.0397,
+    "lon": 19.0278,
+    "name": "Malbork Castle",
+    "sitelinks": 58,
+    "wikidata": "Q71279"
+   },
+   {
+    "lat": 49.0,
+    "lon": 15.0,
+    "name": "Ancient and Primeval Beech Forests of the Carpathians and Other Regions of Europe",
+    "sitelinks": 56,
+    "wikidata": "Q156011"
+   },
+   {
+    "lat": 51.1069,
+    "lon": 17.0772,
+    "name": "Centennial Hall",
+    "sitelinks": 48,
+    "wikidata": "Q155743"
+   },
+   {
+    "lat": 49.5339,
+    "lon": 21.0322,
+    "name": "Wooden tserkvas of Carpathian region in Poland and Ukraine",
+    "sitelinks": 46,
+    "wikidata": "Q8032604"
+   },
+   {
+    "lat": 51.5476,
+    "lon": 14.7232,
+    "name": "Muskau Park",
+    "sitelinks": 45,
+    "wikidata": "Q156308"
+   },
+   {
+    "lat": 52.2497,
+    "lon": 21.0122,
+    "name": "Warsaw Old Town",
+    "sitelinks": 43,
+    "wikidata": "Q1139084"
+   }
+  ],
+  "PS": [
+   {
+    "lat": 31.7761,
+    "lon": 35.2358,
+    "name": "Al-Aqsa Mosque",
+    "sitelinks": 103,
+    "wikidata": "Q12192963"
+   },
+   {
+    "lat": 31.7781,
+    "lon": 35.2353,
+    "name": "Dome of the Rock",
+    "sitelinks": 87,
+    "wikidata": "Q172077"
+   },
+   {
+    "lat": 31.7043,
+    "lon": 35.2076,
+    "name": "Church of the Nativity",
+    "sitelinks": 62,
+    "wikidata": "Q194504"
+   },
+   {
+    "lat": 31.8717,
+    "lon": 35.4446,
+    "name": "Tell es-Sultan",
+    "sitelinks": 24,
+    "wikidata": "Q2402267"
+   },
+   {
+    "lat": 31.778,
+    "lon": 35.236,
+    "name": "Masjid Al-Aqsa",
+    "sitelinks": 23,
+    "wikidata": "Q121610806"
+   },
+   {
+    "lat": 32.2667,
+    "lon": 35.1833,
+    "name": "Sebastia",
+    "sitelinks": 21,
+    "wikidata": "Q2918480"
+   },
+   {
+    "lat": 31.5253,
+    "lon": 35.1083,
+    "name": "Old City of Hebron",
+    "sitelinks": 19,
+    "wikidata": "Q35584069"
+   },
+   {
+    "lat": 31.4472,
+    "lon": 34.3664,
+    "name": "Tell Umm el-'Amr",
+    "sitelinks": 14,
+    "wikidata": "Q7697530"
+   }
+  ],
+  "PT": [
+   {
+    "lat": 38.6978,
+    "lon": -9.2056,
+    "name": "Jerónimos Monastery",
+    "sitelinks": 53,
+    "wikidata": "Q272781"
+   },
+   {
+    "lat": 39.6592,
+    "lon": -8.8261,
+    "name": "Batalha Monastery",
+    "sitelinks": 43,
+    "wikidata": "Q174779"
+   },
+   {
+    "lat": 39.5486,
+    "lon": -8.9786,
+    "name": "Alcobaça Monastery",
+    "sitelinks": 41,
+    "wikidata": "Q593147"
+   },
+   {
+    "lat": 39.6036,
+    "lon": -8.4193,
+    "name": "Convent of Christ",
+    "sitelinks": 39,
+    "wikidata": "Q736692"
+   },
+   {
+    "lat": 41.0333,
+    "lon": -7.1167,
+    "name": "Prehistoric Rock Art Sites in the Côa Valley",
+    "sitelinks": 33,
+    "wikidata": "Q552106"
+   },
+   {
+    "lat": 41.1657,
+    "lon": -7.5177,
+    "name": "Alto Douro Wine Region",
+    "sitelinks": 31,
+    "wikidata": "Q649738"
+   },
+   {
+    "lat": 38.9369,
+    "lon": -9.3264,
+    "name": "Palace of Mafra",
+    "sitelinks": 31,
+    "wikidata": "Q599223"
+   },
+   {
+    "lat": 41.5546,
+    "lon": -8.3775,
+    "name": "Bom Jesus do Monte",
+    "sitelinks": 28,
+    "wikidata": "Q2707216"
+   }
+  ],
+  "PW": [
+   {
+    "lat": 7.2469,
+    "lon": 134.3525,
+    "name": "Rock Islands Southern Lagoon",
+    "sitelinks": 3,
+    "wikidata": "Q17215490"
+   }
+  ],
+  "PY": [
+   {
+    "lat": -27.056,
+    "lon": -55.753,
+    "name": "Jesuit Missions of La Santísima Trinidad de Paraná and Jesús de Tavarangüé",
+    "sitelinks": 9,
+    "wikidata": "Q15727363"
+   }
+  ],
+  "QA": [
+   {
+    "lat": 25.9834,
+    "lon": 51.0272,
+    "name": "Zubarah",
+    "sitelinks": 42,
+    "wikidata": "Q2727469"
+   }
+  ],
+  "RO": [
+   {
+    "lat": 45.2,
+    "lon": 29.5,
+    "name": "Danube Delta",
+    "sitelinks": 68,
+    "wikidata": "Q184429"
+   },
+   {
+    "lat": 49.0,
+    "lon": 15.0,
+    "name": "Ancient and Primeval Beech Forests of the Carpathians and Other Regions of Europe",
+    "sitelinks": 56,
+    "wikidata": "Q156011"
+   },
+   {
+    "lat": 45.1686,
+    "lon": 24.0069,
+    "name": "Horezu monastery",
+    "sitelinks": 43,
+    "wikidata": "Q733069"
+   },
+   {
+    "lat": 47.8194,
+    "lon": 24.0558,
+    "name": "wooden churches of Maramureș",
+    "sitelinks": 42,
+    "wikidata": "Q828412"
+   },
+   {
+    "lat": 47.733,
+    "lon": 25.933,
+    "name": "churches of Moldavia",
+    "sitelinks": 40,
+    "wikidata": "Q387687"
+   },
+   {
+    "lat": 45.6231,
+    "lon": 23.3119,
+    "name": "Dacian Fortresses of the Orăștie Mountains",
+    "sitelinks": 32,
+    "wikidata": "Q729327"
+   },
+   {
+    "lat": 46.2178,
+    "lon": 24.7922,
+    "name": "Historic Centre of Sighișoara",
+    "sitelinks": 23,
+    "wikidata": "Q1075681"
+   },
+   {
+    "lat": 45.0374,
+    "lon": 23.2854,
+    "name": "Sculptural Ensemble of Constantin Brâncuși at Târgu Jiu",
+    "sitelinks": 16,
+    "wikidata": "Q4680630"
+   }
+  ],
+  "RS": [
+   {
+    "lat": 43.4867,
+    "lon": 20.5316,
+    "name": "Studenica monastery",
+    "sitelinks": 44,
+    "wikidata": "Q143042"
+   },
+   {
+    "lat": 43.8993,
+    "lon": 22.1862,
+    "name": "Gamzigrad",
+    "sitelinks": 40,
+    "wikidata": "Q904128"
+   },
+   {
+    "lat": 42.5469,
+    "lon": 20.2664,
+    "name": "Visoki Dečani",
+    "sitelinks": 39,
+    "wikidata": "Q849517"
+   },
+   {
+    "lat": 42.6611,
+    "lon": 20.2656,
+    "name": "Medieval Monuments in Kosovo",
+    "sitelinks": 35,
+    "wikidata": "Q1982106"
+   },
+   {
+    "lat": 42.2114,
+    "lon": 20.7358,
+    "name": "Our Lady of Promise",
+    "sitelinks": 29,
+    "wikidata": "Q890652"
+   },
+   {
+    "lat": 43.1189,
+    "lon": 20.4228,
+    "name": "Stari Ras and Sopoćani",
+    "sitelinks": 4,
+    "wikidata": "Q10913999"
+   }
+  ],
+  "RU": [
+   {
+    "lat": 53.3028,
+    "lon": 108.0047,
+    "name": "Lake Baikal",
+    "sitelinks": 183,
+    "wikidata": "Q5513"
+   },
+   {
+    "lat": 42.0578,
+    "lon": 48.2889,
+    "name": "Derbent",
+    "sitelinks": 101,
+    "wikidata": "Q131416"
+   },
+   {
+    "lat": 55.2744,
+    "lon": 20.9708,
+    "name": "Curonian Spit",
+    "sitelinks": 67,
+    "wikidata": "Q5595"
+   },
+   {
+    "lat": 52.2894,
+    "lon": 25.6494,
+    "name": "Struve Geodetic Arc",
+    "sitelinks": 65,
+    "wikidata": "Q192243"
+   },
+   {
+    "lat": 65.0244,
+    "lon": 35.7106,
+    "name": "Solovetsky Islands",
+    "sitelinks": 58,
+    "wikidata": "Q205711"
+   },
+   {
+    "lat": 65.0667,
+    "lon": 60.15,
+    "name": "Virgin Komi Forests",
+    "sitelinks": 50,
+    "wikidata": "Q593870"
+   },
+   {
+    "lat": 56.3103,
+    "lon": 38.1307,
+    "name": "Trinity Lavra of St. Sergius",
+    "sitelinks": 49,
+    "wikidata": "Q211962"
+   },
+   {
+    "lat": 69.0,
+    "lon": 93.0,
+    "name": "Putorana Plateau",
+    "sitelinks": 48,
+    "wikidata": "Q277576"
+   }
+  ],
+  "RW": [
+   {
+    "lat": -2.5282,
+    "lon": 29.2758,
+    "name": "Nyungwe Forest",
+    "sitelinks": 35,
+    "wikidata": "Q1356828"
+   },
+   {
+    "lat": -2.4544,
+    "lon": 29.5684,
+    "name": "Murambi Genocide Memorial",
+    "sitelinks": 19,
+    "wikidata": "Q5964053"
+   },
+   {
+    "lat": -1.9309,
+    "lon": 30.0607,
+    "name": "Kigali Genocide Memorial",
+    "sitelinks": 17,
+    "wikidata": "Q6405906"
+   }
+  ],
+  "SA": [
+   {
+    "lat": 26.8142,
+    "lon": 37.9475,
+    "name": "Hegra",
+    "sitelinks": 59,
+    "wikidata": "Q27356"
+   },
+   {
+    "lat": 25.4294,
+    "lon": 49.6219,
+    "name": "Al-Ahsa Oasis",
+    "sitelinks": 42,
+    "wikidata": "Q311341"
+   },
+   {
+    "lat": 28.0,
+    "lon": 40.9,
+    "name": "Rock Art in the Hail Region of Saudi Arabia",
+    "sitelinks": 24,
+    "wikidata": "Q20643274"
+   },
+   {
+    "lat": 19.7833,
+    "lon": 45.15,
+    "name": "Qaryat al-Faw",
+    "sitelinks": 22,
+    "wikidata": "Q2829327"
+   },
+   {
+    "lat": 18.2492,
+    "lon": 44.4518,
+    "name": "Bir Hima Rock Petroglyphs and Inscriptions",
+    "sitelinks": 21,
+    "wikidata": "Q4915544"
+   },
+   {
+    "lat": 19.3369,
+    "lon": 45.9039,
+    "name": "'Uruq Bani Ma'arid",
+    "sitelinks": 16,
+    "wikidata": "Q21994709"
+   },
+   {
+    "lat": 21.4833,
+    "lon": 39.2,
+    "name": "Al-Balad, Jeddah",
+    "sitelinks": 15,
+    "wikidata": "Q4702264"
+   },
+   {
+    "lat": 24.7333,
+    "lon": 46.5756,
+    "name": "At-Turaif District",
+    "sitelinks": 11,
+    "wikidata": "Q22687629"
+   }
+  ],
+  "SB": [
+   {
+    "lat": -11.6833,
+    "lon": 160.3333,
+    "name": "East Rennell",
+    "sitelinks": 38,
+    "wikidata": "Q852433"
+   }
+  ],
+  "SC": [
+   {
+    "lat": -9.4164,
+    "lon": 46.4164,
+    "name": "Aldabra",
+    "sitelinks": 52,
+    "wikidata": "Q272768"
+   },
+   {
+    "lat": -4.3292,
+    "lon": 55.7375,
+    "name": "Vallée de Mai",
+    "sitelinks": 40,
+    "wikidata": "Q573558"
+   }
+  ],
+  "SD": [
+   {
+    "lat": 19.7361,
+    "lon": 37.4431,
+    "name": "Sanganeb Marine National Park and Dungonab Bay – Mukkawar Island Marine National Park",
+    "sitelinks": 4,
+    "wikidata": "Q65937857"
+   },
+   {
+    "lat": 16.9333,
+    "lon": 33.7167,
+    "name": "Archaeological Sites of the Island of Meroe",
+    "sitelinks": 2,
+    "wikidata": "Q3962345"
+   },
+   {
+    "lat": 18.5333,
+    "lon": 31.8167,
+    "name": "Gebel Barkal and the Sites of the Napatan Region",
+    "sitelinks": 0,
+    "wikidata": "Q15278408"
+   }
+  ],
+  "SE": [
+   {
+    "lat": 52.2894,
+    "lon": 25.6494,
+    "name": "Struve Geodetic Arc",
+    "sitelinks": 65,
+    "wikidata": "Q192243"
+   },
+   {
+    "lat": 59.3217,
+    "lon": 17.8864,
+    "name": "Drottningholm Palace",
+    "sitelinks": 59,
+    "wikidata": "Q208559"
+   },
+   {
+    "lat": 59.2756,
+    "lon": 18.0994,
+    "name": "Skogskyrkogården",
+    "sitelinks": 44,
+    "wikidata": "Q213988"
+   },
+   {
+    "lat": 59.9692,
+    "lon": 16.0103,
+    "name": "Engelsberg Ironworks",
+    "sitelinks": 43,
+    "wikidata": "Q936884"
+   },
+   {
+    "lat": 57.114,
+    "lon": 12.4044,
+    "name": "Grimeton VLF transmitter",
+    "sitelinks": 37,
+    "wikidata": "Q920206"
+   },
+   {
+    "lat": 67.3333,
+    "lon": 17.5833,
+    "name": "Laponian National Park",
+    "sitelinks": 36,
+    "wikidata": "Q1137314"
+   },
+   {
+    "lat": 61.7072,
+    "lon": 16.1958,
+    "name": "Decorated Farmhouses of Hälsingland",
+    "sitelinks": 33,
+    "wikidata": "Q1642003"
+   },
+   {
+    "lat": 60.6047,
+    "lon": 15.6308,
+    "name": "Falun Mine",
+    "sitelinks": 33,
+    "wikidata": "Q636194"
+   }
+  ],
+  "SG": [
+   {
+    "lat": 1.3151,
+    "lon": 103.8162,
+    "name": "Singapore Botanic Gardens",
+    "sitelinks": 47,
+    "wikidata": "Q3046409"
+   }
+  ],
+  "SI": [
+   {
+    "lat": 49.0,
+    "lon": 15.0,
+    "name": "Ancient and Primeval Beech Forests of the Carpathians and Other Regions of Europe",
+    "sitelinks": 56,
+    "wikidata": "Q156011"
+   },
+   {
+    "lat": 47.6746,
+    "lon": 9.121,
+    "name": "prehistoric pile dwellings around the Alps",
+    "sitelinks": 53,
+    "wikidata": "Q4580"
+   },
+   {
+    "lat": 45.665,
+    "lon": 13.9947,
+    "name": "Škocjan Caves",
+    "sitelinks": 48,
+    "wikidata": "Q500376"
+   },
+   {
+    "lat": 46.0039,
+    "lon": 14.0267,
+    "name": "Heritage of Mercury. Almadén and Idrija",
+    "sitelinks": 25,
+    "wikidata": "Q3370031"
+   },
+   {
+    "lat": 46.0433,
+    "lon": 14.5022,
+    "name": "The works of Jože Plečnik in Ljubljana – Human Centred Urban Design",
+    "sitelinks": 23,
+    "wikidata": "Q64494878"
+   }
+  ],
+  "SK": [
+   {
+    "lat": 49.0,
+    "lon": 15.0,
+    "name": "Ancient and Primeval Beech Forests of the Carpathians and Other Regions of Europe",
+    "sitelinks": 56,
+    "wikidata": "Q156011"
+   },
+   {
+    "lat": 49.0397,
+    "lon": 19.2784,
+    "name": "Vlkolínec",
+    "sitelinks": 50,
+    "wikidata": "Q392365"
+   },
+   {
+    "lat": 49.0006,
+    "lon": 20.7683,
+    "name": "Spiš Castle",
+    "sitelinks": 49,
+    "wikidata": "Q205558"
+   },
+   {
+    "lat": 49.3361,
+    "lon": 19.5583,
+    "name": "wooden churches of the Slovak Carpathians",
+    "sitelinks": 41,
+    "wikidata": "Q471717"
+   },
+   {
+    "lat": 48.4718,
+    "lon": 20.4953,
+    "name": "Caves of Aggtelek Karst and Slovak Karst",
+    "sitelinks": 35,
+    "wikidata": "Q608090"
+   },
+   {
+    "lat": 49.0006,
+    "lon": 20.7411,
+    "name": "Spišská Kapitula",
+    "sitelinks": 24,
+    "wikidata": "Q1042821"
+   },
+   {
+    "lat": 48.9994,
+    "lon": 20.7675,
+    "name": "Levoča, Spiš Castle and the associated cultural monuments",
+    "sitelinks": 14,
+    "wikidata": "Q6535830"
+   },
+   {
+    "lat": 49.2933,
+    "lon": 21.2792,
+    "name": "Bardejov Town Conservation Reserve",
+    "sitelinks": 0,
+    "wikidata": "Q17634781"
+   }
+  ],
+  "SL": [
+   {
+    "lat": 7.5,
+    "lon": -10.9833,
+    "name": "Gola National Park",
+    "sitelinks": 18,
+    "wikidata": "Q1512159"
+   },
+   {
+    "lat": 7.5333,
+    "lon": -11.35,
+    "name": "Gola-Tiwai complex",
+    "sitelinks": 4,
+    "wikidata": "Q127463879"
+   }
+  ],
+  "SM": [
+   {
+    "lat": 43.9328,
+    "lon": 12.4519,
+    "name": "San Marino Historic Centre and Mount Titano",
+    "sitelinks": 0,
+    "wikidata": "Q15613336"
+   }
+  ],
+  "SN": [
+   {
+    "lat": 13.0742,
+    "lon": -12.7222,
+    "name": "Niokolo-Koba National Park",
+    "sitelinks": 60,
+    "wikidata": "Q679891"
+   },
+   {
+    "lat": 14.6669,
+    "lon": -17.3983,
+    "name": "Gorée",
+    "sitelinks": 59,
+    "wikidata": "Q244347"
+   },
+   {
+    "lat": 16.3585,
+    "lon": -16.2741,
+    "name": "Djoudj National Bird Sanctuary",
+    "sitelinks": 47,
+    "wikidata": "Q733676"
+   },
+   {
+    "lat": 12.5933,
+    "lon": -12.8458,
+    "name": "Bassari Country",
+    "sitelinks": 29,
+    "wikidata": "Q2916296"
+   },
+   {
+    "lat": 13.8353,
+    "lon": -16.4986,
+    "name": "Saloum Delta",
+    "sitelinks": 24,
+    "wikidata": "Q559363"
+   },
+   {
+    "lat": 16.0278,
+    "lon": -16.5044,
+    "name": "Island of Saint-Louis",
+    "sitelinks": 12,
+    "wikidata": "Q1114640"
+   },
+   {
+    "lat": 13.6955,
+    "lon": -15.5354,
+    "name": "Stone Circles of Senegambia",
+    "sitelinks": 3,
+    "wikidata": "Q98769058"
+   },
+   {
+    "lat": 13.8353,
+    "lon": -16.4986,
+    "name": "Diorom Boumak",
+    "sitelinks": 1,
+    "wikidata": "Q134522910"
+   }
+  ],
+  "SR": [
+   {
+    "lat": 4.0,
+    "lon": -56.5,
+    "name": "Central Suriname Nature Reserve",
+    "sitelinks": 35,
+    "wikidata": "Q189934"
+   },
+   {
+    "lat": 5.4312,
+    "lon": -54.9823,
+    "name": "Jodensavanne",
+    "sitelinks": 24,
+    "wikidata": "Q648787"
+   },
+   {
+    "lat": 5.826,
+    "lon": -55.1539,
+    "name": "Historic Inner City of Paramaribo",
+    "sitelinks": 7,
+    "wikidata": "Q2147036"
+   }
+  ],
+  "SS": [
+   {
+    "lat": 6.5138,
+    "lon": 32.9586,
+    "name": "Boma-Badingilo Migratory Landscape",
+    "sitelinks": 9,
+    "wikidata": "Q60848196"
+   }
+  ],
+  "ST": [
+   {
+    "lat": 0.3173,
+    "lon": 6.4984,
+    "name": "The Roças of Sao Tome and Principe: Colonial Agricultural System and Forced Migration",
+    "sitelinks": 4,
+    "wikidata": "Q140698922"
+   }
+  ],
+  "SV": [
+   {
+    "lat": 13.8275,
+    "lon": -89.3562,
+    "name": "Joya de Cerén",
+    "sitelinks": 46,
+    "wikidata": "Q27985"
+   }
+  ],
+  "SY": [
+   {
+    "lat": 34.56,
+    "lon": 38.2672,
+    "name": "Palmyra",
+    "sitelinks": 107,
+    "wikidata": "Q5747"
+   },
+   {
+    "lat": 32.5167,
+    "lon": 36.4833,
+    "name": "Bosra",
+    "sitelinks": 62,
+    "wikidata": "Q272680"
+   },
+   {
+    "lat": 36.3342,
+    "lon": 36.8442,
+    "name": "Dead Cities",
+    "sitelinks": 47,
+    "wikidata": "Q393841"
+   },
+   {
+    "lat": 36.1833,
+    "lon": 37.15,
+    "name": "Ancient City of Aleppo",
+    "sitelinks": 34,
+    "wikidata": "Q4115349"
+   },
+   {
+    "lat": 33.5111,
+    "lon": 36.3064,
+    "name": "Ancient City of Damascus",
+    "sitelinks": 27,
+    "wikidata": "Q3678596"
+   },
+   {
+    "lat": 32.5181,
+    "lon": 36.4817,
+    "name": "Ancient City of Bosra",
+    "sitelinks": 15,
+    "wikidata": "Q15727412"
+   },
+   {
+    "lat": 36.3107,
+    "lon": 36.8301,
+    "name": "Sitt er-Rum (Syria)",
+    "sitelinks": 2,
+    "wikidata": "Q107407019"
+   },
+   {
+    "lat": 36.3342,
+    "lon": 36.8442,
+    "name": "ancient village of Northern Syria",
+    "sitelinks": 1,
+    "wikidata": "Q55140228"
+   }
+  ],
+  "TD": [
+   {
+    "lat": 17.25,
+    "lon": 22.0,
+    "name": "Ennedi Plateau",
+    "sitelinks": 35,
+    "wikidata": "Q1343339"
+   },
+   {
+    "lat": 18.9833,
+    "lon": 20.6667,
+    "name": "Lakes of Ounianga",
+    "sitelinks": 34,
+    "wikidata": "Q547375"
+   }
+  ],
+  "TG": [
+   {
+    "lat": 10.1,
+    "lon": 1.0667,
+    "name": "Koutammakou",
+    "sitelinks": 39,
+    "wikidata": "Q508040"
+   }
+  ],
+  "TH": [
+   {
+    "lat": 14.3516,
+    "lon": 100.5575,
+    "name": "Ayutthaya Historical Park",
+    "sitelinks": 43,
+    "wikidata": "Q1025100"
+   },
+   {
+    "lat": 17.5486,
+    "lon": 103.3583,
+    "name": "Ban Chiang",
+    "sitelinks": 43,
+    "wikidata": "Q584125"
+   },
+   {
+    "lat": 15.3333,
+    "lon": 98.9167,
+    "name": "Thungyai Naresuan Wildlife Sanctuary",
+    "sitelinks": 26,
+    "wikidata": "Q422995"
+   },
+   {
+    "lat": 14.33,
+    "lon": 102.05,
+    "name": "Dong Phayayen-Khao Yai Forest Complex",
+    "sitelinks": 20,
+    "wikidata": "Q16963852"
+   },
+   {
+    "lat": 15.4666,
+    "lon": 101.1501,
+    "name": "Si Thep historical park",
+    "sitelinks": 20,
+    "wikidata": "Q1517758"
+   },
+   {
+    "lat": 8.4114,
+    "lon": 99.9667,
+    "name": "Wat Phra Mahathat",
+    "sitelinks": 19,
+    "wikidata": "Q2552354"
+   },
+   {
+    "lat": 17.0211,
+    "lon": 99.7036,
+    "name": "Historic Town of Sukhothai and Associated Historic Towns",
+    "sitelinks": 16,
+    "wikidata": "Q865097"
+   },
+   {
+    "lat": 12.8657,
+    "lon": 99.4002,
+    "name": "Kaeng Krachan Forest Complex",
+    "sitelinks": 10,
+    "wikidata": "Q37636297"
+   }
+  ],
+  "TJ": [
+   {
+    "lat": 38.7412,
+    "lon": 72.1198,
+    "name": "Pamir National Park",
+    "sitelinks": 39,
+    "wikidata": "Q3076575"
+   },
+   {
+    "lat": 39.5167,
+    "lon": 67.5667,
+    "name": "Sarazm",
+    "sitelinks": 38,
+    "wikidata": "Q422929"
+   },
+   {
+    "lat": 37.25,
+    "lon": 68.5,
+    "name": "Tigrovaya Balka Nature Reserve",
+    "sitelinks": 23,
+    "wikidata": "Q1138108"
+   },
+   {
+    "lat": 39.4415,
+    "lon": 69.6856,
+    "name": "Silk Roads: Zarafshan-Karakum Corridor",
+    "sitelinks": 18,
+    "wikidata": "Q122666385"
+   },
+   {
+    "lat": 37.7777,
+    "lon": 69.5567,
+    "name": "Cultural Heritage Sites of Ancient Khuttal",
+    "sitelinks": 4,
+    "wikidata": "Q135442987"
+   }
+  ],
+  "TM": [
+   {
+    "lat": 37.6628,
+    "lon": 62.1925,
+    "name": "Merv",
+    "sitelinks": 70,
+    "wikidata": "Q193325"
+   },
+   {
+    "lat": 42.3261,
+    "lon": 59.1531,
+    "name": "Köneürgenç",
+    "sitelinks": 61,
+    "wikidata": "Q48472"
+   },
+   {
+    "lat": 37.9511,
+    "lon": 58.2124,
+    "name": "Nisa",
+    "sitelinks": 49,
+    "wikidata": "Q854672"
+   },
+   {
+    "lat": 39.4415,
+    "lon": 69.6856,
+    "name": "Silk Roads: Zarafshan-Karakum Corridor",
+    "sitelinks": 18,
+    "wikidata": "Q122666385"
+   },
+   {
+    "lat": 44.0258,
+    "lon": 79.0342,
+    "name": "Cold Winter Deserts of Turan",
+    "sitelinks": 12,
+    "wikidata": "Q122731152"
+   }
+  ],
+  "TN": [
+   {
+    "lat": 35.6833,
+    "lon": 10.1,
+    "name": "Kairouan",
+    "sitelinks": 81,
+    "wikidata": "Q179570"
+   },
+   {
+    "lat": 33.7837,
+    "lon": 10.8833,
+    "name": "Djerba",
+    "sitelinks": 70,
+    "wikidata": "Q188938"
+   },
+   {
+    "lat": 36.4233,
+    "lon": 9.2203,
+    "name": "Dougga",
+    "sitelinks": 46,
+    "wikidata": "Q32378"
+   },
+   {
+    "lat": 36.8698,
+    "lon": 10.341,
+    "name": "Sidi Bou Said",
+    "sitelinks": 46,
+    "wikidata": "Q877391"
+   },
+   {
+    "lat": 35.2964,
+    "lon": 10.7069,
+    "name": "Roman amphitheatre of El Jem",
+    "sitelinks": 41,
+    "wikidata": "Q2914326"
+   },
+   {
+    "lat": 37.1234,
+    "lon": 9.6554,
+    "name": "Ichkeul National Park",
+    "sitelinks": 40,
+    "wikidata": "Q13220079"
+   },
+   {
+    "lat": 35.8278,
+    "lon": 10.6386,
+    "name": "Medina of Sousse",
+    "sitelinks": 22,
+    "wikidata": "Q608100"
+   },
+   {
+    "lat": 36.799,
+    "lon": 10.1701,
+    "name": "Medina of Tunis",
+    "sitelinks": 22,
+    "wikidata": "Q3106527"
+   }
+  ],
+  "TR": [
+   {
+    "lat": 39.9575,
+    "lon": 26.2389,
+    "name": "Troy",
+    "sitelinks": 122,
+    "wikidata": "Q22647"
+   },
+   {
+    "lat": 37.2231,
+    "lon": 38.9225,
+    "name": "Göbekli Tepe",
+    "sitelinks": 78,
+    "wikidata": "Q214944"
+   },
+   {
+    "lat": 37.6675,
+    "lon": 32.8283,
+    "name": "Çatalhöyük",
+    "sitelinks": 70,
+    "wikidata": "Q192522"
+   },
+   {
+    "lat": 41.6781,
+    "lon": 26.5594,
+    "name": "Selimiye Mosque",
+    "sitelinks": 67,
+    "wikidata": "Q184534"
+   },
+   {
+    "lat": 37.9807,
+    "lon": 38.7408,
+    "name": "Mount Nemrut",
+    "sitelinks": 61,
+    "wikidata": "Q207917"
+   },
+   {
+    "lat": 40.5075,
+    "lon": 43.5728,
+    "name": "Ani",
+    "sitelinks": 59,
+    "wikidata": "Q546010"
+   },
+   {
+    "lat": 39.3712,
+    "lon": 38.1216,
+    "name": "Divriği Great Mosque and Hospital",
+    "sitelinks": 40,
+    "wikidata": "Q581641"
+   },
+   {
+    "lat": 39.6505,
+    "lon": 31.9785,
+    "name": "Gordion",
+    "sitelinks": 40,
+    "wikidata": "Q542854"
+   }
+  ],
+  "TZ": [
+   {
+    "lat": -2.4,
+    "lon": 34.6,
+    "name": "Serengeti National Park",
+    "sitelinks": 77,
+    "wikidata": "Q11812902"
+   },
+   {
+    "lat": -3.21,
+    "lon": 35.46,
+    "name": "Ngorongoro Conservation Area",
+    "sitelinks": 68,
+    "wikidata": "Q1217726"
+   },
+   {
+    "lat": -9.0,
+    "lon": 37.4,
+    "name": "Selous Game Reserve",
+    "sitelinks": 55,
+    "wikidata": "Q2268839"
+   },
+   {
+    "lat": -6.1649,
+    "lon": 39.1988,
+    "name": "Stone Town",
+    "sitelinks": 55,
+    "wikidata": "Q844417"
+   },
+   {
+    "lat": -3.0667,
+    "lon": 37.3667,
+    "name": "Kilimanjaro National Park",
+    "sitelinks": 47,
+    "wikidata": "Q756790"
+   },
+   {
+    "lat": -4.7244,
+    "lon": 35.8339,
+    "name": "Kondoa Rock Art Sites",
+    "sitelinks": 34,
+    "wikidata": "Q1404282"
+   },
+   {
+    "lat": -8.9578,
+    "lon": 39.5228,
+    "name": "Ruins of Kilwa Kisiwani and Ruins of Songo Mnara",
+    "sitelinks": 5,
+    "wikidata": "Q15726282"
+   }
+  ],
+  "UA": [
+   {
+    "lat": 45.2,
+    "lon": 29.5,
+    "name": "Danube Delta",
+    "sitelinks": 68,
+    "wikidata": "Q184429"
+   },
+   {
+    "lat": 52.2894,
+    "lon": 25.6494,
+    "name": "Struve Geodetic Arc",
+    "sitelinks": 65,
+    "wikidata": "Q192243"
+   },
+   {
+    "lat": 50.4528,
+    "lon": 30.5144,
+    "name": "Saint Sophia Cathedral",
+    "sitelinks": 64,
+    "wikidata": "Q830054"
+   },
+   {
+    "lat": 49.0,
+    "lon": 15.0,
+    "name": "Ancient and Primeval Beech Forests of the Carpathians and Other Regions of Europe",
+    "sitelinks": 56,
+    "wikidata": "Q156011"
+   },
+   {
+    "lat": 49.5339,
+    "lon": 21.0322,
+    "name": "Wooden tserkvas of Carpathian region in Poland and Ukraine",
+    "sitelinks": 46,
+    "wikidata": "Q8032604"
+   },
+   {
+    "lat": 49.8417,
+    "lon": 24.0319,
+    "name": "Old Town of Lviv",
+    "sitelinks": 43,
+    "wikidata": "Q2592613"
+   },
+   {
+    "lat": 48.2966,
+    "lon": 25.9249,
+    "name": "Residence of Bukovinian and Dalmatian Metropolitans",
+    "sitelinks": 38,
+    "wikidata": "Q156067"
+   },
+   {
+    "lat": 46.485,
+    "lon": 30.741,
+    "name": "historical city centre of Odesa",
+    "sitelinks": 31,
+    "wikidata": "Q15041608"
+   }
+  ],
+  "UG": [
+   {
+    "lat": 0.3292,
+    "lon": 32.5533,
+    "name": "Kasubi Tombs",
+    "sitelinks": 57,
+    "wikidata": "Q309426"
+   },
+   {
+    "lat": -1.05,
+    "lon": 29.7167,
+    "name": "Bwindi Impenetrable National Park",
+    "sitelinks": 47,
+    "wikidata": "Q500397"
+   },
+   {
+    "lat": 0.4,
+    "lon": 29.95,
+    "name": "Rwenzori Mountains National Park",
+    "sitelinks": 46,
+    "wikidata": "Q838928"
+   }
+  ],
+  "US": [
+   {
+    "lat": 40.6892,
+    "lon": -74.0444,
+    "name": "Statue of Liberty",
+    "sitelinks": 159,
+    "wikidata": "Q9202"
+   },
+   {
+    "lat": 44.6,
+    "lon": -110.5,
+    "name": "Yellowstone National Park",
+    "sitelinks": 116,
+    "wikidata": "Q351"
+   },
+   {
+    "lat": 37.7425,
+    "lon": -119.5375,
+    "name": "Yosemite National Park",
+    "sitelinks": 87,
+    "wikidata": "Q180402"
+   },
+   {
+    "lat": 25.3125,
+    "lon": -80.6875,
+    "name": "Everglades National Park",
+    "sitelinks": 70,
+    "wikidata": "Q274131"
+   },
+   {
+    "lat": 36.0553,
+    "lon": -112.122,
+    "name": "Grand Canyon National Park",
+    "sitelinks": 62,
+    "wikidata": "Q220289"
+   },
+   {
+    "lat": 37.2604,
+    "lon": -108.4944,
+    "name": "Mesa Verde National Park",
+    "sitelinks": 60,
+    "wikidata": "Q237128"
+   },
+   {
+    "lat": 40.69,
+    "lon": -74.045,
+    "name": "Liberty Island",
+    "sitelinks": 57,
+    "wikidata": "Q319821"
+   },
+   {
+    "lat": 19.4008,
+    "lon": -155.1236,
+    "name": "Hawaiʻi Volcanoes National Park",
+    "sitelinks": 55,
+    "wikidata": "Q205952"
+   }
+  ],
+  "UY": [
+   {
+    "lat": -34.744,
+    "lon": -55.766,
+    "name": "Church of Cristo Obrero y Nuestra Señora de Lourdes",
+    "sitelinks": 21,
+    "wikidata": "Q26721344"
+   },
+   {
+    "lat": -34.4715,
+    "lon": -57.8512,
+    "name": "Historic Quarter of the City of Colonia del Sacramento",
+    "sitelinks": 3,
+    "wikidata": "Q9643691"
+   },
+   {
+    "lat": -33.1178,
+    "lon": -58.3317,
+    "name": "Fray Bentos Industrial Landscape",
+    "sitelinks": 1,
+    "wikidata": "Q29905581"
+   }
+  ],
+  "UZ": [
+   {
+    "lat": 39.05,
+    "lon": 66.8333,
+    "name": "Shahrisabz",
+    "sitelinks": 80,
+    "wikidata": "Q569766"
+   },
+   {
+    "lat": 41.3777,
+    "lon": 60.3595,
+    "name": "Itchan Kala",
+    "sitelinks": 50,
+    "wikidata": "Q535577"
+   },
+   {
+    "lat": 39.4415,
+    "lon": 69.6856,
+    "name": "Silk Roads: Zarafshan-Karakum Corridor",
+    "sitelinks": 18,
+    "wikidata": "Q122666385"
+   },
+   {
+    "lat": 44.0258,
+    "lon": 79.0342,
+    "name": "Cold Winter Deserts of Turan",
+    "sitelinks": 12,
+    "wikidata": "Q122731152"
+   },
+   {
+    "lat": 42.5,
+    "lon": 74.5833,
+    "name": "Western Tian Shan",
+    "sitelinks": 9,
+    "wikidata": "Q16434635"
+   },
+   {
+    "lat": 39.7667,
+    "lon": 64.4333,
+    "name": "Historic Centre of Bukhara",
+    "sitelinks": 5,
+    "wikidata": "Q29015225"
+   },
+   {
+    "lat": 41.3086,
+    "lon": 69.2417,
+    "name": "Tashkent Modernist Architecture. Modernity and Tradition in Central Asia",
+    "sitelinks": 5,
+    "wikidata": "Q124800237"
+   },
+   {
+    "lat": 39.6686,
+    "lon": 67.0,
+    "name": "Samarkand – Crossroad of Cultures",
+    "sitelinks": 1,
+    "wikidata": "Q17255582"
+   }
+  ],
+  "VA": [
+   {
+    "lat": 41.904,
+    "lon": 12.453,
+    "name": "Vatican City",
+    "sitelinks": 343,
+    "wikidata": "Q237"
+   },
+   {
+    "lat": 41.8928,
+    "lon": 12.4866,
+    "name": "Historic Centre of Rome, the Properties of the Holy See in that City Enjoying Extraterritorial Rights and San Paolo Fuori le Mura",
+    "sitelinks": 5,
+    "wikidata": "Q18448486"
+   }
+  ],
+  "VE": [
+   {
+    "lat": 5.3193,
+    "lon": -61.7954,
+    "name": "Canaima National Park",
+    "sitelinks": 57,
+    "wikidata": "Q1244337"
+   },
+   {
+    "lat": 10.4908,
+    "lon": -66.8906,
+    "name": "University City of Caracas",
+    "sitelinks": 31,
+    "wikidata": "Q1061531"
+   },
+   {
+    "lat": 11.4,
+    "lon": -69.6833,
+    "name": "Coro and its Port",
+    "sitelinks": 10,
+    "wikidata": "Q65621655"
+   }
+  ],
+  "VN": [
+   {
+    "lat": 17.5333,
+    "lon": 106.15,
+    "name": "Phong Nha – Ke Bang National Park",
+    "sitelinks": 125,
+    "wikidata": "Q23513"
+   },
+   {
+    "lat": 20.9,
+    "lon": 107.2,
+    "name": "Ha Long Bay",
+    "sitelinks": 84,
+    "wikidata": "Q190128"
+   },
+   {
+    "lat": 15.8777,
+    "lon": 108.3327,
+    "name": "Hội An",
+    "sitelinks": 62,
+    "wikidata": "Q36160"
+   },
+   {
+    "lat": 15.7632,
+    "lon": 108.1244,
+    "name": "Mỹ Sơn",
+    "sitelinks": 54,
+    "wikidata": "Q391406"
+   },
+   {
+    "lat": 20.0781,
+    "lon": 105.6047,
+    "name": "Citadel of the Hồ Dynasty",
+    "sitelinks": 52,
+    "wikidata": "Q190060"
+   },
+   {
+    "lat": 21.0325,
+    "lon": 105.8397,
+    "name": "Imperial Citadel of Thang Long",
+    "sitelinks": 42,
+    "wikidata": "Q206219"
+   },
+   {
+    "lat": 20.2557,
+    "lon": 105.9156,
+    "name": "Tràng An",
+    "sitelinks": 34,
+    "wikidata": "Q10810559"
+   },
+   {
+    "lat": 20.8,
+    "lon": 106.9997,
+    "name": "Cát Bà Island",
+    "sitelinks": 30,
+    "wikidata": "Q993402"
+   }
+  ],
+  "VU": [
+   {
+    "lat": -17.6936,
+    "lon": 168.234,
+    "name": "Chief Roi Mata’s Domain",
+    "sitelinks": 11,
+    "wikidata": "Q1072369"
+   }
+  ],
+  "YE": [
+   {
+    "lat": 15.9269,
+    "lon": 48.6267,
+    "name": "Shibam",
+    "sitelinks": 69,
+    "wikidata": "Q192518"
+   },
+   {
+    "lat": 14.2,
+    "lon": 43.3167,
+    "name": "Zabid",
+    "sitelinks": 58,
+    "wikidata": "Q138986"
+   },
+   {
+    "lat": 12.5,
+    "lon": 53.4,
+    "name": "Socotra Archipelago",
+    "sitelinks": 24,
+    "wikidata": "Q2860218"
+   },
+   {
+    "lat": 15.4268,
+    "lon": 45.3352,
+    "name": "Landmarks of the Ancient Kingdom of Saba",
+    "sitelinks": 17,
+    "wikidata": "Q116943542"
+   },
+   {
+    "lat": 15.3556,
+    "lon": 44.2081,
+    "name": "Old Sana'a",
+    "sitelinks": 8,
+    "wikidata": "Q12220316"
+   }
+  ],
+  "ZA": [
+   {
+    "lat": -33.805,
+    "lon": 18.37,
+    "name": "Robben Island",
+    "sitelinks": 72,
+    "wikidata": "Q192493"
+   },
+   {
+    "lat": -26.8167,
+    "lon": 27.4167,
+    "name": "Vredefort crater",
+    "sitelinks": 52,
+    "wikidata": "Q330095"
+   },
+   {
+    "lat": -25.9672,
+    "lon": 27.6624,
+    "name": "Cradle of Humankind",
+    "sitelinks": 49,
+    "wikidata": "Q1130112"
+   },
+   {
+    "lat": -34.1667,
+    "lon": 18.375,
+    "name": "Cape Floristic Kingdom",
+    "sitelinks": 47,
+    "wikidata": "Q1974274"
+   },
+   {
+    "lat": -28.6,
+    "lon": 17.2039,
+    "name": "Richtersveld",
+    "sitelinks": 47,
+    "wikidata": "Q1353565"
+   },
+   {
+    "lat": -28.0,
+    "lon": 32.5,
+    "name": "iSimangaliso Wetland Park",
+    "sitelinks": 42,
+    "wikidata": "Q310719"
+   },
+   {
+    "lat": -33.4,
+    "lon": 22.0,
+    "name": "Makhonjwa Mountains",
+    "sitelinks": 23,
+    "wikidata": "Q19605615"
+   },
+   {
+    "lat": -29.4665,
+    "lon": 29.3939,
+    "name": "Maloti-Drakensberg Park",
+    "sitelinks": 23,
+    "wikidata": "Q6744547"
+   }
+  ],
+  "ZM": [
+   {
+    "lat": -17.9248,
+    "lon": 25.8581,
+    "name": "Victoria Falls",
+    "sitelinks": 111,
+    "wikidata": "Q43278"
+   }
+  ],
+  "ZW": [
+   {
+    "lat": -17.9248,
+    "lon": 25.8581,
+    "name": "Victoria Falls",
+    "sitelinks": 111,
+    "wikidata": "Q43278"
+   },
+   {
+    "lat": -20.27,
+    "lon": 30.933,
+    "name": "Great Zimbabwe",
+    "sitelinks": 75,
+    "wikidata": "Q209217"
+   },
+   {
+    "lat": -20.1433,
+    "lon": 28.4234,
+    "name": "Khami",
+    "sitelinks": 39,
+    "wikidata": "Q938685"
+   },
+   {
+    "lat": -20.5,
+    "lon": 28.5,
+    "name": "Matobo Hills",
+    "sitelinks": 26,
+    "wikidata": "Q917429"
+   },
+   {
+    "lat": -15.8194,
+    "lon": 29.4081,
+    "name": "Mana Pools National Park, Sapi and Chewore Safari Areas",
+    "sitelinks": 4,
+    "wikidata": "Q15728398"
+   }
+  ]
+ }
+}

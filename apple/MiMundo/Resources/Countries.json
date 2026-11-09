@@ -3,6 +3,13 @@
   "capitals": [
    "Andorra la Vella"
   ],
+  "landmarks": [
+   {
+    "lat": 42.4921,
+    "lon": 1.5944,
+    "name": "Madriu-Perafita-Claror Valley"
+   }
+  ],
   "languages": [
    "Catalan"
   ],
@@ -12,6 +19,23 @@
  "AE": {
   "capitals": [
    "Abu Dhabi"
+  ],
+  "landmarks": [
+   {
+    "lat": 25.1972,
+    "lon": 55.2744,
+    "name": "Burj Khalifa"
+   },
+   {
+    "lat": 24.4128,
+    "lon": 54.4747,
+    "name": "Sheikh Zayed Grand Mosque"
+   },
+   {
+    "lat": 25.1124,
+    "lon": 55.1386,
+    "name": "Palm Jumeirah"
+   }
   ],
   "languages": [
    "Arabic"
@@ -23,6 +47,7 @@
   "capitals": [
    "Kabul"
   ],
+  "landmarks": [],
   "languages": [
    "Pashto",
    "Dari"
@@ -34,6 +59,23 @@
   "capitals": [
    "St. John's"
   ],
+  "landmarks": [
+   {
+    "lat": 17.0083,
+    "lon": -61.7644,
+    "name": "Nelson's Dockyard"
+   },
+   {
+    "lat": 17.0044,
+    "lon": -61.7633,
+    "name": "Fort Berkeley"
+   },
+   {
+    "lat": 17.01,
+    "lon": -61.7622,
+    "name": "Clarence House"
+   }
+  ],
   "languages": [
    "English"
   ],
@@ -44,6 +86,7 @@
   "capitals": [
    "The Valley"
   ],
+  "landmarks": [],
   "languages": [
    "English"
   ],
@@ -53,6 +96,18 @@
  "AL": {
   "capitals": [
    "Tirana"
+  ],
+  "landmarks": [
+   {
+    "lat": 39.7571,
+    "lon": 20.0166,
+    "name": "Butrint"
+   },
+   {
+    "lat": 39.7461,
+    "lon": 20.0199,
+    "name": "Venetian Acropolis Castle"
+   }
   ],
   "languages": [
    "Albanian"
@@ -64,6 +119,13 @@
   "capitals": [
    "Yerevan"
   ],
+  "landmarks": [
+   {
+    "lat": 41.095,
+    "lon": 44.7103,
+    "name": "Monasteries of Haghpat and Sanahin"
+   }
+  ],
   "languages": [
    "Armenian"
   ],
@@ -74,6 +136,13 @@
   "capitals": [
    "Luanda"
   ],
+  "landmarks": [
+   {
+    "lat": -6.2667,
+    "lon": 14.25,
+    "name": "M'banza-Kongo"
+   }
+  ],
   "languages": [
    "Portuguese"
   ],
@@ -82,6 +151,7 @@
  },
  "AQ": {
   "capitals": [],
+  "landmarks": [],
   "languages": [],
   "population": null,
   "wikidata": "Q10372207"
@@ -89,6 +159,23 @@
  "AR": {
   "capitals": [
    "Buenos Aires"
+  ],
+  "landmarks": [
+   {
+    "lat": -25.6953,
+    "lon": -54.4367,
+    "name": "Iguazu Falls"
+   },
+   {
+    "lat": -50.4967,
+    "lon": -73.048,
+    "name": "Perito Moreno Glacier"
+   },
+   {
+    "lat": -32.6532,
+    "lon": -70.0109,
+    "name": "Aconcagua"
+   }
   ],
   "languages": [
    "Spanish"
@@ -100,6 +187,7 @@
   "capitals": [
    "Pago Pago"
   ],
+  "landmarks": [],
   "languages": [
    "Samoan",
    "English"
@@ -111,6 +199,23 @@
   "capitals": [
    "Vienna"
   ],
+  "landmarks": [
+   {
+    "lat": 48.1845,
+    "lon": 16.3122,
+    "name": "Schönbrunn Palace"
+   },
+   {
+    "lat": 47.5622,
+    "lon": 13.6493,
+    "name": "Hallstatt"
+   },
+   {
+    "lat": 47.799,
+    "lon": 13.047,
+    "name": "Salzburg Old Town"
+   }
+  ],
   "languages": [
    "German"
   ],
@@ -120,6 +225,23 @@
  "AU": {
   "capitals": [
    "Canberra"
+  ],
+  "landmarks": [
+   {
+    "lat": -33.8568,
+    "lon": 151.2153,
+    "name": "Sydney Opera House"
+   },
+   {
+    "lat": -18.0,
+    "lon": 146.0,
+    "name": "Great Barrier Reef"
+   },
+   {
+    "lat": -25.3444,
+    "lon": 131.0369,
+    "name": "Uluru"
+   }
   ],
   "languages": [
    "English"
@@ -131,6 +253,7 @@
   "capitals": [
    "Oranjestad"
   ],
+  "landmarks": [],
   "languages": [
    "Papiamento",
    "Dutch"
@@ -142,6 +265,7 @@
   "capitals": [
    "Mariehamn"
   ],
+  "landmarks": [],
   "languages": [
    "Swedish"
   ],
@@ -152,6 +276,18 @@
   "capitals": [
    "Baku"
   ],
+  "landmarks": [
+   {
+    "lat": 40.125,
+    "lon": 49.375,
+    "name": "Gobustan Rock Art"
+   },
+   {
+    "lat": 37.4215,
+    "lon": 55.7243,
+    "name": "Hyrcanian Forests"
+   }
+  ],
   "languages": [
    "Azerbaijani"
   ],
@@ -161,6 +297,18 @@
  "BA": {
   "capitals": [
    "Sarajevo"
+  ],
+  "landmarks": [
+   {
+    "lat": 43.7825,
+    "lon": 19.2879,
+    "name": "Mehmed Paša Sokolović Bridge"
+   },
+   {
+    "lat": 42.8458,
+    "lon": 17.9839,
+    "name": "Vjetrenica"
+   }
   ],
   "languages": [
    "Bosnian",
@@ -174,6 +322,13 @@
   "capitals": [
    "Bridgetown"
   ],
+  "landmarks": [
+   {
+    "lat": 13.0967,
+    "lon": -59.6139,
+    "name": "Garrison Historic Area"
+   }
+  ],
   "languages": [
    "English",
    "Bajan Creole"
@@ -185,6 +340,18 @@
   "capitals": [
    "Dhaka"
   ],
+  "landmarks": [
+   {
+    "lat": 22.661,
+    "lon": 89.7585,
+    "name": "Mosque City of Bagerhat"
+   },
+   {
+    "lat": 22.0333,
+    "lon": 89.5167,
+    "name": "Sundarbans Reserved Forest"
+   }
+  ],
   "languages": [
    "Bengali"
   ],
@@ -194,6 +361,23 @@
  "BE": {
   "capitals": [
    "Brussels"
+  ],
+  "landmarks": [
+   {
+    "lat": 50.8467,
+    "lon": 4.3525,
+    "name": "Grand-Place"
+   },
+   {
+    "lat": 50.6065,
+    "lon": 3.3889,
+    "name": "Tournai Cathedral"
+   },
+   {
+    "lat": 50.8351,
+    "lon": 4.4162,
+    "name": "Stoclet Palace"
+   }
   ],
   "languages": [
    "Dutch",
@@ -207,6 +391,23 @@
   "capitals": [
    "Ouagadougou"
   ],
+  "landmarks": [
+   {
+    "lat": 11.53,
+    "lon": 2.29,
+    "name": "W-Arly-Pendjari Complex"
+   },
+   {
+    "lat": 10.3103,
+    "lon": -3.5631,
+    "name": "Ruins of Loropéni"
+   },
+   {
+    "lat": 11.0897,
+    "lon": -0.9616,
+    "name": "Royal Court of Tiébélé"
+   }
+  ],
   "languages": [
    "Mooré",
    "Dioula",
@@ -219,6 +420,23 @@
   "capitals": [
    "Sofia"
   ],
+  "landmarks": [
+   {
+    "lat": 42.6595,
+    "lon": 27.7247,
+    "name": "Nesebar"
+   },
+   {
+    "lat": 41.6722,
+    "lon": 23.4878,
+    "name": "Pirin National Park"
+   },
+   {
+    "lat": 42.6447,
+    "lon": 23.2662,
+    "name": "Boyana Church"
+   }
+  ],
   "languages": [
    "Bulgarian"
   ],
@@ -228,6 +446,23 @@
  "BH": {
   "capitals": [
    "Manama"
+  ],
+  "landmarks": [
+   {
+    "lat": 26.2336,
+    "lon": 50.5206,
+    "name": "Qal’at al Bahrain"
+   },
+   {
+    "lat": 26.1497,
+    "lon": 50.5128,
+    "name": "Dilmun Burial Mounds"
+   },
+   {
+    "lat": 26.25,
+    "lon": 50.61,
+    "name": "Bahrain Pearling Trail"
+   }
   ],
   "languages": [
    "Arabic"
@@ -239,6 +474,7 @@
   "capitals": [
    "Gitega"
   ],
+  "landmarks": [],
   "languages": [
    "Kirundi",
    "French",
@@ -251,6 +487,23 @@
   "capitals": [
    "Porto-Novo"
   ],
+  "landmarks": [
+   {
+    "lat": 10.1,
+    "lon": 1.0667,
+    "name": "Koutammakou"
+   },
+   {
+    "lat": 7.1856,
+    "lon": 1.9881,
+    "name": "Royal Palaces of Abomey"
+   },
+   {
+    "lat": 11.53,
+    "lon": 2.29,
+    "name": "W-Arly-Pendjari Complex"
+   }
+  ],
   "languages": [
    "French"
   ],
@@ -261,6 +514,7 @@
   "capitals": [
    "Gustavia"
   ],
+  "landmarks": [],
   "languages": [
    "French"
   ],
@@ -271,6 +525,7 @@
   "capitals": [
    "Hamilton"
   ],
+  "landmarks": [],
   "languages": [
    "English"
   ],
@@ -281,6 +536,7 @@
   "capitals": [
    "Bandar Seri Begawan"
   ],
+  "landmarks": [],
   "languages": [
    "Malay",
    "English"
@@ -292,6 +548,23 @@
   "capitals": [
    "La Paz",
    "Sucre"
+  ],
+  "landmarks": [
+   {
+    "lat": -20.1338,
+    "lon": -67.4891,
+    "name": "Salar de Uyuni"
+   },
+   {
+    "lat": -15.9254,
+    "lon": -69.3354,
+    "name": "Lake Titicaca"
+   },
+   {
+    "lat": -16.555,
+    "lon": -68.673,
+    "name": "Tiwanaku"
+   }
   ],
   "languages": [
    "Spanish",
@@ -305,6 +578,23 @@
   "capitals": [
    "Brasília"
   ],
+  "landmarks": [
+   {
+    "lat": -22.9519,
+    "lon": -43.2105,
+    "name": "Christ the Redeemer"
+   },
+   {
+    "lat": -25.6953,
+    "lon": -54.4367,
+    "name": "Iguazu Falls"
+   },
+   {
+    "lat": -3.4653,
+    "lon": -60.0,
+    "name": "Amazon Rainforest"
+   }
+  ],
   "languages": [
    "Portuguese"
   ],
@@ -315,6 +605,7 @@
   "capitals": [
    "Nassau"
   ],
+  "landmarks": [],
   "languages": [
    "English"
   ],
@@ -325,6 +616,7 @@
   "capitals": [
    "Thimphu"
   ],
+  "landmarks": [],
   "languages": [
    "Dzongkha"
   ],
@@ -335,6 +627,18 @@
   "capitals": [
    "Gaborone"
   ],
+  "landmarks": [
+   {
+    "lat": -19.4,
+    "lon": 22.9,
+    "name": "Okavango Delta"
+   },
+   {
+    "lat": -18.7717,
+    "lon": 21.7542,
+    "name": "Tsodilo"
+   }
+  ],
   "languages": [
    "English"
   ],
@@ -344,6 +648,23 @@
  "BY": {
   "capitals": [
    "Minsk"
+  ],
+  "landmarks": [
+   {
+    "lat": 52.75,
+    "lon": 23.95,
+    "name": "Białowieża Forest"
+   },
+   {
+    "lat": 53.4513,
+    "lon": 26.4729,
+    "name": "Mir Castle Complex"
+   },
+   {
+    "lat": 53.2229,
+    "lon": 26.6917,
+    "name": "Nesvizh Castle"
+   }
   ],
   "languages": [
    "Russian",
@@ -356,6 +677,13 @@
   "capitals": [
    "Belmopan"
   ],
+  "landmarks": [
+   {
+    "lat": 17.2625,
+    "lon": -88.0528,
+    "name": "Belize Barrier Reef"
+   }
+  ],
   "languages": [
    "English"
   ],
@@ -365,6 +693,23 @@
  "CA": {
   "capitals": [
    "Ottawa"
+  ],
+  "landmarks": [
+   {
+    "lat": 43.0799,
+    "lon": -79.0742,
+    "name": "Niagara Falls"
+   },
+   {
+    "lat": 43.6426,
+    "lon": -79.3871,
+    "name": "CN Tower"
+   },
+   {
+    "lat": 51.4968,
+    "lon": -115.5708,
+    "name": "Banff National Park"
+   }
   ],
   "languages": [
    "English",
@@ -377,6 +722,23 @@
   "capitals": [
    "Kinshasa"
   ],
+  "landmarks": [
+   {
+    "lat": -0.5,
+    "lon": 29.5,
+    "name": "Virunga National Park"
+   },
+   {
+    "lat": 2.0,
+    "lon": 28.5,
+    "name": "Okapi Wildlife Reserve"
+   },
+   {
+    "lat": 4.0,
+    "lon": 29.25,
+    "name": "Garamba National Park"
+   }
+  ],
   "languages": [
    "French"
   ],
@@ -386,6 +748,13 @@
  "CF": {
   "capitals": [
    "Bangui"
+  ],
+  "landmarks": [
+   {
+    "lat": 2.6667,
+    "lon": 16.3333,
+    "name": "Sangha Trinational"
+   }
   ],
   "languages": [
    "Sango",
@@ -398,6 +767,18 @@
   "capitals": [
    "Brazzaville"
   ],
+  "landmarks": [
+   {
+    "lat": 2.6667,
+    "lon": 16.3333,
+    "name": "Sangha Trinational"
+   },
+   {
+    "lat": 0.8,
+    "lon": 14.9,
+    "name": "Odzala National Park"
+   }
+  ],
   "languages": [
    "French"
   ],
@@ -407,6 +788,23 @@
  "CH": {
   "capitals": [
    "Bern"
+  ],
+  "landmarks": [
+   {
+    "lat": 45.9763,
+    "lon": 7.6586,
+    "name": "Matterhorn"
+   },
+   {
+    "lat": 46.5475,
+    "lon": 7.9853,
+    "name": "Jungfraujoch"
+   },
+   {
+    "lat": 46.4142,
+    "lon": 6.9273,
+    "name": "Chillon Castle"
+   }
   ],
   "languages": [
    "German",
@@ -420,6 +818,23 @@
   "capitals": [
    "Yamoussoukro"
   ],
+  "landmarks": [
+   {
+    "lat": 9.1636,
+    "lon": -3.7725,
+    "name": "Comoé National Park"
+   },
+   {
+    "lat": 5.75,
+    "lon": -7.12,
+    "name": "Taï National Park"
+   },
+   {
+    "lat": 7.603,
+    "lon": -8.391,
+    "name": "Mount Nimba Strict Nature Reserve"
+   }
+  ],
   "languages": [
    "French"
   ],
@@ -430,6 +845,7 @@
   "capitals": [
    "Avarua"
   ],
+  "landmarks": [],
   "languages": [
    "English",
    "Cook Islands Maori"
@@ -441,6 +857,23 @@
   "capitals": [
    "Santiago"
   ],
+  "landmarks": [
+   {
+    "lat": -27.1127,
+    "lon": -109.3497,
+    "name": "Easter Island statues"
+   },
+   {
+    "lat": -51.0,
+    "lon": -73.0,
+    "name": "Torres del Paine"
+   },
+   {
+    "lat": -24.5,
+    "lon": -69.2,
+    "name": "Atacama Desert"
+   }
+  ],
   "languages": [
    "Spanish"
   ],
@@ -450,6 +883,23 @@
  "CM": {
   "capitals": [
    "Yaoundé"
+  ],
+  "landmarks": [
+   {
+    "lat": 3.0167,
+    "lon": 12.9833,
+    "name": "Dja Faunal Reserve"
+   },
+   {
+    "lat": 2.6667,
+    "lon": 16.3333,
+    "name": "Sangha Trinational"
+   },
+   {
+    "lat": 10.9167,
+    "lon": 13.8333,
+    "name": "Diy-Gid-Biy"
+   }
   ],
   "languages": [
    "French",
@@ -462,6 +912,23 @@
   "capitals": [
    "Beijing"
   ],
+  "landmarks": [
+   {
+    "lat": 40.4319,
+    "lon": 116.5704,
+    "name": "Great Wall of China"
+   },
+   {
+    "lat": 39.9169,
+    "lon": 116.3972,
+    "name": "Forbidden City"
+   },
+   {
+    "lat": 34.3841,
+    "lon": 109.2785,
+    "name": "Terracotta Army"
+   }
+  ],
   "languages": [
    "Mandarin Chinese"
   ],
@@ -471,6 +938,23 @@
  "CO": {
   "capitals": [
    "Bogotá"
+  ],
+  "landmarks": [
+   {
+    "lat": 10.4236,
+    "lon": -75.5514,
+    "name": "Cartagena Old Town"
+   },
+   {
+    "lat": 11.0383,
+    "lon": -73.925,
+    "name": "Lost City (Ciudad Perdida)"
+   },
+   {
+    "lat": 2.264,
+    "lon": -73.788,
+    "name": "Caño Cristales"
+   }
   ],
   "languages": [
    "Spanish"
@@ -482,6 +966,18 @@
   "capitals": [
    "San José"
   ],
+  "landmarks": [
+   {
+    "lat": 8.9114,
+    "lon": -83.4775,
+    "name": "Stone spheres of Costa Rica"
+   },
+   {
+    "lat": 5.5333,
+    "lon": -87.0667,
+    "name": "Cocos Island National Park"
+   }
+  ],
   "languages": [
    "Spanish"
   ],
@@ -491,6 +987,23 @@
  "CU": {
   "capitals": [
    "Havana"
+  ],
+  "landmarks": [
+   {
+    "lat": 23.136,
+    "lon": -82.35,
+    "name": "Old Havana"
+   },
+   {
+    "lat": 22.617,
+    "lon": -83.712,
+    "name": "Viñales Valley"
+   },
+   {
+    "lat": 21.802,
+    "lon": -79.984,
+    "name": "Trinidad"
+   }
   ],
   "languages": [
    "Spanish"
@@ -502,6 +1015,13 @@
   "capitals": [
    "Praia"
   ],
+  "landmarks": [
+   {
+    "lat": 14.9167,
+    "lon": -23.6042,
+    "name": "Cidade Velha"
+   }
+  ],
   "languages": [
    "Portuguese",
    "Cape Verdean Creole"
@@ -512,6 +1032,13 @@
  "CW": {
   "capitals": [
    "Willemstad"
+  ],
+  "landmarks": [
+   {
+    "lat": 12.1045,
+    "lon": -68.9344,
+    "name": "Fortkerk"
+   }
   ],
   "languages": [
    "Papiamento",
@@ -525,6 +1052,7 @@
   "capitals": [
    "Nicosia"
   ],
+  "landmarks": [],
   "languages": [
    "Greek",
    "Turkish"
@@ -536,6 +1064,23 @@
   "capitals": [
    "Prague"
   ],
+  "landmarks": [
+   {
+    "lat": 50.091,
+    "lon": 14.4003,
+    "name": "Prague Castle"
+   },
+   {
+    "lat": 50.0865,
+    "lon": 14.4114,
+    "name": "Charles Bridge, Prague"
+   },
+   {
+    "lat": 48.8127,
+    "lon": 14.3175,
+    "name": "Český Krumlov"
+   }
+  ],
   "languages": [
    "Czech"
   ],
@@ -545,6 +1090,23 @@
  "DE": {
   "capitals": [
    "Berlin"
+  ],
+  "landmarks": [
+   {
+    "lat": 47.5576,
+    "lon": 10.7498,
+    "name": "Neuschwanstein Castle"
+   },
+   {
+    "lat": 52.5163,
+    "lon": 13.3777,
+    "name": "Brandenburg Gate"
+   },
+   {
+    "lat": 50.9413,
+    "lon": 6.9583,
+    "name": "Cologne Cathedral"
+   }
   ],
   "languages": [
    "German"
@@ -556,6 +1118,7 @@
   "capitals": [
    "Djibouti"
   ],
+  "landmarks": [],
   "languages": [
    "Somali",
    "French",
@@ -568,6 +1131,23 @@
   "capitals": [
    "Copenhagen"
   ],
+  "landmarks": [
+   {
+    "lat": 56.0386,
+    "lon": 12.6219,
+    "name": "Kronborg Castle"
+   },
+   {
+    "lat": 55.6427,
+    "lon": 12.0803,
+    "name": "Roskilde Cathedral"
+   },
+   {
+    "lat": 55.3567,
+    "lon": 9.4831,
+    "name": "Christiansfeld"
+   }
+  ],
   "languages": [
    "Danish"
   ],
@@ -577,6 +1157,13 @@
  "DM": {
   "capitals": [
    "Roseau"
+  ],
+  "landmarks": [
+   {
+    "lat": 15.2667,
+    "lon": -61.2833,
+    "name": "Morne Trois Pitons National Park"
+   }
   ],
   "languages": [
    "English"
@@ -588,6 +1175,13 @@
   "capitals": [
    "Santo Domingo"
   ],
+  "landmarks": [
+   {
+    "lat": 18.473,
+    "lon": -69.883,
+    "name": "Colonial City of Santo Domingo"
+   }
+  ],
   "languages": [
    "Spanish"
   ],
@@ -597,6 +1191,23 @@
  "DZ": {
   "capitals": [
    "Algiers"
+  ],
+  "landmarks": [
+   {
+    "lat": 25.6667,
+    "lon": 9.0,
+    "name": "Tassili n'Ajjer"
+   },
+   {
+    "lat": 35.4842,
+    "lon": 6.4687,
+    "name": "Timgad"
+   },
+   {
+    "lat": 36.3206,
+    "lon": 5.7367,
+    "name": "Djemila"
+   }
   ],
   "languages": [
    "Arabic",
@@ -608,6 +1219,23 @@
  "EC": {
   "capitals": [
    "Quito"
+  ],
+  "landmarks": [
+   {
+    "lat": -0.9538,
+    "lon": -90.9656,
+    "name": "Galápagos Islands"
+   },
+   {
+    "lat": -0.22,
+    "lon": -78.5125,
+    "name": "Quito Old Town"
+   },
+   {
+    "lat": -0.68,
+    "lon": -78.438,
+    "name": "Cotopaxi volcano"
+   }
   ],
   "languages": [
    "Spanish",
@@ -621,6 +1249,13 @@
   "capitals": [
    "Tallinn"
   ],
+  "landmarks": [
+   {
+    "lat": 59.4372,
+    "lon": 24.7453,
+    "name": "Tallinn Old Town"
+   }
+  ],
   "languages": [
    "Estonian"
   ],
@@ -631,6 +1266,23 @@
   "capitals": [
    "Cairo"
   ],
+  "landmarks": [
+   {
+    "lat": 29.9792,
+    "lon": 31.1342,
+    "name": "Pyramids of Giza"
+   },
+   {
+    "lat": 29.9753,
+    "lon": 31.1376,
+    "name": "Great Sphinx"
+   },
+   {
+    "lat": 22.3372,
+    "lon": 31.6258,
+    "name": "Abu Simbel"
+   }
+  ],
   "languages": [
    "Arabic"
   ],
@@ -639,6 +1291,7 @@
  },
  "EH": {
   "capitals": [],
+  "landmarks": [],
   "languages": [
    "Arabic"
   ],
@@ -648,6 +1301,13 @@
  "ER": {
   "capitals": [
    "Asmara"
+  ],
+  "landmarks": [
+   {
+    "lat": 15.3353,
+    "lon": 38.9358,
+    "name": "Asmara: A Modernist African City"
+   }
   ],
   "languages": [
    "Tigrinya",
@@ -661,6 +1321,23 @@
   "capitals": [
    "Madrid"
   ],
+  "landmarks": [
+   {
+    "lat": 41.4036,
+    "lon": 2.1744,
+    "name": "Sagrada Família"
+   },
+   {
+    "lat": 37.1761,
+    "lon": -3.5881,
+    "name": "Alhambra"
+   },
+   {
+    "lat": 41.4145,
+    "lon": 2.1527,
+    "name": "Park Güell"
+   }
+  ],
   "languages": [
    "Spanish"
   ],
@@ -670,6 +1347,23 @@
  "ET": {
   "capitals": [
    "Addis Ababa"
+  ],
+  "landmarks": [
+   {
+    "lat": 14.1167,
+    "lon": 38.7333,
+    "name": "Axum"
+   },
+   {
+    "lat": 4.4969,
+    "lon": 36.0138,
+    "name": "Omo River"
+   },
+   {
+    "lat": 13.1833,
+    "lon": 38.0667,
+    "name": "Simien Mountains National Park"
+   }
   ],
   "languages": [
    "Amharic"
@@ -681,6 +1375,23 @@
   "capitals": [
    "Helsinki"
   ],
+  "landmarks": [
+   {
+    "lat": 60.1436,
+    "lon": 24.9844,
+    "name": "Suomenlinna"
+   },
+   {
+    "lat": 62.2501,
+    "lon": 25.1839,
+    "name": "Petäjävesi Old Church"
+   },
+   {
+    "lat": 61.1177,
+    "lon": 21.7752,
+    "name": "Sammallahdenmäki"
+   }
+  ],
   "languages": [
    "Finnish",
    "Swedish"
@@ -691,6 +1402,13 @@
  "FJ": {
   "capitals": [
    "Suva"
+  ],
+  "landmarks": [
+   {
+    "lat": -17.6834,
+    "lon": 178.8345,
+    "name": "Levuka Historical Port Town"
+   }
   ],
   "languages": [
    "English",
@@ -704,6 +1422,7 @@
   "capitals": [
    "Stanley"
   ],
+  "landmarks": [],
   "languages": [
    "English"
   ],
@@ -713,6 +1432,13 @@
  "FM": {
   "capitals": [
    "Palikir"
+  ],
+  "landmarks": [
+   {
+    "lat": 6.8419,
+    "lon": 158.3322,
+    "name": "Nan Madol"
+   }
   ],
   "languages": [
    "English"
@@ -724,6 +1450,7 @@
   "capitals": [
    "Tórshavn"
   ],
+  "landmarks": [],
   "languages": [
    "Danish",
    "Faroese"
@@ -735,6 +1462,23 @@
   "capitals": [
    "Paris"
   ],
+  "landmarks": [
+   {
+    "lat": 48.8584,
+    "lon": 2.2945,
+    "name": "Eiffel Tower"
+   },
+   {
+    "lat": 48.6361,
+    "lon": -1.5115,
+    "name": "Mont-Saint-Michel"
+   },
+   {
+    "lat": 48.8049,
+    "lon": 2.1204,
+    "name": "Palace of Versailles"
+   }
+  ],
   "languages": [
    "French"
   ],
@@ -744,6 +1488,13 @@
  "GA": {
   "capitals": [
    "Libreville"
+  ],
+  "landmarks": [
+   {
+    "lat": 0.088,
+    "lon": 12.63,
+    "name": "Ivindo National Park"
+   }
   ],
   "languages": [
    "French"
@@ -755,6 +1506,23 @@
   "capitals": [
    "London"
   ],
+  "landmarks": [
+   {
+    "lat": 51.5007,
+    "lon": -0.1246,
+    "name": "Big Ben"
+   },
+   {
+    "lat": 51.1789,
+    "lon": -1.8262,
+    "name": "Stonehenge"
+   },
+   {
+    "lat": 51.5081,
+    "lon": -0.0759,
+    "name": "Tower of London"
+   }
+  ],
   "languages": [
    "English"
   ],
@@ -765,6 +1533,7 @@
   "capitals": [
    "St. George's"
   ],
+  "landmarks": [],
   "languages": [
    "English"
   ],
@@ -774,6 +1543,23 @@
  "GE": {
   "capitals": [
    "Tbilisi"
+  ],
+  "landmarks": [
+   {
+    "lat": 42.2947,
+    "lon": 42.7681,
+    "name": "Gelati Monastery"
+   },
+   {
+    "lat": 41.7022,
+    "lon": 41.9511,
+    "name": "Colchic Rainforests and Wetlands"
+   },
+   {
+    "lat": 41.8439,
+    "lon": 44.7164,
+    "name": "Historical Monuments of Mtskheta"
+   }
   ],
   "languages": [
    "Georgian"
@@ -785,6 +1571,7 @@
   "capitals": [
    "Saint Peter Port"
   ],
+  "landmarks": [],
   "languages": [
    "English",
    "French"
@@ -796,6 +1583,13 @@
   "capitals": [
    "Accra"
   ],
+  "landmarks": [
+   {
+    "lat": 6.4011,
+    "lon": -1.6258,
+    "name": "Asante Traditional Buildings"
+   }
+  ],
   "languages": [
    "English"
   ],
@@ -805,6 +1599,23 @@
  "GL": {
   "capitals": [
    "Nuuk"
+  ],
+  "landmarks": [
+   {
+    "lat": 69.15,
+    "lon": -49.55,
+    "name": "Ilulissat Icefjord"
+   },
+   {
+    "lat": 61.1644,
+    "lon": -45.5981,
+    "name": "Kujataa"
+   },
+   {
+    "lat": 67.0639,
+    "lon": -51.4332,
+    "name": "Aasivissuit–Nipisat"
+   }
   ],
   "languages": [
    "Greenlandic"
@@ -816,6 +1627,13 @@
   "capitals": [
    "Banjul"
   ],
+  "landmarks": [
+   {
+    "lat": 13.6955,
+    "lon": -15.5354,
+    "name": "Stone Circles of Senegambia"
+   }
+  ],
   "languages": [
    "English"
   ],
@@ -825,6 +1643,13 @@
  "GN": {
   "capitals": [
    "Conakry"
+  ],
+  "landmarks": [
+   {
+    "lat": 7.603,
+    "lon": -8.391,
+    "name": "Mount Nimba Strict Nature Reserve"
+   }
   ],
   "languages": [
    "French"
@@ -836,6 +1661,7 @@
   "capitals": [
    "Ciudad de la Paz"
   ],
+  "landmarks": [],
   "languages": [
    "Spanish",
    "Portuguese",
@@ -848,6 +1674,23 @@
   "capitals": [
    "Athens"
   ],
+  "landmarks": [
+   {
+    "lat": 37.9715,
+    "lon": 23.7257,
+    "name": "Acropolis of Athens"
+   },
+   {
+    "lat": 36.3932,
+    "lon": 25.4615,
+    "name": "Santorini"
+   },
+   {
+    "lat": 39.7217,
+    "lon": 21.6306,
+    "name": "Meteora"
+   }
+  ],
   "languages": [
    "Greek"
   ],
@@ -858,6 +1701,7 @@
   "capitals": [
    "King Edward Point"
   ],
+  "landmarks": [],
   "languages": [
    "English"
   ],
@@ -867,6 +1711,23 @@
  "GT": {
   "capitals": [
    "Guatemala City"
+  ],
+  "landmarks": [
+   {
+    "lat": 15.2694,
+    "lon": -89.0403,
+    "name": "Quiriguá"
+   },
+   {
+    "lat": 14.6458,
+    "lon": -91.7361,
+    "name": "Takalik Abaj"
+   },
+   {
+    "lat": 17.2167,
+    "lon": -89.6167,
+    "name": "Tikal National Park"
+   }
   ],
   "languages": [
    "Spanish"
@@ -878,6 +1739,7 @@
   "capitals": [
    "Hagåtña"
   ],
+  "landmarks": [],
   "languages": [
    "English",
    "Chamorro"
@@ -889,6 +1751,7 @@
   "capitals": [
    "Bissau"
   ],
+  "landmarks": [],
   "languages": [
    "Portuguese"
   ],
@@ -899,6 +1762,7 @@
   "capitals": [
    "Georgetown"
   ],
+  "landmarks": [],
   "languages": [
    "English"
   ],
@@ -907,6 +1771,7 @@
  },
  "HK": {
   "capitals": [],
+  "landmarks": [],
   "languages": [
    "Cantonese",
    "English"
@@ -916,6 +1781,7 @@
  },
  "HM": {
   "capitals": [],
+  "landmarks": [],
   "languages": [
    "English"
   ],
@@ -925,6 +1791,18 @@
  "HN": {
   "capitals": [
    "Tegucigalpa"
+  ],
+  "landmarks": [
+   {
+    "lat": 14.838,
+    "lon": -89.1424,
+    "name": "Copán"
+   },
+   {
+    "lat": 15.6,
+    "lon": -84.8,
+    "name": "Río Plátano Biosphere Reserve"
+   }
   ],
   "languages": [
    "Spanish"
@@ -936,6 +1814,23 @@
   "capitals": [
    "Zagreb"
   ],
+  "landmarks": [
+   {
+    "lat": 44.8804,
+    "lon": 15.616,
+    "name": "Plitvice Lakes National Park"
+   },
+   {
+    "lat": 45.2286,
+    "lon": 13.5936,
+    "name": "Euphrasian Basilica"
+   },
+   {
+    "lat": 43.7356,
+    "lon": 15.8892,
+    "name": "Šibenik Cathedral"
+   }
+  ],
   "languages": [
    "Croatian"
   ],
@@ -945,6 +1840,23 @@
  "HT": {
   "capitals": [
    "Port-au-Prince"
+  ],
+  "landmarks": [
+   {
+    "lat": 19.5736,
+    "lon": -72.2439,
+    "name": "Citadelle Laferrière"
+   },
+   {
+    "lat": 19.6047,
+    "lon": -72.2186,
+    "name": "Sans-Souci Palace"
+   },
+   {
+    "lat": 19.5736,
+    "lon": -72.2439,
+    "name": "National History Park"
+   }
   ],
   "languages": [
    "Haitian Creole",
@@ -957,6 +1869,23 @@
   "capitals": [
    "Budapest"
   ],
+  "landmarks": [
+   {
+    "lat": 47.8333,
+    "lon": 16.75,
+    "name": "Neusiedl Lake"
+   },
+   {
+    "lat": 47.5946,
+    "lon": 21.1568,
+    "name": "Hortobágy National Park"
+   },
+   {
+    "lat": 47.9961,
+    "lon": 19.5917,
+    "name": "Hollókő"
+   }
+  ],
   "languages": [
    "Hungarian"
   ],
@@ -967,6 +1896,23 @@
   "capitals": [
    "Jakarta"
   ],
+  "landmarks": [
+   {
+    "lat": -7.6079,
+    "lon": 110.2038,
+    "name": "Borobudur"
+   },
+   {
+    "lat": -8.55,
+    "lon": 119.49,
+    "name": "Komodo National Park"
+   },
+   {
+    "lat": -8.435,
+    "lon": 115.433,
+    "name": "Bali rice terraces"
+   }
+  ],
   "languages": [
    "Indonesian"
   ],
@@ -976,6 +1922,23 @@
  "IE": {
   "capitals": [
    "Dublin"
+  ],
+  "landmarks": [
+   {
+    "lat": 52.9715,
+    "lon": -9.4309,
+    "name": "Cliffs of Moher"
+   },
+   {
+    "lat": 55.2408,
+    "lon": -6.5116,
+    "name": "Giant's Causeway"
+   },
+   {
+    "lat": 53.6947,
+    "lon": -6.4755,
+    "name": "Newgrange"
+   }
   ],
   "languages": [
    "English",
@@ -988,6 +1951,23 @@
   "capitals": [
    "Jerusalem"
   ],
+  "landmarks": [
+   {
+    "lat": 31.7767,
+    "lon": 35.2316,
+    "name": "Old City of Jerusalem"
+   },
+   {
+    "lat": 31.3156,
+    "lon": 35.354,
+    "name": "Masada"
+   },
+   {
+    "lat": 31.5,
+    "lon": 35.5,
+    "name": "Dead Sea"
+   }
+  ],
   "languages": [
    "Hebrew"
   ],
@@ -998,6 +1978,7 @@
   "capitals": [
    "Douglas"
   ],
+  "landmarks": [],
   "languages": [
    "English",
    "Manx"
@@ -1008,6 +1989,23 @@
  "IN": {
   "capitals": [
    "New Delhi"
+  ],
+  "landmarks": [
+   {
+    "lat": 27.1751,
+    "lon": 78.0421,
+    "name": "Taj Mahal"
+   },
+   {
+    "lat": 28.6562,
+    "lon": 77.241,
+    "name": "Red Fort"
+   },
+   {
+    "lat": 31.62,
+    "lon": 74.8765,
+    "name": "Golden Temple"
+   }
   ],
   "languages": [
    "Hindi",
@@ -1020,6 +2018,7 @@
   "capitals": [
    "Diego Garcia"
   ],
+  "landmarks": [],
   "languages": [
    "English"
   ],
@@ -1029,6 +2028,23 @@
  "IQ": {
   "capitals": [
    "Baghdad"
+  ],
+  "landmarks": [
+   {
+    "lat": 34.1959,
+    "lon": 43.8857,
+    "name": "Samarra"
+   },
+   {
+    "lat": 35.4567,
+    "lon": 43.2625,
+    "name": "Assur"
+   },
+   {
+    "lat": 35.5881,
+    "lon": 42.7183,
+    "name": "Hatra"
+   }
   ],
   "languages": [
    "Arabic",
@@ -1041,6 +2057,23 @@
   "capitals": [
    "Tehran"
   ],
+  "landmarks": [
+   {
+    "lat": 29.935,
+    "lon": 52.89,
+    "name": "Persepolis"
+   },
+   {
+    "lat": 32.1894,
+    "lon": 48.2561,
+    "name": "Susa"
+   },
+   {
+    "lat": 29.1061,
+    "lon": 58.3569,
+    "name": "Bam"
+   }
+  ],
   "languages": [
    "Persian"
   ],
@@ -1050,6 +2083,23 @@
  "IS": {
   "capitals": [
    "Reykjavík"
+  ],
+  "landmarks": [
+   {
+    "lat": 63.8804,
+    "lon": -22.4495,
+    "name": "Blue Lagoon"
+   },
+   {
+    "lat": 64.3271,
+    "lon": -20.1199,
+    "name": "Gullfoss waterfall"
+   },
+   {
+    "lat": 64.3104,
+    "lon": -20.302,
+    "name": "Geysir"
+   }
   ],
   "languages": [
    "Icelandic"
@@ -1061,6 +2111,23 @@
   "capitals": [
    "Rome"
   ],
+  "landmarks": [
+   {
+    "lat": 41.8902,
+    "lon": 12.4922,
+    "name": "Colosseum"
+   },
+   {
+    "lat": 43.723,
+    "lon": 10.3966,
+    "name": "Leaning Tower of Pisa"
+   },
+   {
+    "lat": 45.4408,
+    "lon": 12.3155,
+    "name": "Venice canals"
+   }
+  ],
   "languages": [
    "Italian"
   ],
@@ -1071,6 +2138,7 @@
   "capitals": [
    "Saint Helier"
   ],
+  "landmarks": [],
   "languages": [
    "English",
    "French"
@@ -1081,6 +2149,23 @@
  "JM": {
   "capitals": [
    "Kingston"
+  ],
+  "landmarks": [
+   {
+    "lat": 17.9375,
+    "lon": -76.8414,
+    "name": "Port Royal"
+   },
+   {
+    "lat": 18.0535,
+    "lon": -76.3546,
+    "name": "John Crow Mountains"
+   },
+   {
+    "lat": 18.0775,
+    "lon": -76.5711,
+    "name": "Blue and John Crow Mountains"
+   }
   ],
   "languages": [
    "English",
@@ -1093,6 +2178,23 @@
   "capitals": [
    "Amman"
   ],
+  "landmarks": [
+   {
+    "lat": 30.3285,
+    "lon": 35.4444,
+    "name": "Petra"
+   },
+   {
+    "lat": 29.5764,
+    "lon": 35.4206,
+    "name": "Wadi Rum"
+   },
+   {
+    "lat": 31.5,
+    "lon": 35.5,
+    "name": "Dead Sea"
+   }
+  ],
   "languages": [
    "Arabic"
   ],
@@ -1103,6 +2205,23 @@
   "capitals": [
    "Tokyo"
   ],
+  "landmarks": [
+   {
+    "lat": 35.3606,
+    "lon": 138.7274,
+    "name": "Mount Fuji"
+   },
+   {
+    "lat": 34.9671,
+    "lon": 135.7727,
+    "name": "Fushimi Inari Shrine, Kyoto"
+   },
+   {
+    "lat": 34.8394,
+    "lon": 134.6939,
+    "name": "Himeji Castle"
+   }
+  ],
   "languages": [
    "Japanese"
   ],
@@ -1112,6 +2231,23 @@
  "KE": {
   "capitals": [
    "Nairobi"
+  ],
+  "landmarks": [
+   {
+    "lat": -1.4061,
+    "lon": 35.143,
+    "name": "Maasai Mara"
+   },
+   {
+    "lat": -0.1521,
+    "lon": 37.308,
+    "name": "Mount Kenya"
+   },
+   {
+    "lat": -0.36,
+    "lon": 36.08,
+    "name": "Lake Nakuru flamingos"
+   }
   ],
   "languages": [
    "Swahili",
@@ -1124,6 +2260,23 @@
   "capitals": [
    "Bishkek"
   ],
+  "landmarks": [
+   {
+    "lat": 40.5294,
+    "lon": 72.7833,
+    "name": "Sulaiman-Too"
+   },
+   {
+    "lat": 42.7465,
+    "lon": 75.2504,
+    "name": "Burana Tower"
+   },
+   {
+    "lat": 42.5,
+    "lon": 74.5833,
+    "name": "Western Tian Shan"
+   }
+  ],
   "languages": [
    "Kyrgyz"
   ],
@@ -1134,6 +2287,23 @@
   "capitals": [
    "Phnom Penh"
   ],
+  "landmarks": [
+   {
+    "lat": 13.4125,
+    "lon": 103.867,
+    "name": "Angkor Wat"
+   },
+   {
+    "lat": 13.4412,
+    "lon": 103.859,
+    "name": "Bayon Temple"
+   },
+   {
+    "lat": 11.564,
+    "lon": 104.931,
+    "name": "Royal Palace, Phnom Penh"
+   }
+  ],
   "languages": [
    "Khmer"
   ],
@@ -1143,6 +2313,13 @@
  "KI": {
   "capitals": [
    "South Tarawa"
+  ],
+  "landmarks": [
+   {
+    "lat": -3.6497,
+    "lon": -172.8575,
+    "name": "Phoenix Islands Protected Area"
+   }
   ],
   "languages": [
    "Gilbertese",
@@ -1155,6 +2332,7 @@
   "capitals": [
    "Moroni"
   ],
+  "landmarks": [],
   "languages": [
    "Comorian",
    "French",
@@ -1167,6 +2345,7 @@
   "capitals": [
    "Basseterre"
   ],
+  "landmarks": [],
   "languages": [
    "English"
   ],
@@ -1176,6 +2355,18 @@
  "KP": {
   "capitals": [
    "Pyongyang"
+  ],
+  "landmarks": [
+   {
+    "lat": 38.6568,
+    "lon": 128.1049,
+    "name": "Mount Kumgang"
+   },
+   {
+    "lat": 38.8631,
+    "lon": 125.415,
+    "name": "Goguryeo tombs"
+   }
   ],
   "languages": [
    "Korean"
@@ -1187,6 +2378,23 @@
   "capitals": [
    "Seoul"
   ],
+  "landmarks": [
+   {
+    "lat": 37.5796,
+    "lon": 126.977,
+    "name": "Gyeongbokgung Palace"
+   },
+   {
+    "lat": 33.4996,
+    "lon": 126.5312,
+    "name": "Jeju Island"
+   },
+   {
+    "lat": 35.79,
+    "lon": 129.332,
+    "name": "Bulguksa Temple"
+   }
+  ],
   "languages": [
    "Korean"
   ],
@@ -1197,6 +2405,7 @@
   "capitals": [
    "Kuwait City"
   ],
+  "landmarks": [],
   "languages": [
    "Arabic"
   ],
@@ -1207,6 +2416,7 @@
   "capitals": [
    "George Town"
   ],
+  "landmarks": [],
   "languages": [
    "English"
   ],
@@ -1216,6 +2426,23 @@
  "KZ": {
   "capitals": [
    "Astana"
+  ],
+  "landmarks": [
+   {
+    "lat": 43.2976,
+    "lon": 68.271,
+    "name": "Mausoleum of Khoja Ahmed Yasawi"
+   },
+   {
+    "lat": 43.8033,
+    "lon": 75.535,
+    "name": "Tamgaly"
+   },
+   {
+    "lat": 44.0258,
+    "lon": 79.0342,
+    "name": "Cold Winter Deserts of Turan"
+   }
   ],
   "languages": [
    "Kazakh",
@@ -1228,6 +2455,23 @@
   "capitals": [
    "Vientiane"
   ],
+  "landmarks": [
+   {
+    "lat": 19.89,
+    "lon": 102.1347,
+    "name": "Luang Prabang"
+   },
+   {
+    "lat": 19.4311,
+    "lon": 103.1525,
+    "name": "Plain of Jars"
+   },
+   {
+    "lat": 17.4583,
+    "lon": 105.9333,
+    "name": "Hin Nam No National Protected Area"
+   }
+  ],
   "languages": [
    "Lao"
   ],
@@ -1237,6 +2481,23 @@
  "LB": {
   "capitals": [
    "Beirut"
+  ],
+  "landmarks": [
+   {
+    "lat": 34.0154,
+    "lon": 36.2006,
+    "name": "Baalbek"
+   },
+   {
+    "lat": 34.1195,
+    "lon": 35.6468,
+    "name": "Byblos"
+   },
+   {
+    "lat": 33.7258,
+    "lon": 35.9297,
+    "name": "Anjar"
+   }
   ],
   "languages": [
    "Arabic"
@@ -1248,6 +2509,13 @@
   "capitals": [
    "Castries"
   ],
+  "landmarks": [
+   {
+    "lat": 13.8071,
+    "lon": -61.0704,
+    "name": "Pitons"
+   }
+  ],
   "languages": [
    "English"
   ],
@@ -1258,6 +2526,7 @@
   "capitals": [
    "Vaduz"
   ],
+  "landmarks": [],
   "languages": [
    "German"
   ],
@@ -1268,6 +2537,23 @@
   "capitals": [
    "Sri Jayawardenepura Kotte",
    "Colombo"
+  ],
+  "landmarks": [
+   {
+    "lat": 7.2931,
+    "lon": 80.635,
+    "name": "Kandy"
+   },
+   {
+    "lat": 8.335,
+    "lon": 80.4108,
+    "name": "Anuradhapura"
+   },
+   {
+    "lat": 7.9569,
+    "lon": 80.7597,
+    "name": "Sigiriya"
+   }
   ],
   "languages": [
    "Sinhala",
@@ -1280,6 +2566,7 @@
   "capitals": [
    "Monrovia"
   ],
+  "landmarks": [],
   "languages": [
    "English"
   ],
@@ -1289,6 +2576,13 @@
  "LS": {
   "capitals": [
    "Maseru"
+  ],
+  "landmarks": [
+   {
+    "lat": -29.4665,
+    "lon": 29.3939,
+    "name": "Maloti-Drakensberg Park"
+   }
   ],
   "languages": [
    "Sesotho",
@@ -1301,6 +2595,23 @@
   "capitals": [
    "Vilnius"
   ],
+  "landmarks": [
+   {
+    "lat": 55.2744,
+    "lon": 20.9708,
+    "name": "Curonian Spit"
+   },
+   {
+    "lat": 54.6833,
+    "lon": 25.2833,
+    "name": "Vilnius Old Town"
+   },
+   {
+    "lat": 54.8806,
+    "lon": 24.8417,
+    "name": "Cultural Reserve of Kernavė"
+   }
+  ],
   "languages": [
    "Lithuanian"
   ],
@@ -1311,6 +2622,7 @@
   "capitals": [
    "Luxembourg"
   ],
+  "landmarks": [],
   "languages": [
    "Luxembourgish",
    "French",
@@ -1323,6 +2635,18 @@
   "capitals": [
    "Riga"
   ],
+  "landmarks": [
+   {
+    "lat": 56.9485,
+    "lon": 24.1082,
+    "name": "Vecrīga"
+   },
+   {
+    "lat": 56.9675,
+    "lon": 21.9706,
+    "name": "Old town of Kuldīga"
+   }
+  ],
   "languages": [
    "Latvian"
   ],
@@ -1333,6 +2657,23 @@
   "capitals": [
    "Tripoli"
   ],
+  "landmarks": [
+   {
+    "lat": 32.8167,
+    "lon": 21.85,
+    "name": "Cyrene"
+   },
+   {
+    "lat": 32.6383,
+    "lon": 14.2905,
+    "name": "Leptis Magna"
+   },
+   {
+    "lat": 24.8334,
+    "lon": 10.3333,
+    "name": "Tadrart Acacus"
+   }
+  ],
   "languages": [
    "Arabic"
   ],
@@ -1342,6 +2683,23 @@
  "MA": {
   "capitals": [
    "Rabat"
+  ],
+  "landmarks": [
+   {
+    "lat": 31.629,
+    "lon": -7.989,
+    "name": "Marrakesh medina"
+   },
+   {
+    "lat": 35.1688,
+    "lon": -5.2636,
+    "name": "Chefchaouen"
+   },
+   {
+    "lat": 33.6086,
+    "lon": -6.8355,
+    "name": "Hassan II Mosque"
+   }
   ],
   "languages": [
    "Arabic",
@@ -1354,6 +2712,7 @@
   "capitals": [
    "Monaco"
   ],
+  "landmarks": [],
   "languages": [
    "French"
   ],
@@ -1364,6 +2723,7 @@
   "capitals": [
    "Chișinău"
   ],
+  "landmarks": [],
   "languages": [
    "Romanian"
   ],
@@ -1373,6 +2733,13 @@
  "ME": {
   "capitals": [
    "Podgorica"
+  ],
+  "landmarks": [
+   {
+    "lat": 43.1532,
+    "lon": 19.0369,
+    "name": "Durmitor National Park"
+   }
   ],
   "languages": [
    "Montenegrin"
@@ -1384,6 +2751,7 @@
   "capitals": [
    "Marigot"
   ],
+  "landmarks": [],
   "languages": [
    "French"
   ],
@@ -1393,6 +2761,18 @@
  "MG": {
   "capitals": [
    "Antananarivo"
+  ],
+  "landmarks": [
+   {
+    "lat": -18.7592,
+    "lon": 47.5628,
+    "name": "Ambohimanga"
+   },
+   {
+    "lat": -14.4597,
+    "lon": 49.7025,
+    "name": "Rainforests of the Atsinanana"
+   }
   ],
   "languages": [
    "Malagasy",
@@ -1405,6 +2785,13 @@
   "capitals": [
    "Majuro"
   ],
+  "landmarks": [
+   {
+    "lat": 11.6,
+    "lon": 165.4,
+    "name": "Bikini Atoll"
+   }
+  ],
   "languages": [
    "Marshallese",
    "English"
@@ -1416,6 +2803,23 @@
   "capitals": [
    "Skopje"
   ],
+  "landmarks": [
+   {
+    "lat": 41.3616,
+    "lon": 21.5385,
+    "name": "Markovi Kuli"
+   },
+   {
+    "lat": 42.2636,
+    "lon": 21.9536,
+    "name": "Kokino"
+   },
+   {
+    "lat": 41.5753,
+    "lon": 21.2169,
+    "name": "Slatinski Izvor"
+   }
+  ],
   "languages": [
    "Macedonian",
    "Albanian"
@@ -1426,6 +2830,23 @@
  "ML": {
   "capitals": [
    "Bamako"
+  ],
+  "landmarks": [
+   {
+    "lat": 16.7735,
+    "lon": -3.0074,
+    "name": "Timbuktu"
+   },
+   {
+    "lat": 16.2897,
+    "lon": -0.0444,
+    "name": "Tomb of Askia"
+   },
+   {
+    "lat": 14.4167,
+    "lon": -3.3167,
+    "name": "Bandiagara Escarpment"
+   }
   ],
   "languages": [
    "Bambara",
@@ -1439,6 +2860,18 @@
   "capitals": [
    "Naypyidaw"
   ],
+  "landmarks": [
+   {
+    "lat": 21.1725,
+    "lon": 94.86,
+    "name": "Bagan"
+   },
+   {
+    "lat": 22.47,
+    "lon": 95.8186,
+    "name": "Pyu Ancient Cities"
+   }
+  ],
   "languages": [
    "Burmese"
   ],
@@ -1449,6 +2882,23 @@
   "capitals": [
    "Ulaanbaatar"
   ],
+  "landmarks": [
+   {
+    "lat": 48.7833,
+    "lon": 109.1667,
+    "name": "Burkhan Khaldun"
+   },
+   {
+    "lat": 47.5567,
+    "lon": 102.8314,
+    "name": "Orkhon Valley"
+   },
+   {
+    "lat": 49.9302,
+    "lon": 115.4254,
+    "name": "Landscapes of Dauria"
+   }
+  ],
   "languages": [
    "Mongolian"
   ],
@@ -1457,6 +2907,7 @@
  },
  "MO": {
   "capitals": [],
+  "landmarks": [],
   "languages": [
    "Cantonese",
    "Portuguese"
@@ -1468,6 +2919,7 @@
   "capitals": [
    "Saipan"
   ],
+  "landmarks": [],
   "languages": [
    "English",
    "Chamorro",
@@ -1480,6 +2932,13 @@
   "capitals": [
    "Nouakchott"
   ],
+  "landmarks": [
+   {
+    "lat": 20.2347,
+    "lon": -16.1089,
+    "name": "Banc d'Arguin National Park"
+   }
+  ],
   "languages": [
    "Arabic",
    "French"
@@ -1491,6 +2950,7 @@
   "capitals": [
    "Brades"
   ],
+  "landmarks": [],
   "languages": [
    "English"
   ],
@@ -1500,6 +2960,23 @@
  "MT": {
   "capitals": [
    "Valletta"
+  ],
+  "landmarks": [
+   {
+    "lat": 35.8978,
+    "lon": 14.5125,
+    "name": "Valletta"
+   },
+   {
+    "lat": 35.8696,
+    "lon": 14.5069,
+    "name": "Hypogeum of Ħal Saflieni"
+   },
+   {
+    "lat": 36.0492,
+    "lon": 14.2694,
+    "name": "Megalithic Temples of Malta"
+   }
   ],
   "languages": [
    "Maltese",
@@ -1511,6 +2988,18 @@
  "MU": {
   "capitals": [
    "Port Louis"
+  ],
+  "landmarks": [
+   {
+    "lat": -20.1586,
+    "lon": 57.5031,
+    "name": "Aapravasi Ghat"
+   },
+   {
+    "lat": -20.4606,
+    "lon": 57.3136,
+    "name": "Le Morne Brabant"
+   }
   ],
   "languages": [
    "Mauritian Creole",
@@ -1524,6 +3013,7 @@
   "capitals": [
    "Malé"
   ],
+  "landmarks": [],
   "languages": [
    "Dhivehi"
   ],
@@ -1533,6 +3023,23 @@
  "MW": {
   "capitals": [
    "Lilongwe"
+  ],
+  "landmarks": [
+   {
+    "lat": -14.0333,
+    "lon": 34.8833,
+    "name": "Lake Malawi National Park"
+   },
+   {
+    "lat": -15.9,
+    "lon": 35.65,
+    "name": "Mulanje Massif"
+   },
+   {
+    "lat": -14.2933,
+    "lon": 34.2792,
+    "name": "Chongoni Rock Art Area"
+   }
   ],
   "languages": [
    "Chichewa",
@@ -1546,6 +3053,23 @@
   "capitals": [
    "Mexico City"
   ],
+  "landmarks": [
+   {
+    "lat": 20.6843,
+    "lon": -88.5678,
+    "name": "Chichen Itza"
+   },
+   {
+    "lat": 19.6925,
+    "lon": -98.8438,
+    "name": "Teotihuacan"
+   },
+   {
+    "lat": 17.4838,
+    "lon": -92.0465,
+    "name": "Palenque"
+   }
+  ],
   "languages": [
    "Spanish",
    "Nahuatl",
@@ -1558,6 +3082,23 @@
   "capitals": [
    "Kuala Lumpur"
   ],
+  "landmarks": [
+   {
+    "lat": 6.15,
+    "lon": 116.65,
+    "name": "Kinabalu Park"
+   },
+   {
+    "lat": 4.0425,
+    "lon": 114.8125,
+    "name": "Gunung Mulu National Park"
+   },
+   {
+    "lat": 3.8139,
+    "lon": 113.7814,
+    "name": "Niah National Park"
+   }
+  ],
   "languages": [
    "Malay"
   ],
@@ -1567,6 +3108,18 @@
  "MZ": {
   "capitals": [
    "Maputo"
+  ],
+  "landmarks": [
+   {
+    "lat": -15.0367,
+    "lon": 40.7328,
+    "name": "Island of Mozambique"
+   },
+   {
+    "lat": -26.5,
+    "lon": 32.8,
+    "name": "Maputo National Park"
+   }
   ],
   "languages": [
    "Portuguese"
@@ -1578,6 +3131,18 @@
   "capitals": [
    "Windhoek"
   ],
+  "landmarks": [
+   {
+    "lat": -20.5956,
+    "lon": 14.3726,
+    "name": "Twyfelfontein"
+   },
+   {
+    "lat": -24.8853,
+    "lon": 15.4078,
+    "name": "Namib Sand Sea"
+   }
+  ],
   "languages": [
    "English"
   ],
@@ -1588,6 +3153,7 @@
   "capitals": [
    "Nouméa"
   ],
+  "landmarks": [],
   "languages": [
    "French"
   ],
@@ -1597,6 +3163,18 @@
  "NE": {
   "capitals": [
    "Niamey"
+  ],
+  "landmarks": [
+   {
+    "lat": 11.53,
+    "lon": 2.29,
+    "name": "W-Arly-Pendjari Complex"
+   },
+   {
+    "lat": 16.9744,
+    "lon": 7.9896,
+    "name": "Historic Center of Agadez"
+   }
   ],
   "languages": [
    "Hausa",
@@ -1610,6 +3188,7 @@
   "capitals": [
    "Kingston"
   ],
+  "landmarks": [],
   "languages": [
    "English",
    "Norfuk"
@@ -1621,6 +3200,23 @@
   "capitals": [
    "Abuja"
   ],
+  "landmarks": [
+   {
+    "lat": 10.7406,
+    "lon": 13.5717,
+    "name": "Sukur"
+   },
+   {
+    "lat": 7.7549,
+    "lon": 4.5506,
+    "name": "Osun-Osogbo Grove"
+   },
+   {
+    "lat": 6.3321,
+    "lon": 5.6201,
+    "name": "Royal Palace Of Oba Of Benin"
+   }
+  ],
   "languages": [
    "English"
   ],
@@ -1630,6 +3226,18 @@
  "NI": {
   "capitals": [
    "Managua"
+  ],
+  "landmarks": [
+   {
+    "lat": 12.435,
+    "lon": -86.8781,
+    "name": "León Cathedral"
+   },
+   {
+    "lat": 12.4005,
+    "lon": -86.6178,
+    "name": "Ruínas de León Viejo"
+   }
   ],
   "languages": [
    "Spanish"
@@ -1641,6 +3249,23 @@
   "capitals": [
    "Amsterdam"
   ],
+  "landmarks": [
+   {
+    "lat": 51.884,
+    "lon": 4.639,
+    "name": "Windmills of Kinderdijk"
+   },
+   {
+    "lat": 52.373,
+    "lon": 4.891,
+    "name": "Amsterdam canals"
+   },
+   {
+    "lat": 52.269,
+    "lon": 4.546,
+    "name": "Keukenhof tulip gardens"
+   }
+  ],
   "languages": [
    "Dutch"
   ],
@@ -1650,6 +3275,23 @@
  "NO": {
   "capitals": [
    "Oslo"
+  ],
+  "landmarks": [
+   {
+    "lat": 62.1016,
+    "lon": 7.0939,
+    "name": "Geirangerfjord"
+   },
+   {
+    "lat": 69.6492,
+    "lon": 18.9553,
+    "name": "Northern Lights in Tromsø"
+   },
+   {
+    "lat": 58.9864,
+    "lon": 6.1902,
+    "name": "Preikestolen (Pulpit Rock)"
+   }
   ],
   "languages": [
    "Norwegian"
@@ -1661,6 +3303,23 @@
   "capitals": [
    "Kathmandu"
   ],
+  "landmarks": [
+   {
+    "lat": 27.9881,
+    "lon": 86.925,
+    "name": "Mount Everest"
+   },
+   {
+    "lat": 27.7046,
+    "lon": 85.3074,
+    "name": "Kathmandu Durbar Square"
+   },
+   {
+    "lat": 27.4833,
+    "lon": 83.276,
+    "name": "Lumbini"
+   }
+  ],
   "languages": [
    "Nepali"
   ],
@@ -1671,6 +3330,7 @@
   "capitals": [
    "Yaren"
   ],
+  "landmarks": [],
   "languages": [
    "Nauruan",
    "English"
@@ -1682,6 +3342,7 @@
   "capitals": [
    "Alofi"
   ],
+  "landmarks": [],
   "languages": [
    "English",
    "Niuean"
@@ -1692,6 +3353,23 @@
  "NZ": {
   "capitals": [
    "Wellington"
+  ],
+  "landmarks": [
+   {
+    "lat": -44.6414,
+    "lon": 167.9255,
+    "name": "Milford Sound"
+   },
+   {
+    "lat": -37.8721,
+    "lon": 175.683,
+    "name": "Hobbiton"
+   },
+   {
+    "lat": -38.1368,
+    "lon": 176.2497,
+    "name": "Rotorua geysers"
+   }
   ],
   "languages": [
    "English",
@@ -1704,6 +3382,23 @@
   "capitals": [
    "Muscat"
   ],
+  "landmarks": [
+   {
+    "lat": 22.9644,
+    "lon": 57.3007,
+    "name": "Bahla Fort"
+   },
+   {
+    "lat": 22.9989,
+    "lon": 57.5361,
+    "name": "Aflaj Irrigation System of Oman"
+   },
+   {
+    "lat": 18.2533,
+    "lon": 53.6476,
+    "name": "Land of Frankincense"
+   }
+  ],
   "languages": [
    "Arabic"
   ],
@@ -1714,6 +3409,23 @@
   "capitals": [
    "Panama City"
   ],
+  "landmarks": [
+   {
+    "lat": 7.48,
+    "lon": -81.79,
+    "name": "Coiba"
+   },
+   {
+    "lat": 7.7361,
+    "lon": -77.5472,
+    "name": "Darién National Park"
+   },
+   {
+    "lat": 7.4333,
+    "lon": -81.7667,
+    "name": "Coiba"
+   }
+  ],
   "languages": [
    "Spanish"
   ],
@@ -1723,6 +3435,23 @@
  "PE": {
   "capitals": [
    "Lima"
+  ],
+  "landmarks": [
+   {
+    "lat": -13.1631,
+    "lon": -72.545,
+    "name": "Machu Picchu"
+   },
+   {
+    "lat": -14.739,
+    "lon": -75.13,
+    "name": "Nazca Lines"
+   },
+   {
+    "lat": -15.9254,
+    "lon": -69.3354,
+    "name": "Lake Titicaca"
+   }
   ],
   "languages": [
    "Spanish",
@@ -1736,6 +3465,7 @@
   "capitals": [
    "Papeete"
   ],
+  "landmarks": [],
   "languages": [
    "French"
   ],
@@ -1745,6 +3475,13 @@
  "PG": {
   "capitals": [
    "Port Moresby"
+  ],
+  "landmarks": [
+   {
+    "lat": -5.7825,
+    "lon": 144.33,
+    "name": "Kuk Swamp"
+   }
   ],
   "languages": [
    "Tok Pisin",
@@ -1758,6 +3495,23 @@
   "capitals": [
    "Manila"
   ],
+  "landmarks": [
+   {
+    "lat": 16.918,
+    "lon": 121.137,
+    "name": "Banaue Rice Terraces"
+   },
+   {
+    "lat": 9.8297,
+    "lon": 124.164,
+    "name": "Chocolate Hills"
+   },
+   {
+    "lat": 8.85,
+    "lon": 119.9,
+    "name": "Tubbataha Reef"
+   }
+  ],
   "languages": [
    "Filipino",
    "English"
@@ -1768,6 +3522,23 @@
  "PK": {
   "capitals": [
    "Islamabad"
+  ],
+  "landmarks": [
+   {
+    "lat": 27.3292,
+    "lon": 68.1389,
+    "name": "Mohenjo-daro"
+   },
+   {
+    "lat": 33.7458,
+    "lon": 72.7875,
+    "name": "Taxila"
+   },
+   {
+    "lat": 32.9653,
+    "lon": 73.5764,
+    "name": "Rohtas Fort"
+   }
   ],
   "languages": [
    "Urdu",
@@ -1780,6 +3551,23 @@
   "capitals": [
    "Warsaw"
   ],
+  "landmarks": [
+   {
+    "lat": 50.054,
+    "lon": 19.9354,
+    "name": "Wawel Castle, Kraków"
+   },
+   {
+    "lat": 54.0397,
+    "lon": 19.0278,
+    "name": "Malbork Castle"
+   },
+   {
+    "lat": 52.7,
+    "lon": 23.8,
+    "name": "Białowieża Forest"
+   }
+  ],
   "languages": [
    "Polish"
   ],
@@ -1790,6 +3578,7 @@
   "capitals": [
    "Saint-Pierre"
   ],
+  "landmarks": [],
   "languages": [
    "French"
   ],
@@ -1800,6 +3589,7 @@
   "capitals": [
    "Adamstown"
   ],
+  "landmarks": [],
   "languages": [
    "English",
    "Pitkern"
@@ -1811,6 +3601,7 @@
   "capitals": [
    "San Juan"
   ],
+  "landmarks": [],
   "languages": [
    "English",
    "Spanish"
@@ -1823,6 +3614,23 @@
    "East Jerusalem",
    "Ramallah"
   ],
+  "landmarks": [
+   {
+    "lat": 31.7767,
+    "lon": 35.2316,
+    "name": "Old City of Jerusalem"
+   },
+   {
+    "lat": 31.7043,
+    "lon": 35.2075,
+    "name": "Church of the Nativity, Bethlehem"
+   },
+   {
+    "lat": 31.524,
+    "lon": 35.11,
+    "name": "Old town of Hebron"
+   }
+  ],
   "languages": [
    "Arabic"
   ],
@@ -1833,6 +3641,23 @@
   "capitals": [
    "Lisbon"
   ],
+  "landmarks": [
+   {
+    "lat": 38.6916,
+    "lon": -9.216,
+    "name": "Belém Tower"
+   },
+   {
+    "lat": 38.7876,
+    "lon": -9.3906,
+    "name": "Sintra palaces"
+   },
+   {
+    "lat": 41.1407,
+    "lon": -8.611,
+    "name": "Porto riverside"
+   }
+  ],
   "languages": [
    "Portuguese"
   ],
@@ -1842,6 +3667,13 @@
  "PW": {
   "capitals": [
    "Ngerulmud"
+  ],
+  "landmarks": [
+   {
+    "lat": 7.2469,
+    "lon": 134.3525,
+    "name": "Rock Islands Southern Lagoon"
+   }
   ],
   "languages": [
    "Palauan",
@@ -1854,6 +3686,7 @@
   "capitals": [
    "Asunción"
   ],
+  "landmarks": [],
   "languages": [
    "Spanish",
    "Guarani"
@@ -1865,6 +3698,13 @@
   "capitals": [
    "Doha"
   ],
+  "landmarks": [
+   {
+    "lat": 25.9834,
+    "lon": 51.0272,
+    "name": "Zubarah"
+   }
+  ],
   "languages": [
    "Arabic"
   ],
@@ -1874,6 +3714,23 @@
  "RO": {
   "capitals": [
    "Bucharest"
+  ],
+  "landmarks": [
+   {
+    "lat": 45.2,
+    "lon": 29.5,
+    "name": "Danube Delta"
+   },
+   {
+    "lat": 45.1686,
+    "lon": 24.0069,
+    "name": "Horezu monastery"
+   },
+   {
+    "lat": 47.8194,
+    "lon": 24.0558,
+    "name": "wooden churches of Maramureș"
+   }
   ],
   "languages": [
    "Romanian"
@@ -1885,6 +3742,23 @@
   "capitals": [
    "Belgrade"
   ],
+  "landmarks": [
+   {
+    "lat": 43.4867,
+    "lon": 20.5316,
+    "name": "Studenica monastery"
+   },
+   {
+    "lat": 43.8993,
+    "lon": 22.1862,
+    "name": "Gamzigrad"
+   },
+   {
+    "lat": 42.5469,
+    "lon": 20.2664,
+    "name": "Visoki Dečani"
+   }
+  ],
   "languages": [
    "Serbian"
   ],
@@ -1895,6 +3769,23 @@
   "capitals": [
    "Moscow"
   ],
+  "landmarks": [
+   {
+    "lat": 55.7539,
+    "lon": 37.6208,
+    "name": "Red Square and the Kremlin"
+   },
+   {
+    "lat": 55.7525,
+    "lon": 37.6231,
+    "name": "Saint Basil's Cathedral"
+   },
+   {
+    "lat": 53.5,
+    "lon": 108.0,
+    "name": "Lake Baikal"
+   }
+  ],
   "languages": [
    "Russian"
   ],
@@ -1904,6 +3795,23 @@
  "RW": {
   "capitals": [
    "Kigali"
+  ],
+  "landmarks": [
+   {
+    "lat": -1.47,
+    "lon": 29.53,
+    "name": "Volcanoes National Park (mountain gorillas)"
+   },
+   {
+    "lat": -2.48,
+    "lon": 29.2,
+    "name": "Nyungwe Forest"
+   },
+   {
+    "lat": -2.0,
+    "lon": 29.24,
+    "name": "Lake Kivu"
+   }
   ],
   "languages": [
    "Kinyarwanda",
@@ -1917,6 +3825,23 @@
   "capitals": [
    "Riyadh"
   ],
+  "landmarks": [
+   {
+    "lat": 21.4225,
+    "lon": 39.8262,
+    "name": "Masjid al-Haram, Mecca"
+   },
+   {
+    "lat": 26.7917,
+    "lon": 37.9536,
+    "name": "Hegra (Al-Ula)"
+   },
+   {
+    "lat": 24.9542,
+    "lon": 45.9775,
+    "name": "Edge of the World"
+   }
+  ],
   "languages": [
    "Arabic"
   ],
@@ -1927,6 +3852,13 @@
   "capitals": [
    "Honiara"
   ],
+  "landmarks": [
+   {
+    "lat": -11.6833,
+    "lon": 160.3333,
+    "name": "East Rennell"
+   }
+  ],
   "languages": [
    "English"
   ],
@@ -1936,6 +3868,18 @@
  "SC": {
   "capitals": [
    "Victoria"
+  ],
+  "landmarks": [
+   {
+    "lat": -9.4164,
+    "lon": 46.4164,
+    "name": "Aldabra"
+   },
+   {
+    "lat": -4.3292,
+    "lon": 55.7375,
+    "name": "Vallée de Mai"
+   }
   ],
   "languages": [
    "Seychellois Creole",
@@ -1949,6 +3893,7 @@
   "capitals": [
    "Khartoum"
   ],
+  "landmarks": [],
   "languages": [
    "Arabic",
    "English"
@@ -1960,6 +3905,23 @@
   "capitals": [
    "Stockholm"
   ],
+  "landmarks": [
+   {
+    "lat": 59.325,
+    "lon": 18.071,
+    "name": "Stockholm Old Town (Gamla stan)"
+   },
+   {
+    "lat": 59.3217,
+    "lon": 17.8867,
+    "name": "Drottningholm Palace"
+   },
+   {
+    "lat": 67.8508,
+    "lon": 20.5933,
+    "name": "Icehotel, Jukkasjärvi"
+   }
+  ],
   "languages": [
    "Swedish"
   ],
@@ -1969,6 +3931,13 @@
  "SG": {
   "capitals": [
    "Singapore"
+  ],
+  "landmarks": [
+   {
+    "lat": 1.3151,
+    "lon": 103.8162,
+    "name": "Singapore Botanic Gardens"
+   }
   ],
   "languages": [
    "English",
@@ -1982,6 +3951,7 @@
   "capitals": [
    "Jamestown"
   ],
+  "landmarks": [],
   "languages": [
    "English"
   ],
@@ -1991,6 +3961,13 @@
  "SI": {
   "capitals": [
    "Ljubljana"
+  ],
+  "landmarks": [
+   {
+    "lat": 45.665,
+    "lon": 13.9947,
+    "name": "Škocjan Caves"
+   }
   ],
   "languages": [
    "Slovene"
@@ -2002,6 +3979,23 @@
   "capitals": [
    "Bratislava"
   ],
+  "landmarks": [
+   {
+    "lat": 49.0397,
+    "lon": 19.2784,
+    "name": "Vlkolínec"
+   },
+   {
+    "lat": 49.0006,
+    "lon": 20.7683,
+    "name": "Spiš Castle"
+   },
+   {
+    "lat": 49.0006,
+    "lon": 20.7411,
+    "name": "Spišská Kapitula"
+   }
+  ],
   "languages": [
    "Slovak"
   ],
@@ -2011,6 +4005,18 @@
  "SL": {
   "capitals": [
    "Freetown"
+  ],
+  "landmarks": [
+   {
+    "lat": 7.5,
+    "lon": -10.9833,
+    "name": "Gola National Park"
+   },
+   {
+    "lat": 7.5333,
+    "lon": -11.35,
+    "name": "Gola-Tiwai complex"
+   }
   ],
   "languages": [
    "English",
@@ -2023,6 +4029,7 @@
   "capitals": [
    "San Marino"
   ],
+  "landmarks": [],
   "languages": [
    "Italian"
   ],
@@ -2032,6 +4039,23 @@
  "SN": {
   "capitals": [
    "Dakar"
+  ],
+  "landmarks": [
+   {
+    "lat": 13.0742,
+    "lon": -12.7222,
+    "name": "Niokolo-Koba National Park"
+   },
+   {
+    "lat": 14.6669,
+    "lon": -17.3983,
+    "name": "Gorée"
+   },
+   {
+    "lat": 16.3585,
+    "lon": -16.2741,
+    "name": "Djoudj National Bird Sanctuary"
+   }
   ],
   "languages": [
    "Wolof",
@@ -2044,6 +4068,7 @@
   "capitals": [
    "Mogadishu"
   ],
+  "landmarks": [],
   "languages": [
    "Somali",
    "Arabic"
@@ -2055,6 +4080,23 @@
   "capitals": [
    "Paramaribo"
   ],
+  "landmarks": [
+   {
+    "lat": 4.0,
+    "lon": -56.5,
+    "name": "Central Suriname Nature Reserve"
+   },
+   {
+    "lat": 5.4312,
+    "lon": -54.9823,
+    "name": "Jodensavanne"
+   },
+   {
+    "lat": 5.826,
+    "lon": -55.1539,
+    "name": "Historic Inner City of Paramaribo"
+   }
+  ],
   "languages": [
    "Dutch"
   ],
@@ -2064,6 +4106,13 @@
  "SS": {
   "capitals": [
    "Juba"
+  ],
+  "landmarks": [
+   {
+    "lat": 6.5138,
+    "lon": 32.9586,
+    "name": "Boma-Badingilo Migratory Landscape"
+   }
   ],
   "languages": [
    "English"
@@ -2075,6 +4124,7 @@
   "capitals": [
    "São Tomé"
   ],
+  "landmarks": [],
   "languages": [
    "Portuguese"
   ],
@@ -2084,6 +4134,13 @@
  "SV": {
   "capitals": [
    "San Salvador"
+  ],
+  "landmarks": [
+   {
+    "lat": 13.8275,
+    "lon": -89.3562,
+    "name": "Joya de Cerén"
+   }
   ],
   "languages": [
    "Spanish"
@@ -2095,6 +4152,7 @@
   "capitals": [
    "Philipsburg"
   ],
+  "landmarks": [],
   "languages": [
    "English",
    "Dutch"
@@ -2105,6 +4163,23 @@
  "SY": {
   "capitals": [
    "Damascus"
+  ],
+  "landmarks": [
+   {
+    "lat": 34.56,
+    "lon": 38.2672,
+    "name": "Palmyra"
+   },
+   {
+    "lat": 32.5167,
+    "lon": 36.4833,
+    "name": "Bosra"
+   },
+   {
+    "lat": 36.3342,
+    "lon": 36.8442,
+    "name": "Dead Cities"
+   }
   ],
   "languages": [
    "Arabic"
@@ -2117,6 +4192,7 @@
    "Lobamba",
    "Mbabane"
   ],
+  "landmarks": [],
   "languages": [
    "Swazi",
    "English"
@@ -2128,6 +4204,7 @@
   "capitals": [
    "Cockburn Town"
   ],
+  "landmarks": [],
   "languages": [
    "English"
   ],
@@ -2137,6 +4214,18 @@
  "TD": {
   "capitals": [
    "N'Djamena"
+  ],
+  "landmarks": [
+   {
+    "lat": 17.25,
+    "lon": 22.0,
+    "name": "Ennedi Plateau"
+   },
+   {
+    "lat": 18.9833,
+    "lon": 20.6667,
+    "name": "Lakes of Ounianga"
+   }
   ],
   "languages": [
    "Arabic",
@@ -2149,6 +4238,7 @@
   "capitals": [
    "Port-aux-Français"
   ],
+  "landmarks": [],
   "languages": [
    "French"
   ],
@@ -2158,6 +4248,13 @@
  "TG": {
   "capitals": [
    "Lomé"
+  ],
+  "landmarks": [
+   {
+    "lat": 10.1,
+    "lon": 1.0667,
+    "name": "Koutammakou"
+   }
   ],
   "languages": [
    "French"
@@ -2169,6 +4266,23 @@
   "capitals": [
    "Bangkok"
   ],
+  "landmarks": [
+   {
+    "lat": 13.75,
+    "lon": 100.4913,
+    "name": "Grand Palace, Bangkok"
+   },
+   {
+    "lat": 14.35,
+    "lon": 100.56,
+    "name": "Ayutthaya"
+   },
+   {
+    "lat": 7.7407,
+    "lon": 98.7784,
+    "name": "Phi Phi Islands"
+   }
+  ],
   "languages": [
    "Thai"
   ],
@@ -2178,6 +4292,23 @@
  "TJ": {
   "capitals": [
    "Dushanbe"
+  ],
+  "landmarks": [
+   {
+    "lat": 38.7412,
+    "lon": 72.1198,
+    "name": "Pamir National Park"
+   },
+   {
+    "lat": 39.5167,
+    "lon": 67.5667,
+    "name": "Sarazm"
+   },
+   {
+    "lat": 37.25,
+    "lon": 68.5,
+    "name": "Tigrovaya Balka Nature Reserve"
+   }
   ],
   "languages": [
    "Tajik"
@@ -2189,6 +4320,7 @@
   "capitals": [
    "Dili"
   ],
+  "landmarks": [],
   "languages": [
    "Portuguese",
    "Tetum"
@@ -2200,6 +4332,23 @@
   "capitals": [
    "Ashgabat"
   ],
+  "landmarks": [
+   {
+    "lat": 37.6628,
+    "lon": 62.1925,
+    "name": "Merv"
+   },
+   {
+    "lat": 42.3261,
+    "lon": 59.1531,
+    "name": "Köneürgenç"
+   },
+   {
+    "lat": 37.9511,
+    "lon": 58.2124,
+    "name": "Nisa"
+   }
+  ],
   "languages": [
    "Turkmen"
   ],
@@ -2209,6 +4358,23 @@
  "TN": {
   "capitals": [
    "Tunis"
+  ],
+  "landmarks": [
+   {
+    "lat": 35.2964,
+    "lon": 10.7069,
+    "name": "Amphitheatre of El Jem"
+   },
+   {
+    "lat": 36.8528,
+    "lon": 10.3233,
+    "name": "Carthage"
+   },
+   {
+    "lat": 36.87,
+    "lon": 10.347,
+    "name": "Sidi Bou Said"
+   }
   ],
   "languages": [
    "Arabic"
@@ -2220,6 +4386,7 @@
   "capitals": [
    "Nukuʻalofa"
   ],
+  "landmarks": [],
   "languages": [
    "Tongan",
    "English"
@@ -2231,6 +4398,23 @@
   "capitals": [
    "Ankara"
   ],
+  "landmarks": [
+   {
+    "lat": 41.0086,
+    "lon": 28.9801,
+    "name": "Hagia Sophia"
+   },
+   {
+    "lat": 38.6431,
+    "lon": 34.83,
+    "name": "Cappadocia"
+   },
+   {
+    "lat": 37.9204,
+    "lon": 29.1206,
+    "name": "Pamukkale"
+   }
+  ],
   "languages": [
    "Turkish"
   ],
@@ -2241,6 +4425,7 @@
   "capitals": [
    "Port of Spain"
   ],
+  "landmarks": [],
   "languages": [
    "English"
   ],
@@ -2251,6 +4436,7 @@
   "capitals": [
    "Funafuti"
   ],
+  "landmarks": [],
   "languages": [
    "Tuvaluan",
    "English"
@@ -2262,6 +4448,7 @@
   "capitals": [
    "Taipei"
   ],
+  "landmarks": [],
   "languages": [
    "Mandarin Chinese",
    "Taiwanese Hokkien",
@@ -2274,6 +4461,23 @@
   "capitals": [
    "Dodoma"
   ],
+  "landmarks": [
+   {
+    "lat": -3.0674,
+    "lon": 37.3556,
+    "name": "Mount Kilimanjaro"
+   },
+   {
+    "lat": -2.3333,
+    "lon": 34.8333,
+    "name": "Serengeti"
+   },
+   {
+    "lat": -6.163,
+    "lon": 39.189,
+    "name": "Zanzibar Stone Town"
+   }
+  ],
   "languages": [
    "Swahili",
    "English"
@@ -2285,6 +4489,23 @@
   "capitals": [
    "Kyiv"
   ],
+  "landmarks": [
+   {
+    "lat": 45.2,
+    "lon": 29.5,
+    "name": "Danube Delta"
+   },
+   {
+    "lat": 50.4528,
+    "lon": 30.5144,
+    "name": "Saint Sophia Cathedral"
+   },
+   {
+    "lat": 49.8417,
+    "lon": 24.0319,
+    "name": "Old Town of Lviv"
+   }
+  ],
   "languages": [
    "Ukrainian"
   ],
@@ -2294,6 +4515,23 @@
  "UG": {
   "capitals": [
    "Kampala"
+  ],
+  "landmarks": [
+   {
+    "lat": 0.3292,
+    "lon": 32.5533,
+    "name": "Kasubi Tombs"
+   },
+   {
+    "lat": -1.05,
+    "lon": 29.7167,
+    "name": "Bwindi Impenetrable National Park"
+   },
+   {
+    "lat": 0.4,
+    "lon": 29.95,
+    "name": "Rwenzori Mountains National Park"
+   }
   ],
   "languages": [
    "English",
@@ -2306,6 +4544,23 @@
   "capitals": [
    "Washington, D.C."
   ],
+  "landmarks": [
+   {
+    "lat": 40.6892,
+    "lon": -74.0445,
+    "name": "Statue of Liberty"
+   },
+   {
+    "lat": 36.1069,
+    "lon": -112.1129,
+    "name": "Grand Canyon"
+   },
+   {
+    "lat": 37.8199,
+    "lon": -122.4783,
+    "name": "Golden Gate Bridge"
+   }
+  ],
   "languages": [
    "English",
    "Spanish"
@@ -2317,6 +4572,13 @@
   "capitals": [
    "Montevideo"
   ],
+  "landmarks": [
+   {
+    "lat": -33.1178,
+    "lon": -58.3317,
+    "name": "Fray Bentos Industrial Landscape"
+   }
+  ],
   "languages": [
    "Spanish"
   ],
@@ -2327,6 +4589,23 @@
   "capitals": [
    "Tashkent"
   ],
+  "landmarks": [
+   {
+    "lat": 39.05,
+    "lon": 66.8333,
+    "name": "Shahrisabz"
+   },
+   {
+    "lat": 41.3777,
+    "lon": 60.3595,
+    "name": "Itchan Kala"
+   },
+   {
+    "lat": 44.0258,
+    "lon": 79.0342,
+    "name": "Cold Winter Deserts of Turan"
+   }
+  ],
   "languages": [
    "Uzbek"
   ],
@@ -2336,6 +4615,13 @@
  "VA": {
   "capitals": [
    "Vatican City"
+  ],
+  "landmarks": [
+   {
+    "lat": 41.904,
+    "lon": 12.453,
+    "name": "Vatican City"
+   }
   ],
   "languages": [
    "Italian",
@@ -2348,6 +4634,7 @@
   "capitals": [
    "Kingstown"
   ],
+  "landmarks": [],
   "languages": [
    "English"
   ],
@@ -2357,6 +4644,23 @@
  "VE": {
   "capitals": [
    "Caracas"
+  ],
+  "landmarks": [
+   {
+    "lat": 5.3193,
+    "lon": -61.7954,
+    "name": "Canaima National Park"
+   },
+   {
+    "lat": 10.4908,
+    "lon": -66.8906,
+    "name": "University City of Caracas"
+   },
+   {
+    "lat": 11.4,
+    "lon": -69.6833,
+    "name": "Coro and its Port"
+   }
   ],
   "languages": [
    "Spanish"
@@ -2368,6 +4672,7 @@
   "capitals": [
    "Road Town"
   ],
+  "landmarks": [],
   "languages": [
    "English"
   ],
@@ -2378,6 +4683,7 @@
   "capitals": [
    "Charlotte Amalie"
   ],
+  "landmarks": [],
   "languages": [
    "English"
   ],
@@ -2388,6 +4694,23 @@
   "capitals": [
    "Hanoi"
   ],
+  "landmarks": [
+   {
+    "lat": 20.9101,
+    "lon": 107.1839,
+    "name": "Ha Long Bay"
+   },
+   {
+    "lat": 15.8801,
+    "lon": 108.338,
+    "name": "Hoi An Ancient Town"
+   },
+   {
+    "lat": 16.469,
+    "lon": 107.577,
+    "name": "Hue Imperial City"
+   }
+  ],
   "languages": [
    "Vietnamese"
   ],
@@ -2397,6 +4720,13 @@
  "VU": {
   "capitals": [
    "Port Vila"
+  ],
+  "landmarks": [
+   {
+    "lat": -17.6936,
+    "lon": 168.234,
+    "name": "Chief Roi Mata’s Domain"
+   }
   ],
   "languages": [
    "Bislama",
@@ -2410,6 +4740,7 @@
   "capitals": [
    "Mata-Utu"
   ],
+  "landmarks": [],
   "languages": [
    "French",
    "Futunan",
@@ -2422,6 +4753,7 @@
   "capitals": [
    "Apia"
   ],
+  "landmarks": [],
   "languages": [
    "Samoan",
    "English"
@@ -2433,6 +4765,7 @@
   "capitals": [
    "Pristina"
   ],
+  "landmarks": [],
   "languages": [
    "Albanian",
    "Serbian"
@@ -2444,6 +4777,23 @@
   "capitals": [
    "Aden",
    "Sanaa"
+  ],
+  "landmarks": [
+   {
+    "lat": 15.9269,
+    "lon": 48.6267,
+    "name": "Shibam"
+   },
+   {
+    "lat": 14.2,
+    "lon": 43.3167,
+    "name": "Zabid"
+   },
+   {
+    "lat": 12.5,
+    "lon": 53.4,
+    "name": "Socotra Archipelago"
+   }
   ],
   "languages": [
    "Arabic"
@@ -2457,6 +4807,23 @@
    "Cape Town",
    "Pretoria"
   ],
+  "landmarks": [
+   {
+    "lat": -33.9628,
+    "lon": 18.4037,
+    "name": "Table Mountain"
+   },
+   {
+    "lat": -24.0,
+    "lon": 31.5,
+    "name": "Kruger National Park"
+   },
+   {
+    "lat": -34.3568,
+    "lon": 18.4719,
+    "name": "Cape of Good Hope"
+   }
+  ],
   "languages": [
    "Zulu",
    "Xhosa",
@@ -2469,6 +4836,18 @@
   "capitals": [
    "Lusaka"
   ],
+  "landmarks": [
+   {
+    "lat": -17.9243,
+    "lon": 25.8572,
+    "name": "Victoria Falls"
+   },
+   {
+    "lat": -13.0,
+    "lon": 31.75,
+    "name": "South Luangwa National Park"
+   }
+  ],
   "languages": [
    "English"
   ],
@@ -2478,6 +4857,23 @@
  "ZW": {
   "capitals": [
    "Harare"
+  ],
+  "landmarks": [
+   {
+    "lat": -17.9243,
+    "lon": 25.8572,
+    "name": "Victoria Falls"
+   },
+   {
+    "lat": -20.2675,
+    "lon": 30.9338,
+    "name": "Great Zimbabwe"
+   },
+   {
+    "lat": -19.0,
+    "lon": 26.5,
+    "name": "Hwange National Park"
+   }
   ],
   "languages": [
    "Shona",

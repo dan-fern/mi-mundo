@@ -1,3 +1,4 @@
+import MiMundoCore
 import SwiftUI
 
 /// Where the map is looking: which map point sits at the middle of the
@@ -43,6 +44,7 @@ struct WorldMapView: View {
     /// the screen, so the card opens on the left and never covers it.
     @Binding var cardOnLeadingSide: Bool
     var insets = MapInsets()
+    var labelMode: MapLabelMode = .explore
 
     /// Baseline for the gesture in progress.
     @State private var gesture: GestureBaseline?
@@ -63,7 +65,8 @@ struct WorldMapView: View {
         GeometryReader { proxy in
             let size = proxy.size
             MapCanvas(atlas: atlas, camera: camera, selection: selection,
-                      layout: MapLayout(atlas: atlas, size: size, insets: insets))
+                      layout: MapLayout(atlas: atlas, size: size, insets: insets),
+                      labelMode: labelMode)
                 .contentShape(.rect)
                 .gesture(panAndZoom(size: size))
                 .onChange(of: gestureActive) { _, active in
@@ -249,6 +252,7 @@ struct MapCanvas: View, Animatable {
     var camera: MapCamera
     let selection: AtlasCountry?
     let layout: MapLayout
+    var labelMode: MapLabelMode = .explore
 
     nonisolated var animatableData: AnimatablePair<AnimatablePair<CGFloat, CGFloat>, CGFloat> {
         get { AnimatablePair(AnimatablePair(camera.center.x, camera.center.y), log(camera.zoom)) }
@@ -297,6 +301,10 @@ struct MapCanvas: View, Animatable {
             let color = Self.land[(Int(country.meta.colorGroup) - 1).clamped(to: 0...(Self.land.count - 1))]
             map.fill(fine ? country.fine : country.coarse, with: .color(color), style: FillStyle(eoFill: true))
         }
+        let features = atlas.features.filter {
+            $0.minZoom <= camera.zoom && $0.bounds.intersects(visible)
+        }
+        drawPhysical(features, in: &map, hairline: hairline)
         for country in shown {
             map.stroke(fine ? country.fine : country.coarse,
                        with: .color(Self.border.opacity(0.8)), lineWidth: 0.7 * hairline)
@@ -315,6 +323,149 @@ struct MapCanvas: View, Animatable {
             }
         }
         map.stroke(atlas.outline, with: .color(.white.opacity(0.5)), lineWidth: 1.5 * hairline)
+        drawMarkersAndLabels(features, in: &context, visible: visible)
+    }
+
+    // MARK: Physical features
+
+    private static let water = Color(red: 0.55, green: 0.75, blue: 0.89)
+    private static let river = Color(red: 0.27, green: 0.53, blue: 0.80)
+    private static let sand = Color(red: 0.93, green: 0.80, blue: 0.50)
+    private static let waterText = Color(red: 0.10, green: 0.30, blue: 0.58)
+    private static let landText = Color(red: 0.42, green: 0.27, blue: 0.12)
+
+    /// Zoom from which landmarks appear (a pin is only drawn when its name
+    /// fits too, so there are never mystery dots).
+    static let landmarkZoom: CGFloat = 4
+
+    /// Deserts (sandy wash), lakes, then rivers, in map space under borders.
+    private func drawPhysical(_ features: [MapFeature], in map: inout GraphicsContext, hairline: CGFloat) {
+        for f in features where f.kind == .desert {
+            map.fill(f.path, with: .color(Self.sand.opacity(0.45)), style: FillStyle(eoFill: true))
+        }
+        for f in features where f.kind == .lake {
+            map.fill(f.path, with: .color(Self.water), style: FillStyle(eoFill: true))
+            map.stroke(f.path, with: .color(Self.river.opacity(0.6)), lineWidth: 0.6 * hairline)
+        }
+        // Rivers get a little thicker as you zoom in, but stay hairline-ish.
+        let riverWidth = (0.8 + 0.25 * log2(camera.zoom)).clamped(to: 0.8...2.2) * hairline
+        for f in features where f.kind == .river {
+            map.stroke(f.path, with: .color(Self.river),
+                       style: StrokeStyle(lineWidth: riverWidth, lineCap: .round, lineJoin: .round))
+        }
+    }
+
+    /// Peaks and landmark pins, then all labels, in screen space so they
+    /// stay the same size at any zoom. Labels are placed in priority order
+    /// and skipped if they would overlap one already placed. Map labels use
+    /// smaller type than the rest of the kid UI so the map stays readable.
+    private func drawMarkersAndLabels(_ features: [MapFeature], in context: inout GraphicsContext,
+                                      visible: CGRect) {
+        let toScreen = layout.mapToScreen(camera)
+        // Labels stay in the open area below the floating top bar.
+        let screen = CGRect(x: 0, y: layout.insets.top, width: layout.size.width,
+                            height: max(layout.size.height - layout.insets.top, 0))
+        var placed: [CGRect] = []
+        var named: Set<String> = []
+
+        func place(_ text: Text, at point: CGPoint, angle: Angle = .zero, padding: CGFloat = 4) -> Bool {
+            let resolved = context.resolve(text)
+            let size = resolved.measure(in: CGSize(width: 320, height: 100))
+            let rect = CGRect(x: point.x - size.width / 2, y: point.y - size.height / 2,
+                              width: size.width, height: size.height)
+            // Rotated text: test against its axis-aligned bounds.
+            let bounds = rect.applying(CGAffineTransform(translationX: point.x, y: point.y)
+                .rotated(by: angle.radians).translatedBy(x: -point.x, y: -point.y))
+                .insetBy(dx: -padding, dy: -padding)
+            guard screen.contains(bounds), !placed.contains(where: { $0.intersects(bounds) }) else {
+                return false
+            }
+            placed.append(bounds)
+            var layer = context
+            layer.translateBy(x: point.x, y: point.y)
+            layer.rotate(by: angle)
+            // Soft white halo so labels stay readable over borders/rivers.
+            layer.addFilter(.shadow(color: .white.opacity(0.95), radius: 1.5))
+            layer.addFilter(.shadow(color: .white.opacity(0.8), radius: 3))
+            layer.draw(resolved, at: .zero, anchor: .center)
+            return true
+        }
+
+        // Peak triangles.
+        for f in features where f.kind == .peak {
+            let p = f.label.applying(toScreen)
+            var tri = Path()
+            tri.move(to: CGPoint(x: p.x, y: p.y - 7))
+            tri.addLine(to: CGPoint(x: p.x + 7, y: p.y + 5))
+            tri.addLine(to: CGPoint(x: p.x - 7, y: p.y + 5))
+            tri.closeSubpath()
+            context.fill(tri, with: .color(Self.landText))
+            placed.append(CGRect(x: p.x - 8, y: p.y - 8, width: 16, height: 16))
+        }
+
+        let pins = camera.zoom >= Self.landmarkZoom
+            ? atlas.landmarks.filter { visible.contains($0.point) && labelMode.showsNames(in: $0.country) }
+            : []
+
+        // Labels, most important first.
+        func priority(_ k: FeatureKind) -> Int {
+            switch k {
+            case .desert: 0
+            case .range: 1
+            case .lake: 2
+            case .river: 3
+            case .peak: 4
+            }
+        }
+        let labelled = features
+            .filter { !$0.name.isEmpty && $0.labelMinZoom <= camera.zoom && labelMode.showsNames(in: $0.country) }
+            .sorted { (priority($0.kind), $0.labelMinZoom) < (priority($1.kind), $1.labelMinZoom) }
+        // Big areas first, then landmarks (an Eiffel Tower matters more than
+        // the river next to it), then water and peaks.
+        for f in labelled where priority(f.kind) <= 1 && !named.contains(f.name) {
+            if placeFeatureLabel(f) { named.insert(f.name) }
+        }
+        placeLandmarks()
+        for f in labelled where priority(f.kind) > 1 && !named.contains(f.name) {
+            if placeFeatureLabel(f) { named.insert(f.name) }
+        }
+
+        func placeFeatureLabel(_ f: MapFeature) -> Bool {
+            let p = f.label.applying(toScreen)
+            let text: Text
+            var at = p
+            switch f.kind {
+            case .desert:
+                text = Text(f.name.uppercased()).font(.headline.italic()).tracking(2)
+                    .foregroundStyle(Self.landText.opacity(0.85))
+            case .range:
+                text = Text(f.name).font(.headline.italic().weight(.semibold))
+                    .foregroundStyle(Self.landText)
+            case .lake, .river:
+                text = Text(f.name).font(.subheadline.italic())
+                    .foregroundStyle(Self.waterText)
+            case .peak:
+                text = Text("\(f.name)\n\(f.elevation.formatted()) m").font(.subheadline.weight(.semibold))
+                    .foregroundStyle(Self.landText)
+                at.y += 22
+            }
+            return place(text, at: at, angle: f.kind == .river ? f.labelAngle : .zero)
+        }
+
+        // Landmarks: pin + name together, or not at all.
+        func placeLandmarks() {
+        for pin in pins {
+            let p = pin.point.applying(toScreen)
+            let dot = CGRect(x: p.x - 7, y: p.y - 7, width: 14, height: 14)
+            guard screen.contains(dot), !placed.contains(where: { $0.intersects(dot) }) else { continue }
+            let label = Text(pin.name).font(.subheadline.weight(.bold)).foregroundStyle(.black.opacity(0.8))
+            guard place(label, at: CGPoint(x: p.x, y: p.y + 18)) else { continue }
+            placed.append(dot)
+            context.fill(Path(ellipseIn: dot), with: .color(.white))
+            context.fill(Path(ellipseIn: dot.insetBy(dx: 2.5, dy: 2.5)),
+                         with: .color(Color(red: 0.85, green: 0.35, blue: 0.10)))
+        }
+        }
     }
 }
 

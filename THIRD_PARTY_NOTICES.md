@@ -9,11 +9,13 @@ Made with Natural Earth. Free vector and raster map data @ naturalearthdata.com.
 | Data | Used for | License |
 |---|---|---|
 | [Natural Earth](https://www.naturalearthdata.com) admin-0 countries, 1:110m and 1:50m (v5.1.2) | Country outlines (`apple/MiMundo/Resources/World.bin`) | Public domain |
-| [Wikidata](https://www.wikidata.org) | Capitals, population, languages (`Countries.json`; snapshot in `tools/wikidata-facts.json`, hand fixes in `tools/facts-overrides.json`) | CC0 1.0 |
+| Natural Earth 1:50m rivers, lakes, geography regions and elevation points (v5.1.2) | Rivers, lakes, deserts, mountain ranges and peaks (`Features.bin`) | Public domain |
+| [Wikidata](https://www.wikidata.org) | Capitals, population, languages and landmarks (`Countries.json`; snapshots in `tools/wikidata-facts.json` and `tools/wikidata-landmarks.json`, hand fixes in `tools/facts-overrides.json`) | CC0 1.0 |
 | [flag-icons](https://github.com/lipis/flag-icons) 7.2.3 | Flags (`Flags.xcassets`) | MIT, notice below |
 
 Rebuild instructions: `tools/fetch-data.sh`, then `tools/build-data.sh`
-(`tools/fetch-facts.py` refreshes the Wikidata snapshot).
+(`tools/fetch-facts.py` and `tools/fetch-landmarks.py` refresh the Wikidata
+snapshots).
 
 ## flag-icons
 

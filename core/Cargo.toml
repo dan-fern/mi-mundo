@@ -32,6 +32,11 @@ name = "mapgen"
 path = "src/bin/mapgen.rs"
 required-features = ["mapgen"]
 
+[[bin]]
+name = "featuregen"
+path = "src/bin/featuregen.rs"
+required-features = ["mapgen"]
+
 [dependencies]
 chrono = { version = "0.4.45", default-features = false, features = ["std"] }
 # filter-by-regex embeds only the zones in CHRONO_TZ_TIMEZONE_FILTER

@@ -16,7 +16,9 @@ FLAG_ICONS_VERSION="7.2.3"
 
 mkdir -p "$RAW/naturalearth" "$RAW/flag-icons"
 
-for layer in ne_110m_admin_0_countries ne_50m_admin_0_countries; do
+for layer in ne_110m_admin_0_countries ne_50m_admin_0_countries \
+    ne_50m_rivers_lake_centerlines ne_50m_lakes \
+    ne_50m_geography_regions_polys ne_50m_geography_regions_elevation_points; do
   echo "==> $layer"
   curl -fsSL "$NE_BASE/$layer.geojson" -o "$RAW/naturalearth/$layer.geojson"
 done

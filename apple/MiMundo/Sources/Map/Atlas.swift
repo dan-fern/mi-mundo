@@ -10,6 +10,55 @@ struct CountryFacts: Decodable, Sendable {
     let capitals: [String]
     let population: Int?
     let languages: [String]
+    let landmarks: [Landmark]
+
+    struct Landmark: Decodable, Sendable, Hashable {
+        let name: String
+        let lon: Double
+        let lat: Double
+    }
+}
+
+/// A physical feature ready to draw (from Features.bin): rivers are open
+/// polylines, lakes/deserts/ranges are filled rings, peaks are a point.
+struct MapFeature: Sendable {
+    let kind: FeatureKind
+    let name: String
+    let minZoom: CGFloat
+    let labelMinZoom: CGFloat
+    let label: CGPoint
+    let labelAngle: Angle
+    let elevation: Int
+    let path: Path
+    let bounds: CGRect
+    /// Country under the label point (nil at sea). In quiz mode the name is
+    /// hidden until this country has been guessed.
+    var country: UInt32? = nil
+}
+
+/// A landmark pin on the map.
+struct LandmarkPin: Sendable {
+    let name: String
+    let point: CGPoint
+    /// Country whose card lists it; in quiz mode it stays hidden until this
+    /// country has been guessed.
+    let country: UInt32?
+}
+
+/// Which names the map may show (requirements §3.2): everything while
+/// exploring; in a quiz only names inside countries already guessed, so
+/// labels can't give answers away. Feature shapes (rivers, lakes…) always
+/// draw.
+enum MapLabelMode: Equatable, Sendable {
+    case explore
+    case quiz(revealed: Set<UInt32>)
+
+    func showsNames(in country: UInt32?) -> Bool {
+        switch self {
+        case .explore: true
+        case .quiz(let revealed): country.map(revealed.contains) ?? false
+        }
+    }
 }
 
 /// One country, ready to draw: metadata from the Rust map plus pre-built
@@ -43,13 +92,19 @@ final class Atlas: Sendable {
     /// Lines of latitude/longitude every 30°.
     let graticule: Path
     let bounds: CGRect
+    /// Rivers, lakes, deserts, ranges and peaks, drawn as you zoom in.
+    let features: [MapFeature]
+    let landmarks: [LandmarkPin]
 
-    private init(world: World, countries: [AtlasCountry], outline: Path, graticule: Path) {
+    private init(world: World, countries: [AtlasCountry], outline: Path, graticule: Path,
+                 features: [MapFeature], landmarks: [LandmarkPin]) {
         self.world = world
         self.countries = countries
         self.outline = outline
         self.graticule = graticule
         self.bounds = outline.boundingRect
+        self.features = features
+        self.landmarks = landmarks
     }
 
     /// Country under a map point. `tolerance` (map units) lets a fingertip
@@ -63,7 +118,8 @@ final class Atlas: Sendable {
         try await Task.detached(priority: .userInitiated) {
             let start = Date.now
             guard let mapURL = Bundle.main.url(forResource: "World", withExtension: "bin"),
-                  let factsURL = Bundle.main.url(forResource: "Countries", withExtension: "json")
+                  let factsURL = Bundle.main.url(forResource: "Countries", withExtension: "json"),
+                  let featuresURL = Bundle.main.url(forResource: "Features", withExtension: "bin")
             else { throw CocoaError(.fileNoSuchFile) }
             let world = try World(bytes: try Data(contentsOf: mapURL))
             let facts = try JSONDecoder().decode(
@@ -79,15 +135,68 @@ final class Atlas: Sendable {
                     facts: facts[meta.iso2]
                 )
             }
+            // Each feature belongs to the country under its label (for
+            // quiz-mode reveals); a little tolerance catches coastal labels.
+            let features = try loadFeatures(bytes: try Data(contentsOf: featuresURL)).map { f in
+                var feature = mapFeature(f)
+                feature.country = world.countryAt(x: f.labelX, y: f.labelY, tolerance: 0.01)
+                return feature
+            }
+            let countryOfISO = Dictionary(
+                countries.map { ($0.meta.iso2, $0.meta.index) }, uniquingKeysWith: { first, _ in first }
+            )
+            var seen = Set<String>()
+            let landmarks = facts.keys.sorted().flatMap { iso2 in
+                facts[iso2]!.landmarks.map { (iso2, $0) }
+            }
+            .filter { seen.insert($0.1.name).inserted } // cross-border sites once
+            .map { iso2, lm in
+                let p = project(lonDeg: lm.lon, latDeg: lm.lat)
+                return LandmarkPin(name: lm.name, point: CGPoint(x: CGFloat(p.x), y: CGFloat(p.y)),
+                                   country: countryOfISO[iso2])
+            }
+            .sorted { $0.name < $1.name }
             let atlas = Atlas(
                 world: world,
                 countries: countries,
                 outline: path(rings: [worldOutline()]),
-                graticule: graticulePath()
+                graticule: graticulePath(),
+                features: features,
+                landmarks: landmarks
             )
             mapLog.info("Atlas loaded: \(countries.count) countries in \(Date.now.timeIntervalSince(start), format: .fixed(precision: 2)) s")
             return atlas
         }.value
+    }
+
+    private static func mapFeature(_ f: PhysicalFeature) -> MapFeature {
+        let path: Path
+        switch f.kind {
+        case .river: path = Self.path(lines: f.parts)
+        case .peak: path = Path()
+        case .lake, .desert, .range: path = Self.path(rings: f.parts)
+        }
+        let label = CGPoint(x: CGFloat(f.labelX), y: CGFloat(f.labelY))
+        return MapFeature(
+            kind: f.kind, name: f.name,
+            minZoom: CGFloat(f.minZoom), labelMinZoom: CGFloat(f.labelMinZoom),
+            label: label, labelAngle: .radians(Double(f.labelAngle)),
+            elevation: Int(f.elevationM), path: path,
+            bounds: f.kind == .peak ? CGRect(origin: label, size: .zero) : path.boundingRect
+        )
+    }
+
+    private static func path(lines: [[Float]]) -> Path {
+        var path = Path()
+        for line in lines where line.count >= 4 {
+            path.move(to: CGPoint(x: CGFloat(line[0]), y: CGFloat(line[1])))
+            var i = 2
+            while i + 1 < line.count {
+                path.addLine(to: CGPoint(x: CGFloat(line[i]), y: CGFloat(line[i + 1])))
+                i += 2
+            }
+        }
+        return path
     }
 
     private static func path(rings: [[Float]]) -> Path {

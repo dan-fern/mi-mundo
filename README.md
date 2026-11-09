@@ -18,7 +18,7 @@ and [CHANGELOG.md](CHANGELOG.md).
 | `apple/MiMundo/` | SwiftUI iPad app; `project.yml` is the XcodeGen spec |
 | `scripts/build-core.sh` | Builds Rust for iPad + simulator, generates bindings and the Xcode project |
 | `tools/` | Map/flag/facts data pipeline (see "Map data" below) |
-| `apple/MiMundo/Resources/` | Bundled data: `World.bin`, `Countries.json`, `Flags.xcassets` |
+| `apple/MiMundo/Resources/` | Bundled data: `World.bin`, `Features.bin`, `Countries.json`, `Flags.xcassets` |
 
 ## Getting started
 
@@ -55,14 +55,16 @@ refresh it (needs Inkscape: `brew install --cask inkscape`):
 
 ```bash
 ./tools/fetch-data.sh   # Natural Earth + flag-icons -> data/raw/ (checksums in tools/data.sha256)
-./tools/build-data.sh   # -> apple/MiMundo/Resources/, then runs core/tests/world_bin.rs
+./tools/build-data.sh   # -> apple/MiMundo/Resources/, then runs core/tests/{world,features}_bin.rs
 ```
 
 Country facts come from a committed Wikidata snapshot,
 `tools/wikidata-facts.json` (refresh with `python3 -I tools/fetch-facts.py "$PWD"`
-and review the diff). Hand fixes go in `tools/facts-overrides.json` and apply
-offline. CI rebuilds `World.bin` and `Countries.json` from the pinned sources
-and fails if the committed files differ. `core/tests/world_bin.rs` checks the
+and review the diff); landmarks likewise from `tools/wikidata-landmarks.json`
+(`tools/fetch-landmarks.py`). Hand fixes and hand-picked landmarks go in
+`tools/facts-overrides.json` and apply offline. CI rebuilds `World.bin`,
+`Features.bin` and `Countries.json` from the pinned sources and fails if the
+committed files differ. `core/tests/world_bin.rs` checks the
 map against known places (capitals, open ocean, the ±180° seam, enclaves,
 tiny islands).
 
