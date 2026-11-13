@@ -168,6 +168,10 @@ Versions: [Semantic Versioning](https://semver.org/).
   changes don't lose data on the iPad.
 
 ### Changed
+- A new game day now starts at 11 pm US Eastern (was 10 pm), for
+  attendance, streaks and the quiz queue.
+- City-states named like their capital (Singapore, Monaco) are asked for
+  their capital again; the review had skipped them.
 - Explore map: landmark pins now show only for the selected country (like
   its capital star), at any zoom, so the map isn't cluttered. A landmark
   in the capital (the Colosseum in Rome) sits just beside the star. A

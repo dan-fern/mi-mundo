@@ -1,8 +1,8 @@
 //! Game days (requirements §3.7).
 //!
-//! A game day starts at 10 pm US Eastern time (America/New_York, following
+//! A game day starts at 11 pm US Eastern time (America/New_York, following
 //! daylight saving), wherever the iPad is. Each game day is named after the
-//! calendar date it mostly covers: 10 pm ET on Nov 8 starts game day Nov 9.
+//! calendar date it mostly covers: 11 pm ET on Nov 8 starts game day Nov 9.
 //!
 //! Game days are passed around as `i32` day numbers (days since 1970-01-01)
 //! so Swift can store and compare them cheaply.
@@ -11,7 +11,7 @@ use chrono::{DateTime, Duration, NaiveDate};
 use chrono_tz::America::New_York;
 
 /// Hour (US Eastern, 24 h clock) when a new game day begins.
-pub const DAY_START_HOUR_ET: i64 = 22;
+pub const DAY_START_HOUR_ET: i64 = 23;
 
 const EPOCH: NaiveDate = NaiveDate::from_ymd_opt(1970, 1, 1).expect("valid date");
 
@@ -28,7 +28,7 @@ pub fn game_day(unix_seconds: i64) -> i32 {
     let clamped = unix_seconds.clamp(MIN_UNIX_SECONDS, MAX_UNIX_SECONDS);
     let utc = DateTime::from_timestamp(clamped, 0).expect("clamped into chrono's range");
     let eastern = utc.with_timezone(&New_York).naive_local();
-    // Shift so 10 pm lands on midnight of the next calendar date.
+    // Shift so 11 pm lands on midnight of the next calendar date.
     let shifted = eastern + Duration::hours(24 - DAY_START_HOUR_ET);
     (shifted.date() - EPOCH).num_days() as i32
 }
@@ -63,32 +63,32 @@ mod tests {
     }
 
     #[test]
-    fn day_rolls_over_at_10pm_eastern() {
-        assert_eq!(label_at(et(2026, 11, 8, 21, 59)), "2026-11-08");
-        assert_eq!(label_at(et(2026, 11, 8, 22, 0)), "2026-11-09");
+    fn day_rolls_over_at_11pm_eastern() {
+        assert_eq!(label_at(et(2026, 11, 8, 22, 59)), "2026-11-08");
+        assert_eq!(label_at(et(2026, 11, 8, 23, 0)), "2026-11-09");
         assert_eq!(label_at(et(2026, 11, 9, 0, 30)), "2026-11-09");
-        assert_eq!(label_at(et(2026, 11, 9, 21, 59)), "2026-11-09");
+        assert_eq!(label_at(et(2026, 11, 9, 22, 59)), "2026-11-09");
     }
 
     #[test]
     fn follows_daylight_saving() {
-        // Summer (EDT, UTC-4): 10 pm ET is 02:00 UTC.
-        let summer = et(2026, 7, 1, 22, 0);
+        // Summer (EDT, UTC-4): 11 pm ET is 03:00 UTC.
+        let summer = et(2026, 7, 1, 23, 0);
         assert_eq!(label_at(summer), "2026-07-02");
         assert_eq!(label_at(summer - 1), "2026-07-01");
-        // Winter (EST, UTC-5): 10 pm ET is 03:00 UTC.
-        let winter = et(2026, 1, 15, 22, 0);
+        // Winter (EST, UTC-5): 11 pm ET is 04:00 UTC.
+        let winter = et(2026, 1, 15, 23, 0);
         assert_eq!(label_at(winter), "2026-01-16");
         assert_eq!(label_at(winter - 1), "2026-01-15");
     }
 
     #[test]
     fn dst_transition_days_are_normal_length_at_the_boundary() {
-        // Clocks change at 2 am, well away from the 10 pm boundary.
-        assert_eq!(label_at(et(2026, 3, 8, 21, 59)), "2026-03-08");
-        assert_eq!(label_at(et(2026, 3, 8, 22, 0)), "2026-03-09");
-        assert_eq!(label_at(et(2026, 11, 1, 21, 59)), "2026-11-01");
-        assert_eq!(label_at(et(2026, 11, 1, 22, 0)), "2026-11-02");
+        // Clocks change at 2 am, well away from the 11 pm boundary.
+        assert_eq!(label_at(et(2026, 3, 8, 22, 59)), "2026-03-08");
+        assert_eq!(label_at(et(2026, 3, 8, 23, 0)), "2026-03-09");
+        assert_eq!(label_at(et(2026, 11, 1, 22, 59)), "2026-11-01");
+        assert_eq!(label_at(et(2026, 11, 1, 23, 0)), "2026-11-02");
     }
 
     #[test]
@@ -119,7 +119,7 @@ mod tests {
     fn day_numbers_are_pinned() {
         assert_eq!(game_day(et(2026, 11, 9, 12, 0)), 20_766);
         assert_eq!(game_day_label(20_766), "2026-11-09");
-        // 1970-01-01 00:00 UTC is 7 pm ET on Dec 31, 1969: before 10 pm.
+        // 1970-01-01 00:00 UTC is 7 pm ET on Dec 31, 1969: before 11 pm.
         assert_eq!(game_day(0), -1);
     }
 
@@ -171,22 +171,22 @@ mod tests {
     }
 
     #[test]
-    fn rollover_is_10pm_in_every_month() {
+    fn rollover_is_11pm_in_every_month() {
         for month in 1..=12 {
             assert_eq!(
-                label_at(et(2027, month, 10, 21, 59)),
+                label_at(et(2027, month, 10, 22, 59)),
                 format!("2027-{month:02}-10")
             );
             assert_eq!(
-                label_at(et(2027, month, 10, 22, 0)),
+                label_at(et(2027, month, 10, 23, 0)),
                 format!("2027-{month:02}-11")
             );
         }
     }
 
     #[test]
-    fn new_year_rolls_over_at_10pm_on_new_years_eve() {
-        assert_eq!(label_at(et(2026, 12, 31, 21, 59)), "2026-12-31");
-        assert_eq!(label_at(et(2026, 12, 31, 22, 0)), "2027-01-01");
+    fn new_year_rolls_over_at_11pm_on_new_years_eve() {
+        assert_eq!(label_at(et(2026, 12, 31, 22, 59)), "2026-12-31");
+        assert_eq!(label_at(et(2026, 12, 31, 23, 0)), "2027-01-01");
     }
 }

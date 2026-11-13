@@ -38,7 +38,7 @@ enum Attendance {
 
 /// The current game day, kept up to date for views. Attendance and streaks
 /// depend on what day it is, not only on the visits, so without this a
-/// screen left open across 10 pm ET (or one the app returns to the next
+/// screen left open across 11 pm ET (or one the app returns to the next
 /// morning) kept showing yesterday's streak.
 @MainActor
 @Observable

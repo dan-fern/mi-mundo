@@ -95,7 +95,7 @@ struct ParentHomeView: View {
                 }
 
                 Section("About") {
-                    LabeledContent("New days start at", value: "10 pm US Eastern")
+                    LabeledContent("New days start at", value: "11 pm US Eastern")
                     NavigationLink("Credits") { CreditsView() }
                     DisclosureGroup("Diagnostics", isExpanded: $showDiagnostics) {
                         LabeledContent("Today's game day", value: gameDayLabel(day: Attendance.today()))

@@ -24,7 +24,7 @@ struct MiMundoApp: App {
                         QuizQueue.refresh(in: container.mainContext)
                     }
                 }
-                // A new game day (10 pm ET) can bring a new quiz of the day:
+                // A new game day (11 pm ET) can bring a new quiz of the day:
                 // update the queue so no screen offers yesterday's.
                 .onChange(of: gameDayClock.today) { _, _ in
                     QuizQueue.refresh(in: container.mainContext)

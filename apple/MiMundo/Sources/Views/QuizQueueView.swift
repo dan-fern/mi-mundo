@@ -99,7 +99,7 @@ struct QuizQueueView: View {
                 if !quizzes.isEmpty { Text("\(quizzes.count) of \(queueMax()) quizzes") }
             } footer: {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Everyone gets the same quiz each day. At 10 pm US Eastern the queue moves on to the next quiz, but only if at least one kid tried today's. After the last quiz it starts again from the top, worth full points.")
+                    Text("Everyone gets the same quiz each day. At 11 pm US Eastern the queue moves on to the next quiz, but only if at least one kid tried today's. After the last quiz it starts again from the top, worth full points.")
                     if todayLocked {
                         Text("A kid has started today's quiz, so it can't be changed until the queue moves on.")
                     }

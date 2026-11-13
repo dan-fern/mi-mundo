@@ -86,8 +86,8 @@ Age-agnostic — fun for a young child, still useful for an adult.
   choices are nearby countries (or their capitals), never one already
   answered in this quiz (its name is on the map). A question shows the same
   four buttons each time it comes up in a sitting. City-states named like
-  their capital (Singapore, Monaco, Vatican City…) get no capital question;
-  countries with several capitals are asked for the one schools teach
+  their capital (Singapore, Monaco) are still asked for it; the same answer
+  is fine. Countries with several capitals are asked for the one schools teach
   (listed first: Pretoria, Mbabane, Malabo, La Paz). Every button and the
   question can be read aloud. **One try per question:** the right answer
   is then shown either way, and a miss earns nothing; to do better, retake
@@ -149,7 +149,7 @@ Shows the child's own:
 - Shown next to the child's name.
 - Counts days the child **picked their profile** in the last 7 days, capped
   at 5. Parent sessions never count.
-- A day starts at **10 pm US Eastern time** (America/New_York, so it follows
+- A day starts at **11 pm US Eastern time** (America/New_York, so it follows
   daylight saving), wherever the iPad is. The day streak uses the same
   definition.
 - The gauge fills up and gets "hotter" in colour as it approaches 5.
@@ -230,7 +230,7 @@ So a parent can set up practice ahead of time (e.g. before work travel):
   A queued quiz is a region or custom set of countries plus its question
   types and point values.
 - The front of the queue is **today's quiz** for everyone. At the start of
-  each game day (10 pm US Eastern, §3.7) the queue moves on to the next quiz
+  each game day (11 pm US Eastern, §3.7) the queue moves on to the next quiz
   **if at least one kid attempted** the current one. If no kid did, the same
   quiz stays up, so a missed day never skips a quiz. Parents' attempts don't
   count, so a parent can never use up the kids' quiz.

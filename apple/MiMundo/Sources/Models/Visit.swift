@@ -3,7 +3,7 @@ import SwiftData
 
 extension SchemaV1 {
     /// One day a child played: logged when they pick their profile. At most
-    /// one per child per game day (10 pm ET to 10 pm ET; see core/src/days.rs).
+    /// one per child per game day (11 pm ET to 11 pm ET; see core/src/days.rs).
     @Model
     final class Visit {
         #Unique<Visit>([\.childID, \.day])

@@ -171,7 +171,7 @@ enum QuizPlay {
     /// so the question can be answered again). A kid's first answer is what
     /// counts as "a kid attempted today's quiz", which lets the queue move on
     /// at the next game day. The queue is brought up to date first, so an
-    /// answer given just after 10 pm ET counts for the day it was given.
+    /// answer given just after 11 pm ET counts for the day it was given.
     @MainActor
     static func record(_ chosen: String, correctAnswer: String, kind: QuestionKind,
                        country: AtlasCountry, chosenCountry: AtlasCountry?, choices: [String],
@@ -201,9 +201,9 @@ enum QuizPlay {
 }
 
 /// One country in a quiz, with the questions it gets. A place with no
-/// capital (a few territories) isn't asked for one, and neither is a
-/// city-state whose capital shares its name (Singapore, Monaco, San
-/// Marino…): that question would answer itself.
+/// capital (a few territories) isn't asked for one. City-states named like
+/// their capital (Singapore, Monaco) are asked: the answer being the same
+/// name is fine (owner's decision).
 struct QuizTarget: Identifiable {
     let country: AtlasCountry
     let kinds: [QuestionKind]
@@ -225,12 +225,7 @@ struct QuizTarget: Identifiable {
     }
 
     static func hasCapitalQuestion(_ country: AtlasCountry) -> Bool {
-        guard let capital = country.facts?.capitals.first else { return false }
-        let (c, n) = (capital.lowercased(), country.name.lowercased())
-        // "Singapore", "Luxembourg"; and "Vatican City" for a tiny place
-        // (but Mexico City, Kuwait City, Panama City are fair questions).
-        let small = (country.facts?.population ?? 0) < 1_000_000
-        return c != n && !(small && c.hasPrefix(n))
+        country.facts?.capitals.isEmpty == false
     }
 }
 
