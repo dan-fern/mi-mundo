@@ -14,6 +14,7 @@ struct ParentHomeView: View {
     @State private var editingKid: Profile?
     @State private var kidToDelete: Profile?
     @State private var showDiagnostics = false
+    @State private var movedAside = UserDefaults.standard.object(forKey: Persistence.movedAsideKey) as? Date
 
     private var kids: [Profile] { profiles.filter { !$0.isParent && !$0.isArchived } }
     private var archivedKids: [Profile] { profiles.filter { !$0.isParent && $0.isArchived } }
@@ -21,6 +22,19 @@ struct ParentHomeView: View {
     var body: some View {
         NavigationStack {
             List {
+                if let movedAside {
+                    Section {
+                        Label {
+                            Text("On \(movedAside.formatted(date: .abbreviated, time: .shortened)) the app's saved data couldn't be opened, so it started fresh. The old data was kept on this iPad as a backup; ask for help if you need it back.")
+                        } icon: {
+                            Image(systemName: "exclamationmark.triangle.fill").foregroundStyle(.orange)
+                        }
+                        Button("Dismiss") {
+                            UserDefaults.standard.removeObject(forKey: Persistence.movedAsideKey)
+                            self.movedAside = nil
+                        }
+                    }
+                }
                 Section {
                     NavigationLink {
                         ParentMapView(parent: parent)
@@ -148,6 +162,9 @@ struct ParentHomeView: View {
             try context.delete(model: QuizAttempt.self, where: #Predicate { $0.profileID == kidID })
             context.delete(kid)
             try context.save()
+            // If they were the one who tried today's quiz, the queue
+            // mustn't move on tomorrow because of them.
+            QuizQueue.recountKidAttempts(in: context)
         } catch {
             dataLog.error("Delete kid failed: \(error, privacy: .public)")
             context.rollback()

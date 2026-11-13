@@ -91,6 +91,8 @@ mod tests {
         list.iter().map(|s| s.to_string()).collect()
     }
 
+    const PINNED_42: [&str; 4] = ["Peru", "Paraguay", "Uruguay", "Bolivia"];
+
     const NEIGHBOURS: &[&str] = &[
         "Bolivia",
         "Ecuador",
@@ -127,6 +129,24 @@ mod tests {
     fn the_same_seed_gives_the_same_buttons() {
         let a = quiz_choices("Peru".into(), names(NEIGHBOURS), 42);
         assert_eq!(a, quiz_choices("Peru".into(), names(NEIGHBOURS), 42));
+    }
+
+    #[test]
+    fn the_generator_is_pinned() {
+        // Reference output of SplitMix64 for seed 0, and a fixed draw: if
+        // either changes, every iPad's buttons would change too.
+        assert_eq!(SplitMix64(0).next(), 0xE220_A839_7B1D_CDAF);
+        assert_eq!(
+            quiz_choices("Peru".into(), names(NEIGHBOURS), 42),
+            PINNED_42.map(String::from)
+        );
+    }
+
+    #[test]
+    fn a_blank_right_answer_is_still_offered_once() {
+        let choices = quiz_choices("  ".into(), names(&["Lima", "Quito"]), 1);
+        assert_eq!(choices.iter().filter(|c| *c == "  ").count(), 1);
+        assert_eq!(choices.len(), 3);
     }
 
     #[test]

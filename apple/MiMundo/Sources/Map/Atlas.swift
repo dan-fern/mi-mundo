@@ -104,6 +104,11 @@ struct AtlasCountry: Identifiable, Sendable {
     let facts: CountryFacts?
     /// Capitals in map coordinates; starred when the country is selected.
     let capitals: [CGPoint]
+    /// Box around the largest ring only (the main landmass): France without
+    /// French Guiana and Réunion, the Netherlands without the Caribbean,
+    /// Russia without the bit of Chukotka across the ±180° line. Used to
+    /// fit the map to a quiz and to aim taps at tiny targets.
+    let mainBounds: CGRect
     /// This country's famous places, most famous first; pinned on the map
     /// while the country is selected. A site shared with a neighbour
     /// (Victoria Falls) is in both countries' lists.
@@ -141,11 +146,16 @@ final class Atlas: Sendable {
     /// only the selected country's own list (`AtlasCountry.landmarks`).
     let landmarks: [LandmarkPin]
     let labelMemory = LabelMemory()
+    /// Biggest first, for placing country names (sorted once, not per frame).
+    let countriesByArea: [AtlasCountry]
 
     private init(world: World, countries: [AtlasCountry], outline: Path, graticule: Path,
                  features: [MapFeature], landmarks: [LandmarkPin]) {
         self.world = world
         self.countries = countries
+        self.countriesByArea = countries.sorted {
+            $0.mainBounds.width * $0.mainBounds.height > $1.mainBounds.width * $1.mainBounds.height
+        }
         self.outline = outline
         self.graticule = graticule
         self.bounds = outline.boundingRect
@@ -183,7 +193,8 @@ final class Atlas: Sendable {
                     capitals: (countryFacts?.capitalPoints ?? []).map {
                         let p = project(lonDeg: $0.lon, latDeg: $0.lat)
                         return CGPoint(x: CGFloat(p.x), y: CGFloat(p.y))
-                    }
+                    },
+                    mainBounds: largestRingBounds(fine[Int(meta.index)].rings)
                 )
             }
             let mentions = MentionIndex(countries: countries)
@@ -282,6 +293,28 @@ final class Atlas: Sendable {
             }
         }
         return pieces
+    }
+
+    /// Bounding box of the ring with the largest area.
+    private static func largestRingBounds(_ rings: [[Float]]) -> CGRect {
+        var best: (area: Float, box: CGRect) = (-1, .zero)
+        for ring in rings where ring.count >= 6 {
+            var area: Float = 0
+            var (minX, minY, maxX, maxY) = (Float.infinity, Float.infinity, -Float.infinity, -Float.infinity)
+            var i = 0
+            while i + 1 < ring.count {
+                let (x, y) = (ring[i], ring[i + 1])
+                let j = (i + 2) % ring.count
+                area += (x - ring[0]) * (ring[j + 1] - ring[1]) - (ring[j] - ring[0]) * (y - ring[1])
+                minX = min(minX, x); maxX = max(maxX, x); minY = min(minY, y); maxY = max(maxY, y)
+                i += 2
+            }
+            if abs(area) > best.area {
+                best = (abs(area), CGRect(x: CGFloat(minX), y: CGFloat(minY),
+                                          width: CGFloat(maxX - minX), height: CGFloat(maxY - minY)))
+            }
+        }
+        return best.box
     }
 
     private static func path(lines: [[Float]]) -> Path {

@@ -254,7 +254,11 @@ fn every_country_has_a_flag() {
 
 #[test]
 fn independent_countries_are_marked_for_quiz_presets() {
-    let independent = |iso: &str| facts()[iso]["independent"].as_bool().unwrap();
+    let independent = |iso: &str| {
+        facts()[iso]["independent"]
+            .as_bool()
+            .unwrap_or_else(|| panic!("{iso} lacks independent"))
+    };
     let count = facts().keys().filter(|iso| independent(iso)).count();
     assert!(
         (193..=200).contains(&count),

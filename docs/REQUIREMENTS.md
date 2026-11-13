@@ -83,7 +83,12 @@ Age-agnostic — fun for a young child, still useful for an adult.
   2. Capital
   3. Flag (see 3.3)
 - **Answering (name and capital):** pick from four big buttons. The wrong
-  choices are nearby countries (or their capitals). Every button and the
+  choices are nearby countries (or their capitals), never one already
+  answered in this quiz (its name is on the map). A question shows the same
+  four buttons each time it comes up in a sitting. City-states named like
+  their capital (Singapore, Monaco, Vatican City…) get no capital question;
+  countries with several capitals are asked for the one schools teach
+  (listed first: Pretoria, Mbabane, Malabo, La Paz). Every button and the
   question can be read aloud. **One try per question:** the right answer
   is then shown either way, and a miss earns nothing; to do better, retake
   the quiz (§3.4).
@@ -238,9 +243,15 @@ So a parent can set up practice ahead of time (e.g. before work travel):
   the 1st, worth full points (§3.4).
 - Parents can add, edit, reorder and remove queued quizzes and see which one
   is today's and which comes next. Today's quiz stays today's whatever is
-  reordered or added, and **once anyone has started it, it can't be edited
-  or removed until the next game day**. Before that a parent may still fix
-  or remove it (removing it brings up the quiz that takes its place).
+  reordered or added, and **once a kid has started it, it can't be edited
+  or removed until the queue moves on** (a parent trying it doesn't lock
+  it). Before that a parent may still fix or remove it (removing it brings
+  up the quiz that takes its place; removing the last one wraps to the
+  first). *This relaxes the earlier "changes take effect from the next game
+  day" rule; to be confirmed by the product owner.*
+- The day comes from the iPad's clock. Setting the clock back never moves
+  the queue on; setting it forward can (a family app: parents can see it in
+  the history).
 - The first quiz added to an empty queue is today's quiz straight away.
 - A quiz is built from a **whole region** or any hand-picked set (from a
   list, or by tapping countries on a map that shows country names),

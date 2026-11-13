@@ -34,6 +34,9 @@ const NAME_OVERRIDES: &[(&str, &str)] = &[
     ("USA", "United States"),
     ("FSM", "Micronesia"),
     ("CZE", "Czechia"),
+    // "The Bahamas" / "The Gambia" sort under T, where kids won't look.
+    ("BHS", "Bahamas"),
+    ("GMB", "Gambia"),
     ("IOA", "Christmas and Cocos Islands"),
 ];
 

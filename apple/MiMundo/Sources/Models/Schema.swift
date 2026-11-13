@@ -29,7 +29,18 @@ enum SchemaV2: VersionedSchema {
 enum SchemaV3: VersionedSchema {
     static var versionIdentifier: Schema.Version { Schema.Version(3, 0, 0) }
     static var models: [any PersistentModel.Type] {
-        SchemaV2.models + [QuizAttempt.self, QuizAnswer.self]
+        SchemaV2.models + [SchemaV3.QuizAttempt.self, SchemaV3.QuizAnswer.self]
+    }
+}
+
+/// Version 4 adds stats fields to quiz sittings and answers (what was
+/// offered and picked, when it was asked, a snapshot of the quiz) and makes
+/// an answer unique per sitting, country and question. SchemaV3's quiz
+/// models are frozen copies in SchemaV3Frozen.swift.
+enum SchemaV4: VersionedSchema {
+    static var versionIdentifier: Schema.Version { Schema.Version(4, 0, 0) }
+    static var models: [any PersistentModel.Type] {
+        SchemaV2.models + [SchemaV4.QuizAttempt.self, SchemaV4.QuizAnswer.self]
     }
 }
 
@@ -38,30 +49,37 @@ typealias Visit = SchemaV1.Visit
 typealias Session = SchemaV1.Session
 typealias QuizSet = SchemaV2.QuizSet
 typealias QueueRecord = SchemaV2.QueueRecord
-typealias QuizAttempt = SchemaV3.QuizAttempt
-typealias QuizAnswer = SchemaV3.QuizAnswer
+typealias QuizAttempt = SchemaV4.QuizAttempt
+typealias QuizAnswer = SchemaV4.QuizAnswer
 
 enum MiMundoMigrationPlan: SchemaMigrationPlan {
-    static var schemas: [any VersionedSchema.Type] { [SchemaV1.self, SchemaV2.self, SchemaV3.self] }
+    static var schemas: [any VersionedSchema.Type] { [SchemaV1.self, SchemaV2.self, SchemaV3.self, SchemaV4.self] }
     static var stages: [MigrationStage] {
         [.lightweight(fromVersion: SchemaV1.self, toVersion: SchemaV2.self),
-         .lightweight(fromVersion: SchemaV2.self, toVersion: SchemaV3.self)]
+         .lightweight(fromVersion: SchemaV2.self, toVersion: SchemaV3.self),
+         .lightweight(fromVersion: SchemaV3.self, toVersion: SchemaV4.self)]
     }
 }
 
 enum Persistence {
+    /// Set when the store couldn't be opened and was moved aside.
+    static let movedAsideKey = "storeMovedAsideAt"
+
     /// Opens the on-device store. If it can't be opened (e.g. a test build
     /// from before the versioned schema), the old files are moved aside —
     /// not deleted — and a fresh store is created, so the app still launches.
     @MainActor
     static func makeContainer() -> ModelContainer {
-        let schema = Schema(versionedSchema: SchemaV3.self)
+        let schema = Schema(versionedSchema: SchemaV4.self)
         let configuration = ModelConfiguration(schema: schema)
         do {
             return try open(schema, configuration)
         } catch {
             dataLog.error("Couldn't open data store, moving it aside: \(error, privacy: .public)")
             moveStoreAside(at: configuration.url)
+            // Tell a parent (parent home shows it) rather than silently
+            // starting over: the old files are kept next to the new store.
+            UserDefaults.standard.set(Date.now, forKey: Persistence.movedAsideKey)
             do {
                 return try open(schema, configuration)
             } catch {

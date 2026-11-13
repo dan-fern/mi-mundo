@@ -2,6 +2,15 @@ import MiMundoCore
 import SwiftData
 import SwiftUI
 
+/// Colours for quiz text and buttons, dark enough for white text and for
+/// text on the light material (WCAG AA): plain `.orange` and `.green` aren't.
+enum QuizColor {
+    static let points = Color(red: 0.70, green: 0.35, blue: 0.0)
+    static let button = Color(red: 0.72, green: 0.36, blue: 0.0)
+    static let right = Color(red: 0.08, green: 0.48, blue: 0.20)
+    static let wrong = Color(red: 0.76, green: 0.18, blue: 0.14)
+}
+
 /// Playing today's quiz (requirements §3.2): the map zooms to the quiz's
 /// countries, the player taps them in any order and answers pick-from-four
 /// questions about each. One try per question; the right answer is shown
@@ -12,22 +21,34 @@ struct QuizPlayView: View {
 
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(AtlasStore.self) private var atlasStore
 
     @State private var attempt: QuizAttempt?
     @State private var targets: [QuizTarget] = []
+    @State private var nothingToAsk = false
     /// What has been answered this sitting: country → kind → was it right.
     @State private var answered: [UInt32: [QuestionKind: Bool]] = [:]
     @State private var points = 0
     @State private var question: ActiveQuestion?
+    /// After a wrong name answer: the country that was picked, shown on the
+    /// map until Next, so the kid sees where it really is.
+    @State private var wrongPick: UInt32?
     @State private var camera = MapCamera()
     @State private var fit: MapFit?
     @State private var cardOnLeadingSide = false
-    @State private var cardFrame: CGRect?
+    /// Card frames by question, so an outgoing card can't leave its frame
+    /// behind as the "keep labels away from here" rect.
+    @State private var cardFrames: [String: CGRect] = [:]
     @State private var topBarBottom: CGFloat = 96
+    @State private var viewSize: CGSize = .zero
     @State private var showingSummary = false
     @State private var confirmingStop = false
+    @State private var saveFailed = false
+    /// Once the player uses a read-aloud button, verdicts are read too.
+    @State private var readingAloud = false
     @State private var speaker = CardSpeaker()
+    @AccessibilityFocusState private var promptFocused: Bool
 
     /// A question on screen: its buttons, and the pick once made.
     struct ActiveQuestion: Equatable {
@@ -35,8 +56,16 @@ struct QuizPlayView: View {
         let kind: QuestionKind
         let correct: String
         let choices: [String]
+        /// Which country each button stands for (stats: "confused with").
+        let countryIDs: [String: String]
+        let askedAt: Date
+        /// The side its card opens on, kept with it so the card leaves the
+        /// way it came even if the next card opens on the other side.
+        let leading: Bool
         var picked: String?
         var earned = 0
+
+        var key: String { "\(target)-\(kind.rawValue)" }
     }
 
     var body: some View {
@@ -58,67 +87,85 @@ struct QuizPlayView: View {
 
             if let question, let target = targets.first(where: { $0.id == question.target }) {
                 HStack {
-                    if !cardOnLeadingSide { Spacer() }
+                    if !question.leading { Spacer() }
                     VStack {
                         Spacer(minLength: topBarBottom)
                         QuestionCard(
                             country: target.country, question: question,
                             isLastForCountry: pendingKinds(for: target).isEmpty,
-                            speaker: speaker, onPick: choose, onNext: next
+                            showsFlag: !quiz.asksFlag, speaker: speaker, promptFocused: $promptFocused,
+                            onSpeak: { readingAloud = true }, onPick: choose, onNext: next
                         )
-                        .id("\(question.target)-\(question.kind.rawValue)")
-                        .onGeometryChange(for: CGRect.self) { $0.frame(in: .global) } action: {
-                            cardFrame = $0
+                        .id(question.key)
+                        .onGeometryChange(for: CGRect.self) { $0.frame(in: .global) } action: { frame in
+                            cardFrames[question.key] = frame
                         }
-                        .transition(.move(edge: cardOnLeadingSide ? .leading : .trailing)
-                            .combined(with: .opacity))
+                        .transition(reduceMotion ? .opacity
+                            : .move(edge: question.leading ? .leading : .trailing).combined(with: .opacity))
                     }
-                    if cardOnLeadingSide { Spacer() }
+                    if question.leading { Spacer() }
                 }
                 .padding(.vertical, 20)
-                .padding(.leading, cardOnLeadingSide ? 100 : 20)
+                .padding(.leading, question.leading ? 100 : 20)
                 .padding(.trailing, 20)
+            }
+
+            if nothingToAsk {
+                NothingToAsk { dismiss() }
             }
 
             if showingSummary, let attempt {
                 Color.black.opacity(0.35).ignoresSafeArea()
                 QuizSummary(quizTitle: quiz.title, attemptNumber: attempt.number,
-                            correct: correctCount, total: totalQuestions, points: points) {
+                            correct: correctCount, total: totalQuestions,
+                            countries: targets.count, points: points, speaker: speaker,
+                            readAloud: readingAloud) {
                     dismiss()
                 }
-                .transition(.scale(scale: 0.9).combined(with: .opacity))
+                .transition(reduceMotion ? .opacity : .scale(scale: 0.9).combined(with: .opacity))
             }
         }
         .background(MapCanvas.space)
+        .onGeometryChange(for: CGSize.self) { $0.size } action: { viewSize = $0 }
         .onAppear(perform: start)
         .onChange(of: atlasStore.atlas == nil) { _, _ in start() }
         .onDisappear { speaker.stop() }
+        .alert("That answer didn't save", isPresented: $saveFailed) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text("Please try it again.")
+        }
     }
 
     // MARK: Map
 
     private func map(_ atlas: Atlas) -> some View {
         let current = question.flatMap { q in targets.first { $0.id == q.target }?.country }
+        let avoid = question.flatMap { cardFrames[$0.key] }.map { [$0] } ?? []
         return WorldMapView(
             atlas: atlas, camera: $camera, selection: .constant(current),
             cardOnLeadingSide: $cardOnLeadingSide,
-            insets: MapInsets(top: topBarBottom + 8,
-                              avoid: question == nil ? [] : cardFrame.map { [$0] } ?? []),
+            insets: MapInsets(top: topBarBottom + 8, avoid: avoid),
             labelMode: .quiz(targets: Set(targets.map(\.id)), revealed: revealed),
             onPick: { country in tapped(country) },
             namedCountries: named,
             marks: marks,
-            fit: fit
+            fit: fit,
+            quizTargets: Set(targets.filter { !isDone($0) }.map(\.id)),
+            quizHighlight: true,
+            accessibilityHintText: "A quiz map. Use Find one for me to pick the next country, or tap a country with a blue border."
         )
         .ignoresSafeArea()
     }
 
     private var marks: [UInt32: QuizMark] {
-        Dictionary(uniqueKeysWithValues: targets.map { target in
+        var marks = Dictionary(uniqueKeysWithValues: targets.map { target in
             guard isDone(target) else { return (target.id, QuizMark.todo) }
             let allRight = answered[target.id]?.values.allSatisfy { $0 } ?? false
-            return (target.id, allRight ? .right : .missed)
+            return (target.id, allRight ? QuizMark.right : .missed)
         })
+        if let wrongPick, marks[wrongPick] == nil { marks[wrongPick] = .missed }
+        return marks
     }
 
     /// Countries whose river, lake and landmark names may show: finished,
@@ -128,9 +175,12 @@ struct QuizPlayView: View {
     }
 
     /// Countries whose own name is drawn: once the name question is behind
-    /// them (or straight away if the quiz doesn't ask for names).
+    /// them (or straight away if the quiz doesn't ask for names), plus a
+    /// wrongly picked country while its mistake is on screen.
     private var named: Set<UInt32> {
-        Set(targets.filter { !$0.kinds.contains(.name) || answered[$0.id]?[.name] != nil }.map(\.id))
+        var named = Set(targets.filter { !$0.kinds.contains(.name) || answered[$0.id]?[.name] != nil }.map(\.id))
+        if let wrongPick { named.insert(wrongPick) }
+        return named
     }
 
     // MARK: Top bar
@@ -147,10 +197,10 @@ struct QuizPlayView: View {
             .buttonStyle(.bordered)
             .buttonBorderShape(.circle)
             .accessibilityLabel("Stop the quiz")
-            .confirmationDialog("Stop the quiz?", isPresented: $confirmingStop, titleVisibility: .visible) {
+            .confirmationDialog("Stop now?", isPresented: $confirmingStop, titleVisibility: .visible) {
                 Button("Stop for now") { dismiss() }
             } message: {
-                Text("Your answers are saved. You can carry on later today.")
+                Text("Your answers are saved. You can finish later.")
             }
 
             VStack(alignment: .leading, spacing: 2) {
@@ -163,7 +213,7 @@ struct QuizPlayView: View {
 
             Label("\(points)", systemImage: "star.fill")
                 .font(.title3.bold())
-                .foregroundStyle(.orange)
+                .foregroundStyle(QuizColor.points)
                 .contentTransition(.numericText())
                 .accessibilityLabel("\(points) points")
 
@@ -177,11 +227,13 @@ struct QuizPlayView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .buttonBorderShape(.capsule)
+                .accessibilityHint("Picks the next country to answer")
             }
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 10)
         .background(.regularMaterial, in: .capsule)
+        .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
     }
 
     // MARK: State
@@ -199,13 +251,17 @@ struct QuizPlayView: View {
     private var correctCount: Int { answered.values.reduce(0) { $0 + $1.values.count { $0 } } }
 
     private func start() {
-        guard attempt == nil, let atlas = atlasStore.atlas else { return }
-        guard let attempt = QuizPlay.begin(quiz, for: profile, in: context) else {
+        guard attempt == nil, !nothingToAsk, let atlas = atlasStore.atlas else { return }
+        targets = QuizTarget.all(for: quiz, in: atlas)
+        guard !targets.isEmpty else {
+            nothingToAsk = true // nothing is created, nothing is locked
+            return
+        }
+        guard let attempt = QuizPlay.begin(quiz, targets: targets, for: profile, in: context) else {
             dismiss() // no longer today's quiz
             return
         }
         self.attempt = attempt
-        targets = QuizTarget.all(for: quiz, in: atlas)
         // Carry on a sitting that was left part-way.
         let attemptID = attempt.id
         let earlier = (try? context.fetch(FetchDescriptor<QuizAnswer>(
@@ -219,19 +275,13 @@ struct QuizPlayView: View {
         if let bounds = Self.bounds(of: targets.map(\.country)) {
             fit = MapFit(rect: bounds)
         }
-        if !targets.isEmpty, remaining == 0 { finish() }
+        if remaining == 0 { finish() }
     }
 
-    /// Box around some countries. A country that wraps the ±180° line
-    /// (Russia, Fiji) reports a world-wide box, so its label point stands
-    /// in for it rather than zooming out to the whole world.
+    /// Box around some countries' main landmasses (France without French
+    /// Guiana and Réunion, Russia without the far side of the ±180° line).
     private static func bounds(of countries: [AtlasCountry]) -> CGRect? {
-        countries.map { country -> CGRect in
-            guard country.bounds.width > 4 else { return country.bounds }
-            return CGRect(x: CGFloat(country.meta.labelX) - 0.5, y: CGFloat(country.meta.labelY) - 0.3,
-                          width: 1, height: 0.6)
-        }
-        .reduce(nil) { $0?.union($1) ?? $1 }
+        countries.map(\.mainBounds).reduce(nil) { $0?.union($1) ?? $1 }
     }
 
     private func tapped(_ country: AtlasCountry) {
@@ -243,37 +293,63 @@ struct QuizPlayView: View {
     }
 
     private func ask(_ target: QuizTarget) {
-        guard let atlas = atlasStore.atlas, let kind = pendingKinds(for: target).first else { return }
+        guard let atlas = atlasStore.atlas, let attempt,
+              let kind = pendingKinds(for: target).first else { return }
         speaker.stop()
-        let made = atlas.choices(for: kind, about: target.country, seed: .random(in: .min ... .max))
-        withAnimation(.easeInOut(duration: 0.25)) {
-            question = ActiveQuestion(target: target.id, kind: kind, correct: made.correct, choices: made.all)
-        }
+        // Same seed every time this question comes up in this sitting, so
+        // leaving and coming back can't re-roll the wrong answers.
+        let seed = QuestionSeed.make(attempt: attempt.id, country: target.country.meta.id, kind: kind)
+        let answeredIDs = Set(targets.filter { answered[$0.id]?[.name] != nil }.map(\.id))
+        let made = atlas.choices(for: kind, about: target.country, excluding: answeredIDs, seed: seed)
+        let asked = ActiveQuestion(target: target.id, kind: kind, correct: made.correct, choices: made.all,
+                                   countryIDs: made.countries.mapValues(\.meta.id), askedAt: .now,
+                                   leading: cardOnLeadingSide)
+        withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.25)) { question = asked }
+        promptFocused = true
     }
 
     private func choose(_ choice: String) {
-        guard var asked = question, asked.picked == nil, let attempt,
+        guard var asked = question, asked.picked == nil, let attempt, let atlas = atlasStore.atlas,
               let target = targets.first(where: { $0.id == asked.target }) else { return }
         speaker.stop()
-        let saved = QuizPlay.record(choice, correctAnswer: asked.correct, kind: asked.kind,
-                                    country: target.country, quiz: quiz, attempt: attempt, in: context)
-        asked.picked = choice
-        asked.earned = saved?.pointsAwarded ?? 0
-        withAnimation(.snappy) {
-            question = asked
-            answered[target.id, default: [:]][asked.kind] = choice == asked.correct
-            points += asked.earned
+        let chosenCountry = asked.countryIDs[choice].flatMap { id in atlas.countries.first { $0.meta.id == id } }
+        guard let saved = QuizPlay.record(choice, correctAnswer: asked.correct, kind: asked.kind,
+                                          country: target.country, chosenCountry: chosenCountry,
+                                          choices: asked.choices, quiz: quiz, attempt: attempt,
+                                          askedAt: asked.askedAt, in: context) else {
+            saveFailed = true // nothing changes: the question can be answered again
+            return
         }
+        let right = choice == asked.correct
+        asked.picked = choice
+        asked.earned = saved.pointsAwarded
+        withAnimation(reduceMotion ? nil : .snappy) {
+            question = asked
+            answered[target.id, default: [:]][asked.kind] = right
+            points += asked.earned
+            if !right, asked.kind == .name, let chosenCountry, chosenCountry.id != target.id {
+                wrongPick = chosenCountry.id
+            }
+        }
+        let verdict = right
+            ? (asked.earned > 0 ? "Yes! \(asked.earned) points." : "Yes!")
+            : "Good try! It's \(asked.correct)."
+        if readingAloud { speaker.say([verdict]) }
+        AccessibilityNotification.Announcement(verdict).post()
     }
 
     private func next() {
-        guard let asked = question, let target = targets.first(where: { $0.id == asked.target }) else { return }
+        // Only from an answered question: a second tap on Next while the
+        // card changes must not draw a new question.
+        guard let asked = question, asked.picked != nil,
+              let target = targets.first(where: { $0.id == asked.target }) else { return }
         speaker.stop()
+        wrongPick = nil
         if !isDone(target) {
             ask(target) // its next question (the capital)
             return
         }
-        withAnimation(.easeInOut(duration: 0.25)) { question = nil }
+        withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.25)) { question = nil }
         if remaining == 0 { finish() }
     }
 
@@ -282,25 +358,32 @@ struct QuizPlayView: View {
         if let bounds = Self.bounds(of: targets.map(\.country)) {
             fit = MapFit(rect: bounds, token: (fit?.token ?? 0) + 1)
         }
-        withAnimation(.spring(duration: 0.4)) { showingSummary = true }
+        withAnimation(reduceMotion ? nil : .spring(duration: 0.4)) { showingSummary = true }
     }
 
     /// Jumps to a country still to do: the one nearest the middle of the
-    /// view. Tiny islands and city states are hard to find and to tap.
+    /// view. Tiny islands and city states are hard to find and to tap. The
+    /// card then opens on the side away from where the country lands.
     private func findOne() {
         let pending = targets.filter { !isDone($0) }
         let center = camera.center
         let distance = { (t: QuizTarget) -> CGFloat in
-            hypot(CGFloat(t.country.meta.labelX) - center.x, CGFloat(t.country.meta.labelY) - center.y)
+            hypot(t.country.mainBounds.midX - center.x, t.country.mainBounds.midY - center.y)
         }
-        let nearest = pending.min { distance($0) < distance($1) }
-        guard let nearest, let bounds = Self.bounds(of: [nearest.country]) else { return }
-        // Room around it, so the neighbours give it away less than a
-        // close-up of its outline would hide them.
-        let side = max(bounds.width, bounds.height, 0.12) * 3
-        cardOnLeadingSide = false
-        fit = MapFit(rect: CGRect(x: bounds.midX - side * 0.35, y: bounds.midY - side / 2, width: side, height: side),
-                     token: (fit?.token ?? 0) + 1)
+        guard let nearest = pending.min(by: { distance($0) < distance($1) }),
+              let atlas = atlasStore.atlas else { return }
+        let bounds = nearest.country.mainBounds
+        // Room around it to see its neighbours: a big country fills most
+        // of the view, a tiny one sits in a small region around it.
+        let side = max(max(bounds.width, bounds.height) * 1.6, 0.35)
+        let rect = CGRect(x: bounds.midX - side / 2, y: bounds.midY - side / 2, width: side, height: side)
+        if viewSize != .zero {
+            let layout = MapLayout(atlas: atlas, size: viewSize, insets: MapInsets(top: topBarBottom + 8))
+            let landed = CGPoint(x: bounds.midX, y: bounds.midY)
+                .applying(layout.mapToScreen(layout.camera(fitting: rect)))
+            cardOnLeadingSide = landed.x > viewSize.width / 2
+        }
+        fit = MapFit(rect: rect, token: (fit?.token ?? 0) + 1)
         ask(nearest)
     }
 }
@@ -311,7 +394,11 @@ private struct QuestionCard: View {
     let country: AtlasCountry
     let question: QuizPlayView.ActiveQuestion
     let isLastForCountry: Bool
+    /// The flag gives the answer away once flag questions exist (§3.3).
+    let showsFlag: Bool
     let speaker: CardSpeaker
+    var promptFocused: AccessibilityFocusState<Bool>.Binding
+    let onSpeak: () -> Void
     let onPick: (String) -> Void
     let onNext: () -> Void
 
@@ -326,7 +413,11 @@ private struct QuestionCard: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 HStack(alignment: .top, spacing: 12) {
-                    if question.kind == .capital, let flag = country.flagAsset {
+                    SpeakButton(label: "Read the question") {
+                        onSpeak()
+                        speaker.say([prompt] + question.choices.map { $0 + "." })
+                    }
+                    if showsFlag, question.kind == .capital, let flag = country.flagAsset {
                         Image(flag)
                             .resizable()
                             .aspectRatio(4 / 3, contentMode: .fit)
@@ -338,14 +429,19 @@ private struct QuestionCard: View {
                     Text(prompt)
                         .font(.title2.bold())
                         .fixedSize(horizontal: false, vertical: true)
-                    Spacer(minLength: 4)
-                    SpeakButton(label: "Read the question") {
-                        speaker.say([prompt] + question.choices.map { $0 + "." })
-                    }
+                        .accessibilityAddTraits(.isHeader)
+                        .accessibilityFocused(promptFocused)
+                    Spacer(minLength: 0)
                 }
 
                 ForEach(question.choices, id: \.self) { choice in
-                    HStack(spacing: 10) {
+                    // The speaker sits on the leading side, well away from
+                    // the answer, so reaching for it can't pick an answer.
+                    HStack(spacing: 22) {
+                        SpeakButton(label: "Read \(choice)") {
+                            onSpeak()
+                            speaker.say([choice])
+                        }
                         Button {
                             onPick(choice)
                         } label: {
@@ -355,7 +451,6 @@ private struct QuestionCard: View {
                         // Not .disabled: that would grey out the green and
                         // red verdict colours.
                         .allowsHitTesting(question.picked == nil)
-                        SpeakButton(label: "Read \(choice)") { speaker.say([choice]) }
                     }
                 }
 
@@ -374,7 +469,7 @@ private struct QuestionCard: View {
         }
         .scrollBounceBehavior(.basedOnSize)
         .fixedSize(horizontal: false, vertical: true)
-        .frame(maxWidth: 400)
+        .frame(maxWidth: 420)
         .background(.regularMaterial, in: .rect(cornerRadius: 28))
         .shadow(color: .black.opacity(0.2), radius: 16, y: 6)
         .dynamicTypeSize(...DynamicTypeSize.accessibility2)
@@ -392,12 +487,12 @@ private struct QuestionCard: View {
         HStack(spacing: 10) {
             Image(systemName: right ? "checkmark.circle.fill" : "lightbulb.fill")
                 .font(.title2)
-                .foregroundStyle(right ? .green : .orange)
+                .foregroundStyle(right ? QuizColor.right : QuizColor.points)
             if right {
                 Text(question.earned > 0 ? "Yes! +\(question.earned)" : "Yes!")
                     .font(.title3.bold())
             } else {
-                Text("It's \(question.correct).")
+                Text("Good try! It's \(question.correct).")
                     .font(.title3.bold())
                     .fixedSize(horizontal: false, vertical: true)
             }
@@ -437,8 +532,8 @@ private struct ChoiceLabel: View {
     private var background: Color {
         switch state {
         case .open, .faded: Color(uiColor: .secondarySystemBackground)
-        case .right: Color(red: 0.16, green: 0.60, blue: 0.26)
-        case .wrong: Color(red: 0.80, green: 0.22, blue: 0.18)
+        case .right: QuizColor.right
+        case .wrong: QuizColor.wrong
         }
     }
 
@@ -469,16 +564,49 @@ private struct SpeakButton: View {
     }
 }
 
-/// The end of a sitting: stars, how many were right, points earned.
+/// Shown instead of a quiz that has no questions it can ask (only capital
+/// questions about places without a capital, say). Nothing is saved.
+private struct NothingToAsk: View {
+    let onDone: () -> Void
+
+    var body: some View {
+        VStack(spacing: 18) {
+            Image(systemName: "questionmark.folder").font(.system(size: 48))
+            Text("This quiz has no questions yet").font(.title2.bold())
+            Text("Ask a grown-up to check today's quiz.")
+                .font(.headline).foregroundStyle(.secondary)
+            Button("OK", action: onDone)
+                .buttonStyle(.borderedProminent)
+                .font(.title3.bold())
+        }
+        .padding(32)
+        .background(.regularMaterial, in: .rect(cornerRadius: 32))
+    }
+}
+
+/// The end of a sitting: stars, how many were right, points earned, and
+/// something kind to say even when most answers were wrong.
 private struct QuizSummary: View {
     let quizTitle: String
     let attemptNumber: Int
     let correct: Int
     let total: Int
+    let countries: Int
     let points: Int
+    let speaker: CardSpeaker
+    let readAloud: Bool
     let onDone: () -> Void
 
-    private var stars: Int { Int(quizStars(correct: UInt32(correct), total: UInt32(total))) }
+    private var stars: Int { Int(quizStars(correct: UInt32(clamping: correct), total: UInt32(clamping: total))) }
+
+    private var cheer: String {
+        switch stars {
+        case 3: "Amazing!"
+        case 2: "Great job!"
+        case 1: "Nice work! You're learning."
+        default: "Good try! You visited \(countries) places today."
+        }
+    }
 
     var body: some View {
         VStack(spacing: 18) {
@@ -492,11 +620,12 @@ private struct QuizSummary: View {
             }
             .accessibilityElement()
             .accessibilityLabel("\(stars) of 3 stars")
+            Text(cheer).font(.title2.bold()).multilineTextAlignment(.center)
             Text("\(correct) of \(total) right")
-                .font(.largeTitle.bold())
+                .font(.title.bold())
             Label("+\(points) points", systemImage: "star.circle.fill")
                 .font(.title2.bold())
-                .foregroundStyle(.orange)
+                .foregroundStyle(QuizColor.points)
             Text(QuizWorth.note(forAttempt: attemptNumber))
                 .font(.headline)
                 .foregroundStyle(.secondary)
@@ -514,11 +643,18 @@ private struct QuizSummary: View {
         .background(.regularMaterial, in: .rect(cornerRadius: 32))
         .shadow(color: .black.opacity(0.25), radius: 24, y: 8)
         .dynamicTypeSize(...DynamicTypeSize.accessibility2)
+        .onAppear {
+            let words = [cheer, "\(correct) of \(total) right.", "\(points) points.",
+                         QuizWorth.note(forAttempt: attemptNumber)]
+            if readAloud { speaker.say(words) }
+            AccessibilityNotification.Announcement(words.joined(separator: " ")).post()
+        }
     }
 }
 
 /// What a sitting is worth, in words (the numbers are the Rust core's:
-/// full, half, a quarter, then practice only; requirements §3.4).
+/// full, half, a quarter, then practice only; requirements §3.4). Tries are
+/// counted for each time the quiz comes up in the queue, not per day.
 enum QuizWorth {
     static func short(forAttempt number: Int) -> String {
         switch number {
@@ -531,7 +667,7 @@ enum QuizWorth {
 
     static func note(forAttempt number: Int) -> String {
         switch number {
-        case ...1: "First try today: full points."
+        case ...1: "First try: full points."
         case 2: "Second try: half points."
         case 3: "Third try: quarter points."
         default: "Practice round: no points this time."
@@ -544,6 +680,7 @@ enum QuizWorth {
 struct TodayQuizButton: View {
     let profile: Profile
     var prominent = true
+    var compact = false
 
     @Environment(\.modelContext) private var context
     @Query(FetchDescriptor<QuizSet>(predicate: #Predicate { $0.removedAt == nil })) private var quizzes: [QuizSet]
@@ -551,9 +688,10 @@ struct TodayQuizButton: View {
     @Query private var attempts: [QuizAttempt]
     @State private var playing: QuizSet?
 
-    init(profile: Profile, prominent: Bool = true) {
+    init(profile: Profile, prominent: Bool = true, compact: Bool = false) {
         self.profile = profile
         self.prominent = prominent
+        self.compact = compact
         let id = profile.id
         _attempts = Query(filter: #Predicate<QuizAttempt> { $0.profileID == id })
     }
@@ -572,17 +710,19 @@ struct TodayQuizButton: View {
         if let today {
             let unfinished = sittings.contains { $0.finishedAt == nil }
             let finished = sittings.count { $0.finishedAt != nil }
+            let title = unfinished ? "Keep going" : finished == 0 ? "Today's quiz" : "Play again"
+            let detail = unfinished ? today.title : QuizWorth.short(forAttempt: finished + 1)
             Button {
                 playing = today
             } label: {
                 Label {
                     VStack(alignment: .leading, spacing: 0) {
-                        Text(unfinished ? "Keep going" : finished == 0 ? "Today's quiz" : "Play again")
-                            .font(.headline)
-                        Text(unfinished ? today.title : QuizWorth.short(forAttempt: finished + 1))
-                            .font(.caption.weight(.semibold))
-                            .opacity(0.85)
-                            .lineLimit(1)
+                        Text(title).font(.headline)
+                        if !compact {
+                            Text(detail)
+                                .font(.caption.weight(.semibold))
+                                .lineLimit(1)
+                        }
                     }
                 } icon: {
                     Image(systemName: finished > 0 && !unfinished ? "arrow.counterclockwise" : "questionmark.circle.fill")
@@ -593,6 +733,7 @@ struct TodayQuizButton: View {
             .modifier(QuizButtonStyle(prominent: prominent && (finished == 0 || unfinished)))
             .buttonBorderShape(.capsule)
             .accessibilityLabel(unfinished ? "Keep going with today's quiz" : finished == 0 ? "Play today's quiz" : "Play today's quiz again")
+            .accessibilityValue(detail)
             .fullScreenCover(item: $playing) { quiz in
                 QuizPlayView(quiz: quiz, profile: profile)
             }
@@ -605,7 +746,7 @@ private struct QuizButtonStyle: ViewModifier {
 
     func body(content: Content) -> some View {
         if prominent {
-            content.buttonStyle(.borderedProminent).tint(.orange)
+            content.buttonStyle(.borderedProminent).tint(QuizColor.button)
         } else {
             content.buttonStyle(.bordered)
         }

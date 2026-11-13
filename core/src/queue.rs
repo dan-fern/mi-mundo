@@ -61,13 +61,16 @@ pub fn queue_initial_state(today: i32) -> QueueState {
 ///   the cycle comes up (a new run), even if that's the same quiz again
 ///   (a queue of one).
 /// - A new game day and no kid attempted it: the same quiz stays up.
-/// - Same day (or the clock went backwards): nothing changes, except that
-///   `position` follows the quiz if the queue was reordered.
+/// - Same day: nothing changes, except that `position` follows the quiz
+///   if the queue was reordered.
+/// - The clock went backwards (someone corrected a clock that was set
+///   ahead): nothing moves on, but the state takes the earlier day, so the
+///   queue isn't stuck until real time catches up with the wrong date.
 #[uniffi::export]
 pub fn queue_today(state: QueueState, queue: Vec<String>, today: i32) -> QueueState {
     let len = queue.len() as u32;
     let new_day = today > state.day;
-    let day = state.day.max(today);
+    let day = today;
     if len == 0 {
         return QueueState {
             current: None,
@@ -81,7 +84,8 @@ pub fn queue_today(state: QueueState, queue: Vec<String>, today: i32) -> QueueSt
     let come_up = |index: u32| QueueState {
         current: Some(queue[index as usize].clone()),
         position: index,
-        run: state.run.saturating_add(1),
+        // Wrapping: the run is only ever compared for equality.
+        run: state.run.wrapping_add(1),
         day,
         attempted_by_kid: false,
         started: false,
@@ -91,8 +95,9 @@ pub fn queue_today(state: QueueState, queue: Vec<String>, today: i32) -> QueueSt
         .as_ref()
         .and_then(|id| queue.iter().position(|q| q == id));
     match found {
-        // Nothing current, or it was removed: whatever now sits in its place.
-        None => come_up(state.position.min(len - 1)),
+        // Nothing current, or it was removed: whatever now sits in its place
+        // (removing the last quiz wraps to the top, as the cycle would).
+        None => come_up(state.position % len),
         Some(index) => {
             let index = index as u32;
             if new_day && state.attempted_by_kid {
@@ -269,9 +274,9 @@ mod tests {
         let state = queue_today(playing("b", 1, 100), ids(&["a", "c", "d"]), 100);
         assert_eq!(current(&state), Some("c"));
         assert_eq!(state.run, 2);
-        // Removing the last one wraps to the new last.
+        // Removing the last one wraps to the top, as the cycle would.
         let state = queue_today(playing("d", 3, 100), ids(&["a", "b", "c"]), 100);
-        assert_eq!(current(&state), Some("c"));
+        assert_eq!(current(&state), Some("a"));
     }
 
     #[test]
@@ -288,11 +293,56 @@ mod tests {
     }
 
     #[test]
-    fn a_clock_set_backwards_changes_nothing() {
+    fn a_clock_set_backwards_moves_nothing_on() {
         let mut state = playing("a", 0, 100);
         state.attempted_by_kid = true;
-        let same = queue_today(state.clone(), ids(&["a", "b"]), 90);
-        assert_eq!(same, state);
+        let back = queue_today(state.clone(), ids(&["a", "b"]), 90);
+        assert_eq!(current(&back), Some("a"));
+        assert_eq!((back.run, back.attempted_by_kid), (1, true));
+        assert_eq!(back.day, 90, "the state follows the corrected clock");
+    }
+
+    #[test]
+    fn a_clock_set_ahead_then_corrected_does_not_freeze_the_queue() {
+        // Someone sets the iPad to a date far ahead, then puts it right.
+        let state = queue_today(playing("a", 0, 100), ids(&["a", "b"]), 900);
+        let corrected = queue_today(state, ids(&["a", "b"]), 101);
+        assert_eq!(corrected.day, 101);
+        // The next real day still moves on after a kid's attempt.
+        let mut attempted = corrected;
+        attempted.attempted_by_kid = true;
+        assert_eq!(
+            current(&queue_today(attempted, ids(&["a", "b"]), 102)),
+            Some("b")
+        );
+    }
+
+    #[test]
+    fn removing_todays_quiz_on_a_new_day_brings_up_its_replacement() {
+        let mut state = playing("b", 1, 100);
+        state.attempted_by_kid = true;
+        let next = queue_today(state, ids(&["a", "c"]), 101);
+        assert_eq!(current(&next), Some("c"));
+        assert!(!next.attempted_by_kid, "a fresh run");
+    }
+
+    #[test]
+    fn a_remembered_position_past_the_end_wraps() {
+        let mut state = playing("gone", 7, 100);
+        state.current = None;
+        assert_eq!(
+            current(&queue_today(state, ids(&["a", "b", "c"]), 100)),
+            Some("b")
+        );
+    }
+
+    #[test]
+    fn the_run_counter_wraps_instead_of_sticking() {
+        let mut state = playing("a", 0, 100);
+        state.run = u32::MAX;
+        state.attempted_by_kid = true;
+        let next = queue_today(state, ids(&["a"]), 101);
+        assert_eq!(next.run, 0, "still a different run");
     }
 
     #[test]

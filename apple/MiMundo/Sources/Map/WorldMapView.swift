@@ -78,6 +78,16 @@ struct WorldMapView: View {
     var marks: [UInt32: QuizMark] = [:]
     /// Where to look: applied on appearing and whenever it changes.
     var fit: MapFit? = nil
+    /// Quiz: the countries still to do. A tap within a fingertip of one
+    /// picks it even when it lands on a neighbour (San Marino in Italy),
+    /// and the selection is drawn in a neutral yellow, not the card's red
+    /// (red means "wrong" in a quiz).
+    var quizTargets: Set<UInt32> = []
+    var quizHighlight = false
+    /// What VoiceOver says the map is for.
+    var accessibilityHintText = "Drag to move, pinch to zoom, tap a country to learn about it."
+
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     /// Baseline for the gesture in progress.
     @State private var gesture: GestureBaseline?
@@ -102,7 +112,8 @@ struct WorldMapView: View {
                       labelMode: labelMode,
                       covered: insets.avoid + [Self.controlsRect(in: size)],
                       chosen: chosen, showsCountryNames: showsCountryNames,
-                      namedCountries: namedCountries, marks: marks)
+                      namedCountries: namedCountries, marks: marks,
+                      quizHighlight: quizHighlight)
                 // Map labels are already big; past this they mostly collide
                 // and vanish, so they stop growing (the card keeps growing).
                 .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
@@ -122,13 +133,16 @@ struct WorldMapView: View {
                 }
                 .onChange(of: fit) { _, fit in
                     guard let fit else { return }
-                    withAnimation(.easeInOut(duration: 0.6)) {
-                        camera = layout(size).camera(fitting: fit.rect)
+                    let target = layout(size).camera(fitting: fit.rect)
+                    if reduceMotion {
+                        camera = target
+                    } else {
+                        withAnimation(.easeInOut(duration: 0.6)) { camera = target }
                     }
                 }
                 .accessibilityElement()
                 .accessibilityLabel("World map")
-                .accessibilityHint("Drag to move, pinch to zoom, tap a country to learn about it.")
+                .accessibilityHint(accessibilityHintText)
                 .overlay(alignment: .bottomLeading) { controls(size: size) }
         }
         .background(MapCanvas.space)
@@ -220,11 +234,30 @@ struct WorldMapView: View {
         return layout.clamped(next)
     }
 
+    /// A quiz target whose main landmass is within a fingertip (22 pt) of
+    /// the tap, nearest first. Without this, a tap on the ring drawn around
+    /// a tiny target lands in the country around it.
+    private func nearbyTarget(at location: CGPoint, layout: MapLayout) -> AtlasCountry? {
+        guard !quizTargets.isEmpty else { return nil }
+        let toScreen = layout.mapToScreen(camera)
+        return atlas.countries
+            .filter { quizTargets.contains($0.id) }
+            .compactMap { country -> (AtlasCountry, CGFloat)? in
+                let box = country.mainBounds.applying(toScreen)
+                // Only small targets: a big one is hit by a plain tap.
+                guard max(box.width, box.height) < 44,
+                      box.insetBy(dx: -22, dy: -22).contains(location) else { return nil }
+                return (country, hypot(box.midX - location.x, box.midY - location.y))
+            }
+            .min { $0.1 < $1.1 }?.0
+    }
+
     private func select(at location: CGPoint, size: CGSize) {
         let layout = layout(size)
         let point = layout.mapPoint(at: location, camera: camera)
         // ~22 pt of fingertip slack, in map units.
-        let hit = atlas.country(at: point, tolerance: 22 / layout.pointsPerUnit(camera))
+        let hit = nearbyTarget(at: location, layout: layout)
+            ?? atlas.country(at: point, tolerance: 22 / layout.pointsPerUnit(camera))
         if let hit {
             let box = hit.bounds.applying(layout.mapToScreen(camera))
             cardOnLeadingSide = box.midX > size.width / 2
@@ -329,6 +362,7 @@ struct MapCanvas: View, Animatable {
     var showsCountryNames = false
     var namedCountries: Set<UInt32>? = nil
     var marks: [UInt32: QuizMark] = [:]
+    var quizHighlight = false
 
     nonisolated var animatableData: AnimatablePair<AnimatablePair<CGFloat, CGFloat>, CGFloat> {
         get { AnimatablePair(AnimatablePair(camera.center.x, camera.center.y), log(camera.zoom)) }
@@ -357,8 +391,13 @@ struct MapCanvas: View, Animatable {
     private static let highlight = Color(red: 0.86, green: 0.30, blue: 0.20)
     private static let highlightEdge = Color(red: 0.35, green: 0.08, blue: 0.05)
     private static let todoEdge = Color(red: 0.05, green: 0.25, blue: 0.75)
-    private static let rightFill = Color(red: 0.36, green: 0.72, blue: 0.38)
-    private static let missedFill = Color(red: 0.95, green: 0.68, blue: 0.22)
+    /// Right is a darker green, missed a lighter amber, so the two differ
+    /// in lightness too (colour-blind kids); each also gets a glyph.
+    private static let rightFill = Color(red: 0.24, green: 0.58, blue: 0.30)
+    private static let missedFill = Color(red: 0.99, green: 0.80, blue: 0.42)
+    /// The country being asked about in a quiz: yellow, not the card's red.
+    private static let quizHighlightFill = Color(red: 1.0, green: 0.86, blue: 0.30)
+    private static let quizHighlightEdge = Color(red: 0.45, green: 0.30, blue: 0.0)
     private static let chosenFill = Color(red: 0.16, green: 0.62, blue: 0.62)
     private static let chosenEdge = Color(red: 0.03, green: 0.30, blue: 0.32)
 
@@ -426,8 +465,10 @@ struct MapCanvas: View, Animatable {
         }
         if let selection, selection.bounds.intersects(visible) {
             let path = fine ? selection.fine : selection.coarse
-            map.fill(path, with: .color(Self.highlight), style: FillStyle(eoFill: true))
-            map.stroke(path, with: .color(Self.highlightEdge), lineWidth: 3 * hairline)
+            map.fill(path, with: .color(quizHighlight ? Self.quizHighlightFill : Self.highlight),
+                     style: FillStyle(eoFill: true))
+            map.stroke(path, with: .color(quizHighlight ? Self.quizHighlightEdge : Self.highlightEdge),
+                       lineWidth: 3 * hairline)
             // Tiny countries (a few points across): add a ring so the
             // selection is visible at all.
             let box = selection.bounds.applying(layout.mapToScreen(camera))
@@ -533,9 +574,8 @@ struct MapCanvas: View, Animatable {
         // country is what they're choosing. Biggest countries win space.
         if showsCountryNames || namedCountries != nil {
             let toScreenRect = { (c: AtlasCountry) in c.bounds.applying(toScreen) }
-            let named = atlas.countries
+            let named = atlas.countriesByArea
                 .filter { $0.bounds.intersects(visible) && (namedCountries?.contains($0.id) ?? true) }
-                .sorted { $0.bounds.width * $0.bounds.height > $1.bounds.width * $1.bounds.height }
             for country in named {
                 let box = toScreenRect(country)
                 // Too small to label at this zoom (tiny islands): skip.
@@ -547,6 +587,23 @@ struct MapCanvas: View, Animatable {
                     .foregroundStyle(isChosen ? Self.chosenEdge : .black.opacity(0.75))
                 _ = place(text, at: at)
             }
+        }
+
+        // Quiz: a glyph on each finished target, so right and missed don't
+        // rely on colour alone.
+        for (id, mark) in marks where mark != .todo {
+            let country = atlas.countries[Int(id)]
+            let p = CGPoint(x: CGFloat(country.meta.labelX), y: CGFloat(country.meta.labelY)).applying(toScreen)
+            let box = CGRect(x: p.x - 11, y: p.y - 30, width: 22, height: 22)
+            guard screen.contains(box) else { continue }
+            let symbol = mark == .right ? "checkmark.circle.fill" : "questionmark.circle.fill"
+            var glyph = context.resolve(Image(systemName: symbol))
+            glyph.shading = .color(mark == .right ? Color(red: 0.08, green: 0.40, blue: 0.16)
+                                                  : Color(red: 0.62, green: 0.36, blue: 0.0))
+            var layer = context
+            layer.addFilter(.shadow(color: .white, radius: 2))
+            layer.draw(glyph, in: box)
+            placed.append(box)
         }
 
         // Peak triangles: on screen and clear of what's there, or not at all

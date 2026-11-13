@@ -10,6 +10,26 @@ Versions: [Semantic Versioning](https://semver.org/).
 ## [Unreleased]
 
 ### Added
+- Review of PRs #13–#15 (six reviewers): quiz questions can't be re-rolled
+  by tapping away and back; wrong answers skip countries already answered,
+  measure distance across the ±180° line and from capitals, and never
+  offer a capital that is also right (Jerusalem); a wrong name answer
+  shows where the picked country is; kind spoken and announced verdicts,
+  VoiceOver focus on each question; yellow (not red) highlight for the
+  country being asked; ✓ and ? marks so results don't rely on colour;
+  darker orange and green for contrast; Reduce Motion respected; speaker
+  buttons moved away from the answers; taps aimed at tiny targets; the
+  quiz fits the main landmass (France without Réunion); the top bar fits
+  an iPad mini in portrait. Rules: removing the last quiz wraps to the
+  first; a clock set ahead and corrected no longer freezes the queue; a
+  kid's sitting keeps today's quiz locked for its whole run (a parent's
+  doesn't); answers after 10 pm count for the new day; deleting a kid
+  recounts who tried today's quiz; quizzes with nothing to ask can't be
+  saved or played. Data: schema v4 saves what was offered and picked and
+  when, and snapshots the quiz per sitting; a store that can't be opened
+  is reported to parents. Content: Pretoria, Mbabane, Malabo and Tarawa;
+  Iran in the Middle East, Cyprus in Southern Europe; "West Africa
+  (west/east)"; "Bahamas" and "Gambia".
 - Playable quizzes (requirements §3.2): kids open today's quiz from their
   top bar, parents from parent home. The map zooms to the quiz's
   countries; tap one (or "Find one for me") and answer its name and
