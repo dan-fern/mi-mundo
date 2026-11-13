@@ -13,6 +13,8 @@ Output is keyed by ISO 3166-1 alpha-2 (matches CountryMeta.iso2):
             "languages": ["French"], "wikidata": "Q142",
             "landmarks": [{"name": "Eiffel Tower", "lon": 2.29, "lat": 48.86}],
             "capitalPoints": [{"name": "Paris", "lon": 2.35, "lat": 48.86}] }, ... }
+"region" is a quiz-sized part of the world (at most 14 independent
+countries each; see REGIONS), used by the quiz editor's region presets.
 "independent" is true for places that govern themselves (Natural Earth:
 SOVEREIGNT == ADMIN) and have residents; quiz presets ("all of Europe") use
 only those, so they aren't padded with small territories.
@@ -74,6 +76,56 @@ def distance(rings, lon, lat):
     return best
 
 
+# Quiz regions, built from Natural Earth's UN sub-regions (SUBREGION), with
+# the big ones split so each has at most 14 independent countries, which
+# keeps a day's quiz a sensible size. Listed in display order.
+REGIONS = [
+    "North Africa", "West Africa: Atlantic", "West Africa: Gulf of Guinea",
+    "Central Africa", "East Africa", "Southern Africa",
+    "North America", "Central America", "Caribbean", "South America",
+    "Middle East", "Arabian Peninsula", "Central Asia and the Caucasus",
+    "South Asia", "East Asia", "Southeast Asia",
+    "Northern Europe", "Western Europe", "Eastern Europe", "Southern Europe", "Balkans",
+    "Australia and Melanesia", "Pacific Islands",
+    "Antarctica and ocean islands",
+]
+FROM_SUBREGION = {
+    "Northern Africa": "North Africa", "Western Africa": "West Africa: Atlantic",
+    "Middle Africa": "Central Africa", "Eastern Africa": "East Africa",
+    "Southern Africa": "Southern Africa",
+    "Northern America": "North America", "Central America": "Central America",
+    "Caribbean": "Caribbean", "South America": "South America",
+    "Western Asia": "Middle East", "Central Asia": "Central Asia and the Caucasus",
+    "Southern Asia": "South Asia", "Eastern Asia": "East Asia",
+    "South-Eastern Asia": "Southeast Asia",
+    "Northern Europe": "Northern Europe", "Western Europe": "Western Europe",
+    "Eastern Europe": "Eastern Europe", "Southern Europe": "Southern Europe",
+    "Australia and New Zealand": "Australia and Melanesia",
+    "Melanesia": "Australia and Melanesia",
+    "Micronesia": "Pacific Islands", "Polynesia": "Pacific Islands",
+    "Antarctica": "Antarctica and ocean islands",
+    "Seven seas (open ocean)": "Antarctica and ocean islands",
+}
+# Countries placed differently from their UN sub-region, to split the big
+# groups along lines schools use.
+REGION_OF = {
+    # West Africa (16) -> Atlantic side / Gulf of Guinea and the Niger.
+    **dict.fromkeys(["CI", "GH", "TG", "BJ", "NG", "BF", "NE"], "West Africa: Gulf of Guinea"),
+    # East Africa (18) -> East Africa / Southern Africa.
+    **dict.fromkeys(["MZ", "MW", "ZM", "ZW", "MG", "KM", "MU", "SC", "RE", "YT"], "Southern Africa"),
+    # Western Asia (18) -> Middle East / Arabian Peninsula / Caucasus.
+    **dict.fromkeys(["SA", "YE", "OM", "AE", "QA", "BH", "KW"], "Arabian Peninsula"),
+    **dict.fromkeys(["AM", "AZ", "GE"], "Central Asia and the Caucasus"),
+    # Southern Europe (16) -> Southern Europe / Balkans.
+    **dict.fromkeys(["AL", "BA", "HR", "XK", "ME", "MK", "RS", "SI"], "Balkans"),
+    # Central America includes Mexico in the UN scheme; schools put it in
+    # North America.
+    "MX": "North America",
+    # Natural Earth files these island countries under "open ocean".
+    "MV": "South Asia",
+}
+
+
 def is_number(v):
     return isinstance(v, (int, float)) and not isinstance(v, bool)
 
@@ -125,7 +177,9 @@ def main():
     capital_points = json.load(open(capitals_path))["countries"]
     outlines = {}
     self_governing = set()
+    subregion = {}
     for f in features:
+        subregion[f["properties"]["ISO_A2_EH"]] = f["properties"]["SUBREGION"]
         outlines.setdefault(f["properties"]["ISO_A2_EH"], []).extend(rings_of(f["geometry"]))
         if f["properties"]["SOVEREIGNT"] == f["properties"]["ADMIN"]:
             self_governing.add(f["properties"]["ISO_A2_EH"])
@@ -166,6 +220,7 @@ def main():
         # country; the Western Sahara strip east of the Berm isn't.
         entry["independent"] = (iso2 == "PS" or (
             iso2 in self_governing and iso2 != "EH" and entry["population"] is not None))
+        entry["region"] = REGION_OF.get(iso2) or FROM_SUBREGION[subregion[iso2]]
         entry["capitals"] = entry["capitals"][:3]
         entry["languages"] = entry["languages"][:3]
         entry["landmarks"] = entry["landmarks"][:3]
@@ -184,9 +239,18 @@ def main():
             entry["capitalPoints"].append({"name": name, "lon": point["lon"], "lat": point["lat"]})
         out[iso2] = entry
 
+    sizes = {r: sum(1 for e in out.values() if e["region"] == r and e["independent"]) for r in REGIONS}
+    unknown_regions = sorted({e["region"] for e in out.values()} - set(REGIONS))
+    if unknown_regions:
+        sys.exit(f"error: regions missing from REGIONS: {unknown_regions}")
+    too_big = {r: n for r, n in sizes.items() if n > 14}
+    if too_big:
+        sys.exit(f"error: quiz regions over 14 countries (split them in REGION_OF): {too_big}")
+
     with open(out_path, "w") as f:
         json.dump(out, f, ensure_ascii=False, indent=1, sort_keys=True)
         f.write("\n")
+    print("  regions: " + ", ".join(f"{r} {n}" for r, n in sizes.items()))
     multi = sum(1 for e in out.values() if len(e["languages"]) > 1)
     with_landmarks = sum(1 for e in out.values() if e["landmarks"])
     print(f"  {with_landmarks} countries with landmarks "

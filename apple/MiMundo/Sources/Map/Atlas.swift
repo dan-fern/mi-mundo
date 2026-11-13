@@ -16,6 +16,9 @@ struct CountryFacts: Decodable, Sendable {
     /// Governs itself and has residents: used by quiz presets ("all of
     /// Europe") so they aren't padded with small territories.
     let independent: Bool
+    /// Quiz-sized part of the world ("Balkans", "Caribbean"), at most 14
+    /// independent countries each (tools/build-countries.py REGIONS).
+    let region: String
 
     struct Landmark: Decodable, Sendable, Hashable {
         let name: String

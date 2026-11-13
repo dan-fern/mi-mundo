@@ -49,6 +49,12 @@ struct WorldMapView: View {
     @Binding var cardOnLeadingSide: Bool
     var insets = MapInsets()
     var labelMode: MapLabelMode = .explore
+    /// Picking mode (parents building a quiz): these countries are tinted,
+    /// and a tap calls `onPick` instead of selecting and opening a card.
+    var chosen: Set<UInt32> = []
+    var onPick: ((AtlasCountry) -> Void)? = nil
+    /// Draw country names (parents only: the kids' map never shows them).
+    var showsCountryNames = false
 
     /// Baseline for the gesture in progress.
     @State private var gesture: GestureBaseline?
@@ -71,7 +77,8 @@ struct WorldMapView: View {
             MapCanvas(atlas: atlas, camera: camera, selection: selection,
                       layout: MapLayout(atlas: atlas, size: size, insets: insets),
                       labelMode: labelMode,
-                      covered: insets.avoid + [Self.controlsRect(in: size)])
+                      covered: insets.avoid + [Self.controlsRect(in: size)],
+                      chosen: chosen, showsCountryNames: showsCountryNames)
                 // Map labels are already big; past this they mostly collide
                 // and vanish, so they stop growing (the card keeps growing).
                 .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
@@ -185,6 +192,10 @@ struct WorldMapView: View {
         let point = layout.mapPoint(at: location, camera: camera)
         // ~22 pt of fingertip slack, in map units.
         let hit = atlas.country(at: point, tolerance: 22 / layout.pointsPerUnit(camera))
+        if let onPick {
+            if let hit { onPick(hit) }
+            return
+        }
         if let hit {
             let box = hit.bounds.applying(layout.mapToScreen(camera))
             cardOnLeadingSide = box.midX > size.width / 2
@@ -272,6 +283,8 @@ struct MapCanvas: View, Animatable {
     var labelMode: MapLabelMode = .explore
     /// Screen rects with controls or the card on top: nothing is placed there.
     var covered: [CGRect] = []
+    var chosen: Set<UInt32> = []
+    var showsCountryNames = false
 
     nonisolated var animatableData: AnimatablePair<AnimatablePair<CGFloat, CGFloat>, CGFloat> {
         get { AnimatablePair(AnimatablePair(camera.center.x, camera.center.y), log(camera.zoom)) }
@@ -299,6 +312,8 @@ struct MapCanvas: View, Animatable {
     /// it stands out by lightness too (not hue alone).
     private static let highlight = Color(red: 0.86, green: 0.30, blue: 0.20)
     private static let highlightEdge = Color(red: 0.35, green: 0.08, blue: 0.05)
+    private static let chosenFill = Color(red: 0.16, green: 0.62, blue: 0.62)
+    private static let chosenEdge = Color(red: 0.03, green: 0.30, blue: 0.32)
 
     var body: some View {
         Canvas { context, _ in draw(in: &context) }
@@ -327,6 +342,18 @@ struct MapCanvas: View, Animatable {
         for country in shown {
             map.stroke(fine ? country.fine : country.coarse,
                        with: .color(Self.border.opacity(0.8)), lineWidth: 0.7 * hairline)
+        }
+        // Countries chosen for a quiz: a teal tint with a strong edge (not
+        // the red of a selection, which means "the card is about this").
+        for country in shown where chosen.contains(country.id) {
+            let path = fine ? country.fine : country.coarse
+            map.fill(path, with: .color(Self.chosenFill), style: FillStyle(eoFill: true))
+            map.stroke(path, with: .color(Self.chosenEdge), lineWidth: 2 * hairline)
+            let box = country.bounds.applying(layout.mapToScreen(camera))
+            if max(box.width, box.height) < 14 {
+                let ring = CGRect(x: box.midX - 16, y: box.midY - 16, width: 32, height: 32)
+                context.stroke(Path(ellipseIn: ring), with: .color(Self.chosenEdge), lineWidth: 3)
+            }
         }
         if let selection, selection.bounds.intersects(visible) {
             let path = fine ? selection.fine : selection.coarse
@@ -431,6 +458,26 @@ struct MapCanvas: View, Animatable {
             placed.append(bounds)
             labels.append((resolved, point, angle))
             return true
+        }
+
+        // Country names (parents' map only), before every other label: the
+        // country is what they're choosing. Biggest countries win space.
+        if showsCountryNames {
+            let toScreenRect = { (c: AtlasCountry) in c.bounds.applying(toScreen) }
+            let named = atlas.countries
+                .filter { $0.bounds.intersects(visible) }
+                .sorted { $0.bounds.width * $0.bounds.height > $1.bounds.width * $1.bounds.height }
+            for country in named {
+                let box = toScreenRect(country)
+                // Too small to label at this zoom (tiny islands): skip.
+                guard max(box.width, box.height) > 18 else { continue }
+                let at = CGPoint(x: CGFloat(country.meta.labelX), y: CGFloat(country.meta.labelY)).applying(toScreen)
+                let isChosen = chosen.contains(country.id)
+                let text = Text(country.name)
+                    .font(.subheadline.weight(isChosen ? .heavy : .semibold))
+                    .foregroundStyle(isChosen ? Self.chosenEdge : .black.opacity(0.75))
+                _ = place(text, at: at)
+            }
         }
 
         // Peak triangles: on screen and clear of what's there, or not at all
