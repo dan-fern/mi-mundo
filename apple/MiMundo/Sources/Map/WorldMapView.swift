@@ -353,8 +353,9 @@ struct MapCanvas: View, Animatable {
     private static let waterText = Color(red: 0.10, green: 0.30, blue: 0.58)
     private static let landText = Color(red: 0.42, green: 0.27, blue: 0.12)
 
-    /// Zoom from which landmarks appear (a pin is only drawn when its name
-    /// fits too, so there are never mystery dots).
+    /// Quiz mode: zoom from which landmarks appear on guessed countries. (A
+    /// pin is only drawn when its name fits too, so there are never mystery
+    /// dots.) Explore mode pins the selected country's landmarks at any zoom.
     static let landmarkZoom: CGFloat = 4
 
     /// Deserts (sandy wash), lakes, then rivers, in map space under borders.
@@ -395,6 +396,7 @@ struct MapCanvas: View, Animatable {
         var named: Set<String> = []
         var labels: [(text: GraphicsContext.ResolvedText, at: CGPoint, angle: Angle)] = []
         var pinDots: [CGRect] = []
+        var starBoxes: [CGRect] = []
         let memory = atlas.labelMemory
         var placedKeys: Set<String> = []
 
@@ -412,6 +414,7 @@ struct MapCanvas: View, Animatable {
                 guard screen.contains(box) else { continue }
                 MapSymbol.drawCapitalStar(in: &context, at: p, radius: 11)
                 placed.append(box)
+                starBoxes.append(box)
             }
         }
 
@@ -462,26 +465,44 @@ struct MapCanvas: View, Animatable {
         }
         let areas = steady(labelled.filter { $0.kind.labelPriority <= 1 }) { "f\($0.index)" }
         let others = steady(labelled.filter { $0.kind.labelPriority > 1 }) { "f\($0.index)" }
-        let pins = camera.zoom >= Self.landmarkZoom
-            ? steady(atlas.landmarks.filter {
-                visible.contains($0.point) && labelMode.shows($0.reveal)
-            }) { "l\($0.name)" }
-            : []
+        // Landmarks. Exploring: only the selected country's, like its
+        // capital star, so the map isn't cluttered with pins. In a quiz:
+        // those of countries already guessed, as a reward, once zoomed in.
+        let pins: [LandmarkPin]
+        switch labelMode {
+        case .explore:
+            pins = selection?.landmarks ?? []
+        case .quiz:
+            pins = camera.zoom >= Self.landmarkZoom
+                ? steady(atlas.landmarks.filter {
+                    visible.contains($0.point) && labelMode.shows($0.reveal)
+                }) { "l\($0.name)" }
+                : []
+        }
 
-        // Big areas first, then landmarks (an Eiffel Tower matters more than
-        // the river next to it), then water and peaks.
+        // The selected country's landmarks come first (they're what the kid
+        // asked about), then big areas, then water and peaks.
+        for pin in pins {
+            let at = pin.point.applying(toScreen)
+            func dot(_ p: CGPoint) -> CGRect { CGRect(x: p.x - 7, y: p.y - 7, width: 14, height: 14) }
+            // A landmark in the capital (the Colosseum in Rome) would sit
+            // under the star: its pin slides just beside the star instead,
+            // on whichever side its name also fits.
+            var spots = [at]
+            if let star = starBoxes.first(where: { $0.intersects(dot(at)) }) {
+                spots = [CGPoint(x: star.midX + 21, y: star.midY + 14),
+                         CGPoint(x: star.midX - 21, y: star.midY + 14)]
+            }
+            let label = Text(pin.name).font(.subheadline.weight(.bold)).foregroundStyle(.black.opacity(0.8))
+            for p in spots where free(dot(p)) && place(label, at: CGPoint(x: p.x, y: p.y + 18)) {
+                placed.append(dot(p))
+                pinDots.append(dot(p))
+                placedKeys.insert("l\(pin.name)")
+                break
+            }
+        }
         for f in areas where !named.contains(f.name) {
             if placeFeatureLabel(f) { named.insert(f.name) }
-        }
-        for pin in pins {
-            let p = pin.point.applying(toScreen)
-            let dot = CGRect(x: p.x - 7, y: p.y - 7, width: 14, height: 14)
-            guard free(dot) else { continue }
-            let label = Text(pin.name).font(.subheadline.weight(.bold)).foregroundStyle(.black.opacity(0.8))
-            guard place(label, at: CGPoint(x: p.x, y: p.y + 18)) else { continue }
-            placed.append(dot)
-            pinDots.append(dot)
-            placedKeys.insert("l\(pin.name)")
         }
         for f in others where !named.contains(f.name) {
             if placeFeatureLabel(f) { named.insert(f.name) }

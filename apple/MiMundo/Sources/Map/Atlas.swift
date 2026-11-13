@@ -98,6 +98,10 @@ struct AtlasCountry: Identifiable, Sendable {
     let facts: CountryFacts?
     /// Capitals in map coordinates; starred when the country is selected.
     let capitals: [CGPoint]
+    /// This country's famous places, most famous first; pinned on the map
+    /// while the country is selected. A site shared with a neighbour
+    /// (Victoria Falls) is in both countries' lists.
+    var landmarks: [LandmarkPin] = []
 
     var id: UInt32 { meta.index }
     var name: String { meta.name }
@@ -126,7 +130,9 @@ final class Atlas: Sendable {
     /// In label priority order (deserts and ranges, then water, then peaks;
     /// earlier-appearing first) so drawing never sorts per frame.
     let features: [MapFeature]
-    /// Most famous first (each country's #1, then each #2, …).
+    /// Every landmark once, most famous first (each country's #1, then each
+    /// #2, …). Quiz mode pins these on guessed countries; explore mode pins
+    /// only the selected country's own list (`AtlasCountry.landmarks`).
     let landmarks: [LandmarkPin]
     let labelMemory = LabelMemory()
 
@@ -204,9 +210,20 @@ final class Atlas: Sendable {
                                    reveal: NameReveal(owner: countryOfISO[iso2],
                                                       mentions: mentions.countries(named: lm.name)))
             }
+            let pinnedCountries = countries.map { country in
+                var country = country
+                country.landmarks = (country.facts?.landmarks ?? []).enumerated().map { rank, lm in
+                    let p = project(lonDeg: lm.lon, latDeg: lm.lat)
+                    return LandmarkPin(name: lm.name, point: CGPoint(x: CGFloat(p.x), y: CGFloat(p.y)),
+                                       rank: rank,
+                                       reveal: NameReveal(owner: country.id,
+                                                          mentions: mentions.countries(named: lm.name)))
+                }
+                return country
+            }
             let atlas = Atlas(
                 world: world,
-                countries: countries,
+                countries: pinnedCountries,
                 outline: path(rings: [worldOutline()]),
                 graticule: graticulePath(),
                 features: features,

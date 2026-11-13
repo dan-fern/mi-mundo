@@ -56,10 +56,12 @@ Age-agnostic — fun for a young child, still useful for an adult.
 - Tap any country to see a card with: name, capital, flag, approximate
   population, top 1–3 languages, 1–3 major landmarks.
 - When zoomed in far enough, show major rivers, lakes, mountain ranges,
-  peaks, deserts and landmarks, with their names. Bigger features appear
-  first (Natural Earth's own zoom hints); landmarks from closer in.
+  peaks and deserts, with their names. Bigger features appear first
+  (Natural Earth's own zoom hints).
 - The selected country's capital is marked with a **star** (every capital,
-  where a country has more than one).
+  where a country has more than one), and its **landmarks are pinned**, at
+  any zoom. Landmarks of other countries stay hidden so the map isn't
+  cluttered.
 - The card has a **read-aloud** button and shows population as a picture
   (one to five people) for kids who can't read numbers yet.
 - Low word count, large child-friendly fonts.
@@ -73,7 +75,8 @@ Age-agnostic — fun for a young child, still useful for an adult.
 - **Names stay hidden until earned:** landmark pins and the names of
   rivers, lakes, ranges, peaks and deserts are hidden in quiz mode (the
   rivers, lakes and peaks themselves still draw). Once a country is guessed
-  correctly, the names inside it appear. A feature belongs to the country
+  correctly, the names inside it appear, and its landmark pins too (as a
+  reward; no need to select it). A feature belongs to the country
   its label sits in (so Lake Geneva's name shows with France).
 - Question types per country:
   1. Country name

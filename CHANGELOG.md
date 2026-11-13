@@ -119,6 +119,10 @@ Versions: [Semantic Versioning](https://semver.org/).
   changes don't lose data on the iPad.
 
 ### Changed
+- Explore map: landmark pins now show only for the selected country (like
+  its capital star), at any zoom, so the map isn't cluttered. A landmark
+  in the capital (the Colosseum in Rome) sits just beside the star. A
+  landmark shared by two countries (Victoria Falls) shows for either.
 - Requirements v0.4: multiple parent (admin) accounts; kids can compare
   their quiz scores with their parents' on the same quiz (the family's only
   competition); one family quiz queue of up to 20 quizzes that serves the
