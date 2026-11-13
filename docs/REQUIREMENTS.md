@@ -220,8 +220,13 @@ So a parent can set up practice ahead of time (e.g. before work travel):
 - **Each time a quiz comes up again it's a fresh start:** attempts reset to
   the 1st, worth full points (§3.4).
 - Parents can add, edit, reorder and remove queued quizzes and see which one
-  is today's and which come next. Changes take effect from the next game
-  day; today's quiz never changes mid-day.
+  is today's and which comes next. Today's quiz stays today's whatever is
+  reordered or added, and **once anyone has started it, it can't be edited
+  or removed until the next game day**. Before that a parent may still fix
+  or remove it (removing it brings up the quiz that takes its place).
+- The first quiz added to an empty queue is today's quiz straight away.
+- A quiz is built from a **whole region** (the independent countries of a
+  continent) or any hand-picked set, territories included if wanted.
 - An empty queue means no quiz of the day (explore mode still works).
 
 ## 6. Open questions
@@ -237,9 +242,8 @@ How the v0.4 features fit the on-device data (SwiftData, versioned schema):
 | Model | Key fields | Notes |
 |---|---|---|
 | `Profile` | role (parent/child), name, avatar, PIN, archivedAt | Already exists; multiple parents need no schema change. |
-| `QuizSet` | id, title, country codes, question types, point values, createdBy | A reusable quiz definition. |
-| `QueueEntry` | quizSetID, position (0–19) | The one family queue, max 20. |
-| `QueueState` | current position, run number, day it became current, attempted by a kid (yes/no) | Single record. At a new game day it advances only if at least one kid attempted it; each advance starts a new run. The "today's quiz" rule lives in the Rust core so it's unit-tested. |
+| `QuizSet` | id, title, country codes, question types, point values, position, createdBy, removedAt | One quiz in the family queue (max 20), ordered by position. Removing it sets `removedAt` so old attempts can still name it. (Built; there is no separate `QueueEntry`.) |
+| `QueueRecord` | current quiz, position, run number, day last checked, attempted by a kid, started by anyone | Single record mirroring the Rust core's `QueueState`. At a new game day it advances only if at least one kid attempted it; each advance starts a new run. The "today's quiz" rule lives in the Rust core (`core/src/queue.rs`) so it's unit-tested. (Built.) |
 | `Attempt` | id, profileID, quizSetID, run number, game day, attempt number, started/finished | One quiz sitting by anyone, kid or parent. Attempt numbers count within a run, so they reset when a quiz comes back around. |
 | `Answer` | attemptID, country, question type, correct, base points, multiple choice, points awarded | Scoring inputs stored per answer (§5.3). |
 

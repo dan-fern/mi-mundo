@@ -14,13 +14,27 @@ enum SchemaV1: VersionedSchema {
     }
 }
 
+/// Version 2 adds the family quiz queue (`QuizSet`, `QueueRecord`). The
+/// version 1 models are unchanged, so they are reused as they are and the
+/// migration is lightweight (new, empty tables).
+enum SchemaV2: VersionedSchema {
+    static var versionIdentifier: Schema.Version { Schema.Version(2, 0, 0) }
+    static var models: [any PersistentModel.Type] {
+        SchemaV1.models + [QuizSet.self, QueueRecord.self]
+    }
+}
+
 typealias Profile = SchemaV1.Profile
 typealias Visit = SchemaV1.Visit
 typealias Session = SchemaV1.Session
+typealias QuizSet = SchemaV2.QuizSet
+typealias QueueRecord = SchemaV2.QueueRecord
 
 enum MiMundoMigrationPlan: SchemaMigrationPlan {
-    static var schemas: [any VersionedSchema.Type] { [SchemaV1.self] }
-    static var stages: [MigrationStage] { [] }
+    static var schemas: [any VersionedSchema.Type] { [SchemaV1.self, SchemaV2.self] }
+    static var stages: [MigrationStage] {
+        [.lightweight(fromVersion: SchemaV1.self, toVersion: SchemaV2.self)]
+    }
 }
 
 enum Persistence {
@@ -29,7 +43,7 @@ enum Persistence {
     /// not deleted — and a fresh store is created, so the app still launches.
     @MainActor
     static func makeContainer() -> ModelContainer {
-        let schema = Schema(versionedSchema: SchemaV1.self)
+        let schema = Schema(versionedSchema: SchemaV2.self)
         let configuration = ModelConfiguration(schema: schema)
         do {
             return try open(schema, configuration)

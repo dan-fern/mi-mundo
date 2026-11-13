@@ -251,3 +251,20 @@ fn every_country_has_a_flag() {
         assert!(std::path::Path::new(&set).is_dir(), "no flag for {iso}");
     }
 }
+
+#[test]
+fn independent_countries_are_marked_for_quiz_presets() {
+    let independent = |iso: &str| facts()[iso]["independent"].as_bool().unwrap();
+    let count = facts().keys().filter(|iso| independent(iso)).count();
+    assert!(
+        (193..=200).contains(&count),
+        "{count} independent countries"
+    );
+    for iso in ["FR", "US", "TW", "PS", "XK", "VA", "TV"] {
+        assert!(independent(iso), "{iso}");
+    }
+    // Territories, and Antarctica (nobody lives there).
+    for iso in ["GL", "PR", "HK", "BM", "AQ", "FK", "EH"] {
+        assert!(!independent(iso), "{iso}");
+    }
+}

@@ -13,6 +13,9 @@ struct CountryFacts: Decodable, Sendable {
     let landmarks: [Landmark]
     /// Where each capital is, in the same order as `capitals`.
     let capitalPoints: [Landmark]
+    /// Governs itself and has residents: used by quiz presets ("all of
+    /// Europe") so they aren't padded with small territories.
+    let independent: Bool
 
     struct Landmark: Decodable, Sendable, Hashable {
         let name: String

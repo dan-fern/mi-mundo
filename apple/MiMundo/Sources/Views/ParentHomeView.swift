@@ -21,6 +21,8 @@ struct ParentHomeView: View {
     var body: some View {
         NavigationStack {
             List {
+                QuizOfTheDaySection(parent: parent)
+
                 Section("Kids") {
                     if kids.isEmpty {
                         Text("No kids yet. Add one to get started.")
