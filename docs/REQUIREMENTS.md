@@ -82,6 +82,19 @@ Age-agnostic — fun for a young child, still useful for an adult.
   1. Country name
   2. Capital
   3. Flag (see 3.3)
+- **Answering (name and capital):** pick from four big buttons. The wrong
+  choices are nearby countries (or their capitals). Every button and the
+  question can be read aloud. **One try per question:** the right answer
+  is then shown either way, and a miss earns nothing; to do better, retake
+  the quiz (§3.4).
+- On the map, a country still to do has a bold blue border; a finished one
+  is tinted green (all right) or amber (a miss) and shows its name.
+- **"Find one for me"** jumps to a country still to do, for tiny islands
+  and city states that are hard to find or tap.
+- A quiz left part-way **carries on** where it stopped when reopened the
+  same day. Finishing shows stars (three for 90% right, two for 60%, one
+  for anything right), how many were right and the points earned.
+- Kids open today's quiz from their top bar; parents from parent home.
 
 ### 3.3 Flag drawing
 Escalating help, from hardest to easiest:
@@ -252,8 +265,8 @@ How the v0.4 features fit the on-device data (SwiftData, versioned schema):
 | `Profile` | role (parent/child), name, avatar, PIN, archivedAt | Already exists; multiple parents need no schema change. |
 | `QuizSet` | id, title, country codes, question types, point values, position, createdBy, removedAt | One quiz in the family queue (max 20), ordered by position. Removing it sets `removedAt` so old attempts can still name it. (Built; there is no separate `QueueEntry`.) |
 | `QueueRecord` | current quiz, position, run number, day last checked, attempted by a kid, started by anyone | Single record mirroring the Rust core's `QueueState`. At a new game day it advances only if at least one kid attempted it; each advance starts a new run. The "today's quiz" rule lives in the Rust core (`core/src/queue.rs`) so it's unit-tested. (Built.) |
-| `Attempt` | id, profileID, quizSetID, run number, game day, attempt number, started/finished | One quiz sitting by anyone, kid or parent. Attempt numbers count within a run, so they reset when a quiz comes back around. |
-| `Answer` | attemptID, country, question type, correct, base points, multiple choice, points awarded | Scoring inputs stored per answer (§5.3). |
+| `QuizAttempt` | id, profileID, role, quizSetID, run number, game day, attempt number, started/finished | One quiz sitting by anyone, kid or parent. Attempt numbers count within a run, so they reset when a quiz comes back around. An unfinished sitting is resumed, not replaced. (Built.) |
+| `QuizAnswer` | attemptID, profileID, country, question type, chosen and correct answer, correct, base points, attempt number, multiple choice, points awarded | Scoring inputs stored per answer (§5.3). A kid's first answer marks today's quiz as attempted, which lets the queue move on. (Built.) |
 
 Kid-vs-grown-up comparisons are then a query: first `Attempt` per profile
 for a given `QuizSet` and run.

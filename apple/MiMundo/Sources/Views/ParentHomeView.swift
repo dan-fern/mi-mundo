@@ -123,7 +123,7 @@ struct ParentHomeView: View {
                     if let kidToDelete { deleteForever(kidToDelete) }
                 }
             } message: {
-                Text("This permanently deletes their profile, attendance and history on this iPad. It can't be undone.")
+                Text("This permanently deletes their profile, attendance, quiz results and history on this iPad. It can't be undone.")
             }
         }
     }
@@ -144,6 +144,8 @@ struct ParentHomeView: View {
         do {
             try context.delete(model: Visit.self, where: #Predicate { $0.childID == kidID })
             try context.delete(model: Session.self, where: #Predicate { $0.profileID == kidID })
+            try context.delete(model: QuizAnswer.self, where: #Predicate { $0.profileID == kidID })
+            try context.delete(model: QuizAttempt.self, where: #Predicate { $0.profileID == kidID })
             context.delete(kid)
             try context.save()
         } catch {

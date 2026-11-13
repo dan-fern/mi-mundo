@@ -38,6 +38,23 @@ struct MapInsets: Equatable {
     var avoid: [CGRect] = []
 }
 
+/// How a quiz marks a country on the map (requirements §3.2).
+enum QuizMark: Equatable, Sendable {
+    /// Still to answer: a bold border.
+    case todo
+    /// Answered, everything right.
+    case right
+    /// Answered, with at least one miss.
+    case missed
+}
+
+/// Asks the map to move so a map rectangle fills the view. Change `token`
+/// to ask again (the map also fits once when it first appears).
+struct MapFit: Equatable {
+    var rect: CGRect
+    var token = 0
+}
+
 /// Pan/zoom world map. No country names are drawn (quiz answers stay
 /// hidden); tapping a country selects it, tapping the sea clears it.
 struct WorldMapView: View {
@@ -55,6 +72,12 @@ struct WorldMapView: View {
     var onPick: ((AtlasCountry) -> Void)? = nil
     /// Draw country names (parents only: the kids' map never shows them).
     var showsCountryNames = false
+    /// Quiz: draw only these countries' names (the ones already answered).
+    var namedCountries: Set<UInt32>? = nil
+    /// Quiz: targets and how they stand.
+    var marks: [UInt32: QuizMark] = [:]
+    /// Where to look: applied on appearing and whenever it changes.
+    var fit: MapFit? = nil
 
     /// Baseline for the gesture in progress.
     @State private var gesture: GestureBaseline?
@@ -78,7 +101,8 @@ struct WorldMapView: View {
                       layout: MapLayout(atlas: atlas, size: size, insets: insets),
                       labelMode: labelMode,
                       covered: insets.avoid + [Self.controlsRect(in: size)],
-                      chosen: chosen, showsCountryNames: showsCountryNames)
+                      chosen: chosen, showsCountryNames: showsCountryNames,
+                      namedCountries: namedCountries, marks: marks)
                 // Map labels are already big; past this they mostly collide
                 // and vanish, so they stop growing (the card keeps growing).
                 .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
@@ -92,6 +116,15 @@ struct WorldMapView: View {
                 }
                 .onChange(of: size) { _, newSize in
                     camera = layout(newSize).clamped(camera)
+                }
+                .onAppear {
+                    if let fit { camera = layout(size).camera(fitting: fit.rect) }
+                }
+                .onChange(of: fit) { _, fit in
+                    guard let fit else { return }
+                    withAnimation(.easeInOut(duration: 0.6)) {
+                        camera = layout(size).camera(fitting: fit.rect)
+                    }
                 }
                 .accessibilityElement()
                 .accessibilityLabel("World map")
@@ -192,13 +225,13 @@ struct WorldMapView: View {
         let point = layout.mapPoint(at: location, camera: camera)
         // ~22 pt of fingertip slack, in map units.
         let hit = atlas.country(at: point, tolerance: 22 / layout.pointsPerUnit(camera))
-        if let onPick {
-            if let hit { onPick(hit) }
-            return
-        }
         if let hit {
             let box = hit.bounds.applying(layout.mapToScreen(camera))
             cardOnLeadingSide = box.midX > size.width / 2
+        }
+        if let onPick {
+            if let hit { onPick(hit) }
+            return
         }
         withAnimation(.easeInOut(duration: 0.25)) {
             // Tapping the selected country again keeps it; the sea clears it.
@@ -250,6 +283,15 @@ struct MapLayout {
         return clamped(next)
     }
 
+    /// A camera that shows the whole of a map rectangle, with some margin.
+    func camera(fitting rect: CGRect) -> MapCamera {
+        let wanted = rect.insetBy(dx: -max(rect.width * 0.12, 0.02), dy: -max(rect.height * 0.12, 0.02))
+        // Points per map unit that just fits it, as a multiple of zoom 1.
+        let zoom = min(visible.width / wanted.width, visible.height / wanted.height) / fitScale
+        return clamped(MapCamera(center: CGPoint(x: rect.midX, y: rect.midY),
+                                 zoom: min(zoom, 24)))
+    }
+
     /// Keeps the zoom in range and the world covering the view: a kid can't
     /// drag the world off the screen. When the world is smaller than the
     /// view along an axis, it stays centered on that axis.
@@ -285,6 +327,8 @@ struct MapCanvas: View, Animatable {
     var covered: [CGRect] = []
     var chosen: Set<UInt32> = []
     var showsCountryNames = false
+    var namedCountries: Set<UInt32>? = nil
+    var marks: [UInt32: QuizMark] = [:]
 
     nonisolated var animatableData: AnimatablePair<AnimatablePair<CGFloat, CGFloat>, CGFloat> {
         get { AnimatablePair(AnimatablePair(camera.center.x, camera.center.y), log(camera.zoom)) }
@@ -312,6 +356,9 @@ struct MapCanvas: View, Animatable {
     /// it stands out by lightness too (not hue alone).
     private static let highlight = Color(red: 0.86, green: 0.30, blue: 0.20)
     private static let highlightEdge = Color(red: 0.35, green: 0.08, blue: 0.05)
+    private static let todoEdge = Color(red: 0.05, green: 0.25, blue: 0.75)
+    private static let rightFill = Color(red: 0.36, green: 0.72, blue: 0.38)
+    private static let missedFill = Color(red: 0.95, green: 0.68, blue: 0.22)
     private static let chosenFill = Color(red: 0.16, green: 0.62, blue: 0.62)
     private static let chosenEdge = Color(red: 0.03, green: 0.30, blue: 0.32)
 
@@ -342,6 +389,28 @@ struct MapCanvas: View, Animatable {
         for country in shown {
             map.stroke(fine ? country.fine : country.coarse,
                        with: .color(Self.border.opacity(0.8)), lineWidth: 0.7 * hairline)
+        }
+        // Quiz targets: answered ones are tinted (green: all right, amber:
+        // a miss); ones still to do get a bold blue border on top.
+        for country in shown {
+            guard let mark = marks[country.id], mark != .todo else { continue }
+            let path = fine ? country.fine : country.coarse
+            map.fill(path, with: .color(mark == .right ? Self.rightFill : Self.missedFill),
+                     style: FillStyle(eoFill: true))
+            map.stroke(path, with: .color(Self.border), lineWidth: 1.2 * hairline)
+        }
+        for country in shown where marks[country.id] == .todo {
+            let path = fine ? country.fine : country.coarse
+            map.fill(path, with: .color(.white.opacity(0.22)), style: FillStyle(eoFill: true))
+            map.stroke(path, with: .color(Self.todoEdge),
+                       style: StrokeStyle(lineWidth: 3 * hairline, lineJoin: .round))
+            // Tiny targets (islands, city states) get a ring to aim at.
+            let box = country.bounds.applying(layout.mapToScreen(camera))
+            if max(box.width, box.height) < 18 {
+                let ring = CGRect(x: box.midX - 17, y: box.midY - 17, width: 34, height: 34)
+                context.stroke(Path(ellipseIn: ring), with: .color(.white), lineWidth: 5)
+                context.stroke(Path(ellipseIn: ring), with: .color(Self.todoEdge), lineWidth: 3)
+            }
         }
         // Countries chosen for a quiz: a teal tint with a strong edge (not
         // the red of a selection, which means "the card is about this").
@@ -462,10 +531,10 @@ struct MapCanvas: View, Animatable {
 
         // Country names (parents' map only), before every other label: the
         // country is what they're choosing. Biggest countries win space.
-        if showsCountryNames {
+        if showsCountryNames || namedCountries != nil {
             let toScreenRect = { (c: AtlasCountry) in c.bounds.applying(toScreen) }
             let named = atlas.countries
-                .filter { $0.bounds.intersects(visible) }
+                .filter { $0.bounds.intersects(visible) && (namedCountries?.contains($0.id) ?? true) }
                 .sorted { $0.bounds.width * $0.bounds.height > $1.bounds.width * $1.bounds.height }
             for country in named {
                 let box = toScreenRect(country)

@@ -25,6 +25,9 @@ struct QuizOfTheDaySection: View {
         Section("Quiz of the day") {
             if let today {
                 QuizRow(quiz: today, badge: .today)
+                // Parents take the same quiz as the kids (§3.8); their
+                // sittings never move the queue on.
+                TodayQuizButton(profile: parent, prominent: false)
             } else {
                 Text("No quiz today. Add one to the queue.")
                     .foregroundStyle(.secondary)

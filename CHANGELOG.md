@@ -10,6 +10,19 @@ Versions: [Semantic Versioning](https://semver.org/).
 ## [Unreleased]
 
 ### Added
+- Playable quizzes (requirements §3.2): kids open today's quiz from their
+  top bar, parents from parent home. The map zooms to the quiz's
+  countries; tap one (or "Find one for me") and answer its name and
+  capital by picking from four, with every choice readable aloud. One try
+  per question, then the right answer is shown. Answered countries are
+  tinted and named, and their rivers, lakes and landmarks appear. A quiz
+  left part-way carries on later; the end screen shows stars, the score
+  and points. Second and third tries the same day earn half and a quarter.
+- Sittings and answers are saved (schema version 3), each answer with what
+  it was worth. A kid's first answer lets the queue move on the next day;
+  starting a quiz locks it against edits for the day.
+- Rust core: answer choices drawn from the nearest countries
+  (`quiz_choices`) and star ratings (`quiz_stars`), with 9 tests.
 - Parents can open the explore map from parent home.
 - Quiz editor: "Choose on the map" to tap countries in and out (the
   parent's map shows country names; chosen ones are tinted), and

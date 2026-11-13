@@ -24,16 +24,28 @@ enum SchemaV2: VersionedSchema {
     }
 }
 
+/// Version 3 adds quiz sittings (`QuizAttempt`, `QuizAnswer`). Earlier
+/// models are unchanged; the migration is lightweight.
+enum SchemaV3: VersionedSchema {
+    static var versionIdentifier: Schema.Version { Schema.Version(3, 0, 0) }
+    static var models: [any PersistentModel.Type] {
+        SchemaV2.models + [QuizAttempt.self, QuizAnswer.self]
+    }
+}
+
 typealias Profile = SchemaV1.Profile
 typealias Visit = SchemaV1.Visit
 typealias Session = SchemaV1.Session
 typealias QuizSet = SchemaV2.QuizSet
 typealias QueueRecord = SchemaV2.QueueRecord
+typealias QuizAttempt = SchemaV3.QuizAttempt
+typealias QuizAnswer = SchemaV3.QuizAnswer
 
 enum MiMundoMigrationPlan: SchemaMigrationPlan {
-    static var schemas: [any VersionedSchema.Type] { [SchemaV1.self, SchemaV2.self] }
+    static var schemas: [any VersionedSchema.Type] { [SchemaV1.self, SchemaV2.self, SchemaV3.self] }
     static var stages: [MigrationStage] {
-        [.lightweight(fromVersion: SchemaV1.self, toVersion: SchemaV2.self)]
+        [.lightweight(fromVersion: SchemaV1.self, toVersion: SchemaV2.self),
+         .lightweight(fromVersion: SchemaV2.self, toVersion: SchemaV3.self)]
     }
 }
 
@@ -43,7 +55,7 @@ enum Persistence {
     /// not deleted — and a fresh store is created, so the app still launches.
     @MainActor
     static func makeContainer() -> ModelContainer {
-        let schema = Schema(versionedSchema: SchemaV2.self)
+        let schema = Schema(versionedSchema: SchemaV3.self)
         let configuration = ModelConfiguration(schema: schema)
         do {
             return try open(schema, configuration)

@@ -35,6 +35,7 @@ struct ChildHomeView: View {
                     .accessibilityLabel("\(summary.streak) days in a row")
                 }
             }
+            TodayQuizButton(profile: child)
             Button {
                 confirmingSwitch = true
             } label: {
