@@ -13,6 +13,9 @@ Output is keyed by ISO 3166-1 alpha-2 (matches CountryMeta.iso2):
             "languages": ["French"], "wikidata": "Q142",
             "landmarks": [{"name": "Eiffel Tower", "lon": 2.29, "lat": 48.86}],
             "capitalPoints": [{"name": "Paris", "lon": 2.35, "lat": 48.86}] }, ... }
+"independent" is true for places that govern themselves (Natural Earth:
+SOVEREIGNT == ADMIN) and have residents; quiz presets ("all of Europe") use
+only those, so they aren't padded with small territories.
 Capitals, languages and landmarks are capped at 3. capitalPoints has one
 entry per capital, in the same order; every capital must have one and it
 must lie in (or within CAPITAL_SLACK of) the country's outline.
@@ -121,8 +124,11 @@ def main():
     unesco = json.load(open(landmarks_path))["countries"]
     capital_points = json.load(open(capitals_path))["countries"]
     outlines = {}
+    self_governing = set()
     for f in features:
         outlines.setdefault(f["properties"]["ISO_A2_EH"], []).extend(rings_of(f["geometry"]))
+        if f["properties"]["SOVEREIGNT"] == f["properties"]["ADMIN"]:
+            self_governing.add(f["properties"]["ISO_A2_EH"])
     overrides = {k: v for k, v in json.load(open(overrides_path)).items() if not k.startswith("_")}
 
     on_map = {f["properties"]["ISO_A2_EH"] for f in features} - {"-99"}
@@ -156,6 +162,10 @@ def main():
         entry.update({k: v for k, v in overrides.get(iso2, {}).items() if not k.startswith("_")})
         if "landmarks" not in overrides.get(iso2, {}):
             entry["landmarks"] = auto_landmarks(unesco.get(iso2, []), entry["capitals"], iso2, outlines)
+        # Family policy (docs/REQUIREMENTS.md §4): Palestine is quizzed as a
+        # country; the Western Sahara strip east of the Berm isn't.
+        entry["independent"] = (iso2 == "PS" or (
+            iso2 in self_governing and iso2 != "EH" and entry["population"] is not None))
         entry["capitals"] = entry["capitals"][:3]
         entry["languages"] = entry["languages"][:3]
         entry["landmarks"] = entry["landmarks"][:3]

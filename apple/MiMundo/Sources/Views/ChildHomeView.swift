@@ -9,6 +9,7 @@ struct ChildHomeView: View {
 
     @Environment(AtlasStore.self) private var atlasStore
     @Environment(MapCameraStore.self) private var cameraStore
+    @Environment(\.modelContext) private var context
     @Environment(\.dynamicTypeSize) private var typeSize
     @State private var camera = MapCamera()
     @State private var selection: AtlasCountry?
@@ -72,7 +73,12 @@ struct ChildHomeView: View {
                 .padding(.trailing, 20)
             }
         }
-        .onAppear { camera = cameraStore.camera(for: child.id) }
+        .onAppear {
+            camera = cameraStore.camera(for: child.id)
+            // A kid opening the app on a new day moves the queue on, even if
+            // no parent looks at it.
+            QuizQueue.refresh(in: context)
+        }
         .onChange(of: camera) { _, new in cameraStore.set(new, for: child.id) }
     }
 

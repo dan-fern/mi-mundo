@@ -10,6 +10,16 @@ Versions: [Semantic Versioning](https://semver.org/).
 ## [Unreleased]
 
 ### Added
+- Family quiz queue for parents (requirements §5.4): add up to 20 quizzes,
+  each a whole region or a hand-picked set of countries with name and
+  capital questions and their point values; edit, reorder and remove them;
+  see which is today's and which is next. The rule for when today's quiz
+  moves on (10 pm Eastern, only if a kid tried it) is in the Rust core
+  with 19 tests. Quizzes can't be played yet; that is the next PR.
+- Saved data moves to schema version 2 (new quiz tables; existing
+  profiles and attendance are kept).
+- Country facts mark the 197 independent countries, so "a whole region"
+  doesn't include small territories.
 - About 100 more Rust tests (163 in all): property tests for the
   projection, geometry, map file formats, scoring, game days and
   attendance; damaged-file tests for World.bin and Features.bin; checks of

@@ -7,6 +7,7 @@ pub mod attendance;
 pub mod datagen;
 pub mod days;
 pub mod map;
+pub mod queue;
 pub mod scoring;
 
 pub use attendance::{
@@ -14,6 +15,7 @@ pub use attendance::{
     days_played_last_7,
 };
 pub use days::{game_day, game_day_label};
+pub use queue::{QueueState, queue_from_today, queue_initial_state, queue_max, queue_today};
 pub use scoring::points_for_attempt;
 
 uniffi::setup_scaffolding!();

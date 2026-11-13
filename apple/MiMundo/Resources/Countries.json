@@ -10,6 +10,7 @@
   "capitals": [
    "Andorra la Vella"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 42.4921,
@@ -34,6 +35,7 @@
   "capitals": [
    "Abu Dhabi"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 25.1972,
@@ -68,6 +70,7 @@
   "capitals": [
    "Kabul"
   ],
+  "independent": true,
   "landmarks": [],
   "languages": [
    "Pashto",
@@ -87,6 +90,7 @@
   "capitals": [
    "St. John's"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 17.0083,
@@ -116,6 +120,7 @@
   "capitals": [
    "The Valley"
   ],
+  "independent": false,
   "landmarks": [],
   "languages": [
    "English"
@@ -134,6 +139,7 @@
   "capitals": [
    "Tirana"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 39.7571,
@@ -163,6 +169,7 @@
   "capitals": [
    "Yerevan"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 41.095,
@@ -187,6 +194,7 @@
   "capitals": [
    "Luanda"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": -6.2667,
@@ -203,6 +211,7 @@
  "AQ": {
   "capitalPoints": [],
   "capitals": [],
+  "independent": false,
   "landmarks": [],
   "languages": [],
   "population": null,
@@ -219,6 +228,7 @@
   "capitals": [
    "Buenos Aires"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": -25.6953,
@@ -253,6 +263,7 @@
   "capitals": [
    "Pago Pago"
   ],
+  "independent": false,
   "landmarks": [],
   "languages": [
    "Samoan",
@@ -272,6 +283,7 @@
   "capitals": [
    "Vienna"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 48.1845,
@@ -306,6 +318,7 @@
   "capitals": [
    "Canberra"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": -33.8568,
@@ -340,6 +353,7 @@
   "capitals": [
    "Oranjestad"
   ],
+  "independent": false,
   "landmarks": [],
   "languages": [
    "Papiamento",
@@ -359,6 +373,7 @@
   "capitals": [
    "Mariehamn"
   ],
+  "independent": false,
   "landmarks": [],
   "languages": [
    "Swedish"
@@ -377,6 +392,7 @@
   "capitals": [
    "Baku"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 40.125,
@@ -401,6 +417,7 @@
   "capitals": [
    "Sarajevo"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 43.7825,
@@ -432,6 +449,7 @@
   "capitals": [
    "Bridgetown"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 13.0967,
@@ -457,6 +475,7 @@
   "capitals": [
    "Dhaka"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 22.661,
@@ -486,6 +505,7 @@
   "capitals": [
    "Brussels"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 50.8467,
@@ -522,6 +542,7 @@
   "capitals": [
    "Ouagadougou"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 11.53,
@@ -558,6 +579,7 @@
   "capitals": [
    "Sofia"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 42.6595,
@@ -592,6 +614,7 @@
   "capitals": [
    "Manama"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 26.2336,
@@ -626,6 +649,7 @@
   "capitals": [
    "Gitega"
   ],
+  "independent": true,
   "landmarks": [],
   "languages": [
    "Kirundi",
@@ -646,6 +670,7 @@
   "capitals": [
    "Porto-Novo"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 10.1,
@@ -680,6 +705,7 @@
   "capitals": [
    "Gustavia"
   ],
+  "independent": false,
   "landmarks": [],
   "languages": [
    "French"
@@ -698,6 +724,7 @@
   "capitals": [
    "Hamilton"
   ],
+  "independent": false,
   "landmarks": [],
   "languages": [
    "English"
@@ -716,6 +743,7 @@
   "capitals": [
    "Bandar Seri Begawan"
   ],
+  "independent": true,
   "landmarks": [],
   "languages": [
    "Malay",
@@ -741,6 +769,7 @@
    "La Paz",
    "Sucre"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": -20.1338,
@@ -777,6 +806,7 @@
   "capitals": [
    "Brasília"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": -22.9519,
@@ -811,6 +841,7 @@
   "capitals": [
    "Nassau"
   ],
+  "independent": true,
   "landmarks": [],
   "languages": [
    "English"
@@ -829,6 +860,7 @@
   "capitals": [
    "Thimphu"
   ],
+  "independent": true,
   "landmarks": [],
   "languages": [
    "Dzongkha"
@@ -847,6 +879,7 @@
   "capitals": [
    "Gaborone"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": -19.4,
@@ -876,6 +909,7 @@
   "capitals": [
    "Minsk"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 52.75,
@@ -911,6 +945,7 @@
   "capitals": [
    "Belmopan"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 17.2625,
@@ -935,6 +970,7 @@
   "capitals": [
    "Ottawa"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 43.0799,
@@ -970,6 +1006,7 @@
   "capitals": [
    "Kinshasa"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": -0.5,
@@ -1004,6 +1041,7 @@
   "capitals": [
    "Bangui"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 2.6667,
@@ -1029,6 +1067,7 @@
   "capitals": [
    "Brazzaville"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 2.6667,
@@ -1058,6 +1097,7 @@
   "capitals": [
    "Bern"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 45.9763,
@@ -1094,6 +1134,7 @@
   "capitals": [
    "Yamoussoukro"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 9.1636,
@@ -1128,6 +1169,7 @@
   "capitals": [
    "Avarua"
   ],
+  "independent": false,
   "landmarks": [],
   "languages": [
    "English",
@@ -1147,6 +1189,7 @@
   "capitals": [
    "Santiago"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": -27.1127,
@@ -1181,6 +1224,7 @@
   "capitals": [
    "Yaoundé"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 3.0167,
@@ -1216,6 +1260,7 @@
   "capitals": [
    "Beijing"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 40.4319,
@@ -1250,6 +1295,7 @@
   "capitals": [
    "Bogotá"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 10.4236,
@@ -1284,6 +1330,7 @@
   "capitals": [
    "San José"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 8.9114,
@@ -1313,6 +1360,7 @@
   "capitals": [
    "Havana"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 23.136,
@@ -1347,6 +1395,7 @@
   "capitals": [
    "Praia"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 14.9167,
@@ -1372,6 +1421,7 @@
   "capitals": [
    "Willemstad"
   ],
+  "independent": false,
   "landmarks": [
    {
     "lat": 12.1045,
@@ -1398,6 +1448,7 @@
   "capitals": [
    "Nicosia"
   ],
+  "independent": true,
   "landmarks": [],
   "languages": [
    "Greek",
@@ -1417,6 +1468,7 @@
   "capitals": [
    "Prague"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 50.091,
@@ -1451,6 +1503,7 @@
   "capitals": [
    "Berlin"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 47.5576,
@@ -1485,6 +1538,7 @@
   "capitals": [
    "Djibouti"
   ],
+  "independent": true,
   "landmarks": [],
   "languages": [
    "Somali",
@@ -1505,6 +1559,7 @@
   "capitals": [
    "Copenhagen"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 56.0386,
@@ -1539,6 +1594,7 @@
   "capitals": [
    "Roseau"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 15.2667,
@@ -1563,6 +1619,7 @@
   "capitals": [
    "Santo Domingo"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 18.473,
@@ -1587,6 +1644,7 @@
   "capitals": [
    "Algiers"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 25.6667,
@@ -1622,6 +1680,7 @@
   "capitals": [
    "Quito"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": -0.9538,
@@ -1658,6 +1717,7 @@
   "capitals": [
    "Tallinn"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 59.4372,
@@ -1682,6 +1742,7 @@
   "capitals": [
    "Cairo"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 29.9792,
@@ -1708,6 +1769,7 @@
  "EH": {
   "capitalPoints": [],
   "capitals": [],
+  "independent": false,
   "landmarks": [],
   "languages": [
    "Arabic"
@@ -1726,6 +1788,7 @@
   "capitals": [
    "Asmara"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 15.3353,
@@ -1752,6 +1815,7 @@
   "capitals": [
    "Madrid"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 41.4036,
@@ -1786,6 +1850,7 @@
   "capitals": [
    "Addis Ababa"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 14.1167,
@@ -1820,6 +1885,7 @@
   "capitals": [
    "Helsinki"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 60.1436,
@@ -1855,6 +1921,7 @@
   "capitals": [
    "Suva"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": -17.6834,
@@ -1881,6 +1948,7 @@
   "capitals": [
    "Stanley"
   ],
+  "independent": false,
   "landmarks": [],
   "languages": [
    "English"
@@ -1899,6 +1967,7 @@
   "capitals": [
    "Palikir"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 6.8419,
@@ -1923,6 +1992,7 @@
   "capitals": [
    "Tórshavn"
   ],
+  "independent": false,
   "landmarks": [],
   "languages": [
    "Danish",
@@ -1942,6 +2012,7 @@
   "capitals": [
    "Paris"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 48.8584,
@@ -1976,6 +2047,7 @@
   "capitals": [
    "Libreville"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 0.088,
@@ -2000,6 +2072,7 @@
   "capitals": [
    "London"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 51.5007,
@@ -2034,6 +2107,7 @@
   "capitals": [
    "St. George's"
   ],
+  "independent": true,
   "landmarks": [],
   "languages": [
    "English"
@@ -2052,6 +2126,7 @@
   "capitals": [
    "Tbilisi"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 42.2947,
@@ -2086,6 +2161,7 @@
   "capitals": [
    "Saint Peter Port"
   ],
+  "independent": false,
   "landmarks": [],
   "languages": [
    "English",
@@ -2105,6 +2181,7 @@
   "capitals": [
    "Accra"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 6.4011,
@@ -2129,6 +2206,7 @@
   "capitals": [
    "Nuuk"
   ],
+  "independent": false,
   "landmarks": [
    {
     "lat": 69.15,
@@ -2163,6 +2241,7 @@
   "capitals": [
    "Banjul"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 13.6955,
@@ -2187,6 +2266,7 @@
   "capitals": [
    "Conakry"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 7.603,
@@ -2211,6 +2291,7 @@
   "capitals": [
    "Ciudad de la Paz"
   ],
+  "independent": true,
   "landmarks": [],
   "languages": [
    "Spanish",
@@ -2231,6 +2312,7 @@
   "capitals": [
    "Athens"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 37.9715,
@@ -2265,6 +2347,7 @@
   "capitals": [
    "King Edward Point"
   ],
+  "independent": false,
   "landmarks": [],
   "languages": [
    "English"
@@ -2283,6 +2366,7 @@
   "capitals": [
    "Guatemala City"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 15.2694,
@@ -2317,6 +2401,7 @@
   "capitals": [
    "Hagåtña"
   ],
+  "independent": false,
   "landmarks": [],
   "languages": [
    "English",
@@ -2336,6 +2421,7 @@
   "capitals": [
    "Bissau"
   ],
+  "independent": true,
   "landmarks": [],
   "languages": [
    "Portuguese"
@@ -2354,6 +2440,7 @@
   "capitals": [
    "Georgetown"
   ],
+  "independent": true,
   "landmarks": [],
   "languages": [
    "English"
@@ -2364,6 +2451,7 @@
  "HK": {
   "capitalPoints": [],
   "capitals": [],
+  "independent": false,
   "landmarks": [],
   "languages": [
    "Cantonese",
@@ -2375,6 +2463,7 @@
  "HM": {
   "capitalPoints": [],
   "capitals": [],
+  "independent": false,
   "landmarks": [],
   "languages": [
    "English"
@@ -2393,6 +2482,7 @@
   "capitals": [
    "Tegucigalpa"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 14.838,
@@ -2422,6 +2512,7 @@
   "capitals": [
    "Zagreb"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 44.8804,
@@ -2456,6 +2547,7 @@
   "capitals": [
    "Port-au-Prince"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 19.5736,
@@ -2486,6 +2578,7 @@
   "capitals": [
    "Budapest"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 47.5071,
@@ -2520,6 +2613,7 @@
   "capitals": [
    "Jakarta"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": -7.6079,
@@ -2554,6 +2648,7 @@
   "capitals": [
    "Dublin"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 52.9715,
@@ -2589,6 +2684,7 @@
   "capitals": [
    "Jerusalem"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 31.7767,
@@ -2623,6 +2719,7 @@
   "capitals": [
    "Douglas"
   ],
+  "independent": false,
   "landmarks": [],
   "languages": [
    "English",
@@ -2642,6 +2739,7 @@
   "capitals": [
    "New Delhi"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 27.1751,
@@ -2677,6 +2775,7 @@
   "capitals": [
    "Diego Garcia"
   ],
+  "independent": false,
   "landmarks": [],
   "languages": [
    "English"
@@ -2695,6 +2794,7 @@
   "capitals": [
    "Baghdad"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 34.1959,
@@ -2730,6 +2830,7 @@
   "capitals": [
    "Tehran"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 29.935,
@@ -2764,6 +2865,7 @@
   "capitals": [
    "Reykjavík"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 63.8804,
@@ -2798,6 +2900,7 @@
   "capitals": [
    "Rome"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 41.8902,
@@ -2832,6 +2935,7 @@
   "capitals": [
    "Saint Helier"
   ],
+  "independent": false,
   "landmarks": [],
   "languages": [
    "English",
@@ -2851,6 +2955,7 @@
   "capitals": [
    "Kingston"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 17.9375,
@@ -2881,6 +2986,7 @@
   "capitals": [
    "Amman"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 30.3285,
@@ -2915,6 +3021,7 @@
   "capitals": [
    "Tokyo"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 35.3606,
@@ -2949,6 +3056,7 @@
   "capitals": [
    "Nairobi"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": -1.4061,
@@ -2984,6 +3092,7 @@
   "capitals": [
    "Bishkek"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 40.5294,
@@ -3018,6 +3127,7 @@
   "capitals": [
    "Phnom Penh"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 13.4125,
@@ -3052,6 +3162,7 @@
   "capitals": [
    "South Tarawa"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": -3.6497,
@@ -3077,6 +3188,7 @@
   "capitals": [
    "Moroni"
   ],
+  "independent": true,
   "landmarks": [],
   "languages": [
    "Comorian",
@@ -3097,6 +3209,7 @@
   "capitals": [
    "Basseterre"
   ],
+  "independent": true,
   "landmarks": [],
   "languages": [
    "English"
@@ -3115,6 +3228,7 @@
   "capitals": [
    "Pyongyang"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 38.6568,
@@ -3144,6 +3258,7 @@
   "capitals": [
    "Seoul"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 37.5796,
@@ -3178,6 +3293,7 @@
   "capitals": [
    "Kuwait City"
   ],
+  "independent": true,
   "landmarks": [],
   "languages": [
    "Arabic"
@@ -3196,6 +3312,7 @@
   "capitals": [
    "George Town"
   ],
+  "independent": false,
   "landmarks": [],
   "languages": [
    "English"
@@ -3214,6 +3331,7 @@
   "capitals": [
    "Astana"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 43.2976,
@@ -3249,6 +3367,7 @@
   "capitals": [
    "Vientiane"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 19.89,
@@ -3283,6 +3402,7 @@
   "capitals": [
    "Beirut"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 34.0154,
@@ -3317,6 +3437,7 @@
   "capitals": [
    "Castries"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 13.8071,
@@ -3341,6 +3462,7 @@
   "capitals": [
    "Vaduz"
   ],
+  "independent": true,
   "landmarks": [],
   "languages": [
    "German"
@@ -3365,6 +3487,7 @@
    "Sri Jayawardenepura Kotte",
    "Colombo"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 7.2931,
@@ -3400,6 +3523,7 @@
   "capitals": [
    "Monrovia"
   ],
+  "independent": true,
   "landmarks": [],
   "languages": [
    "English"
@@ -3418,6 +3542,7 @@
   "capitals": [
    "Maseru"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": -29.4665,
@@ -3443,6 +3568,7 @@
   "capitals": [
    "Vilnius"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 55.2744,
@@ -3477,6 +3603,7 @@
   "capitals": [
    "Luxembourg"
   ],
+  "independent": true,
   "landmarks": [],
   "languages": [
    "Luxembourgish",
@@ -3497,6 +3624,7 @@
   "capitals": [
    "Riga"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 56.9485,
@@ -3526,6 +3654,7 @@
   "capitals": [
    "Tripoli"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 32.8167,
@@ -3560,6 +3689,7 @@
   "capitals": [
    "Rabat"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 31.629,
@@ -3595,6 +3725,7 @@
   "capitals": [
    "Monaco"
   ],
+  "independent": true,
   "landmarks": [],
   "languages": [
    "French"
@@ -3613,6 +3744,7 @@
   "capitals": [
    "Chișinău"
   ],
+  "independent": true,
   "landmarks": [],
   "languages": [
    "Romanian"
@@ -3631,6 +3763,7 @@
   "capitals": [
    "Podgorica"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 43.1532,
@@ -3655,6 +3788,7 @@
   "capitals": [
    "Marigot"
   ],
+  "independent": false,
   "landmarks": [],
   "languages": [
    "French"
@@ -3673,6 +3807,7 @@
   "capitals": [
    "Antananarivo"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": -18.7592,
@@ -3703,6 +3838,7 @@
   "capitals": [
    "Majuro"
   ],
+  "independent": true,
   "landmarks": [],
   "languages": [
    "Marshallese",
@@ -3722,6 +3858,7 @@
   "capitals": [
    "Skopje"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 41.05,
@@ -3752,6 +3889,7 @@
   "capitals": [
    "Bamako"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 16.7735,
@@ -3788,6 +3926,7 @@
   "capitals": [
    "Naypyidaw"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 21.1725,
@@ -3817,6 +3956,7 @@
   "capitals": [
    "Ulaanbaatar"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 48.7833,
@@ -3843,6 +3983,7 @@
  "MO": {
   "capitalPoints": [],
   "capitals": [],
+  "independent": false,
   "landmarks": [],
   "languages": [
    "Cantonese",
@@ -3862,6 +4003,7 @@
   "capitals": [
    "Saipan"
   ],
+  "independent": false,
   "landmarks": [],
   "languages": [
    "English",
@@ -3882,6 +4024,7 @@
   "capitals": [
    "Nouakchott"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 20.2347,
@@ -3907,6 +4050,7 @@
   "capitals": [
    "Brades"
   ],
+  "independent": false,
   "landmarks": [],
   "languages": [
    "English"
@@ -3925,6 +4069,7 @@
   "capitals": [
    "Valletta"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 35.8696,
@@ -3955,6 +4100,7 @@
   "capitals": [
    "Port Louis"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": -20.1586,
@@ -3986,6 +4132,7 @@
   "capitals": [
    "Malé"
   ],
+  "independent": true,
   "landmarks": [],
   "languages": [
    "Dhivehi"
@@ -4004,6 +4151,7 @@
   "capitals": [
    "Lilongwe"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": -14.0333,
@@ -4040,6 +4188,7 @@
   "capitals": [
    "Mexico City"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 20.6843,
@@ -4076,6 +4225,7 @@
   "capitals": [
    "Kuala Lumpur"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 3.1579,
@@ -4110,6 +4260,7 @@
   "capitals": [
    "Maputo"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": -15.0367,
@@ -4139,6 +4290,7 @@
   "capitals": [
    "Windhoek"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": -20.5956,
@@ -4168,6 +4320,7 @@
   "capitals": [
    "Nouméa"
   ],
+  "independent": false,
   "landmarks": [],
   "languages": [
    "French"
@@ -4186,6 +4339,7 @@
   "capitals": [
    "Niamey"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 16.9744,
@@ -4212,6 +4366,7 @@
   "capitals": [
    "Kingston"
   ],
+  "independent": false,
   "landmarks": [],
   "languages": [
    "English",
@@ -4231,6 +4386,7 @@
   "capitals": [
    "Abuja"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 10.7406,
@@ -4265,6 +4421,7 @@
   "capitals": [
    "Managua"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 12.435,
@@ -4294,6 +4451,7 @@
   "capitals": [
    "Amsterdam"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 51.884,
@@ -4328,6 +4486,7 @@
   "capitals": [
    "Oslo"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 62.1016,
@@ -4362,6 +4521,7 @@
   "capitals": [
    "Kathmandu"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 27.9881,
@@ -4396,6 +4556,7 @@
   "capitals": [
    "Yaren"
   ],
+  "independent": true,
   "landmarks": [],
   "languages": [
    "Nauruan",
@@ -4415,6 +4576,7 @@
   "capitals": [
    "Alofi"
   ],
+  "independent": false,
   "landmarks": [],
   "languages": [
    "English",
@@ -4434,6 +4596,7 @@
   "capitals": [
    "Wellington"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": -44.6414,
@@ -4469,6 +4632,7 @@
   "capitals": [
    "Muscat"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 22.9644,
@@ -4503,6 +4667,7 @@
   "capitals": [
    "Panama City"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 8.997,
@@ -4537,6 +4702,7 @@
   "capitals": [
    "Lima"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": -13.1631,
@@ -4573,6 +4739,7 @@
   "capitals": [
    "Papeete"
   ],
+  "independent": false,
   "landmarks": [],
   "languages": [
    "French"
@@ -4591,6 +4758,7 @@
   "capitals": [
    "Port Moresby"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": -5.7825,
@@ -4617,6 +4785,7 @@
   "capitals": [
    "Manila"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 16.918,
@@ -4652,6 +4821,7 @@
   "capitals": [
    "Islamabad"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 27.3292,
@@ -4687,6 +4857,7 @@
   "capitals": [
    "Warsaw"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 50.054,
@@ -4721,6 +4892,7 @@
   "capitals": [
    "Saint-Pierre"
   ],
+  "independent": false,
   "landmarks": [],
   "languages": [
    "French"
@@ -4739,6 +4911,7 @@
   "capitals": [
    "Adamstown"
   ],
+  "independent": false,
   "landmarks": [],
   "languages": [
    "English",
@@ -4758,6 +4931,7 @@
   "capitals": [
    "San Juan"
   ],
+  "independent": false,
   "landmarks": [],
   "languages": [
    "English",
@@ -4783,6 +4957,7 @@
    "East Jerusalem",
    "Ramallah"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 31.7767,
@@ -4817,6 +4992,7 @@
   "capitals": [
    "Lisbon"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 38.6916,
@@ -4851,6 +5027,7 @@
   "capitals": [
    "Ngerulmud"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 7.2469,
@@ -4876,6 +5053,7 @@
   "capitals": [
    "Asunción"
   ],
+  "independent": true,
   "landmarks": [],
   "languages": [
    "Spanish",
@@ -4895,6 +5073,7 @@
   "capitals": [
    "Doha"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 25.9834,
@@ -4919,6 +5098,7 @@
   "capitals": [
    "Bucharest"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 45.2,
@@ -4953,6 +5133,7 @@
   "capitals": [
    "Belgrade"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 43.4867,
@@ -4987,6 +5168,7 @@
   "capitals": [
    "Moscow"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 55.7539,
@@ -5021,6 +5203,7 @@
   "capitals": [
    "Kigali"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": -1.47,
@@ -5057,6 +5240,7 @@
   "capitals": [
    "Riyadh"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 21.4225,
@@ -5091,6 +5275,7 @@
   "capitals": [
    "Honiara"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": -11.6833,
@@ -5115,6 +5300,7 @@
   "capitals": [
    "Victoria"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": -9.4164,
@@ -5146,6 +5332,7 @@
   "capitals": [
    "Khartoum"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 16.938,
@@ -5176,6 +5363,7 @@
   "capitals": [
    "Stockholm"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 59.325,
@@ -5210,6 +5398,7 @@
   "capitals": [
    "Singapore"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 1.2868,
@@ -5246,6 +5435,7 @@
   "capitals": [
    "Jamestown"
   ],
+  "independent": false,
   "landmarks": [],
   "languages": [
    "English"
@@ -5264,6 +5454,7 @@
   "capitals": [
    "Ljubljana"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 45.665,
@@ -5288,6 +5479,7 @@
   "capitals": [
    "Bratislava"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 49.0397,
@@ -5322,6 +5514,7 @@
   "capitals": [
    "Freetown"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 7.5,
@@ -5352,6 +5545,7 @@
   "capitals": [
    "San Marino"
   ],
+  "independent": true,
   "landmarks": [],
   "languages": [
    "Italian"
@@ -5370,6 +5564,7 @@
   "capitals": [
    "Dakar"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 13.0742,
@@ -5405,6 +5600,7 @@
   "capitals": [
    "Mogadishu"
   ],
+  "independent": true,
   "landmarks": [],
   "languages": [
    "Somali",
@@ -5424,6 +5620,7 @@
   "capitals": [
    "Paramaribo"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 4.0,
@@ -5458,6 +5655,7 @@
   "capitals": [
    "Juba"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 6.5138,
@@ -5482,6 +5680,7 @@
   "capitals": [
    "São Tomé"
   ],
+  "independent": true,
   "landmarks": [],
   "languages": [
    "Portuguese"
@@ -5500,6 +5699,7 @@
   "capitals": [
    "San Salvador"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 13.8275,
@@ -5524,6 +5724,7 @@
   "capitals": [
    "Philipsburg"
   ],
+  "independent": false,
   "landmarks": [],
   "languages": [
    "English",
@@ -5543,6 +5744,7 @@
   "capitals": [
    "Damascus"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 34.56,
@@ -5583,6 +5785,7 @@
    "Lobamba",
    "Mbabane"
   ],
+  "independent": true,
   "landmarks": [],
   "languages": [
    "Swazi",
@@ -5602,6 +5805,7 @@
   "capitals": [
    "Cockburn Town"
   ],
+  "independent": false,
   "landmarks": [],
   "languages": [
    "English"
@@ -5620,6 +5824,7 @@
   "capitals": [
    "N'Djamena"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 17.25,
@@ -5650,6 +5855,7 @@
   "capitals": [
    "Port-aux-Français"
   ],
+  "independent": false,
   "landmarks": [],
   "languages": [
    "French"
@@ -5668,6 +5874,7 @@
   "capitals": [
    "Lomé"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 10.1,
@@ -5692,6 +5899,7 @@
   "capitals": [
    "Bangkok"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 13.75,
@@ -5726,6 +5934,7 @@
   "capitals": [
    "Dushanbe"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 38.7412,
@@ -5760,6 +5969,7 @@
   "capitals": [
    "Dili"
   ],
+  "independent": true,
   "landmarks": [],
   "languages": [
    "Portuguese",
@@ -5779,6 +5989,7 @@
   "capitals": [
    "Ashgabat"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 37.6628,
@@ -5813,6 +6024,7 @@
   "capitals": [
    "Tunis"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 35.2964,
@@ -5847,6 +6059,7 @@
   "capitals": [
    "Nukuʻalofa"
   ],
+  "independent": true,
   "landmarks": [],
   "languages": [
    "Tongan",
@@ -5866,6 +6079,7 @@
   "capitals": [
    "Ankara"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 41.0086,
@@ -5900,6 +6114,7 @@
   "capitals": [
    "Port of Spain"
   ],
+  "independent": true,
   "landmarks": [],
   "languages": [
    "English"
@@ -5918,6 +6133,7 @@
   "capitals": [
    "Funafuti"
   ],
+  "independent": true,
   "landmarks": [],
   "languages": [
    "Tuvaluan",
@@ -5937,6 +6153,7 @@
   "capitals": [
    "Taipei"
   ],
+  "independent": true,
   "landmarks": [],
   "languages": [
    "Mandarin Chinese",
@@ -5957,6 +6174,7 @@
   "capitals": [
    "Dodoma"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": -3.0674,
@@ -5992,6 +6210,7 @@
   "capitals": [
    "Kyiv"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 50.4528,
@@ -6026,6 +6245,7 @@
   "capitals": [
    "Kampala"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 0.3292,
@@ -6061,6 +6281,7 @@
   "capitals": [
    "Washington, D.C."
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 40.6892,
@@ -6096,6 +6317,7 @@
   "capitals": [
    "Montevideo"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": -33.1178,
@@ -6120,6 +6342,7 @@
   "capitals": [
    "Tashkent"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 39.05,
@@ -6154,6 +6377,7 @@
   "capitals": [
    "Vatican City"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 41.9022,
@@ -6184,6 +6408,7 @@
   "capitals": [
    "Kingstown"
   ],
+  "independent": true,
   "landmarks": [],
   "languages": [
    "English"
@@ -6202,6 +6427,7 @@
   "capitals": [
    "Caracas"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 5.3193,
@@ -6236,6 +6462,7 @@
   "capitals": [
    "Road Town"
   ],
+  "independent": false,
   "landmarks": [],
   "languages": [
    "English"
@@ -6254,6 +6481,7 @@
   "capitals": [
    "Charlotte Amalie"
   ],
+  "independent": false,
   "landmarks": [],
   "languages": [
    "English"
@@ -6272,6 +6500,7 @@
   "capitals": [
    "Hanoi"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 20.9101,
@@ -6306,6 +6535,7 @@
   "capitals": [
    "Port Vila"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": -17.6936,
@@ -6332,6 +6562,7 @@
   "capitals": [
    "Mata-Utu"
   ],
+  "independent": false,
   "landmarks": [],
   "languages": [
    "French",
@@ -6352,6 +6583,7 @@
   "capitals": [
    "Apia"
   ],
+  "independent": true,
   "landmarks": [],
   "languages": [
    "Samoan",
@@ -6371,6 +6603,7 @@
   "capitals": [
    "Pristina"
   ],
+  "independent": true,
   "landmarks": [],
   "languages": [
    "Albanian",
@@ -6396,6 +6629,7 @@
    "Sanaa",
    "Aden"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": 15.9269,
@@ -6442,6 +6676,7 @@
    "Cape Town",
    "Pretoria"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": -33.9628,
@@ -6478,6 +6713,7 @@
   "capitals": [
    "Lusaka"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": -17.9243,
@@ -6507,6 +6743,7 @@
   "capitals": [
    "Harare"
   ],
+  "independent": true,
   "landmarks": [
    {
     "lat": -17.9243,
