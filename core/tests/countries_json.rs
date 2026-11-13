@@ -268,3 +268,25 @@ fn independent_countries_are_marked_for_quiz_presets() {
         assert!(!independent(iso), "{iso}");
     }
 }
+
+#[test]
+fn quiz_regions_are_quiz_sized() {
+    let mut sizes: HashMap<&str, usize> = HashMap::new();
+    for (iso, f) in facts() {
+        let region = f["region"]
+            .as_str()
+            .unwrap_or_else(|| panic!("{iso} has no region"));
+        if f["independent"].as_bool().unwrap() {
+            *sizes.entry(region).or_default() += 1;
+        }
+    }
+    assert!(sizes.len() >= 20, "{sizes:?}");
+    for (region, n) in &sizes {
+        assert!(*n <= 14, "{region} has {n} countries");
+    }
+    let region = |iso: &str| facts()[iso]["region"].as_str().unwrap();
+    assert_eq!(region("MX"), "North America");
+    assert_eq!(region("HR"), "Balkans");
+    assert_eq!(region("SA"), "Arabian Peninsula");
+    assert_eq!(region("JM"), "Caribbean");
+}

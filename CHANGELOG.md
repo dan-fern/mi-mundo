@@ -10,6 +10,12 @@ Versions: [Semantic Versioning](https://semver.org/).
 ## [Unreleased]
 
 ### Added
+- Parents can open the explore map from parent home.
+- Quiz editor: "Choose on the map" to tap countries in and out (the
+  parent's map shows country names; chosen ones are tinted), and
+  "Use a whole region" now offers 23 quiz-sized regions of at most 14
+  countries (Caribbean, Central America, Balkans, Arabian Peninsula, …),
+  grouped by continent.
 - Family quiz queue for parents (requirements §5.4): add up to 20 quizzes,
   each a whole region or a hand-picked set of countries with name and
   capital questions and their point values; edit, reorder and remove them;
@@ -149,6 +155,9 @@ Versions: [Semantic Versioning](https://semver.org/).
 - The scoring demo screen (`ContentView`), replaced by the launch flow.
 
 ### Fixed
+- The day streak and attendance gauge could keep showing yesterday's
+  values on a screen left open across 10 pm Eastern, or when coming back
+  to the app the next day. They now update when the game day changes.
 - `game_day_label` / `game_day` can no longer panic on extreme input (that
   would crash the app). Day numbers are pinned by tests.
 - Only US time zones are compiled in, cutting ~1.1 MB from the app.

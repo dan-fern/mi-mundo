@@ -183,6 +183,10 @@ Shows the child's own:
 - The app suggests areas to practise based on what each child is forgetting.
 - Add, edit and archive other parents (§2).
 
+### 5.1a World map
+- Parents can open the same explore map as the kids (with country cards),
+  from parent home.
+
 ### 5.2 Stats & review
 Pick a region, see each child's strengths and weaknesses. There are far more
 stats here than in child mode:
@@ -225,8 +229,12 @@ So a parent can set up practice ahead of time (e.g. before work travel):
   or removed until the next game day**. Before that a parent may still fix
   or remove it (removing it brings up the quiz that takes its place).
 - The first quiz added to an empty queue is today's quiz straight away.
-- A quiz is built from a **whole region** (the independent countries of a
-  continent) or any hand-picked set, territories included if wanted.
+- A quiz is built from a **whole region** or any hand-picked set (from a
+  list, or by tapping countries on a map that shows country names),
+  territories included if wanted. Regions are quiz-sized groups of at most
+  14 independent countries, based on the UN sub-regions with the big ones
+  split (e.g. Caribbean, Central America, Balkans, Arabian Peninsula,
+  West Africa: Gulf of Guinea).
 - An empty queue means no quiz of the day (explore mode still works).
 
 ## 6. Open questions

@@ -190,6 +190,7 @@ private struct QuizEditor: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(AtlasStore.self) private var atlasStore
     @State private var draft: QuizDraft
+    @State private var pickingOnMap = false
 
     init(heading: String, saveTitle: String, draft: QuizDraft, onSave: @escaping (QuizDraft) -> Void) {
         self.heading = heading
@@ -215,9 +216,22 @@ private struct QuizEditor: View {
                     } label: {
                         LabeledContent("Choose countries", value: "\(draft.countryIDs.count) chosen")
                     }
+                    Button {
+                        pickingOnMap = true
+                    } label: {
+                        Label("Choose on the map", systemImage: "hand.tap")
+                    }
+                    .disabled(atlasStore.atlas == nil)
                     Menu {
-                        ForEach(regions.filter { !$0.independent.isEmpty }) { region in
-                            Button("\(region.name) (\(region.independent.count))") { fill(with: region) }
+                        let continents = Dictionary(grouping: regions.filter { !$0.independent.isEmpty }, by: \.continent)
+                        ForEach(regions.map(\.continent).uniqued(), id: \.self) { continent in
+                            if let inContinent = continents[continent] {
+                                Section(continent) {
+                                    ForEach(inContinent) { region in
+                                        Button("\(region.name) (\(region.independent.count))") { fill(with: region) }
+                                    }
+                                }
+                            }
                         }
                     } label: {
                         Label("Use a whole region", systemImage: "globe")
@@ -252,6 +266,11 @@ private struct QuizEditor: View {
             }
             .navigationTitle(heading)
             .navigationBarTitleDisplayMode(.inline)
+            .fullScreenCover(isPresented: $pickingOnMap) {
+                if let atlas = atlasStore.atlas {
+                    MapCountryPicker(atlas: atlas, selection: $draft.countryIDs)
+                }
+            }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }
@@ -305,11 +324,12 @@ private struct QuestionToggle: View {
     }
 }
 
-/// A part of the world a quiz can be built from. Regions are the map's
-/// continents; three island countries Natural Earth files under "open
-/// ocean" are placed with the continent schools teach them in.
+/// A part of the world a quiz can be built from: quiz-sized groups of at
+/// most 14 countries ("Balkans", "Caribbean"), set in the country data
+/// (tools/build-countries.py REGIONS), listed by continent.
 struct QuizRegion: Identifiable {
     let name: String
+    let continent: String
     /// Every place in the region that has a country card, by name.
     let countries: [AtlasCountry]
 
@@ -317,19 +337,23 @@ struct QuizRegion: Identifiable {
     /// Self-governing countries only: what "the whole region" means.
     var independent: [AtlasCountry] { countries.filter { $0.facts?.independent == true } }
 
-    private static let moved = ["MV": "Asia", "MU": "Africa", "SC": "Africa"]
+    private static let continentOrder = ["Africa", "North America", "South America", "Asia", "Europe", "Oceania"]
 
     static func all(in atlas: Atlas) -> [QuizRegion] {
         let quizzable = atlas.countries.filter { $0.facts != nil }
-        let grouped = Dictionary(grouping: quizzable) { country in
-            let region = moved[country.meta.iso2] ?? country.meta.continent
-            // Natural Earth's name for scattered island territories.
-            return region.hasPrefix("Seven seas") ? "Ocean islands" : region
+        let grouped = Dictionary(grouping: quizzable) { $0.facts!.region }
+        return grouped.map { name, members in
+            // The continent most of its countries are on (the Caribbean's
+            // islands are all North America; Antarctica stays last).
+            let continents = Dictionary(grouping: members, by: \.meta.continent)
+            let continent = continents.max { ($0.value.count, $1.key) < ($1.value.count, $0.key) }!.key
+            return QuizRegion(name: name, continent: continent,
+                              countries: members.sorted { $0.name < $1.name })
         }
-        return grouped
-            .map { QuizRegion(name: $0.key, countries: $0.value.sorted { $0.name < $1.name }) }
-            .filter { !$0.independent.isEmpty || $0.countries.count > 1 }
-            .sorted { ($0.independent.count, $1.name) > ($1.independent.count, $0.name) }
+        .sorted {
+            let rank = { (r: QuizRegion) in continentOrder.firstIndex(of: r.continent) ?? continentOrder.count }
+            return (rank($0), $0.name) < (rank($1), $1.name)
+        }
     }
 }
 
@@ -435,5 +459,82 @@ private struct CountryPickerRow: View {
         .contentShape(.rect)
         .accessibilityElement(children: .combine)
         .accessibilityAddTraits(isChosen ? .isSelected : [])
+    }
+}
+
+extension Array where Element: Hashable {
+    /// The elements in order, each kept only the first time it appears.
+    func uniqued() -> [Element] {
+        var seen = Set<Element>()
+        return filter { seen.insert($0).inserted }
+    }
+}
+
+/// Choose a quiz's countries by tapping them on the map: handy for a few
+/// neighbours ("the Benelux", "around Lake Victoria"). Country names are
+/// shown here (it's the parent's map), chosen countries are tinted teal.
+private struct MapCountryPicker: View {
+    let atlas: Atlas
+    @Binding var selection: [String]
+
+    @Environment(\.dismiss) private var dismiss
+    @State private var camera = MapCamera()
+    @State private var noSelection: AtlasCountry?
+    @State private var cardSide = false
+    @State private var topBarBottom: CGFloat = 96
+
+    private var chosen: Set<UInt32> {
+        let ids = Set(selection)
+        return Set(atlas.countries.filter { ids.contains($0.meta.id) }.map(\.id))
+    }
+
+    var body: some View {
+        ZStack(alignment: .top) {
+            WorldMapView(
+                atlas: atlas, camera: $camera, selection: $noSelection,
+                cardOnLeadingSide: $cardSide,
+                insets: MapInsets(top: topBarBottom + 8),
+                chosen: chosen,
+                onPick: toggle,
+                showsCountryNames: true
+            )
+            .ignoresSafeArea()
+
+            HStack(spacing: 14) {
+                Text("Tap countries to add or remove them")
+                    .font(.headline)
+                Spacer()
+                Text("\(selection.count) chosen")
+                    .font(.headline)
+                    .foregroundStyle(.secondary)
+                    .contentTransition(.numericText())
+                if !selection.isEmpty {
+                    Button("Clear") { selection = [] }
+                        .buttonStyle(.bordered)
+                }
+                Button("Done") { dismiss() }
+                    .buttonStyle(.borderedProminent)
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 12)
+            .background(.regularMaterial, in: .capsule)
+            .padding(20)
+            .onGeometryChange(for: CGFloat.self) { $0.frame(in: .global).maxY } action: {
+                topBarBottom = $0
+            }
+        }
+    }
+
+    private func toggle(_ country: AtlasCountry) {
+        // Only places with a country card can be quizzed.
+        guard country.facts != nil else { return }
+        let id = country.meta.id
+        withAnimation(.snappy) {
+            if let index = selection.firstIndex(of: id) {
+                selection.remove(at: index)
+            } else {
+                selection.append(id)
+            }
+        }
     }
 }

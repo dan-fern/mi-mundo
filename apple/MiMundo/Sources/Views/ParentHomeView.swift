@@ -21,6 +21,14 @@ struct ParentHomeView: View {
     var body: some View {
         NavigationStack {
             List {
+                Section {
+                    NavigationLink {
+                        ParentMapView(parent: parent)
+                    } label: {
+                        Label("Explore the world map", systemImage: "globe.americas.fill")
+                    }
+                }
+
                 QuizOfTheDaySection(parent: parent)
 
                 Section("Kids") {

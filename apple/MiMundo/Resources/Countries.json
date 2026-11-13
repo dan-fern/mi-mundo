@@ -22,6 +22,7 @@
    "Catalan"
   ],
   "population": 89752,
+  "region": "Southern Europe",
   "wikidata": "Q228"
  },
  "AE": {
@@ -57,6 +58,7 @@
    "Arabic"
   ],
   "population": 9890400,
+  "region": "Arabian Peninsula",
   "wikidata": "Q878"
  },
  "AF": {
@@ -77,6 +79,7 @@
    "Dari"
   ],
   "population": 41454761,
+  "region": "South Asia",
   "wikidata": "Q889"
  },
  "AG": {
@@ -107,6 +110,7 @@
    "English"
   ],
   "population": 101489,
+  "region": "Caribbean",
   "wikidata": "Q781"
  },
  "AI": {
@@ -126,6 +130,7 @@
    "English"
   ],
   "population": 19079,
+  "region": "Caribbean",
   "wikidata": "Q25228"
  },
  "AL": {
@@ -156,6 +161,7 @@
    "Albanian"
   ],
   "population": 2400000,
+  "region": "Balkans",
   "wikidata": "Q222"
  },
  "AM": {
@@ -181,6 +187,7 @@
    "Armenian"
   ],
   "population": 3000000,
+  "region": "Central Asia and the Caucasus",
   "wikidata": "Q399"
  },
  "AO": {
@@ -206,6 +213,7 @@
    "Portuguese"
   ],
   "population": 36749906,
+  "region": "Central Africa",
   "wikidata": "Q916"
  },
  "AQ": {
@@ -215,6 +223,7 @@
   "landmarks": [],
   "languages": [],
   "population": null,
+  "region": "Antarctica and ocean islands",
   "wikidata": "Q10372207"
  },
  "AR": {
@@ -250,6 +259,7 @@
    "Spanish"
   ],
   "population": 47327407,
+  "region": "South America",
   "wikidata": "Q414"
  },
  "AS": {
@@ -270,6 +280,7 @@
    "English"
   ],
   "population": 49710,
+  "region": "Pacific Islands",
   "wikidata": "Q16641"
  },
  "AT": {
@@ -305,6 +316,7 @@
    "German"
   ],
   "population": 8979894,
+  "region": "Western Europe",
   "wikidata": "Q40"
  },
  "AU": {
@@ -340,6 +352,7 @@
    "English"
   ],
   "population": 27614411,
+  "region": "Australia and Melanesia",
   "wikidata": "Q408"
  },
  "AW": {
@@ -360,6 +373,7 @@
    "Dutch"
   ],
   "population": 106739,
+  "region": "Caribbean",
   "wikidata": "Q21203"
  },
  "AX": {
@@ -379,6 +393,7 @@
    "Swedish"
   ],
   "population": 30836,
+  "region": "Northern Europe",
   "wikidata": "Q5689"
  },
  "AZ": {
@@ -404,6 +419,7 @@
    "Azerbaijani"
   ],
   "population": 10180770,
+  "region": "Central Asia and the Caucasus",
   "wikidata": "Q227"
  },
  "BA": {
@@ -436,6 +452,7 @@
    "Croatian"
   ],
   "population": 3816459,
+  "region": "Balkans",
   "wikidata": "Q225"
  },
  "BB": {
@@ -462,6 +479,7 @@
    "Bajan Creole"
   ],
   "population": 303431,
+  "region": "Caribbean",
   "wikidata": "Q244"
  },
  "BD": {
@@ -492,6 +510,7 @@
    "Bengali"
   ],
   "population": 171466990,
+  "region": "South Asia",
   "wikidata": "Q902"
  },
  "BE": {
@@ -529,6 +548,7 @@
    "German"
   ],
   "population": 11825551,
+  "region": "Western Europe",
   "wikidata": "Q31"
  },
  "BF": {
@@ -566,6 +586,7 @@
    "Bissa"
   ],
   "population": 23025776,
+  "region": "West Africa: Gulf of Guinea",
   "wikidata": "Q965"
  },
  "BG": {
@@ -601,6 +622,7 @@
    "Bulgarian"
   ],
   "population": 6423207,
+  "region": "Eastern Europe",
   "wikidata": "Q219"
  },
  "BH": {
@@ -636,6 +658,7 @@
    "Arabic"
   ],
   "population": 1569666,
+  "region": "Arabian Peninsula",
   "wikidata": "Q398"
  },
  "BI": {
@@ -657,6 +680,7 @@
    "English"
   ],
   "population": 13689450,
+  "region": "East Africa",
   "wikidata": "Q967"
  },
  "BJ": {
@@ -692,6 +716,7 @@
    "French"
   ],
   "population": 14111034,
+  "region": "West Africa: Gulf of Guinea",
   "wikidata": "Q962"
  },
  "BL": {
@@ -711,6 +736,7 @@
    "French"
   ],
   "population": 10124,
+  "region": "Caribbean",
   "wikidata": "Q25362"
  },
  "BM": {
@@ -730,6 +756,7 @@
    "English"
   ],
   "population": 63179,
+  "region": "North America",
   "wikidata": "Q23635"
  },
  "BN": {
@@ -750,6 +777,7 @@
    "English"
   ],
   "population": 458949,
+  "region": "Southeast Asia",
   "wikidata": "Q921"
  },
  "BO": {
@@ -793,6 +821,7 @@
    "Guarani"
   ],
   "population": 12244159,
+  "region": "South America",
   "wikidata": "Q750"
  },
  "BR": {
@@ -828,6 +857,7 @@
    "Portuguese"
   ],
   "population": 214211951,
+  "region": "South America",
   "wikidata": "Q155"
  },
  "BS": {
@@ -847,6 +877,7 @@
    "English"
   ],
   "population": 399440,
+  "region": "Caribbean",
   "wikidata": "Q778"
  },
  "BT": {
@@ -866,6 +897,7 @@
    "Dzongkha"
   ],
   "population": 787424,
+  "region": "South Asia",
   "wikidata": "Q917"
  },
  "BW": {
@@ -896,6 +928,7 @@
    "English"
   ],
   "population": 2480244,
+  "region": "Southern Africa",
   "wikidata": "Q963"
  },
  "BY": {
@@ -932,6 +965,7 @@
    "Belarusian"
   ],
   "population": 9056080,
+  "region": "Eastern Europe",
   "wikidata": "Q184"
  },
  "BZ": {
@@ -957,6 +991,7 @@
    "English"
   ],
   "population": 411106,
+  "region": "Central America",
   "wikidata": "Q242"
  },
  "CA": {
@@ -993,6 +1028,7 @@
    "French"
   ],
   "population": 36991981,
+  "region": "North America",
   "wikidata": "Q16"
  },
  "CD": {
@@ -1028,6 +1064,7 @@
    "French"
   ],
   "population": 105789731,
+  "region": "Central Africa",
   "wikidata": "Q974"
  },
  "CF": {
@@ -1054,6 +1091,7 @@
    "French"
   ],
   "population": 5152421,
+  "region": "Central Africa",
   "wikidata": "Q929"
  },
  "CG": {
@@ -1084,6 +1122,7 @@
    "French"
   ],
   "population": 6142180,
+  "region": "Central Africa",
   "wikidata": "Q971"
  },
  "CH": {
@@ -1121,6 +1160,7 @@
    "Italian"
   ],
   "population": 9104063,
+  "region": "Western Europe",
   "wikidata": "Q39"
  },
  "CI": {
@@ -1156,6 +1196,7 @@
    "French"
   ],
   "population": 31165654,
+  "region": "West Africa: Gulf of Guinea",
   "wikidata": "Q1008"
  },
  "CK": {
@@ -1176,6 +1217,7 @@
    "Cook Islands Maori"
   ],
   "population": 14222,
+  "region": "Pacific Islands",
   "wikidata": "Q26988"
  },
  "CL": {
@@ -1211,6 +1253,7 @@
    "Spanish"
   ],
   "population": 19458000,
+  "region": "South America",
   "wikidata": "Q298"
  },
  "CM": {
@@ -1247,6 +1290,7 @@
    "English"
   ],
   "population": 28372687,
+  "region": "Central Africa",
   "wikidata": "Q1009"
  },
  "CN": {
@@ -1282,6 +1326,7 @@
    "Mandarin Chinese"
   ],
   "population": 1408000000,
+  "region": "East Asia",
   "wikidata": "Q148"
  },
  "CO": {
@@ -1317,6 +1362,7 @@
    "Spanish"
   ],
   "population": 52321152,
+  "region": "South America",
   "wikidata": "Q739"
  },
  "CR": {
@@ -1347,6 +1393,7 @@
    "Spanish"
   ],
   "population": 5265575,
+  "region": "Central America",
   "wikidata": "Q800"
  },
  "CU": {
@@ -1382,6 +1429,7 @@
    "Spanish"
   ],
   "population": 10985974,
+  "region": "Caribbean",
   "wikidata": "Q241"
  },
  "CV": {
@@ -1408,6 +1456,7 @@
    "Cape Verdean Creole"
   ],
   "population": 555988,
+  "region": "West Africa: Atlantic",
   "wikidata": "Q1011"
  },
  "CW": {
@@ -1435,6 +1484,7 @@
    "English"
   ],
   "population": 152849,
+  "region": "Caribbean",
   "wikidata": "Q25279"
  },
  "CY": {
@@ -1455,6 +1505,7 @@
    "Turkish"
   ],
   "population": 1344976,
+  "region": "Middle East",
   "wikidata": "Q644636"
  },
  "CZ": {
@@ -1490,6 +1541,7 @@
    "Czech"
   ],
   "population": 10909500,
+  "region": "Eastern Europe",
   "wikidata": "Q213"
  },
  "DE": {
@@ -1525,6 +1577,7 @@
    "German"
   ],
   "population": 83467117,
+  "region": "Western Europe",
   "wikidata": "Q183"
  },
  "DJ": {
@@ -1546,6 +1599,7 @@
    "Arabic"
   ],
   "population": 1152944,
+  "region": "East Africa",
   "wikidata": "Q977"
  },
  "DK": {
@@ -1581,6 +1635,7 @@
    "Danish"
   ],
   "population": 5822863,
+  "region": "Northern Europe",
   "wikidata": "Q35"
  },
  "DM": {
@@ -1606,6 +1661,7 @@
    "English"
   ],
   "population": 74656,
+  "region": "Caribbean",
   "wikidata": "Q784"
  },
  "DO": {
@@ -1631,6 +1687,7 @@
    "Spanish"
   ],
   "population": 10760028,
+  "region": "Caribbean",
   "wikidata": "Q786"
  },
  "DZ": {
@@ -1667,6 +1724,7 @@
    "Tamazight"
   ],
   "population": 46164219,
+  "region": "North Africa",
   "wikidata": "Q262"
  },
  "EC": {
@@ -1704,6 +1762,7 @@
    "Shuar"
   ],
   "population": 16938986,
+  "region": "South America",
   "wikidata": "Q736"
  },
  "EE": {
@@ -1729,6 +1788,7 @@
    "Estonian"
   ],
   "population": 1369995,
+  "region": "Northern Europe",
   "wikidata": "Q191"
  },
  "EG": {
@@ -1764,6 +1824,7 @@
    "Arabic"
   ],
   "population": 114535772,
+  "region": "North Africa",
   "wikidata": "Q79"
  },
  "EH": {
@@ -1775,6 +1836,7 @@
    "Arabic"
   ],
   "population": 612000,
+  "region": "North Africa",
   "wikidata": "Q6250"
  },
  "ER": {
@@ -1802,6 +1864,7 @@
    "English"
   ],
   "population": 3500000,
+  "region": "East Africa",
   "wikidata": "Q986"
  },
  "ES": {
@@ -1837,6 +1900,7 @@
    "Spanish"
   ],
   "population": 48592909,
+  "region": "Southern Europe",
   "wikidata": "Q29"
  },
  "ET": {
@@ -1872,6 +1936,7 @@
    "Amharic"
   ],
   "population": 128691692,
+  "region": "East Africa",
   "wikidata": "Q115"
  },
  "FI": {
@@ -1908,6 +1973,7 @@
    "Swedish"
   ],
   "population": 5652881,
+  "region": "Northern Europe",
   "wikidata": "Q33"
  },
  "FJ": {
@@ -1935,6 +2001,7 @@
    "Fijian"
   ],
   "population": 930000,
+  "region": "Australia and Melanesia",
   "wikidata": "Q712"
  },
  "FK": {
@@ -1954,6 +2021,7 @@
    "English"
   ],
   "population": 3662,
+  "region": "South America",
   "wikidata": "Q9648"
  },
  "FM": {
@@ -1979,6 +2047,7 @@
    "English"
   ],
   "population": 105000,
+  "region": "Pacific Islands",
   "wikidata": "Q702"
  },
  "FO": {
@@ -1999,6 +2068,7 @@
    "Faroese"
   ],
   "population": 54149,
+  "region": "Northern Europe",
   "wikidata": "Q4628"
  },
  "FR": {
@@ -2034,6 +2104,7 @@
    "French"
   ],
   "population": 68605616,
+  "region": "Western Europe",
   "wikidata": "Q142"
  },
  "GA": {
@@ -2059,6 +2130,7 @@
    "French"
   ],
   "population": 2500000,
+  "region": "Central Africa",
   "wikidata": "Q1000"
  },
  "GB": {
@@ -2094,6 +2166,7 @@
    "English"
   ],
   "population": 67326569,
+  "region": "Northern Europe",
   "wikidata": "Q145"
  },
  "GD": {
@@ -2113,6 +2186,7 @@
    "English"
   ],
   "population": 114299,
+  "region": "Caribbean",
   "wikidata": "Q769"
  },
  "GE": {
@@ -2148,6 +2222,7 @@
    "Georgian"
   ],
   "population": 3929581,
+  "region": "Central Asia and the Caucasus",
   "wikidata": "Q230"
  },
  "GG": {
@@ -2168,6 +2243,7 @@
    "French"
   ],
   "population": 67787,
+  "region": "Northern Europe",
   "wikidata": "Q25230"
  },
  "GH": {
@@ -2193,6 +2269,7 @@
    "English"
   ],
   "population": 32833031,
+  "region": "West Africa: Gulf of Guinea",
   "wikidata": "Q117"
  },
  "GL": {
@@ -2228,6 +2305,7 @@
    "Greenlandic"
   ],
   "population": 56609,
+  "region": "North America",
   "wikidata": "Q223"
  },
  "GM": {
@@ -2253,6 +2331,7 @@
    "English"
   ],
   "population": 2639916,
+  "region": "West Africa: Atlantic",
   "wikidata": "Q1005"
  },
  "GN": {
@@ -2278,6 +2357,7 @@
    "French"
   ],
   "population": 17521167,
+  "region": "West Africa: Atlantic",
   "wikidata": "Q1006"
  },
  "GQ": {
@@ -2299,6 +2379,7 @@
    "French"
   ],
   "population": 1847549,
+  "region": "Central Africa",
   "wikidata": "Q983"
  },
  "GR": {
@@ -2334,6 +2415,7 @@
    "Greek"
   ],
   "population": 10482487,
+  "region": "Southern Europe",
   "wikidata": "Q41"
  },
  "GS": {
@@ -2353,6 +2435,7 @@
    "English"
   ],
   "population": null,
+  "region": "Antarctica and ocean islands",
   "wikidata": "Q35086"
  },
  "GT": {
@@ -2388,6 +2471,7 @@
    "Spanish"
   ],
   "population": 18400000,
+  "region": "Central America",
   "wikidata": "Q774"
  },
  "GU": {
@@ -2408,6 +2492,7 @@
    "Chamorro"
   ],
   "population": 153836,
+  "region": "Pacific Islands",
   "wikidata": "Q16635"
  },
  "GW": {
@@ -2427,6 +2512,7 @@
    "Portuguese"
   ],
   "population": 2200000,
+  "region": "West Africa: Atlantic",
   "wikidata": "Q1007"
  },
  "GY": {
@@ -2446,6 +2532,7 @@
    "English"
   ],
   "population": 878674,
+  "region": "South America",
   "wikidata": "Q734"
  },
  "HK": {
@@ -2458,6 +2545,7 @@
    "English"
   ],
   "population": 7413070,
+  "region": "East Asia",
   "wikidata": "Q8646"
  },
  "HM": {
@@ -2469,6 +2557,7 @@
    "English"
   ],
   "population": null,
+  "region": "Antarctica and ocean islands",
   "wikidata": "Q131198"
  },
  "HN": {
@@ -2499,6 +2588,7 @@
    "Spanish"
   ],
   "population": 10800000,
+  "region": "Central America",
   "wikidata": "Q783"
  },
  "HR": {
@@ -2534,6 +2624,7 @@
    "Croatian"
   ],
   "population": 3871833,
+  "region": "Balkans",
   "wikidata": "Q224"
  },
  "HT": {
@@ -2565,6 +2656,7 @@
    "French"
   ],
   "population": 11800000,
+  "region": "Caribbean",
   "wikidata": "Q790"
  },
  "HU": {
@@ -2600,6 +2692,7 @@
    "Hungarian"
   ],
   "population": 9603634,
+  "region": "Eastern Europe",
   "wikidata": "Q28"
  },
  "ID": {
@@ -2635,6 +2728,7 @@
    "Indonesian"
   ],
   "population": 275439000,
+  "region": "Southeast Asia",
   "wikidata": "Q252"
  },
  "IE": {
@@ -2671,6 +2765,7 @@
    "Irish"
   ],
   "population": 5149139,
+  "region": "Northern Europe",
   "wikidata": "Q27"
  },
  "IL": {
@@ -2706,6 +2801,7 @@
    "Hebrew"
   ],
   "population": 9840000,
+  "region": "Middle East",
   "wikidata": "Q801"
  },
  "IM": {
@@ -2726,6 +2822,7 @@
    "Manx"
   ],
   "population": 84523,
+  "region": "Northern Europe",
   "wikidata": "Q9676"
  },
  "IN": {
@@ -2762,6 +2859,7 @@
    "English"
   ],
   "population": 1460000000,
+  "region": "South Asia",
   "wikidata": "Q668"
  },
  "IO": {
@@ -2781,6 +2879,7 @@
    "English"
   ],
   "population": null,
+  "region": "Antarctica and ocean islands",
   "wikidata": "Q43448"
  },
  "IQ": {
@@ -2817,6 +2916,7 @@
    "Kurdish"
   ],
   "population": 46000000,
+  "region": "Middle East",
   "wikidata": "Q796"
  },
  "IR": {
@@ -2852,6 +2952,7 @@
    "Persian"
   ],
   "population": 92417700,
+  "region": "South Asia",
   "wikidata": "Q794"
  },
  "IS": {
@@ -2887,6 +2988,7 @@
    "Icelandic"
   ],
   "population": 390000,
+  "region": "Northern Europe",
   "wikidata": "Q189"
  },
  "IT": {
@@ -2922,6 +3024,7 @@
    "Italian"
   ],
   "population": 58850717,
+  "region": "Southern Europe",
   "wikidata": "Q38"
  },
  "JE": {
@@ -2942,6 +3045,7 @@
    "French"
   ],
   "population": 103267,
+  "region": "Northern Europe",
   "wikidata": "Q785"
  },
  "JM": {
@@ -2973,6 +3077,7 @@
    "Jamaican Patois"
   ],
   "population": 2800000,
+  "region": "Caribbean",
   "wikidata": "Q766"
  },
  "JO": {
@@ -3008,6 +3113,7 @@
    "Arabic"
   ],
   "population": 11600000,
+  "region": "Middle East",
   "wikidata": "Q810"
  },
  "JP": {
@@ -3043,6 +3149,7 @@
    "Japanese"
   ],
   "population": 123802000,
+  "region": "East Asia",
   "wikidata": "Q17"
  },
  "KE": {
@@ -3079,6 +3186,7 @@
    "English"
   ],
   "population": 53000000,
+  "region": "East Africa",
   "wikidata": "Q114"
  },
  "KG": {
@@ -3114,6 +3222,7 @@
    "Kyrgyz"
   ],
   "population": 7281800,
+  "region": "Central Asia and the Caucasus",
   "wikidata": "Q813"
  },
  "KH": {
@@ -3149,6 +3258,7 @@
    "Khmer"
   ],
   "population": 17423880,
+  "region": "Southeast Asia",
   "wikidata": "Q424"
  },
  "KI": {
@@ -3175,6 +3285,7 @@
    "English"
   ],
   "population": 134518,
+  "region": "Pacific Islands",
   "wikidata": "Q710"
  },
  "KM": {
@@ -3196,6 +3307,7 @@
    "Arabic"
   ],
   "population": 902348,
+  "region": "Southern Africa",
   "wikidata": "Q970"
  },
  "KN": {
@@ -3215,6 +3327,7 @@
    "English"
   ],
   "population": 46922,
+  "region": "Caribbean",
   "wikidata": "Q763"
  },
  "KP": {
@@ -3245,6 +3358,7 @@
    "Korean"
   ],
   "population": 26418204,
+  "region": "East Asia",
   "wikidata": "Q423"
  },
  "KR": {
@@ -3280,6 +3394,7 @@
    "Korean"
   ],
   "population": 51700000,
+  "region": "East Asia",
   "wikidata": "Q884"
  },
  "KW": {
@@ -3299,6 +3414,7 @@
    "Arabic"
   ],
   "population": 4464000,
+  "region": "Arabian Peninsula",
   "wikidata": "Q817"
  },
  "KY": {
@@ -3318,6 +3434,7 @@
    "English"
   ],
   "population": 88833,
+  "region": "Caribbean",
   "wikidata": "Q5785"
  },
  "KZ": {
@@ -3354,6 +3471,7 @@
    "Russian"
   ],
   "population": 20139914,
+  "region": "Central Asia and the Caucasus",
   "wikidata": "Q232"
  },
  "LA": {
@@ -3389,6 +3507,7 @@
    "Lao"
   ],
   "population": 7700000,
+  "region": "Southeast Asia",
   "wikidata": "Q819"
  },
  "LB": {
@@ -3424,6 +3543,7 @@
    "Arabic"
   ],
   "population": 5800000,
+  "region": "Middle East",
   "wikidata": "Q822"
  },
  "LC": {
@@ -3449,6 +3569,7 @@
    "English"
   ],
   "population": 167591,
+  "region": "Caribbean",
   "wikidata": "Q760"
  },
  "LI": {
@@ -3468,6 +3589,7 @@
    "German"
   ],
   "population": 40000,
+  "region": "Western Europe",
   "wikidata": "Q347"
  },
  "LK": {
@@ -3510,6 +3632,7 @@
    "Tamil"
   ],
   "population": 21900000,
+  "region": "South Asia",
   "wikidata": "Q854"
  },
  "LR": {
@@ -3529,6 +3652,7 @@
    "English"
   ],
   "population": 5214030,
+  "region": "West Africa: Atlantic",
   "wikidata": "Q1014"
  },
  "LS": {
@@ -3555,6 +3679,7 @@
    "English"
   ],
   "population": 2300000,
+  "region": "Southern Africa",
   "wikidata": "Q1013"
  },
  "LT": {
@@ -3590,6 +3715,7 @@
    "Lithuanian"
   ],
   "population": 2860002,
+  "region": "Northern Europe",
   "wikidata": "Q37"
  },
  "LU": {
@@ -3611,6 +3737,7 @@
    "German"
   ],
   "population": 690959,
+  "region": "Western Europe",
   "wikidata": "Q32"
  },
  "LV": {
@@ -3641,6 +3768,7 @@
    "Latvian"
   ],
   "population": 1845096,
+  "region": "Northern Europe",
   "wikidata": "Q211"
  },
  "LY": {
@@ -3676,6 +3804,7 @@
    "Arabic"
   ],
   "population": 7381023,
+  "region": "North Africa",
   "wikidata": "Q1016"
  },
  "MA": {
@@ -3712,6 +3841,7 @@
    "Tamazight"
   ],
   "population": 36828330,
+  "region": "North Africa",
   "wikidata": "Q1028"
  },
  "MC": {
@@ -3731,6 +3861,7 @@
    "French"
   ],
   "population": 38857,
+  "region": "Western Europe",
   "wikidata": "Q235"
  },
  "MD": {
@@ -3750,6 +3881,7 @@
    "Romanian"
   ],
   "population": 2409207,
+  "region": "Eastern Europe",
   "wikidata": "Q217"
  },
  "ME": {
@@ -3775,6 +3907,7 @@
    "Montenegrin"
   ],
   "population": 617213,
+  "region": "Balkans",
   "wikidata": "Q236"
  },
  "MF": {
@@ -3794,6 +3927,7 @@
    "French"
   ],
   "population": 32358,
+  "region": "Caribbean",
   "wikidata": "Q126125"
  },
  "MG": {
@@ -3825,6 +3959,7 @@
    "French"
   ],
   "population": 31964956,
+  "region": "Southern Africa",
   "wikidata": "Q1019"
  },
  "MH": {
@@ -3845,6 +3980,7 @@
    "English"
   ],
   "population": 42000,
+  "region": "Pacific Islands",
   "wikidata": "Q709"
  },
  "MK": {
@@ -3876,6 +4012,7 @@
    "Albanian"
   ],
   "population": 1836713,
+  "region": "Balkans",
   "wikidata": "Q221"
  },
  "ML": {
@@ -3913,6 +4050,7 @@
    "French"
   ],
   "population": 22395489,
+  "region": "West Africa: Atlantic",
   "wikidata": "Q912"
  },
  "MM": {
@@ -3943,6 +4081,7 @@
    "Burmese"
   ],
   "population": 54500000,
+  "region": "Southeast Asia",
   "wikidata": "Q836"
  },
  "MN": {
@@ -3978,6 +4117,7 @@
    "Mongolian"
   ],
   "population": 3409939,
+  "region": "East Asia",
   "wikidata": "Q711"
  },
  "MO": {
@@ -3990,6 +4130,7 @@
    "Portuguese"
   ],
   "population": 682100,
+  "region": "East Asia",
   "wikidata": "Q14773"
  },
  "MP": {
@@ -4011,6 +4152,7 @@
    "Carolinian"
   ],
   "population": 47329,
+  "region": "Pacific Islands",
   "wikidata": "Q16644"
  },
  "MR": {
@@ -4037,6 +4179,7 @@
    "French"
   ],
   "population": 4736139,
+  "region": "West Africa: Atlantic",
   "wikidata": "Q1025"
  },
  "MS": {
@@ -4056,6 +4199,7 @@
    "English"
   ],
   "population": 5440,
+  "region": "Caribbean",
   "wikidata": "Q13353"
  },
  "MT": {
@@ -4087,6 +4231,7 @@
    "English"
   ],
   "population": 553214,
+  "region": "Southern Europe",
   "wikidata": "Q233"
  },
  "MU": {
@@ -4119,6 +4264,7 @@
    "French"
   ],
   "population": 1270000,
+  "region": "Southern Africa",
   "wikidata": "Q1027"
  },
  "MV": {
@@ -4138,6 +4284,7 @@
    "Dhivehi"
   ],
   "population": 530000,
+  "region": "South Asia",
   "wikidata": "Q826"
  },
  "MW": {
@@ -4175,6 +4322,7 @@
    "Tumbuka"
   ],
   "population": 21500000,
+  "region": "Southern Africa",
   "wikidata": "Q1020"
  },
  "MX": {
@@ -4212,6 +4360,7 @@
    "Yucatec Maya"
   ],
   "population": 132274416,
+  "region": "North America",
   "wikidata": "Q96"
  },
  "MY": {
@@ -4247,6 +4396,7 @@
    "Malay"
   ],
   "population": 34231700,
+  "region": "Southeast Asia",
   "wikidata": "Q833"
  },
  "MZ": {
@@ -4277,6 +4427,7 @@
    "Portuguese"
   ],
   "population": 34000000,
+  "region": "Southern Africa",
   "wikidata": "Q1029"
  },
  "NA": {
@@ -4307,6 +4458,7 @@
    "English"
   ],
   "population": 3000000,
+  "region": "Southern Africa",
   "wikidata": "Q1030"
  },
  "NC": {
@@ -4326,6 +4478,7 @@
    "French"
   ],
   "population": 278500,
+  "region": "Australia and Melanesia",
   "wikidata": "Q33788"
  },
  "NE": {
@@ -4353,6 +4506,7 @@
    "French"
   ],
   "population": 27000000,
+  "region": "West Africa: Gulf of Guinea",
   "wikidata": "Q1032"
  },
  "NF": {
@@ -4373,6 +4527,7 @@
    "Norfuk"
   ],
   "population": 2188,
+  "region": "Australia and Melanesia",
   "wikidata": "Q31057"
  },
  "NG": {
@@ -4408,6 +4563,7 @@
    "English"
   ],
   "population": 211400708,
+  "region": "West Africa: Gulf of Guinea",
   "wikidata": "Q1033"
  },
  "NI": {
@@ -4438,6 +4594,7 @@
    "Spanish"
   ],
   "population": 7000000,
+  "region": "Central America",
   "wikidata": "Q811"
  },
  "NL": {
@@ -4473,6 +4630,7 @@
    "Dutch"
   ],
   "population": 17900000,
+  "region": "Western Europe",
   "wikidata": "Q29999"
  },
  "NO": {
@@ -4508,6 +4666,7 @@
    "Norwegian"
   ],
   "population": 5627400,
+  "region": "Northern Europe",
   "wikidata": "Q20"
  },
  "NP": {
@@ -4543,6 +4702,7 @@
    "Nepali"
   ],
   "population": 29164578,
+  "region": "South Asia",
   "wikidata": "Q837"
  },
  "NR": {
@@ -4563,6 +4723,7 @@
    "English"
   ],
   "population": 12000,
+  "region": "Pacific Islands",
   "wikidata": "Q697"
  },
  "NU": {
@@ -4583,6 +4744,7 @@
    "Niuean"
   ],
   "population": 1821,
+  "region": "Pacific Islands",
   "wikidata": "Q34020"
  },
  "NZ": {
@@ -4619,6 +4781,7 @@
    "Māori"
   ],
   "population": 5307800,
+  "region": "Australia and Melanesia",
   "wikidata": "Q664"
  },
  "OM": {
@@ -4654,6 +4817,7 @@
    "Arabic"
   ],
   "population": 5300000,
+  "region": "Arabian Peninsula",
   "wikidata": "Q842"
  },
  "PA": {
@@ -4689,6 +4853,7 @@
    "Spanish"
   ],
   "population": 4570133,
+  "region": "Central America",
   "wikidata": "Q804"
  },
  "PE": {
@@ -4726,6 +4891,7 @@
    "Aymara"
   ],
   "population": 34157732,
+  "region": "South America",
   "wikidata": "Q419"
  },
  "PF": {
@@ -4745,6 +4911,7 @@
    "French"
   ],
   "population": 278786,
+  "region": "Pacific Islands",
   "wikidata": "Q30971"
  },
  "PG": {
@@ -4772,6 +4939,7 @@
    "Hiri Motu"
   ],
   "population": 8935000,
+  "region": "Australia and Melanesia",
   "wikidata": "Q691"
  },
  "PH": {
@@ -4808,6 +4976,7 @@
    "English"
   ],
   "population": 112729484,
+  "region": "Southeast Asia",
   "wikidata": "Q928"
  },
  "PK": {
@@ -4844,6 +5013,7 @@
    "English"
   ],
   "population": 241500000,
+  "region": "South Asia",
   "wikidata": "Q843"
  },
  "PL": {
@@ -4879,6 +5049,7 @@
    "Polish"
   ],
   "population": 37563071,
+  "region": "Eastern Europe",
   "wikidata": "Q36"
  },
  "PM": {
@@ -4898,6 +5069,7 @@
    "French"
   ],
   "population": 5974,
+  "region": "North America",
   "wikidata": "Q34617"
  },
  "PN": {
@@ -4918,6 +5090,7 @@
    "Pitkern"
   ],
   "population": 50,
+  "region": "Pacific Islands",
   "wikidata": "Q35672"
  },
  "PR": {
@@ -4938,6 +5111,7 @@
    "Spanish"
   ],
   "population": 3285874,
+  "region": "Caribbean",
   "wikidata": "Q1183"
  },
  "PS": {
@@ -4979,6 +5153,7 @@
    "Arabic"
   ],
   "population": 5227193,
+  "region": "Middle East",
   "wikidata": "Q219060"
  },
  "PT": {
@@ -5014,6 +5189,7 @@
    "Portuguese"
   ],
   "population": 10347892,
+  "region": "Southern Europe",
   "wikidata": "Q45"
  },
  "PW": {
@@ -5040,6 +5216,7 @@
    "English"
   ],
   "population": 17600,
+  "region": "Pacific Islands",
   "wikidata": "Q695"
  },
  "PY": {
@@ -5060,6 +5237,7 @@
    "Guarani"
   ],
   "population": 6900000,
+  "region": "South America",
   "wikidata": "Q733"
  },
  "QA": {
@@ -5085,6 +5263,7 @@
    "Arabic"
   ],
   "population": 3000000,
+  "region": "Arabian Peninsula",
   "wikidata": "Q846"
  },
  "RO": {
@@ -5120,6 +5299,7 @@
    "Romanian"
   ],
   "population": 19053815,
+  "region": "Eastern Europe",
   "wikidata": "Q218"
  },
  "RS": {
@@ -5155,6 +5335,7 @@
    "Serbian"
   ],
   "population": 6605168,
+  "region": "Balkans",
   "wikidata": "Q403"
  },
  "RU": {
@@ -5190,6 +5371,7 @@
    "Russian"
   ],
   "population": 146119928,
+  "region": "Eastern Europe",
   "wikidata": "Q159"
  },
  "RW": {
@@ -5227,6 +5409,7 @@
    "French"
   ],
   "population": 14569341,
+  "region": "East Africa",
   "wikidata": "Q1037"
  },
  "SA": {
@@ -5262,6 +5445,7 @@
    "Arabic"
   ],
   "population": 35300000,
+  "region": "Arabian Peninsula",
   "wikidata": "Q851"
  },
  "SB": {
@@ -5287,6 +5471,7 @@
    "English"
   ],
   "population": 760000,
+  "region": "Australia and Melanesia",
   "wikidata": "Q685"
  },
  "SC": {
@@ -5319,6 +5504,7 @@
    "French"
   ],
   "population": 119773,
+  "region": "Southern Africa",
   "wikidata": "Q1042"
  },
  "SD": {
@@ -5350,6 +5536,7 @@
    "English"
   ],
   "population": 50400000,
+  "region": "North Africa",
   "wikidata": "Q1049"
  },
  "SE": {
@@ -5385,6 +5572,7 @@
    "Swedish"
   ],
   "population": 10609460,
+  "region": "Northern Europe",
   "wikidata": "Q34"
  },
  "SG": {
@@ -5422,6 +5610,7 @@
    "Malay"
   ],
   "population": 5866139,
+  "region": "Southeast Asia",
   "wikidata": "Q334"
  },
  "SH": {
@@ -5441,6 +5630,7 @@
    "English"
   ],
   "population": 5633,
+  "region": "West Africa: Atlantic",
   "wikidata": "Q192184"
  },
  "SI": {
@@ -5466,6 +5656,7 @@
    "Slovene"
   ],
   "population": 2100000,
+  "region": "Balkans",
   "wikidata": "Q215"
  },
  "SK": {
@@ -5501,6 +5692,7 @@
    "Slovak"
   ],
   "population": 5409407,
+  "region": "Eastern Europe",
   "wikidata": "Q214"
  },
  "SL": {
@@ -5532,6 +5724,7 @@
    "Krio"
   ],
   "population": 8600000,
+  "region": "West Africa: Atlantic",
   "wikidata": "Q1044"
  },
  "SM": {
@@ -5551,6 +5744,7 @@
    "Italian"
   ],
   "population": 34167,
+  "region": "Southern Europe",
   "wikidata": "Q238"
  },
  "SN": {
@@ -5587,6 +5781,7 @@
    "French"
   ],
   "population": 16876720,
+  "region": "West Africa: Atlantic",
   "wikidata": "Q1041"
  },
  "SO": {
@@ -5607,6 +5802,7 @@
    "Arabic"
   ],
   "population": 19000000,
+  "region": "East Africa",
   "wikidata": "Q1045"
  },
  "SR": {
@@ -5642,6 +5838,7 @@
    "Dutch"
   ],
   "population": 630000,
+  "region": "South America",
   "wikidata": "Q730"
  },
  "SS": {
@@ -5667,6 +5864,7 @@
    "English"
   ],
   "population": 11900000,
+  "region": "East Africa",
   "wikidata": "Q958"
  },
  "ST": {
@@ -5686,6 +5884,7 @@
    "Portuguese"
   ],
   "population": 230000,
+  "region": "Central Africa",
   "wikidata": "Q1039"
  },
  "SV": {
@@ -5711,6 +5910,7 @@
    "Spanish"
   ],
   "population": 6029976,
+  "region": "Central America",
   "wikidata": "Q792"
  },
  "SX": {
@@ -5731,6 +5931,7 @@
    "Dutch"
   ],
   "population": 43847,
+  "region": "Caribbean",
   "wikidata": "Q26273"
  },
  "SY": {
@@ -5766,6 +5967,7 @@
    "Arabic"
   ],
   "population": 23865423,
+  "region": "Middle East",
   "wikidata": "Q858"
  },
  "SZ": {
@@ -5792,6 +5994,7 @@
    "English"
   ],
   "population": 1230506,
+  "region": "Southern Africa",
   "wikidata": "Q1050"
  },
  "TC": {
@@ -5811,6 +6014,7 @@
    "English"
   ],
   "population": 44542,
+  "region": "Caribbean",
   "wikidata": "Q18221"
  },
  "TD": {
@@ -5842,6 +6046,7 @@
    "French"
   ],
   "population": 19319064,
+  "region": "Central Africa",
   "wikidata": "Q657"
  },
  "TF": {
@@ -5861,6 +6066,7 @@
    "French"
   ],
   "population": null,
+  "region": "Antarctica and ocean islands",
   "wikidata": "Q129003"
  },
  "TG": {
@@ -5886,6 +6092,7 @@
    "French"
   ],
   "population": 9700000,
+  "region": "West Africa: Gulf of Guinea",
   "wikidata": "Q945"
  },
  "TH": {
@@ -5921,6 +6128,7 @@
    "Thai"
   ],
   "population": 71700000,
+  "region": "Southeast Asia",
   "wikidata": "Q869"
  },
  "TJ": {
@@ -5956,6 +6164,7 @@
    "Tajik"
   ],
   "population": 9504000,
+  "region": "Central Asia and the Caucasus",
   "wikidata": "Q863"
  },
  "TL": {
@@ -5976,6 +6185,7 @@
    "Tetum"
   ],
   "population": 1400638,
+  "region": "Southeast Asia",
   "wikidata": "Q574"
  },
  "TM": {
@@ -6011,6 +6221,7 @@
    "Turkmen"
   ],
   "population": 6117933,
+  "region": "Central Asia and the Caucasus",
   "wikidata": "Q874"
  },
  "TN": {
@@ -6046,6 +6257,7 @@
    "Arabic"
   ],
   "population": 12300000,
+  "region": "North Africa",
   "wikidata": "Q948"
  },
  "TO": {
@@ -6066,6 +6278,7 @@
    "English"
   ],
   "population": 104000,
+  "region": "Pacific Islands",
   "wikidata": "Q678"
  },
  "TR": {
@@ -6101,6 +6314,7 @@
    "Turkish"
   ],
   "population": 85372377,
+  "region": "Middle East",
   "wikidata": "Q43"
  },
  "TT": {
@@ -6120,6 +6334,7 @@
    "English"
   ],
   "population": 1500000,
+  "region": "Caribbean",
   "wikidata": "Q754"
  },
  "TV": {
@@ -6140,6 +6355,7 @@
    "English"
   ],
   "population": 10643,
+  "region": "Pacific Islands",
   "wikidata": "Q672"
  },
  "TW": {
@@ -6161,6 +6377,7 @@
    "Hakka"
   ],
   "population": 23262544,
+  "region": "East Asia",
   "wikidata": "Q865"
  },
  "TZ": {
@@ -6197,6 +6414,7 @@
    "English"
   ],
   "population": 68500000,
+  "region": "East Africa",
   "wikidata": "Q924"
  },
  "UA": {
@@ -6232,6 +6450,7 @@
    "Ukrainian"
   ],
   "population": 38000000,
+  "region": "Eastern Europe",
   "wikidata": "Q212"
  },
  "UG": {
@@ -6268,6 +6487,7 @@
    "Swahili"
   ],
   "population": 47123531,
+  "region": "East Africa",
   "wikidata": "Q1036"
  },
  "US": {
@@ -6304,6 +6524,7 @@
    "Spanish"
   ],
   "population": 340110988,
+  "region": "North America",
   "wikidata": "Q30"
  },
  "UY": {
@@ -6329,6 +6550,7 @@
    "Spanish"
   ],
   "population": 3444263,
+  "region": "South America",
   "wikidata": "Q77"
  },
  "UZ": {
@@ -6364,6 +6586,7 @@
    "Uzbek"
   ],
   "population": 34915100,
+  "region": "Central Asia and the Caucasus",
   "wikidata": "Q265"
  },
  "VA": {
@@ -6395,6 +6618,7 @@
    "Latin"
   ],
   "population": 949,
+  "region": "Southern Europe",
   "wikidata": "Q237"
  },
  "VC": {
@@ -6414,6 +6638,7 @@
    "English"
   ],
   "population": 109296,
+  "region": "Caribbean",
   "wikidata": "Q757"
  },
  "VE": {
@@ -6449,6 +6674,7 @@
    "Spanish"
   ],
   "population": 31250306,
+  "region": "South America",
   "wikidata": "Q717"
  },
  "VG": {
@@ -6468,6 +6694,7 @@
    "English"
   ],
   "population": 39369,
+  "region": "Caribbean",
   "wikidata": "Q25305"
  },
  "VI": {
@@ -6487,6 +6714,7 @@
    "English"
   ],
   "population": 87000,
+  "region": "Caribbean",
   "wikidata": "Q11703"
  },
  "VN": {
@@ -6522,6 +6750,7 @@
    "Vietnamese"
   ],
   "population": 100900000,
+  "region": "Southeast Asia",
   "wikidata": "Q881"
  },
  "VU": {
@@ -6549,6 +6778,7 @@
    "French"
   ],
   "population": 300019,
+  "region": "Australia and Melanesia",
   "wikidata": "Q686"
  },
  "WF": {
@@ -6570,6 +6800,7 @@
    "Wallisian"
   ],
   "population": 11558,
+  "region": "Pacific Islands",
   "wikidata": "Q35555"
  },
  "WS": {
@@ -6590,6 +6821,7 @@
    "English"
   ],
   "population": 200010,
+  "region": "Pacific Islands",
   "wikidata": "Q683"
  },
  "XK": {
@@ -6610,6 +6842,7 @@
    "Serbian"
   ],
   "population": 1586659,
+  "region": "Balkans",
   "wikidata": "Q1246"
  },
  "YE": {
@@ -6651,6 +6884,7 @@
    "Arabic"
   ],
   "population": 40600000,
+  "region": "Arabian Peninsula",
   "wikidata": "Q805"
  },
  "ZA": {
@@ -6700,6 +6934,7 @@
    "English"
   ],
   "population": 62027503,
+  "region": "Southern Africa",
   "wikidata": "Q258"
  },
  "ZM": {
@@ -6730,6 +6965,7 @@
    "English"
   ],
   "population": 19610769,
+  "region": "Southern Africa",
   "wikidata": "Q953"
  },
  "ZW": {
@@ -6767,6 +7003,7 @@
    "English"
   ],
   "population": 15178979,
+  "region": "Southern Africa",
   "wikidata": "Q954"
  }
 }

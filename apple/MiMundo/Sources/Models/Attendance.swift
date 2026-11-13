@@ -36,10 +36,56 @@ enum Attendance {
     }
 }
 
+/// The current game day, kept up to date for views. Attendance and streaks
+/// depend on what day it is, not only on the visits, so without this a
+/// screen left open across 10 pm ET (or one the app returns to the next
+/// morning) kept showing yesterday's streak.
+@MainActor
+@Observable
+final class GameDayClock {
+    private(set) var today: Int32 = Attendance.today()
+    @ObservationIgnored private var ticker: Task<Void, Never>?
+
+    init() { schedule() }
+
+    /// Re-reads the clock (call when the app comes back to the front: a
+    /// sleeping Task can be late after the iPad was locked).
+    func refresh(now: Date = .now) {
+        let day = Attendance.today(now: now)
+        if day != today { today = day }
+        schedule()
+    }
+
+    private func schedule() {
+        ticker?.cancel()
+        let wait = Self.secondsUntilNextDay(from: .now)
+        ticker = Task { [weak self] in
+            try? await Task.sleep(for: .seconds(wait + 1))
+            guard !Task.isCancelled else { return }
+            self?.refresh()
+        }
+    }
+
+    /// Seconds until the game day changes: the first second after `now`
+    /// whose game day differs, found by halving (DST makes the length of
+    /// a day vary, so it isn't a fixed offset).
+    static func secondsUntilNextDay(from now: Date) -> TimeInterval {
+        let start = Int64(now.timeIntervalSince1970.rounded(.down))
+        let today = gameDay(unixSeconds: start)
+        var low: Int64 = 0, high: Int64 = 26 * 3600
+        while high - low > 1 {
+            let mid = (low + high) / 2
+            if gameDay(unixSeconds: start + mid) == today { low = mid } else { high = mid }
+        }
+        return TimeInterval(high)
+    }
+}
+
 /// Fetches only one child's visits and hands their attendance summary to
-/// `content`.
+/// `content`, recomputed whenever the visits or the game day change.
 struct WithAttendance<Content: View>: View {
     @Query private var visits: [Visit]
+    @Environment(GameDayClock.self) private var clock
     private let content: (AttendanceSummary) -> Content
 
     init(childID: UUID, @ViewBuilder content: @escaping (AttendanceSummary) -> Content) {
@@ -48,7 +94,7 @@ struct WithAttendance<Content: View>: View {
     }
 
     var body: some View {
-        content(Attendance.summary(days: visits.map(\.day)))
+        content(attendanceSummary(visitDays: visits.map(\.day), today: clock.today))
     }
 }
 

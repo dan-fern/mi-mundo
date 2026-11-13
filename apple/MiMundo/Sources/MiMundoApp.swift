@@ -6,6 +6,8 @@ struct MiMundoApp: App {
     private let container = Persistence.makeContainer()
     @State private var atlasStore = AtlasStore()
     @State private var cameraStore = MapCameraStore()
+    @State private var gameDayClock = GameDayClock()
+    @Environment(\.scenePhase) private var scenePhase
 
     var body: some Scene {
         WindowGroup {
@@ -15,6 +17,10 @@ struct MiMundoApp: App {
                 .fontDesign(.rounded)
                 .environment(atlasStore)
                 .environment(cameraStore)
+                .environment(gameDayClock)
+                .onChange(of: scenePhase) { _, phase in
+                    if phase == .active { gameDayClock.refresh() }
+                }
                 // Start loading the map while the kid is still picking a profile.
                 .task { await atlasStore.loadIfNeeded() }
         }

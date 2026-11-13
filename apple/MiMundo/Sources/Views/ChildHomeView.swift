@@ -7,79 +7,15 @@ struct ChildHomeView: View {
     let child: Profile
     let onSwitchPlayer: () -> Void
 
-    @Environment(AtlasStore.self) private var atlasStore
-    @Environment(MapCameraStore.self) private var cameraStore
     @Environment(\.modelContext) private var context
     @Environment(\.dynamicTypeSize) private var typeSize
-    @State private var camera = MapCamera()
-    @State private var selection: AtlasCountry?
     @State private var confirmingSwitch = false
-    @State private var cardOnLeadingSide = false
-    /// Bottom edge of the floating top bar in screen coordinates, measured
-    /// so the map fits below it at any text size.
-    @State private var topBarBottom: CGFloat = 96
-    /// Where the country card is (global coordinates, like the full-screen
-    /// map), so map labels and stars aren't placed under it.
-    @State private var cardFrame: CGRect?
 
     var body: some View {
-        ZStack {
-            if let atlas = atlasStore.atlas {
-                WorldMapView(
-                    atlas: atlas, camera: $camera, selection: $selection,
-                    cardOnLeadingSide: $cardOnLeadingSide,
-                    insets: MapInsets(top: topBarBottom + 8,
-                                      avoid: selection == nil ? [] : cardFrame.map { [$0] } ?? [])
-                )
-                .ignoresSafeArea()
-            } else if atlasStore.failed {
-                ContentUnavailableView("The map couldn't load", systemImage: "map",
-                                       description: Text("Ask a grown-up to reinstall Mi Mundo."))
-            } else {
-                ProgressView("Unrolling the map…")
-                    .font(.title3)
-            }
-
-            VStack {
-                topBar
-                    .onGeometryChange(for: CGFloat.self) { $0.frame(in: .global).maxY } action: {
-                        topBarBottom = $0
-                    }
-                Spacer()
-            }
-            .padding(20)
-
-            if let selection {
-                // On the side away from the country so it's never covered;
-                // on the left it clears the zoom buttons.
-                HStack {
-                    if !cardOnLeadingSide { Spacer() }
-                    VStack {
-                        Spacer(minLength: topBarBottom)
-                        CountryCard(country: selection) {
-                            withAnimation(.easeInOut(duration: 0.2)) { self.selection = nil }
-                        }
-                        .id(selection.id)
-                        .onGeometryChange(for: CGRect.self) { $0.frame(in: .global) } action: {
-                            cardFrame = $0
-                        }
-                        .transition(.move(edge: cardOnLeadingSide ? .leading : .trailing)
-                            .combined(with: .opacity))
-                    }
-                    if cardOnLeadingSide { Spacer() }
-                }
-                .padding(.vertical, 20)
-                .padding(.leading, cardOnLeadingSide ? 100 : 20)
-                .padding(.trailing, 20)
-            }
-        }
-        .onAppear {
-            camera = cameraStore.camera(for: child.id)
+        ExploreMapView(profileID: child.id) { topBar }
             // A kid opening the app on a new day moves the queue on, even if
             // no parent looks at it.
-            QuizQueue.refresh(in: context)
-        }
-        .onChange(of: camera) { _, new in cameraStore.set(new, for: child.id) }
+            .onAppear { QuizQueue.refresh(in: context) }
     }
 
     private var topBar: some View {
