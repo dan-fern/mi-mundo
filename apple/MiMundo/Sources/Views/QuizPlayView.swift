@@ -289,12 +289,11 @@ struct QuizPlayView: View {
     /// view. Tiny islands and city states are hard to find and to tap.
     private func findOne() {
         let pending = targets.filter { !isDone($0) }
-        let nearest = pending.min { a, b in
-            func distance(_ t: QuizTarget) -> CGFloat {
-                hypot(CGFloat(t.country.meta.labelX) - camera.center.x, CGFloat(t.country.meta.labelY) - camera.center.y)
-            }
-            return distance(a) < distance(b)
+        let center = camera.center
+        let distance = { (t: QuizTarget) -> CGFloat in
+            hypot(CGFloat(t.country.meta.labelX) - center.x, CGFloat(t.country.meta.labelY) - center.y)
         }
+        let nearest = pending.min { distance($0) < distance($1) }
         guard let nearest, let bounds = Self.bounds(of: [nearest.country]) else { return }
         // Room around it, so the neighbours give it away less than a
         // close-up of its outline would hide them.
