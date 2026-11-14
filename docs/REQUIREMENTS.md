@@ -91,7 +91,8 @@ Age-agnostic — fun for a young child, still useful for an adult.
   (listed first: Pretoria, Mbabane, Malabo, La Paz). Every button and the
   question can be read aloud. **One try per question:** the right answer
   is then shown either way, and a miss earns nothing; to do better, retake
-  the quiz (§3.4).
+  the quiz (§3.4). Retakes are the practice: there is no separate "try your
+  misses again" round (Dan's decision).
 - On the map, a country still to do has a bold blue border; a finished one
   is tinted green (all right) or amber (a miss) and shows its name.
 - **"Find one for me"** jumps to a country still to do, for tiny islands
@@ -231,9 +232,12 @@ So a parent can set up practice ahead of time (e.g. before work travel):
   types and point values.
 - The front of the queue is **today's quiz** for everyone. At the start of
   each game day (11 pm US Eastern, §3.7) the queue moves on to the next quiz
-  **if at least one kid attempted** the current one. If no kid did, the same
-  quiz stays up, so a missed day never skips a quiz. Parents' attempts don't
-  count, so a parent can never use up the kids' quiz.
+  **if at least one kid attempted** the current one. A kid has attempted it
+  as soon as they answer one question. That means a kid who answers once
+  and stops still moves the queue on for a sibling who hadn't played yet;
+  that edge case is accepted (Dan's decision). If no kid did, the same
+  quiz stays up, so a missed day never skips a quiz. Parents' attempts
+  don't count, so a parent can never use up the kids' quiz.
 - A kid who doesn't attempt a quiz before it moves on simply has **no entry**
   for it: no score, no zero, and nothing counted against them in stats. They
   meet it again the next time the queue wraps around.
@@ -247,8 +251,8 @@ So a parent can set up practice ahead of time (e.g. before work travel):
   or removed until the queue moves on** (a parent trying it doesn't lock
   it). Before that a parent may still fix or remove it (removing it brings
   up the quiz that takes its place; removing the last one wraps to the
-  first). *This relaxes the earlier "changes take effect from the next game
-  day" rule; to be confirmed by the product owner.*
+  first). This replaces the earlier rule that changes only took effect from
+  the next game day (Dan's decision).
 - The day comes from the iPad's clock. Setting the clock back never moves
   the queue on; setting it forward can (a family app: parents can see it in
   the history).
