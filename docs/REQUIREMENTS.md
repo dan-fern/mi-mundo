@@ -247,7 +247,12 @@ stats here than in child mode:
 - Hint usage: how often outlines / multiple choice were needed for flags.
 
 ### 5.3 Drawing review
-- Browse every flag drawing with the app's verdict.
+- Browse every flag drawing with the app's verdict. (Built: parent home →
+  "Flag drawings". Every freehand and outline drawing is saved with its
+  answer — SwiftData schema V5 adds `FlagDrawing` — and shown next to the
+  real flag, newest first, filterable by kid, "marked wrong" and "changed
+  by you". "Change" marks it right or wrong, or goes back to the app's
+  verdict; the answer is rescored straight away.)
 - Override any verdict and award any lost points. An overturned answer earns
   what that question was worth on that attempt, so each answer stores its
   scoring inputs (base points, attempt, multiple choice) when it's made.

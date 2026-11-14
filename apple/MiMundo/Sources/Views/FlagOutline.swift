@@ -218,7 +218,7 @@ struct FlagOutlineCanvas: View {
 }
 
 /// One line of the emblem, in fractions of the flag's size.
-struct FlagStroke: Equatable {
+struct FlagStroke: Equatable, Codable {
     var color: String
     var points: [CGPoint]
 }

@@ -204,6 +204,7 @@ enum QuizPlay {
     static func record(_ chosen: String, correctAnswer: String, kind: QuestionKind,
                        country: AtlasCountry, chosenCountry: AtlasCountry?, choices: [String],
                        multipleChoice: Bool = false, isCorrect: Bool? = nil,
+                       drawing: (content: FlagDrawingContent, scorePercent: Int)? = nil,
                        quiz: QuizSet, attempt: QuizAttempt, askedAt: Date?,
                        in context: ModelContext, now: Date = .now) -> QuizAnswer? {
         QuizQueue.refresh(in: context, now: now)
@@ -213,6 +214,13 @@ enum QuizPlay {
                                 basePoints: quiz.basePoints(for: kind), multipleChoice: multipleChoice,
                                 isCorrect: isCorrect, askedAt: askedAt, answeredAt: now)
         context.insert(answer)
+        // Every drawing is kept for parent review (§5.3).
+        if let drawing {
+            context.insert(FlagDrawing(answerID: answer.id, profileID: attempt.profileID,
+                                       countryID: country.meta.id, content: drawing.content,
+                                       scorePercent: drawing.scorePercent,
+                                       autoCorrect: answer.correct, drawnAt: now))
+        }
         if attempt.isKid,
            let record = try? context.fetch(FetchDescriptor<QueueRecord>()).first,
            record.currentQuizID == quiz.id, record.run == attempt.run {

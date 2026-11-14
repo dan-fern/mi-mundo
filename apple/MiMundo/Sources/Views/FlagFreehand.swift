@@ -61,7 +61,7 @@ enum FlagGrid {
 
 /// What the kid drew: an optional background colour and strokes, all in
 /// fractions of the canvas so it draws the same at any size.
-struct FlagSketch: Equatable {
+struct FlagSketch: Equatable, Codable {
     var background: String?
     var strokes: [FlagStroke] = []
     /// Stroke width per stroke, as a fraction of the canvas width.
