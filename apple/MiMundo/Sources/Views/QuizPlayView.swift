@@ -62,6 +62,14 @@ struct QuizPlayView: View {
         let names: [String: String]
         /// Each answer's flag picture, for flag questions.
         let flags: [String: String]
+        /// A flag question that can be drawn on an outline (§3.3), with the
+        /// layouts offered. Nil: the flag is picked from four.
+        var outline: FlagOutlineSpec? = nil
+        var layoutChoices: [String] = []
+        /// The kid asked for help: pick from four instead (half points).
+        var usingChoices = false
+        /// The checked drawing, once drawn.
+        var drawing: FlagDrawResult? = nil
         let askedAt: Date
         /// The side its card opens on, kept with it so the card leaves the
         /// way it came even if the next card opens on the other side.
@@ -70,6 +78,10 @@ struct QuizPlayView: View {
         var earned = 0
 
         var key: String { "\(target)-\(kind.rawValue)" }
+
+        var isDrawing: Bool { kind == .flag && outline != nil && !usingChoices }
+        /// Right, by the grader for a drawing, else by the button picked.
+        var isRight: Bool { drawing?.grade.correct ?? (picked == correct) }
     }
 
     var body: some View {
@@ -98,7 +110,8 @@ struct QuizPlayView: View {
                             country: target.country, question: question,
                             isLastForCountry: pendingKinds(for: target).isEmpty,
                             showsFlag: !quiz.asksFlag, speaker: speaker, promptFocused: $promptFocused,
-                            onSpeak: { readingAloud = true }, onPick: choose, onNext: next
+                            onSpeak: { readingAloud = true }, onPick: choose, onNext: next,
+                            onDrawn: drawn, onUseChoices: useChoices
                         )
                         .id(question.key)
                         .onGeometryChange(for: CGRect.self) { $0.frame(in: .global) } action: { frame in
@@ -305,30 +318,60 @@ struct QuizPlayView: View {
         let seed = QuestionSeed.make(attempt: attempt.id, country: target.country.meta.id, kind: kind)
         let answeredIDs = Set(targets.filter { answered[$0.id]?[.name] != nil }.map(\.id))
         let made = atlas.choices(for: kind, about: target.country, excluding: answeredIDs, seed: seed)
-        let asked = ActiveQuestion(target: target.id, kind: kind, correct: made.correct, choices: made.all,
+        var asked = ActiveQuestion(target: target.id, kind: kind, correct: made.correct, choices: made.all,
                                    countryIDs: made.countries.mapValues(\.meta.id),
                                    names: made.countries.mapValues(\.name),
                                    flags: made.countries.compactMapValues(\.flagAsset), askedAt: .now,
                                    leading: cardOnLeadingSide)
+        if kind == .flag, let spec = FlagOutlines.spec(for: target.country) {
+            asked.outline = spec
+            asked.layoutChoices = flagLayoutChoices(correct: spec.layout, seed: seed)
+        }
         withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.25)) { question = asked }
         promptFocused = true
     }
 
+    /// The kid gave up drawing: the same question, picked from four.
+    private func useChoices() {
+        guard var asked = question, asked.picked == nil else { return }
+        asked.usingChoices = true
+        withAnimation(reduceMotion ? nil : .snappy) { question = asked }
+    }
+
+    /// A checked flag drawing: recorded with its grade, at full points.
+    private func drawn(_ result: FlagDrawResult) {
+        guard let outline = question?.outline else { return }
+        choose(FlagOutlines.summary(layout: result.layout, colors: result.painted),
+               drawing: result, correctAnswer: FlagOutlines.summary(layout: outline.layout, colors: outline.colors))
+    }
+
     private func choose(_ choice: String) {
+        choose(choice, drawing: nil, correctAnswer: nil)
+    }
+
+    private func choose(_ choice: String, drawing: FlagDrawResult?, correctAnswer: String?) {
         guard var asked = question, asked.picked == nil, let attempt, let atlas = atlasStore.atlas,
               let target = targets.first(where: { $0.id == asked.target }) else { return }
         speaker.stop()
-        let chosenCountry = asked.countryIDs[choice].flatMap { id in atlas.countries.first { $0.meta.id == id } }
-        guard let saved = QuizPlay.record(choice, correctAnswer: asked.correct, kind: asked.kind,
+        let chosenCountry = drawing == nil
+            ? asked.countryIDs[choice].flatMap { id in atlas.countries.first { $0.meta.id == id } }
+            : nil
+        // Name and capital buttons have always been full points; a flag
+        // picked from four is the half-points help (§3.3).
+        let multipleChoice = asked.kind == .flag && drawing == nil
+        guard let saved = QuizPlay.record(choice, correctAnswer: correctAnswer ?? asked.correct, kind: asked.kind,
                                           country: target.country, chosenCountry: chosenCountry,
-                                          choices: asked.choices, quiz: quiz, attempt: attempt,
+                                          choices: drawing == nil ? asked.choices : asked.layoutChoices,
+                                          multipleChoice: multipleChoice, isCorrect: drawing?.grade.correct,
+                                          quiz: quiz, attempt: attempt,
                                           askedAt: asked.askedAt, in: context) else {
             saveFailed = true // nothing changes: the question can be answered again
             return
         }
-        let right = choice == asked.correct
         asked.picked = choice
+        asked.drawing = drawing
         asked.earned = saved.pointsAwarded
+        let right = asked.isRight
         withAnimation(reduceMotion ? nil : .snappy) {
             question = asked
             answered[target.id, default: [:]][asked.kind] = right
@@ -409,17 +452,24 @@ private struct QuestionCard: View {
     let onSpeak: () -> Void
     let onPick: (String) -> Void
     let onNext: () -> Void
+    let onDrawn: (FlagDrawResult) -> Void
+    let onUseChoices: () -> Void
 
     private var prompt: String {
         switch question.kind {
         case .name: "Which country is this?"
         case .capital: "What is the capital of \(country.name)?"
-        case .flag: "Which flag belongs to \(country.name)?"
+        case .flag: question.isDrawing ? "Draw the flag of \(country.name)!" : "Which flag belongs to \(country.name)?"
         }
     }
 
     /// What a wrong answer hears: the right answer, in words.
     static func missed(_ question: QuizPlayView.ActiveQuestion, country: AtlasCountry) -> String {
+        if let drawing = question.drawing {
+            return drawing.grade.layoutRight
+                ? "Good try! Some colours are different. Here's the flag of \(country.name)."
+                : "Good try! Its shape is different. Here's the flag of \(country.name)."
+        }
         guard question.kind == .flag else { return "Good try! It's \(question.correct)." }
         let picked = question.picked.flatMap { question.names[$0] }
         return picked.map { "Good try! That's the flag of \($0)." } ?? "Good try!"
@@ -455,7 +505,10 @@ private struct QuestionCard: View {
                     Spacer(minLength: 0)
                 }
 
-                if question.kind == .flag {
+                if question.isDrawing, let outline = question.outline {
+                    FlagDrawingPanel(country: country, spec: outline, layoutChoices: question.layoutChoices,
+                                     result: question.drawing, onCheck: onDrawn, onUseChoices: onUseChoices)
+                } else if question.kind == .flag {
                     flagGrid
                 } else {
                     wordChoices
@@ -534,7 +587,7 @@ private struct QuestionCard: View {
 
     @ViewBuilder
     private func verdict(_ picked: String) -> some View {
-        let right = picked == question.correct
+        let right = question.isRight
         HStack(spacing: 10) {
             Image(systemName: right ? "checkmark.circle.fill" : "lightbulb.fill")
                 .font(.title2)

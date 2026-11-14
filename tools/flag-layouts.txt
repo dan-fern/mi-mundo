@@ -1,0 +1,168 @@
+# Flag outlines for flag drawing (requirements 3.3), hand-written and checked
+# against the flag pictures by tools/check-flag-layouts.py.
+# code  layout  colours (in the layout's region order)  [emblem]
+# Region orders: see FLAG_LAYOUTS in core/src/flags.rs.
+# Flags a few regions can't describe (Union Jack ensigns, USA, Nepal, ...)
+# are left out and stay pick-from-four.
+fr v3 blue white red
+it v3 green white red
+ie v3 green white orange
+be v3 black yellow red
+ro v3 blue yellow red
+td v3 blue yellow red
+md v3 blue yellow red emblem
+ad v3 blue yellow red emblem
+ng v3 green white green
+pe v3 red white red
+ca v3 red white red emblem
+mx v3 green white red emblem
+gn v3 red yellow green
+ml v3 green yellow red
+sn v3 green yellow red emblem
+cm v3 green red yellow emblem
+ci v3 orange white green
+mn v3 red blue red emblem
+bb v3 blue yellow blue emblem
+vc v3 blue yellow green emblem
+gt v3 lightblue white lightblue emblem
+af v3 black red green emblem
+mf v3 blue white red
+bl v3 blue white red
+de h3 black red yellow
+ru h3 white blue red
+nl h3 red white blue
+lu h3 red white lightblue
+bg h3 white green red
+hu h3 red white green
+at h3 red white red
+lv h3 maroon white maroon
+ee h3 blue black white
+lt h3 yellow green red
+am h3 red blue orange
+ye h3 red white black
+eg h3 red white black emblem
+iq h3 red white black emblem
+sy h3 red white black emblem
+sl h3 green white blue
+ga h3 green yellow blue
+in h3 orange white green emblem
+ir h3 green white red emblem
+tj h3 red white green emblem
+hr h3 red white blue emblem
+rs h3 red blue white emblem
+sk h3 white blue red emblem
+si h3 white blue red emblem
+py h3 red white blue emblem
+lb h3 red white red emblem
+sv h3 blue white blue emblem
+ni h3 blue white blue emblem
+hn h3 lightblue white lightblue emblem
+ar h3 lightblue white lightblue emblem
+gm h3 red blue green
+ke h3 black red green emblem
+bw h3 lightblue black lightblue
+mw h3 black red green emblem
+mm h3 yellow green red emblem
+rw h3 lightblue yellow green emblem
+az h3 lightblue red green emblem
+uz h3 lightblue white green emblem
+ec h3 yellow blue red emblem
+ve h3 yellow blue red emblem
+co h3 yellow blue red
+es h3 red yellow red emblem
+bo h3 red yellow green
+gh h3 red yellow green emblem
+et h3 green yellow red emblem
+ls h3 blue white green emblem
+ly h3 red black green emblem
+id h2 red white
+mc h2 red white
+pl h2 white red
+ua h2 blue yellow
+ht h2 blue red emblem
+li h2 blue red emblem
+sm h2 white lightblue emblem
+sg h2 red white emblem
+by h2 red green emblem
+bf h2 red green emblem
+ao h2 red black emblem
+mu h4 red blue yellow green
+th h5 red white blue white red
+cr h5 blue white red white blue
+sr h5 green white red white green emblem
+mt v2 white red emblem
+va v2 yellow white emblem
+dz v2 green white emblem
+pt v2 green red emblem
+pk v2 white green emblem
+bh v2 white red
+qa v2 white maroon
+dk nordic red white
+se nordic blue yellow
+fi nordic white blue
+no nordic-bordered red white blue
+is nordic-bordered blue white red
+fo nordic-bordered white blue red
+ax nordic-bordered blue yellow red
+ch cross red white
+ge cross white red emblem
+do cross-quartered blue red red blue white emblem
+pa quarters white red blue white emblem
+jp disc white red
+bd disc green red
+pw disc lightblue yellow
+la h3-disc red blue red white
+ne h3-disc orange white green orange
+cz tri-h2 white red blue
+ph tri-h2 blue red white emblem
+dj tri-h2 lightblue green white emblem
+er tri-h2 green lightblue red emblem
+sd tri-h3 red white black green
+jo tri-h3 black white green red emblem
+ps tri-h3 black white green red
+kw tri-h3 green white red black
+eh tri-h3 black white green red emblem
+bs tri-h3 lightblue yellow lightblue black
+gq tri-h3 green white red blue emblem
+st tri-h3 green yellow green red emblem
+mz tri-h3 green black yellow red emblem
+cu tri-h5 blue white blue white blue red emblem
+pr tri-h5 red white red white red blue emblem
+bj bar-h2 green yellow red
+mg bar-h2 white red green
+gw bar-h2 red yellow green emblem
+ae bar-h3 red green white black
+jm saltire green black yellow
+bi saltire red green white emblem
+tz diagonal green black lightblue emblem
+cd diagonal lightblue red lightblue emblem
+na diagonal blue red green emblem
+cg diagonal green yellow red
+tt diagonal red black red
+kn diagonal green black red emblem
+sb diagonal blue yellow green emblem
+bt diagonal-split yellow orange emblem
+tw canton red blue emblem
+ws canton red blue emblem
+cl canton-h2 white red blue emblem
+br diamond green yellow blue emblem
+kg plain red emblem
+tn plain red emblem
+tr plain red emblem
+vn plain red emblem
+cn plain red emblem
+ma plain red emblem
+al plain red emblem
+hk plain red emblem
+sa plain green emblem
+tm plain green emblem
+zm plain green emblem
+mo plain green emblem
+cy plain white emblem
+kr plain white emblem
+il plain white emblem
+so plain lightblue emblem
+fm plain lightblue emblem
+kz plain lightblue emblem
+ba plain blue emblem
+xk plain blue emblem

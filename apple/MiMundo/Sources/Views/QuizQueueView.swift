@@ -263,7 +263,7 @@ private struct QuizEditor: View {
                     QuestionToggle(title: "Country name", isOn: $draft.asksName, points: $draft.namePoints)
                     QuestionToggle(title: "Capital", isOn: $draft.asksCapital, points: $draft.capitalPoints)
                     QuestionToggle(title: "Flag", isOn: $draft.asksFlag, points: $draft.flagPoints,
-                                   note: "Picking it from four flags earns half: \(QuizScoring.firstTry(.flag, base: draft.flagPoints)). Drawing it, coming later, earns it all.")
+                                   note: "For drawing it. Picking it from four flags instead earns half (\(QuizScoring.firstTry(base: draft.flagPoints, multipleChoice: true))), and so do flags too detailed to draw.")
                 } header: {
                     Text("Questions for each country")
                 } footer: {
@@ -306,7 +306,9 @@ private struct QuizEditor: View {
         guard let atlas = atlasStore.atlas else { return 0 }
         let draft = draft
         return QuizTarget.all(countryIDs: draft.countryIDs, asks: draft.asks, in: atlas).reduce(0) { total, target in
-            total + target.kinds.reduce(0) { $0 + QuizScoring.firstTry($1, base: draft.basePoints(for: $1)) }
+            total + target.kinds.reduce(0) {
+                $0 + QuizScoring.best($1, base: draft.basePoints(for: $1), country: target.country)
+            }
         }
     }
 

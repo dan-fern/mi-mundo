@@ -6,6 +6,7 @@ pub mod attendance;
 #[cfg(feature = "mapgen")]
 pub mod datagen;
 pub mod days;
+pub mod flags;
 pub mod map;
 pub mod queue;
 pub mod quiz;
@@ -16,6 +17,10 @@ pub use attendance::{
     days_played_last_7,
 };
 pub use days::{game_day, game_day_label};
+pub use flags::{
+    FlagOutlineGrade, flag_colours_match, flag_layout_choices, flag_layout_regions, flag_palette,
+    grade_flag_outline,
+};
 pub use queue::{QueueState, queue_from_today, queue_initial_state, queue_max, queue_today};
 pub use quiz::{quiz_choices, quiz_stars};
 pub use scoring::points_for_attempt;

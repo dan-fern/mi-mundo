@@ -8,20 +8,25 @@ import UIKit
 enum QuestionKind: String, CaseIterable, Sendable {
     case name
     case capital
-    /// Pick the country's flag from four. This is the easiest of the three
-    /// levels of help in §3.3, so it earns half points (multiple choice);
-    /// drawing the flag comes in later steps.
+    /// Draw the country's flag on a layout outline (full points), or, as
+    /// help, pick it from four (half points, §3.3). Flags too detailed for
+    /// an outline are always picked from four.
     case flag
-
-    /// Flag questions are multiple choice for now (§3.3: half points).
-    var usesMultipleChoice: Bool { self == .flag }
 }
 
 /// Points a right answer earns on a first try, by the Rust core's rules.
 enum QuizScoring {
-    static func firstTry(_ kind: QuestionKind, base: Int) -> Int {
+    static func firstTry(base: Int, multipleChoice: Bool) -> Int {
         Int(pointsForAttempt(basePoints: UInt32(clamping: max(base, 0)), attempt: 1,
-                             usedMultipleChoice: kind.usesMultipleChoice))
+                             usedMultipleChoice: multipleChoice))
+    }
+
+    /// The most a question can earn on a first try: a flag that can be
+    /// drawn earns full points, one that can only be picked from four half.
+    /// Without a country (no map yet) a flag counts as drawable.
+    static func best(_ kind: QuestionKind, base: Int, country: AtlasCountry?) -> Int {
+        let pickOnly = kind == .flag && country.map { FlagOutlines.spec(for: $0) == nil } == true
+        return firstTry(base: base, multipleChoice: pickOnly)
     }
 }
 
@@ -63,7 +68,9 @@ extension SchemaV4 {
             self.quizCountryIDs = quiz.countryIDs
             self.questionCount = targets.reduce(0) { $0 + $1.kinds.count }
             self.perfectPoints = targets.reduce(0) { total, target in
-                total + target.kinds.reduce(0) { $0 + QuizScoring.firstTry($1, base: quiz.basePoints(for: $1)) }
+                total + target.kinds.reduce(0) {
+                    $0 + QuizScoring.best($1, base: quiz.basePoints(for: $1), country: target.country)
+                }
             }
         }
 
@@ -106,7 +113,11 @@ extension SchemaV4 {
 
         init(attempt: QuizAttempt, countryID: String, kind: QuestionKind, chosen: String,
              chosenCountryID: String?, correctAnswer: String, choices: [String],
-             basePoints: Int, askedAt: Date?, answeredAt: Date) {
+             basePoints: Int, multipleChoice: Bool, isCorrect: Bool? = nil,
+             askedAt: Date?, answeredAt: Date) {
+            // A drawn flag can be right without matching exactly (close
+            // shades count), so the grader's verdict wins when there is one.
+            let right = isCorrect ?? (chosen == correctAnswer)
             self.id = UUID()
             self.attemptID = attempt.id
             self.profileID = attempt.profileID
@@ -115,15 +126,15 @@ extension SchemaV4 {
             self.chosen = chosen
             self.chosenCountryID = chosenCountryID
             self.correctAnswer = correctAnswer
-            self.correct = chosen == correctAnswer
+            self.correct = right
             self.choices = choices
             self.basePoints = basePoints
             self.attemptNumber = attempt.number
-            self.usedMultipleChoice = kind.usesMultipleChoice
-            self.pointsAwarded = chosen == correctAnswer
+            self.usedMultipleChoice = multipleChoice
+            self.pointsAwarded = right
                 ? Int(pointsForAttempt(basePoints: UInt32(clamping: max(basePoints, 0)),
                                        attempt: UInt32(clamping: max(attempt.number, 1)),
-                                       usedMultipleChoice: kind.usesMultipleChoice))
+                                       usedMultipleChoice: multipleChoice))
                 : 0
             self.askedAt = askedAt
             self.answeredAt = answeredAt
@@ -193,13 +204,15 @@ enum QuizPlay {
     @MainActor
     static func record(_ chosen: String, correctAnswer: String, kind: QuestionKind,
                        country: AtlasCountry, chosenCountry: AtlasCountry?, choices: [String],
+                       multipleChoice: Bool = false, isCorrect: Bool? = nil,
                        quiz: QuizSet, attempt: QuizAttempt, askedAt: Date?,
                        in context: ModelContext, now: Date = .now) -> QuizAnswer? {
         QuizQueue.refresh(in: context, now: now)
         let answer = QuizAnswer(attempt: attempt, countryID: country.meta.id, kind: kind,
                                 chosen: chosen, chosenCountryID: chosenCountry?.meta.id,
                                 correctAnswer: correctAnswer, choices: choices,
-                                basePoints: quiz.basePoints(for: kind), askedAt: askedAt, answeredAt: now)
+                                basePoints: quiz.basePoints(for: kind), multipleChoice: multipleChoice,
+                                isCorrect: isCorrect, askedAt: askedAt, answeredAt: now)
         context.insert(answer)
         if attempt.isKid,
            let record = try? context.fetch(FetchDescriptor<QueueRecord>()).first,

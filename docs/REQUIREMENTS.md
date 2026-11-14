@@ -114,7 +114,16 @@ Built in steps (owner decision, Nov 2026): multiple choice first (pick the
 flag from four, neighbours' flags as the wrong answers, look-alikes that can't
 be told apart at button size — Monaco/Indonesia, Chad/Romania — never shown
 together), then the layout outline, then freehand, then parent review (5.3).
-Until drawing exists every flag question is multiple choice at half points.
+Step 2 (layout outline) works like this: the kid picks the flag's shape from
+six, taps a colour from a nine-colour paint box (red, maroon, orange, yellow,
+green, light blue, blue, white, black) and taps each part to fill it, then may
+draw the emblem with a finger (never graded). It's right when the shape is
+right and every part's colour matches; blue/light blue and red/maroon count as
+the same. Full points. "Pick it from four instead" is the half-points help.
+The shapes and colours of ~160 flags are in tools/flag-layouts.txt, checked
+against the flag pictures by tools/check-flag-layouts.py; flags no outline can
+describe (Union Jack ensigns, the USA, Nepal, South Africa, …) stay
+pick-from-four.
 
 Grading:
 - Automatically graded on colours and approximate placement.
