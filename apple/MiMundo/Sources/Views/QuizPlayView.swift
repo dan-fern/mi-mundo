@@ -395,6 +395,8 @@ struct QuizPlayView: View {
                                           choices: drawing != nil ? asked.layoutChoices : (drawn ? [] : asked.choices),
                                           multipleChoice: multipleChoice,
                                           isCorrect: freehand?.grade.correct ?? drawing?.grade.correct,
+                                          drawing: freehand.map { (FlagDrawingContent.freehand($0.sketch), Int($0.grade.scorePercent)) }
+                                            ?? drawing.map { (FlagDrawingContent.outline(layout: $0.layout, painted: $0.painted, strokes: $0.strokes), -1) },
                                           quiz: quiz, attempt: attempt,
                                           askedAt: asked.askedAt, in: context) else {
             saveFailed = true // nothing changes: the question can be answered again

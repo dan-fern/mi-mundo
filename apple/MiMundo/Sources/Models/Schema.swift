@@ -51,13 +51,15 @@ typealias QuizSet = SchemaV2.QuizSet
 typealias QueueRecord = SchemaV2.QueueRecord
 typealias QuizAttempt = SchemaV4.QuizAttempt
 typealias QuizAnswer = SchemaV4.QuizAnswer
+typealias FlagDrawing = SchemaV5.FlagDrawing
 
 enum MiMundoMigrationPlan: SchemaMigrationPlan {
-    static var schemas: [any VersionedSchema.Type] { [SchemaV1.self, SchemaV2.self, SchemaV3.self, SchemaV4.self] }
+    static var schemas: [any VersionedSchema.Type] { [SchemaV1.self, SchemaV2.self, SchemaV3.self, SchemaV4.self, SchemaV5.self] }
     static var stages: [MigrationStage] {
         [.lightweight(fromVersion: SchemaV1.self, toVersion: SchemaV2.self),
          .lightweight(fromVersion: SchemaV2.self, toVersion: SchemaV3.self),
-         .lightweight(fromVersion: SchemaV3.self, toVersion: SchemaV4.self)]
+         .lightweight(fromVersion: SchemaV3.self, toVersion: SchemaV4.self),
+         .lightweight(fromVersion: SchemaV4.self, toVersion: SchemaV5.self)]
     }
 }
 
@@ -70,7 +72,7 @@ enum Persistence {
     /// not deleted — and a fresh store is created, so the app still launches.
     @MainActor
     static func makeContainer() -> ModelContainer {
-        let schema = Schema(versionedSchema: SchemaV4.self)
+        let schema = Schema(versionedSchema: SchemaV5.self)
         let configuration = ModelConfiguration(schema: schema)
         do {
             return try open(schema, configuration)
