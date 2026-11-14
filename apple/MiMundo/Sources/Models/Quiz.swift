@@ -118,9 +118,24 @@ struct QuizDraft: Equatable {
     }
 
     var trimmedTitle: String { title.trimmingCharacters(in: .whitespaces) }
-    /// Flag questions don't exist yet (§3.3), so they don't count.
-    var asksAnything: Bool { asksName || asksCapital }
+    var asksAnything: Bool { asksName || asksCapital || asksFlag }
     var isValid: Bool { !trimmedTitle.isEmpty && !countryIDs.isEmpty && asksAnything }
+
+    func asks(_ kind: QuestionKind) -> Bool {
+        switch kind {
+        case .name: asksName
+        case .capital: asksCapital
+        case .flag: asksFlag
+        }
+    }
+
+    func basePoints(for kind: QuestionKind) -> Int {
+        switch kind {
+        case .name: namePoints
+        case .capital: capitalPoints
+        case .flag: flagPoints
+        }
+    }
 }
 
 extension QuizSet {
@@ -138,10 +153,12 @@ extension QuizSet {
     /// one); without it, an estimate.
     func perfectPoints(in atlas: Atlas?) -> Int {
         guard let atlas else {
-            return countryIDs.count * ((asksName ? namePoints : 0) + (asksCapital ? capitalPoints : 0))
+            return countryIDs.count * QuestionKind.allCases.filter(asks).reduce(0) {
+                $0 + QuizScoring.firstTry($1, base: basePoints(for: $1))
+            }
         }
         return QuizTarget.all(for: self, in: atlas).reduce(0) { total, target in
-            total + target.kinds.reduce(0) { $0 + basePoints(for: $1) }
+            total + target.kinds.reduce(0) { $0 + QuizScoring.firstTry($1, base: basePoints(for: $1)) }
         }
     }
 }

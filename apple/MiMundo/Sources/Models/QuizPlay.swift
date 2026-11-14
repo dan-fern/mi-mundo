@@ -1,12 +1,28 @@
 import Foundation
 import MiMundoCore
 import SwiftData
+import UIKit
 
-/// The kinds of question a quiz asks about a country (requirements §3.2).
-/// Flag questions arrive with flag drawing.
+/// The kinds of question a quiz asks about a country (requirements §3.2),
+/// asked in this order.
 enum QuestionKind: String, CaseIterable, Sendable {
     case name
     case capital
+    /// Pick the country's flag from four. This is the easiest of the three
+    /// levels of help in §3.3, so it earns half points (multiple choice);
+    /// drawing the flag comes in later steps.
+    case flag
+
+    /// Flag questions are multiple choice for now (§3.3: half points).
+    var usesMultipleChoice: Bool { self == .flag }
+}
+
+/// Points a right answer earns on a first try, by the Rust core's rules.
+enum QuizScoring {
+    static func firstTry(_ kind: QuestionKind, base: Int) -> Int {
+        Int(pointsForAttempt(basePoints: UInt32(clamping: max(base, 0)), attempt: 1,
+                             usedMultipleChoice: kind.usesMultipleChoice))
+    }
 }
 
 extension SchemaV4 {
@@ -47,7 +63,7 @@ extension SchemaV4 {
             self.quizCountryIDs = quiz.countryIDs
             self.questionCount = targets.reduce(0) { $0 + $1.kinds.count }
             self.perfectPoints = targets.reduce(0) { total, target in
-                total + target.kinds.reduce(0) { $0 + quiz.basePoints(for: $1) }
+                total + target.kinds.reduce(0) { $0 + QuizScoring.firstTry($1, base: quiz.basePoints(for: $1)) }
             }
         }
 
@@ -103,11 +119,11 @@ extension SchemaV4 {
             self.choices = choices
             self.basePoints = basePoints
             self.attemptNumber = attempt.number
-            self.usedMultipleChoice = false
+            self.usedMultipleChoice = kind.usesMultipleChoice
             self.pointsAwarded = chosen == correctAnswer
                 ? Int(pointsForAttempt(basePoints: UInt32(clamping: max(basePoints, 0)),
                                        attempt: UInt32(clamping: max(attempt.number, 1)),
-                                       usedMultipleChoice: false))
+                                       usedMultipleChoice: kind.usesMultipleChoice))
                 : 0
             self.askedAt = askedAt
             self.answeredAt = answeredAt
@@ -122,6 +138,7 @@ extension QuizSet {
         switch kind {
         case .name: asksName
         case .capital: asksCapital
+        case .flag: asksFlag
         }
     }
 
@@ -129,6 +146,7 @@ extension QuizSet {
         switch kind {
         case .name: namePoints
         case .capital: capitalPoints
+        case .flag: flagPoints
         }
     }
 }
@@ -218,7 +236,11 @@ struct QuizTarget: Identifiable {
         let wanted = Set(countryIDs)
         return atlas.countries.filter { wanted.contains($0.meta.id) }.compactMap { country in
             let kinds = QuestionKind.allCases.filter { kind in
-                asks(kind) && (kind != .capital || hasCapitalQuestion(country))
+                switch kind {
+                case .name: asks(kind)
+                case .capital: asks(kind) && hasCapitalQuestion(country)
+                case .flag: asks(kind) && country.hasFlag
+                }
             }
             return kinds.isEmpty ? nil : QuizTarget(country: country, kinds: kinds)
         }
@@ -265,6 +287,19 @@ extension Atlas {
             byAnswer[correct] = country
             let candidates = nearest.map(\.name)
             return (correct, quizChoices(correct: correct, candidates: candidates, seed: seed), byAnswer)
+        case .flag:
+            // Buttons are flags: the choices are country codes, drawn as
+            // flags. Look-alikes that can't be told apart at button size
+            // (Monaco and Indonesia, Chad and Romania) never meet.
+            let lookAlikes = Self.flagLookAlikes[country.meta.iso2] ?? []
+            var candidates: [String] = []
+            for other in nearest where other.hasFlag && !lookAlikes.contains(other.meta.iso2) {
+                candidates.append(other.meta.id)
+                byAnswer[other.meta.id] = other
+            }
+            correct = country.meta.id
+            byAnswer[correct] = country
+            return (correct, quizChoices(correct: correct, candidates: candidates, seed: seed), byAnswer)
         case .capital:
             let capitals = country.facts?.capitals ?? []
             correct = capitals.first ?? ""
@@ -283,6 +318,12 @@ extension Atlas {
             return (correct, quizChoices(correct: correct, candidates: candidates, seed: seed), byAnswer)
         }
     }
+
+    /// Flags too alike to tell apart as small buttons (by ISO code).
+    static let flagLookAlikes: [String: Set<String>] = [
+        "MC": ["ID"], "ID": ["MC"],
+        "TD": ["RO"], "RO": ["TD"],
+    ]
 
     /// Distinctive words of a name (4+ letters), lowercased.
     private static func words(_ name: String) -> [String] {
