@@ -1,0 +1,1419 @@
+{
+ "ad": {
+  "colors": [
+   "blue",
+   "yellow",
+   "red"
+  ],
+  "emblem": true,
+  "layout": "v3"
+ },
+ "ae": {
+  "colors": [
+   "red",
+   "green",
+   "white",
+   "black"
+  ],
+  "emblem": false,
+  "layout": "bar-h3"
+ },
+ "af": {
+  "colors": [
+   "black",
+   "red",
+   "green"
+  ],
+  "emblem": true,
+  "layout": "v3"
+ },
+ "al": {
+  "colors": [
+   "red"
+  ],
+  "emblem": true,
+  "layout": "plain"
+ },
+ "am": {
+  "colors": [
+   "red",
+   "blue",
+   "orange"
+  ],
+  "emblem": false,
+  "layout": "h3"
+ },
+ "ao": {
+  "colors": [
+   "red",
+   "black"
+  ],
+  "emblem": true,
+  "layout": "h2"
+ },
+ "ar": {
+  "colors": [
+   "lightblue",
+   "white",
+   "lightblue"
+  ],
+  "emblem": true,
+  "layout": "h3"
+ },
+ "at": {
+  "colors": [
+   "red",
+   "white",
+   "red"
+  ],
+  "emblem": false,
+  "layout": "h3"
+ },
+ "ax": {
+  "colors": [
+   "blue",
+   "yellow",
+   "red"
+  ],
+  "emblem": false,
+  "layout": "nordic-bordered"
+ },
+ "az": {
+  "colors": [
+   "lightblue",
+   "red",
+   "green"
+  ],
+  "emblem": true,
+  "layout": "h3"
+ },
+ "ba": {
+  "colors": [
+   "blue"
+  ],
+  "emblem": true,
+  "layout": "plain"
+ },
+ "bb": {
+  "colors": [
+   "blue",
+   "yellow",
+   "blue"
+  ],
+  "emblem": true,
+  "layout": "v3"
+ },
+ "bd": {
+  "colors": [
+   "green",
+   "red"
+  ],
+  "emblem": false,
+  "layout": "disc"
+ },
+ "be": {
+  "colors": [
+   "black",
+   "yellow",
+   "red"
+  ],
+  "emblem": false,
+  "layout": "v3"
+ },
+ "bf": {
+  "colors": [
+   "red",
+   "green"
+  ],
+  "emblem": true,
+  "layout": "h2"
+ },
+ "bg": {
+  "colors": [
+   "white",
+   "green",
+   "red"
+  ],
+  "emblem": false,
+  "layout": "h3"
+ },
+ "bh": {
+  "colors": [
+   "white",
+   "red"
+  ],
+  "emblem": false,
+  "layout": "v2"
+ },
+ "bi": {
+  "colors": [
+   "red",
+   "green",
+   "white"
+  ],
+  "emblem": true,
+  "layout": "saltire"
+ },
+ "bj": {
+  "colors": [
+   "green",
+   "yellow",
+   "red"
+  ],
+  "emblem": false,
+  "layout": "bar-h2"
+ },
+ "bl": {
+  "colors": [
+   "blue",
+   "white",
+   "red"
+  ],
+  "emblem": false,
+  "layout": "v3"
+ },
+ "bo": {
+  "colors": [
+   "red",
+   "yellow",
+   "green"
+  ],
+  "emblem": false,
+  "layout": "h3"
+ },
+ "br": {
+  "colors": [
+   "green",
+   "yellow",
+   "blue"
+  ],
+  "emblem": true,
+  "layout": "diamond"
+ },
+ "bs": {
+  "colors": [
+   "lightblue",
+   "yellow",
+   "lightblue",
+   "black"
+  ],
+  "emblem": false,
+  "layout": "tri-h3"
+ },
+ "bt": {
+  "colors": [
+   "yellow",
+   "orange"
+  ],
+  "emblem": true,
+  "layout": "diagonal-split"
+ },
+ "bw": {
+  "colors": [
+   "lightblue",
+   "black",
+   "lightblue"
+  ],
+  "emblem": false,
+  "layout": "h3"
+ },
+ "by": {
+  "colors": [
+   "red",
+   "green"
+  ],
+  "emblem": true,
+  "layout": "h2"
+ },
+ "ca": {
+  "colors": [
+   "red",
+   "white",
+   "red"
+  ],
+  "emblem": true,
+  "layout": "v3"
+ },
+ "cd": {
+  "colors": [
+   "lightblue",
+   "red",
+   "lightblue"
+  ],
+  "emblem": true,
+  "layout": "diagonal"
+ },
+ "cg": {
+  "colors": [
+   "green",
+   "yellow",
+   "red"
+  ],
+  "emblem": false,
+  "layout": "diagonal"
+ },
+ "ch": {
+  "colors": [
+   "red",
+   "white"
+  ],
+  "emblem": false,
+  "layout": "cross"
+ },
+ "ci": {
+  "colors": [
+   "orange",
+   "white",
+   "green"
+  ],
+  "emblem": false,
+  "layout": "v3"
+ },
+ "cl": {
+  "colors": [
+   "white",
+   "red",
+   "blue"
+  ],
+  "emblem": true,
+  "layout": "canton-h2"
+ },
+ "cm": {
+  "colors": [
+   "green",
+   "red",
+   "yellow"
+  ],
+  "emblem": true,
+  "layout": "v3"
+ },
+ "cn": {
+  "colors": [
+   "red"
+  ],
+  "emblem": true,
+  "layout": "plain"
+ },
+ "co": {
+  "colors": [
+   "yellow",
+   "blue",
+   "red"
+  ],
+  "emblem": false,
+  "layout": "h3"
+ },
+ "cr": {
+  "colors": [
+   "blue",
+   "white",
+   "red",
+   "white",
+   "blue"
+  ],
+  "emblem": false,
+  "layout": "h5"
+ },
+ "cu": {
+  "colors": [
+   "blue",
+   "white",
+   "blue",
+   "white",
+   "blue",
+   "red"
+  ],
+  "emblem": true,
+  "layout": "tri-h5"
+ },
+ "cy": {
+  "colors": [
+   "white"
+  ],
+  "emblem": true,
+  "layout": "plain"
+ },
+ "cz": {
+  "colors": [
+   "white",
+   "red",
+   "blue"
+  ],
+  "emblem": false,
+  "layout": "tri-h2"
+ },
+ "de": {
+  "colors": [
+   "black",
+   "red",
+   "yellow"
+  ],
+  "emblem": false,
+  "layout": "h3"
+ },
+ "dj": {
+  "colors": [
+   "lightblue",
+   "green",
+   "white"
+  ],
+  "emblem": true,
+  "layout": "tri-h2"
+ },
+ "dk": {
+  "colors": [
+   "red",
+   "white"
+  ],
+  "emblem": false,
+  "layout": "nordic"
+ },
+ "do": {
+  "colors": [
+   "blue",
+   "red",
+   "red",
+   "blue",
+   "white"
+  ],
+  "emblem": true,
+  "layout": "cross-quartered"
+ },
+ "dz": {
+  "colors": [
+   "green",
+   "white"
+  ],
+  "emblem": true,
+  "layout": "v2"
+ },
+ "ec": {
+  "colors": [
+   "yellow",
+   "blue",
+   "red"
+  ],
+  "emblem": true,
+  "layout": "h3"
+ },
+ "ee": {
+  "colors": [
+   "blue",
+   "black",
+   "white"
+  ],
+  "emblem": false,
+  "layout": "h3"
+ },
+ "eg": {
+  "colors": [
+   "red",
+   "white",
+   "black"
+  ],
+  "emblem": true,
+  "layout": "h3"
+ },
+ "eh": {
+  "colors": [
+   "black",
+   "white",
+   "green",
+   "red"
+  ],
+  "emblem": true,
+  "layout": "tri-h3"
+ },
+ "er": {
+  "colors": [
+   "green",
+   "lightblue",
+   "red"
+  ],
+  "emblem": true,
+  "layout": "tri-h2"
+ },
+ "es": {
+  "colors": [
+   "red",
+   "yellow",
+   "red"
+  ],
+  "emblem": true,
+  "layout": "h3"
+ },
+ "et": {
+  "colors": [
+   "green",
+   "yellow",
+   "red"
+  ],
+  "emblem": true,
+  "layout": "h3"
+ },
+ "fi": {
+  "colors": [
+   "white",
+   "blue"
+  ],
+  "emblem": false,
+  "layout": "nordic"
+ },
+ "fm": {
+  "colors": [
+   "lightblue"
+  ],
+  "emblem": true,
+  "layout": "plain"
+ },
+ "fo": {
+  "colors": [
+   "white",
+   "blue",
+   "red"
+  ],
+  "emblem": false,
+  "layout": "nordic-bordered"
+ },
+ "fr": {
+  "colors": [
+   "blue",
+   "white",
+   "red"
+  ],
+  "emblem": false,
+  "layout": "v3"
+ },
+ "ga": {
+  "colors": [
+   "green",
+   "yellow",
+   "blue"
+  ],
+  "emblem": false,
+  "layout": "h3"
+ },
+ "ge": {
+  "colors": [
+   "white",
+   "red"
+  ],
+  "emblem": true,
+  "layout": "cross"
+ },
+ "gh": {
+  "colors": [
+   "red",
+   "yellow",
+   "green"
+  ],
+  "emblem": true,
+  "layout": "h3"
+ },
+ "gm": {
+  "colors": [
+   "red",
+   "blue",
+   "green"
+  ],
+  "emblem": false,
+  "layout": "h3"
+ },
+ "gn": {
+  "colors": [
+   "red",
+   "yellow",
+   "green"
+  ],
+  "emblem": false,
+  "layout": "v3"
+ },
+ "gq": {
+  "colors": [
+   "green",
+   "white",
+   "red",
+   "blue"
+  ],
+  "emblem": true,
+  "layout": "tri-h3"
+ },
+ "gt": {
+  "colors": [
+   "lightblue",
+   "white",
+   "lightblue"
+  ],
+  "emblem": true,
+  "layout": "v3"
+ },
+ "gw": {
+  "colors": [
+   "red",
+   "yellow",
+   "green"
+  ],
+  "emblem": true,
+  "layout": "bar-h2"
+ },
+ "hk": {
+  "colors": [
+   "red"
+  ],
+  "emblem": true,
+  "layout": "plain"
+ },
+ "hn": {
+  "colors": [
+   "lightblue",
+   "white",
+   "lightblue"
+  ],
+  "emblem": true,
+  "layout": "h3"
+ },
+ "hr": {
+  "colors": [
+   "red",
+   "white",
+   "blue"
+  ],
+  "emblem": true,
+  "layout": "h3"
+ },
+ "ht": {
+  "colors": [
+   "blue",
+   "red"
+  ],
+  "emblem": true,
+  "layout": "h2"
+ },
+ "hu": {
+  "colors": [
+   "red",
+   "white",
+   "green"
+  ],
+  "emblem": false,
+  "layout": "h3"
+ },
+ "id": {
+  "colors": [
+   "red",
+   "white"
+  ],
+  "emblem": false,
+  "layout": "h2"
+ },
+ "ie": {
+  "colors": [
+   "green",
+   "white",
+   "orange"
+  ],
+  "emblem": false,
+  "layout": "v3"
+ },
+ "il": {
+  "colors": [
+   "white"
+  ],
+  "emblem": true,
+  "layout": "plain"
+ },
+ "in": {
+  "colors": [
+   "orange",
+   "white",
+   "green"
+  ],
+  "emblem": true,
+  "layout": "h3"
+ },
+ "iq": {
+  "colors": [
+   "red",
+   "white",
+   "black"
+  ],
+  "emblem": true,
+  "layout": "h3"
+ },
+ "ir": {
+  "colors": [
+   "green",
+   "white",
+   "red"
+  ],
+  "emblem": true,
+  "layout": "h3"
+ },
+ "is": {
+  "colors": [
+   "blue",
+   "white",
+   "red"
+  ],
+  "emblem": false,
+  "layout": "nordic-bordered"
+ },
+ "it": {
+  "colors": [
+   "green",
+   "white",
+   "red"
+  ],
+  "emblem": false,
+  "layout": "v3"
+ },
+ "jm": {
+  "colors": [
+   "green",
+   "black",
+   "yellow"
+  ],
+  "emblem": false,
+  "layout": "saltire"
+ },
+ "jo": {
+  "colors": [
+   "black",
+   "white",
+   "green",
+   "red"
+  ],
+  "emblem": true,
+  "layout": "tri-h3"
+ },
+ "jp": {
+  "colors": [
+   "white",
+   "red"
+  ],
+  "emblem": false,
+  "layout": "disc"
+ },
+ "ke": {
+  "colors": [
+   "black",
+   "red",
+   "green"
+  ],
+  "emblem": true,
+  "layout": "h3"
+ },
+ "kg": {
+  "colors": [
+   "red"
+  ],
+  "emblem": true,
+  "layout": "plain"
+ },
+ "kn": {
+  "colors": [
+   "green",
+   "black",
+   "red"
+  ],
+  "emblem": true,
+  "layout": "diagonal"
+ },
+ "kr": {
+  "colors": [
+   "white"
+  ],
+  "emblem": true,
+  "layout": "plain"
+ },
+ "kw": {
+  "colors": [
+   "green",
+   "white",
+   "red",
+   "black"
+  ],
+  "emblem": false,
+  "layout": "tri-h3"
+ },
+ "kz": {
+  "colors": [
+   "lightblue"
+  ],
+  "emblem": true,
+  "layout": "plain"
+ },
+ "la": {
+  "colors": [
+   "red",
+   "blue",
+   "red",
+   "white"
+  ],
+  "emblem": false,
+  "layout": "h3-disc"
+ },
+ "lb": {
+  "colors": [
+   "red",
+   "white",
+   "red"
+  ],
+  "emblem": true,
+  "layout": "h3"
+ },
+ "li": {
+  "colors": [
+   "blue",
+   "red"
+  ],
+  "emblem": true,
+  "layout": "h2"
+ },
+ "ls": {
+  "colors": [
+   "blue",
+   "white",
+   "green"
+  ],
+  "emblem": true,
+  "layout": "h3"
+ },
+ "lt": {
+  "colors": [
+   "yellow",
+   "green",
+   "red"
+  ],
+  "emblem": false,
+  "layout": "h3"
+ },
+ "lu": {
+  "colors": [
+   "red",
+   "white",
+   "lightblue"
+  ],
+  "emblem": false,
+  "layout": "h3"
+ },
+ "lv": {
+  "colors": [
+   "maroon",
+   "white",
+   "maroon"
+  ],
+  "emblem": false,
+  "layout": "h3"
+ },
+ "ly": {
+  "colors": [
+   "red",
+   "black",
+   "green"
+  ],
+  "emblem": true,
+  "layout": "h3"
+ },
+ "ma": {
+  "colors": [
+   "red"
+  ],
+  "emblem": true,
+  "layout": "plain"
+ },
+ "mc": {
+  "colors": [
+   "red",
+   "white"
+  ],
+  "emblem": false,
+  "layout": "h2"
+ },
+ "md": {
+  "colors": [
+   "blue",
+   "yellow",
+   "red"
+  ],
+  "emblem": true,
+  "layout": "v3"
+ },
+ "mf": {
+  "colors": [
+   "blue",
+   "white",
+   "red"
+  ],
+  "emblem": false,
+  "layout": "v3"
+ },
+ "mg": {
+  "colors": [
+   "white",
+   "red",
+   "green"
+  ],
+  "emblem": false,
+  "layout": "bar-h2"
+ },
+ "ml": {
+  "colors": [
+   "green",
+   "yellow",
+   "red"
+  ],
+  "emblem": false,
+  "layout": "v3"
+ },
+ "mm": {
+  "colors": [
+   "yellow",
+   "green",
+   "red"
+  ],
+  "emblem": true,
+  "layout": "h3"
+ },
+ "mn": {
+  "colors": [
+   "red",
+   "blue",
+   "red"
+  ],
+  "emblem": true,
+  "layout": "v3"
+ },
+ "mo": {
+  "colors": [
+   "green"
+  ],
+  "emblem": true,
+  "layout": "plain"
+ },
+ "mt": {
+  "colors": [
+   "white",
+   "red"
+  ],
+  "emblem": true,
+  "layout": "v2"
+ },
+ "mu": {
+  "colors": [
+   "red",
+   "blue",
+   "yellow",
+   "green"
+  ],
+  "emblem": false,
+  "layout": "h4"
+ },
+ "mw": {
+  "colors": [
+   "black",
+   "red",
+   "green"
+  ],
+  "emblem": true,
+  "layout": "h3"
+ },
+ "mx": {
+  "colors": [
+   "green",
+   "white",
+   "red"
+  ],
+  "emblem": true,
+  "layout": "v3"
+ },
+ "mz": {
+  "colors": [
+   "green",
+   "black",
+   "yellow",
+   "red"
+  ],
+  "emblem": true,
+  "layout": "tri-h3"
+ },
+ "na": {
+  "colors": [
+   "blue",
+   "red",
+   "green"
+  ],
+  "emblem": true,
+  "layout": "diagonal"
+ },
+ "ne": {
+  "colors": [
+   "orange",
+   "white",
+   "green",
+   "orange"
+  ],
+  "emblem": false,
+  "layout": "h3-disc"
+ },
+ "ng": {
+  "colors": [
+   "green",
+   "white",
+   "green"
+  ],
+  "emblem": false,
+  "layout": "v3"
+ },
+ "ni": {
+  "colors": [
+   "blue",
+   "white",
+   "blue"
+  ],
+  "emblem": true,
+  "layout": "h3"
+ },
+ "nl": {
+  "colors": [
+   "red",
+   "white",
+   "blue"
+  ],
+  "emblem": false,
+  "layout": "h3"
+ },
+ "no": {
+  "colors": [
+   "red",
+   "white",
+   "blue"
+  ],
+  "emblem": false,
+  "layout": "nordic-bordered"
+ },
+ "pa": {
+  "colors": [
+   "white",
+   "red",
+   "blue",
+   "white"
+  ],
+  "emblem": true,
+  "layout": "quarters"
+ },
+ "pe": {
+  "colors": [
+   "red",
+   "white",
+   "red"
+  ],
+  "emblem": false,
+  "layout": "v3"
+ },
+ "ph": {
+  "colors": [
+   "blue",
+   "red",
+   "white"
+  ],
+  "emblem": true,
+  "layout": "tri-h2"
+ },
+ "pk": {
+  "colors": [
+   "white",
+   "green"
+  ],
+  "emblem": true,
+  "layout": "v2"
+ },
+ "pl": {
+  "colors": [
+   "white",
+   "red"
+  ],
+  "emblem": false,
+  "layout": "h2"
+ },
+ "pr": {
+  "colors": [
+   "red",
+   "white",
+   "red",
+   "white",
+   "red",
+   "blue"
+  ],
+  "emblem": true,
+  "layout": "tri-h5"
+ },
+ "ps": {
+  "colors": [
+   "black",
+   "white",
+   "green",
+   "red"
+  ],
+  "emblem": false,
+  "layout": "tri-h3"
+ },
+ "pt": {
+  "colors": [
+   "green",
+   "red"
+  ],
+  "emblem": true,
+  "layout": "v2"
+ },
+ "pw": {
+  "colors": [
+   "lightblue",
+   "yellow"
+  ],
+  "emblem": false,
+  "layout": "disc"
+ },
+ "py": {
+  "colors": [
+   "red",
+   "white",
+   "blue"
+  ],
+  "emblem": true,
+  "layout": "h3"
+ },
+ "qa": {
+  "colors": [
+   "white",
+   "maroon"
+  ],
+  "emblem": false,
+  "layout": "v2"
+ },
+ "ro": {
+  "colors": [
+   "blue",
+   "yellow",
+   "red"
+  ],
+  "emblem": false,
+  "layout": "v3"
+ },
+ "rs": {
+  "colors": [
+   "red",
+   "blue",
+   "white"
+  ],
+  "emblem": true,
+  "layout": "h3"
+ },
+ "ru": {
+  "colors": [
+   "white",
+   "blue",
+   "red"
+  ],
+  "emblem": false,
+  "layout": "h3"
+ },
+ "rw": {
+  "colors": [
+   "lightblue",
+   "yellow",
+   "green"
+  ],
+  "emblem": true,
+  "layout": "h3"
+ },
+ "sa": {
+  "colors": [
+   "green"
+  ],
+  "emblem": true,
+  "layout": "plain"
+ },
+ "sb": {
+  "colors": [
+   "blue",
+   "yellow",
+   "green"
+  ],
+  "emblem": true,
+  "layout": "diagonal"
+ },
+ "sd": {
+  "colors": [
+   "red",
+   "white",
+   "black",
+   "green"
+  ],
+  "emblem": false,
+  "layout": "tri-h3"
+ },
+ "se": {
+  "colors": [
+   "blue",
+   "yellow"
+  ],
+  "emblem": false,
+  "layout": "nordic"
+ },
+ "sg": {
+  "colors": [
+   "red",
+   "white"
+  ],
+  "emblem": true,
+  "layout": "h2"
+ },
+ "si": {
+  "colors": [
+   "white",
+   "blue",
+   "red"
+  ],
+  "emblem": true,
+  "layout": "h3"
+ },
+ "sk": {
+  "colors": [
+   "white",
+   "blue",
+   "red"
+  ],
+  "emblem": true,
+  "layout": "h3"
+ },
+ "sl": {
+  "colors": [
+   "green",
+   "white",
+   "blue"
+  ],
+  "emblem": false,
+  "layout": "h3"
+ },
+ "sm": {
+  "colors": [
+   "white",
+   "lightblue"
+  ],
+  "emblem": true,
+  "layout": "h2"
+ },
+ "sn": {
+  "colors": [
+   "green",
+   "yellow",
+   "red"
+  ],
+  "emblem": true,
+  "layout": "v3"
+ },
+ "so": {
+  "colors": [
+   "lightblue"
+  ],
+  "emblem": true,
+  "layout": "plain"
+ },
+ "sr": {
+  "colors": [
+   "green",
+   "white",
+   "red",
+   "white",
+   "green"
+  ],
+  "emblem": true,
+  "layout": "h5"
+ },
+ "st": {
+  "colors": [
+   "green",
+   "yellow",
+   "green",
+   "red"
+  ],
+  "emblem": true,
+  "layout": "tri-h3"
+ },
+ "sv": {
+  "colors": [
+   "blue",
+   "white",
+   "blue"
+  ],
+  "emblem": true,
+  "layout": "h3"
+ },
+ "sy": {
+  "colors": [
+   "red",
+   "white",
+   "black"
+  ],
+  "emblem": true,
+  "layout": "h3"
+ },
+ "td": {
+  "colors": [
+   "blue",
+   "yellow",
+   "red"
+  ],
+  "emblem": false,
+  "layout": "v3"
+ },
+ "th": {
+  "colors": [
+   "red",
+   "white",
+   "blue",
+   "white",
+   "red"
+  ],
+  "emblem": false,
+  "layout": "h5"
+ },
+ "tj": {
+  "colors": [
+   "red",
+   "white",
+   "green"
+  ],
+  "emblem": true,
+  "layout": "h3"
+ },
+ "tm": {
+  "colors": [
+   "green"
+  ],
+  "emblem": true,
+  "layout": "plain"
+ },
+ "tn": {
+  "colors": [
+   "red"
+  ],
+  "emblem": true,
+  "layout": "plain"
+ },
+ "tr": {
+  "colors": [
+   "red"
+  ],
+  "emblem": true,
+  "layout": "plain"
+ },
+ "tt": {
+  "colors": [
+   "red",
+   "black",
+   "red"
+  ],
+  "emblem": false,
+  "layout": "diagonal"
+ },
+ "tw": {
+  "colors": [
+   "red",
+   "blue"
+  ],
+  "emblem": true,
+  "layout": "canton"
+ },
+ "tz": {
+  "colors": [
+   "green",
+   "black",
+   "lightblue"
+  ],
+  "emblem": true,
+  "layout": "diagonal"
+ },
+ "ua": {
+  "colors": [
+   "blue",
+   "yellow"
+  ],
+  "emblem": false,
+  "layout": "h2"
+ },
+ "uz": {
+  "colors": [
+   "lightblue",
+   "white",
+   "green"
+  ],
+  "emblem": true,
+  "layout": "h3"
+ },
+ "va": {
+  "colors": [
+   "yellow",
+   "white"
+  ],
+  "emblem": true,
+  "layout": "v2"
+ },
+ "vc": {
+  "colors": [
+   "blue",
+   "yellow",
+   "green"
+  ],
+  "emblem": true,
+  "layout": "v3"
+ },
+ "ve": {
+  "colors": [
+   "yellow",
+   "blue",
+   "red"
+  ],
+  "emblem": true,
+  "layout": "h3"
+ },
+ "vn": {
+  "colors": [
+   "red"
+  ],
+  "emblem": true,
+  "layout": "plain"
+ },
+ "ws": {
+  "colors": [
+   "red",
+   "blue"
+  ],
+  "emblem": true,
+  "layout": "canton"
+ },
+ "xk": {
+  "colors": [
+   "blue"
+  ],
+  "emblem": true,
+  "layout": "plain"
+ },
+ "ye": {
+  "colors": [
+   "red",
+   "white",
+   "black"
+  ],
+  "emblem": false,
+  "layout": "h3"
+ },
+ "zm": {
+  "colors": [
+   "green"
+  ],
+  "emblem": true,
+  "layout": "plain"
+ }
+}

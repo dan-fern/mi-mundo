@@ -154,11 +154,13 @@ extension QuizSet {
     func perfectPoints(in atlas: Atlas?) -> Int {
         guard let atlas else {
             return countryIDs.count * QuestionKind.allCases.filter(asks).reduce(0) {
-                $0 + QuizScoring.firstTry($1, base: basePoints(for: $1))
+                $0 + QuizScoring.best($1, base: basePoints(for: $1), country: nil)
             }
         }
         return QuizTarget.all(for: self, in: atlas).reduce(0) { total, target in
-            total + target.kinds.reduce(0) { $0 + QuizScoring.firstTry($1, base: basePoints(for: $1)) }
+            total + target.kinds.reduce(0) {
+                $0 + QuizScoring.best($1, base: basePoints(for: $1), country: target.country)
+            }
         }
     }
 }
