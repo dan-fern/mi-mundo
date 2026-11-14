@@ -191,7 +191,9 @@ enum QuizPlay {
                                   targets: targets)
             context.insert(attempt)
         }
-        if !profile.isParent { record.started = true }
+        // Opening the quiz doesn't lock it: only a kid's first answer does
+        // (record), so a parent can still swap or remove a quiz nobody has
+        // really attempted.
         return context.saveOrRollback("start quiz attempt") ? attempt : nil
     }
 

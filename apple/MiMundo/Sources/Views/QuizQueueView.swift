@@ -56,9 +56,10 @@ struct QuizQueueView: View {
     @State private var adding = false
     @State private var editing: QuizSet?
     @State private var editRefused = false
+    @State private var swapRefused = false
 
     private var todayID: UUID? { records.first?.currentQuizID }
-    /// Someone started today's quiz: it can't be changed until tomorrow.
+    /// A kid answered in today's quiz: it can't be changed until the queue moves on.
     private var todayLocked: Bool { records.first?.started ?? false }
     private var nextID: UUID? {
         let cycle = queueFromToday(queue: quizzes.map(\.id.uuidString), current: todayID?.uuidString)
@@ -86,6 +87,21 @@ struct QuizQueueView: View {
                     .buttonStyle(.plain)
                     .disabled(locked)
                     .deleteDisabled(locked)
+                    .swipeActions(edge: .leading) {
+                        if quiz.id != todayID && !todayLocked {
+                            Button("Make today's", systemImage: "star.fill") {
+                                if !QuizQueue.makeToday(quiz, in: context) { swapRefused = true }
+                            }
+                            .tint(.orange)
+                        }
+                    }
+                    .contextMenu {
+                        if quiz.id != todayID && !todayLocked {
+                            Button("Make today's quiz", systemImage: "star.fill") {
+                                if !QuizQueue.makeToday(quiz, in: context) { swapRefused = true }
+                            }
+                        }
+                    }
                 }
                 .onMove(perform: move)
                 .onDelete(perform: delete)
@@ -101,7 +117,9 @@ struct QuizQueueView: View {
                 VStack(alignment: .leading, spacing: 6) {
                     Text("Everyone gets the same quiz each day. At 11 pm US Eastern the queue moves on to the next quiz, but only if at least one kid tried today's. After the last quiz it starts again from the top, worth full points.")
                     if todayLocked {
-                        Text("A kid has started today's quiz, so it can't be changed until the queue moves on.")
+                        Text("A kid has answered today's quiz, so it can't be changed or removed until the queue moves on.")
+                    } else if quizzes.count > 1 {
+                        Text("Until a kid answers a question, you can edit or remove today's quiz, or swipe right on another quiz to make it today's.")
                     }
                     if isFull { Text("The queue is full. Remove a quiz to add another.") }
                 }
@@ -124,10 +142,15 @@ struct QuizQueueView: View {
                 if !QuizQueue.edit(quiz, to: draft, in: context) { editRefused = true }
             }
         }
+        .alert("A kid just started today's quiz", isPresented: $swapRefused) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text("Today's quiz can't be swapped once a kid has answered a question. It moves on at 11 pm US Eastern.")
+        }
         .alert("Today's quiz was just started", isPresented: $editRefused) {
             Button("OK", role: .cancel) {}
         } message: {
-            Text("A kid started it while you were editing, so your changes weren't saved. You can change it once the queue moves on.")
+            Text("A kid answered a question while you were editing, so your changes weren't saved. You can change it once the queue moves on.")
         }
     }
 
@@ -234,19 +257,10 @@ private struct QuizEditor: View {
                         Label("Choose on the map", systemImage: "hand.tap")
                     }
                     .disabled(atlasStore.atlas == nil)
-                    Menu {
-                        let continents = Dictionary(grouping: regions.filter { !$0.independent.isEmpty }, by: \.continent)
-                        ForEach(regions.map(\.continent).uniqued(), id: \.self) { continent in
-                            if let inContinent = continents[continent] {
-                                Section(continent) {
-                                    ForEach(inContinent) { region in
-                                        Button("\(region.name) (\(region.independent.count))") { fill(with: region) }
-                                    }
-                                }
-                            }
-                        }
+                    NavigationLink {
+                        RegionPicker(regions: regions, selection: $draft.countryIDs, title: $draft.title)
                     } label: {
-                        Label("Use a whole region", systemImage: "globe")
+                        Label("Use whole regions", systemImage: "globe")
                     }
                     if !draft.countryIDs.isEmpty {
                         Text(chosenNames)
@@ -320,10 +334,6 @@ private struct QuizEditor: View {
         return names.count > 6 ? "\(shown) and \(names.count - 6) more" : shown
     }
 
-    private func fill(with region: QuizRegion) {
-        draft.countryIDs = region.independent.map(\.meta.id)
-        if draft.trimmedTitle.isEmpty { draft.title = region.name }
-    }
 }
 
 private struct QuestionToggle: View {
@@ -386,6 +396,79 @@ struct QuizRegion: Identifiable {
 
 /// Pick any set of countries: searchable, grouped by region, with an
 /// "all / none" button per region. Territories are hidden unless asked for.
+/// Pick one or more whole regions ("Polynesia" + "Melanesia"); ticking a
+/// region adds its self-governing countries, unticking removes them.
+/// Countries picked another way are left alone.
+private struct RegionPicker: View {
+    let regions: [QuizRegion]
+    @Binding var selection: [String]
+    @Binding var title: String
+
+    private func isOn(_ region: QuizRegion) -> Bool {
+        let ids = Set(selection)
+        return !region.independent.isEmpty && region.independent.allSatisfy { ids.contains($0.meta.id) }
+    }
+
+    private var chosenRegions: [QuizRegion] { regions.filter(isOn) }
+
+    private func toggle(_ region: QuizRegion) {
+        let ids = region.independent.map(\.meta.id)
+        if isOn(region) {
+            selection.removeAll { ids.contains($0) }
+        } else {
+            for id in ids where !selection.contains(id) { selection.append(id) }
+        }
+    }
+
+    var body: some View {
+        List {
+            ForEach(regions.map(\.continent).uniqued(), id: \.self) { continent in
+                let inContinent = regions.filter { $0.continent == continent && !$0.independent.isEmpty }
+                if !inContinent.isEmpty {
+                    Section(continent) {
+                        ForEach(inContinent) { region in
+                            Button {
+                                toggle(region)
+                            } label: {
+                                HStack {
+                                    VStack(alignment: .leading, spacing: 2) {
+                                        Text(region.name).foregroundStyle(.primary)
+                                        Text("^[\(region.independent.count) country](inflect: true)")
+                                            .font(.footnote)
+                                            .foregroundStyle(.secondary)
+                                    }
+                                    Spacer()
+                                    Image(systemName: isOn(region) ? "checkmark.circle.fill" : "circle")
+                                        .font(.title3)
+                                        .foregroundStyle(isOn(region) ? Color.accentColor : .secondary)
+                                }
+                                .contentShape(.rect)
+                            }
+                            .buttonStyle(.plain)
+                            .accessibilityAddTraits(isOn(region) ? .isSelected : [])
+                        }
+                    }
+                }
+            }
+        }
+        .navigationTitle("Whole regions")
+        .safeAreaInset(edge: .bottom) {
+            Text("^[\(selection.count) country](inflect: true) chosen")
+                .font(.headline)
+                .padding(.vertical, 10)
+                .frame(maxWidth: .infinity)
+                .background(.bar)
+        }
+        .onDisappear {
+            // Name the quiz after the regions if the parent hasn't named it.
+            let names = chosenRegions.map(\.name)
+            if title.trimmingCharacters(in: .whitespaces).isEmpty, !names.isEmpty {
+                title = ListFormatter.localizedString(byJoining: names)
+            }
+        }
+    }
+}
+
 private struct CountryPicker: View {
     let regions: [QuizRegion]
     @Binding var selection: [String]

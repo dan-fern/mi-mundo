@@ -200,13 +200,15 @@ enum QuizQueue {
         }
         let before = record.state
         var after = queueToday(state: before, queue: quizzes.map(\.id.uuidString), today: today)
-        // Once a kid has a sitting in this run, today's quiz stays locked for
+        // Once a kid has answered in this run, today's quiz stays locked for
         // the whole run, even on later days (the core lifts `started` each
         // new day): editing it would change the questions between sittings
-        // that are meant to be compared (§3.8) and under one in progress.
-        if !after.started, let id = after.current.flatMap(UUID.init(uuidString:)),
-           kidHasSitting(quiz: id, run: Int(after.run), in: context) {
-            after.started = true
+        // that are meant to be compared (§3.8). Just opening it doesn't
+        // lock it, so a parent can still swap or remove it.
+        // Recomputed every time, so a lock left by an older build (which
+        // locked as soon as a kid opened the quiz) lifts by itself.
+        if let id = after.current.flatMap(UUID.init(uuidString:)) {
+            after.started = kidHasAnswered(quiz: id, run: Int(after.run), in: context)
         }
         if after != before || record.modelContext == nil || record.hasChanges {
             record.update(after)
@@ -216,14 +218,34 @@ enum QuizQueue {
     }
 
     @MainActor
-    private static func kidHasSitting(quiz: UUID, run: Int, in context: ModelContext) -> Bool {
+    private static func kidHasAnswered(quiz: UUID, run: Int, in context: ModelContext) -> Bool {
         let child = Role.child.rawValue
-        let descriptor = FetchDescriptor<QuizAttempt>(
-            predicate: #Predicate { $0.quizSetID == quiz && $0.run == run && $0.roleRaw == child })
-        return ((try? context.fetchCount(descriptor)) ?? 0) > 0
+        let attempts = (try? context.fetch(FetchDescriptor<QuizAttempt>(
+            predicate: #Predicate { $0.quizSetID == quiz && $0.run == run && $0.roleRaw == child }))) ?? []
+        for attempt in attempts {
+            let id = attempt.id
+            let answers = FetchDescriptor<QuizAnswer>(predicate: #Predicate { $0.attemptID == id })
+            if ((try? context.fetchCount(answers)) ?? 0) > 0 { return true }
+        }
+        return false
     }
 
-    /// Whether today's quiz is locked against edits (a kid has started it).
+    /// Makes another quiz today's (a new run for it), if no kid has
+    /// answered today's quiz yet. The queue carries on from there.
+    @MainActor
+    @discardableResult
+    static func makeToday(_ quiz: QuizSet, in context: ModelContext) -> Bool {
+        refresh(in: context)
+        guard let record = try? context.fetch(FetchDescriptor<QueueRecord>()).first,
+              !record.started else { return false }
+        let after = queueSetToday(state: record.state, queue: quizzes(in: context).map(\.id.uuidString),
+                                  id: quiz.id.uuidString)
+        guard after.current == quiz.id.uuidString else { return false }
+        record.update(after)
+        return context.saveOrRollback("make today's quiz")
+    }
+
+    /// Whether today's quiz is locked against edits (a kid has answered in it).
     @MainActor
     static func isLocked(_ quiz: QuizSet, in context: ModelContext) -> Bool {
         refresh(in: context)
@@ -252,9 +274,9 @@ enum QuizQueue {
             predicate: #Predicate { $0.quizSetID == quizID && $0.run == run && $0.roleRaw == child }))) ?? []
         let ids = Set(attempts.map(\.id))
         let answered = ((try? context.fetch(FetchDescriptor<QuizAnswer>())) ?? []).contains { ids.contains($0.attemptID) }
-        if record.attemptedByKid != answered || record.started != !attempts.isEmpty {
+        if record.attemptedByKid != answered || record.started != answered {
             record.attemptedByKid = answered
-            record.started = !attempts.isEmpty
+            record.started = answered
             context.saveOrRollback("recount kid attempts")
         }
     }

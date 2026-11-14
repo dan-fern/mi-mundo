@@ -281,17 +281,19 @@ So a parent can set up practice ahead of time (e.g. before work travel):
   the 1st, worth full points (§3.4).
 - Parents can add, edit, reorder and remove queued quizzes and see which one
   is today's and which comes next. Today's quiz stays today's whatever is
-  reordered or added, and **once a kid has started it, it can't be edited
-  or removed until the queue moves on** (a parent trying it doesn't lock
-  it). Before that a parent may still fix or remove it (removing it brings
-  up the quiz that takes its place; removing the last one wraps to the
-  first). This replaces the earlier rule that changes only took effect from
+  reordered or added, and **once a kid has answered a question in it, it
+  can't be edited, removed or swapped until the queue moves on** (opening
+  it without answering, or a parent trying it, doesn't lock it). Before
+  that a parent may still fix or remove it (removing it brings up the quiz
+  that takes its place; removing the last one wraps to the first), or make
+  any other queued quiz today's instead (it comes up as a fresh run; the
+  queue carries on from there). This replaces the earlier rule that changes only took effect from
   the next game day (Dan's decision).
 - The day comes from the iPad's clock. Setting the clock back never moves
   the queue on; setting it forward can (a family app: parents can see it in
   the history).
 - The first quiz added to an empty queue is today's quiz straight away.
-- A quiz is built from a **whole region** or any hand-picked set (from a
+- A quiz is built from **one or more whole regions** or any hand-picked set (from a
   list, or by tapping countries on a map that shows country names),
   territories included if wanted. Regions are quiz-sized groups of at most
   14 independent countries, based on the UN sub-regions with the big ones

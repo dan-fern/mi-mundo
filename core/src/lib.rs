@@ -23,7 +23,9 @@ pub use flags::{
     grade_flag_outline,
 };
 pub use freehand::{FreehandGrade, classify_pixels, grade_freehand};
-pub use queue::{QueueState, queue_from_today, queue_initial_state, queue_max, queue_today};
+pub use queue::{
+    QueueState, queue_from_today, queue_initial_state, queue_max, queue_set_today, queue_today,
+};
 pub use quiz::{quiz_choices, quiz_stars};
 pub use scoring::points_for_attempt;
 

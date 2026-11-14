@@ -128,10 +128,81 @@ pub fn queue_from_today(queue: Vec<String>, current: Option<String>) -> Vec<Stri
     ordered
 }
 
+/// A parent picks a different quiz to be today's (requirements §5.4).
+///
+/// Only while no kid has attempted today's quiz: once one has, the state is
+/// returned unchanged (the app also hides the action). The chosen quiz
+/// comes up as a new run, as if the queue had moved on to it, and the queue
+/// carries on from there tomorrow. Picking today's own quiz, or one that
+/// isn't in the queue, changes nothing.
+#[uniffi::export]
+pub fn queue_set_today(state: QueueState, queue: Vec<String>, id: String) -> QueueState {
+    if state.attempted_by_kid || state.current.as_deref() == Some(id.as_str()) {
+        return state;
+    }
+    let Some(position) = queue.iter().position(|q| *q == id) else {
+        return state;
+    };
+    QueueState {
+        current: Some(id),
+        position: position as u32,
+        run: state.run.wrapping_add(1),
+        day: state.day,
+        attempted_by_kid: false,
+        started: false,
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
     use proptest::prelude::*;
+
+    #[test]
+    fn set_today_brings_the_chosen_quiz_up_as_a_new_run() {
+        let queue = ids(&["a", "b", "c"]);
+        let state = queue_today(queue_initial_state(10), queue.clone(), 10);
+        let after = queue_set_today(state.clone(), queue.clone(), "c".into());
+        assert_eq!(current(&after), Some("c"));
+        assert_eq!(after.position, 2);
+        assert_eq!(after.run, state.run + 1);
+        assert_eq!(after.day, 10);
+        // Tomorrow, after a kid tries it, the queue carries on from "c".
+        let tried = QueueState {
+            attempted_by_kid: true,
+            ..after
+        };
+        assert_eq!(current(&queue_today(tried, queue, 11)), Some("a"));
+    }
+
+    #[test]
+    fn set_today_is_refused_once_a_kid_attempted() {
+        let queue = ids(&["a", "b"]);
+        let state = QueueState {
+            attempted_by_kid: true,
+            ..queue_today(queue_initial_state(3), queue.clone(), 3)
+        };
+        assert_eq!(queue_set_today(state.clone(), queue, "b".into()), state);
+    }
+
+    #[test]
+    fn set_today_ignores_unknown_and_current_quizzes() {
+        let queue = ids(&["a", "b"]);
+        let state = queue_today(queue_initial_state(3), queue.clone(), 3);
+        assert_eq!(
+            queue_set_today(state.clone(), queue.clone(), "zz".into()),
+            state
+        );
+        assert_eq!(queue_set_today(state.clone(), queue, "a".into()), state);
+    }
+
+    #[test]
+    fn set_today_then_same_day_refresh_keeps_it() {
+        let queue = ids(&["a", "b", "c"]);
+        let state = queue_today(queue_initial_state(5), queue.clone(), 5);
+        let after = queue_set_today(state, queue.clone(), "b".into());
+        assert_eq!(queue_today(after.clone(), queue, 5), after);
+    }
 
     fn ids(names: &[&str]) -> Vec<String> {
         names.iter().map(|s| s.to_string()).collect()
