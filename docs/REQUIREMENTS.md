@@ -110,9 +110,16 @@ Escalating help, from hardest to easiest:
    canton, …), fill regions with colours, then draw the emblem.
 3. **Multiple choice** — half the points; **no penalty to stats**.
 
+Built in steps (owner decision, Nov 2026): multiple choice first (pick the
+flag from four, neighbours' flags as the wrong answers, look-alikes that can't
+be told apart at button size — Monaco/Indonesia, Chad/Romania — never shown
+together), then the layout outline, then freehand, then parent review (5.3).
+Until drawing exists every flag question is multiple choice at half points.
+
 Grading:
 - Automatically graded on colours and approximate placement.
-- Very lenient on emblems and other hand-drawn detail.
+- Very lenient on emblems and other hand-drawn detail (owner: *especially*
+  lenient on emblems and anything hard to draw).
 - Every drawing and its automatic verdict is saved for parent review (5.3).
 
 ### 3.4 Scoring

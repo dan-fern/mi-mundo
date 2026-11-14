@@ -58,6 +58,10 @@ struct QuizPlayView: View {
         let choices: [String]
         /// Which country each button stands for (stats: "confused with").
         let countryIDs: [String: String]
+        /// Each answer's country name: flag answers are country codes.
+        let names: [String: String]
+        /// Each answer's flag picture, for flag questions.
+        let flags: [String: String]
         let askedAt: Date
         /// The side its card opens on, kept with it so the card leaves the
         /// way it came even if the next card opens on the other side.
@@ -302,7 +306,9 @@ struct QuizPlayView: View {
         let answeredIDs = Set(targets.filter { answered[$0.id]?[.name] != nil }.map(\.id))
         let made = atlas.choices(for: kind, about: target.country, excluding: answeredIDs, seed: seed)
         let asked = ActiveQuestion(target: target.id, kind: kind, correct: made.correct, choices: made.all,
-                                   countryIDs: made.countries.mapValues(\.meta.id), askedAt: .now,
+                                   countryIDs: made.countries.mapValues(\.meta.id),
+                                   names: made.countries.mapValues(\.name),
+                                   flags: made.countries.compactMapValues(\.flagAsset), askedAt: .now,
                                    leading: cardOnLeadingSide)
         withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.25)) { question = asked }
         promptFocused = true
@@ -327,13 +333,15 @@ struct QuizPlayView: View {
             question = asked
             answered[target.id, default: [:]][asked.kind] = right
             points += asked.earned
-            if !right, asked.kind == .name, let chosenCountry, chosenCountry.id != target.id {
+            // Show where the wrong pick is: the country tapped by name, or
+            // the country whose flag was picked.
+            if !right, asked.kind != .capital, let chosenCountry, chosenCountry.id != target.id {
                 wrongPick = chosenCountry.id
             }
         }
         let verdict = right
             ? (asked.earned > 0 ? "Yes! \(asked.earned) points." : "Yes!")
-            : "Good try! It's \(asked.correct)."
+            : QuestionCard.missed(asked, country: target.country)
         if readingAloud { speaker.say([verdict]) }
         AccessibilityNotification.Announcement(verdict).post()
     }
@@ -406,7 +414,20 @@ private struct QuestionCard: View {
         switch question.kind {
         case .name: "Which country is this?"
         case .capital: "What is the capital of \(country.name)?"
+        case .flag: "Which flag belongs to \(country.name)?"
         }
+    }
+
+    /// What a wrong answer hears: the right answer, in words.
+    static func missed(_ question: QuizPlayView.ActiveQuestion, country: AtlasCountry) -> String {
+        guard question.kind == .flag else { return "Good try! It's \(question.correct)." }
+        let picked = question.picked.flatMap { question.names[$0] }
+        return picked.map { "Good try! That's the flag of \($0)." } ?? "Good try!"
+    }
+
+    /// Flags are read out by number: their names would give the answer.
+    private var spokenChoices: [String] {
+        question.kind == .flag ? [] : question.choices.map { $0 + "." }
     }
 
     var body: some View {
@@ -415,7 +436,7 @@ private struct QuestionCard: View {
                 HStack(alignment: .top, spacing: 12) {
                     SpeakButton(label: "Read the question") {
                         onSpeak()
-                        speaker.say([prompt] + question.choices.map { $0 + "." })
+                        speaker.say([prompt] + spokenChoices)
                     }
                     if showsFlag, question.kind == .capital, let flag = country.flagAsset {
                         Image(flag)
@@ -434,24 +455,10 @@ private struct QuestionCard: View {
                     Spacer(minLength: 0)
                 }
 
-                ForEach(question.choices, id: \.self) { choice in
-                    // The speaker sits on the leading side, well away from
-                    // the answer, so reaching for it can't pick an answer.
-                    HStack(spacing: 22) {
-                        SpeakButton(label: "Read \(choice)") {
-                            onSpeak()
-                            speaker.say([choice])
-                        }
-                        Button {
-                            onPick(choice)
-                        } label: {
-                            ChoiceLabel(text: choice, state: state(of: choice))
-                        }
-                        .buttonStyle(.plain)
-                        // Not .disabled: that would grey out the green and
-                        // red verdict colours.
-                        .allowsHitTesting(question.picked == nil)
-                    }
+                if question.kind == .flag {
+                    flagGrid
+                } else {
+                    wordChoices
                 }
 
                 if let picked = question.picked {
@@ -475,6 +482,50 @@ private struct QuestionCard: View {
         .dynamicTypeSize(...DynamicTypeSize.accessibility2)
     }
 
+    /// Four flags, two by two. Once answered, each shows whose it is.
+    private var flagGrid: some View {
+        Grid(horizontalSpacing: 14, verticalSpacing: 14) {
+            ForEach(Array(stride(from: 0, to: question.choices.count, by: 2)), id: \.self) { row in
+                GridRow {
+                    ForEach(question.choices[row..<min(row + 2, question.choices.count)], id: \.self) { choice in
+                        let number = (question.choices.firstIndex(of: choice) ?? 0) + 1
+                        Button {
+                            onPick(choice)
+                        } label: {
+                            FlagChoice(asset: question.flags[choice], number: number,
+                                       name: question.names[choice] ?? "", state: state(of: choice))
+                        }
+                        .buttonStyle(.plain)
+                        .allowsHitTesting(question.picked == nil)
+                    }
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var wordChoices: some View {
+        ForEach(question.choices, id: \.self) { choice in
+            // The speaker sits on the leading side, well away from
+            // the answer, so reaching for it can't pick an answer.
+            HStack(spacing: 22) {
+                SpeakButton(label: "Read \(choice)") {
+                    onSpeak()
+                    speaker.say([choice])
+                }
+                Button {
+                    onPick(choice)
+                } label: {
+                    ChoiceLabel(text: choice, state: state(of: choice))
+                }
+                .buttonStyle(.plain)
+                // Not .disabled: that would grey out the green and
+                // red verdict colours.
+                .allowsHitTesting(question.picked == nil)
+            }
+        }
+    }
+
     private func state(of choice: String) -> ChoiceLabel.State {
         guard let picked = question.picked else { return .open }
         if choice == question.correct { return .right }
@@ -492,12 +543,86 @@ private struct QuestionCard: View {
                 Text(question.earned > 0 ? "Yes! +\(question.earned)" : "Yes!")
                     .font(.title3.bold())
             } else {
-                Text("Good try! It's \(question.correct).")
+                Text(Self.missed(question, country: country))
                     .font(.title3.bold())
                     .fixedSize(horizontal: false, vertical: true)
             }
         }
         .accessibilityElement(children: .combine)
+    }
+}
+
+/// One flag answer. Before answering it's just the flag (its name would
+/// give it away); after, the right one turns green, a wrong pick red, and
+/// each says whose flag it is.
+private struct FlagChoice: View {
+    let asset: String?
+    let number: Int
+    let name: String
+    let state: ChoiceLabel.State
+
+    var body: some View {
+        VStack(spacing: 6) {
+            Group {
+                if let asset {
+                    Image(asset)
+                        .resizable()
+                        .scaledToFit()
+                        .clipShape(.rect(cornerRadius: 4))
+                        .overlay(RoundedRectangle(cornerRadius: 4).stroke(.black.opacity(0.2)))
+                } else {
+                    Image(systemName: "flag").font(.largeTitle)
+                }
+            }
+            .frame(maxWidth: .infinity, minHeight: 90, maxHeight: 90)
+            if state != .open {
+                Text(name)
+                    .font(.footnote.weight(.semibold))
+                    .lineLimit(2)
+                    .multilineTextAlignment(.center)
+                    .minimumScaleFactor(0.8)
+            }
+        }
+        .padding(10)
+        .frame(maxWidth: .infinity)
+        .foregroundStyle(state == .right || state == .wrong ? Color.white : Color.primary)
+        .background(background, in: .rect(cornerRadius: 16))
+        .overlay(alignment: .topTrailing) {
+            switch state {
+            case .right: badge("checkmark")
+            case .wrong: badge("xmark")
+            default: EmptyView()
+            }
+        }
+        .opacity(state == .faded ? 0.45 : 1)
+        .contentShape(.rect)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(accessibilityText)
+    }
+
+    private func badge(_ symbol: String) -> some View {
+        Image(systemName: symbol)
+            .font(.headline.bold())
+            .padding(6)
+            .background(background, in: .circle)
+            .offset(x: 6, y: -6)
+    }
+
+    private var background: Color {
+        switch state {
+        case .open, .faded: Color(uiColor: .secondarySystemBackground)
+        case .right: QuizColor.right
+        case .wrong: QuizColor.wrong
+        }
+    }
+
+    private var accessibilityText: String {
+        switch state {
+        case .open: "Flag \(number)"
+        case .right: "Flag \(number), \(name), the right answer"
+        case .wrong: "Flag \(number), \(name), not right"
+        case .faded: "Flag \(number), \(name)"
+        }
     }
 }
 

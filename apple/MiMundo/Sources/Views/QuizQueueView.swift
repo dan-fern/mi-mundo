@@ -262,8 +262,8 @@ private struct QuizEditor: View {
                 Section {
                     QuestionToggle(title: "Country name", isOn: $draft.asksName, points: $draft.namePoints)
                     QuestionToggle(title: "Capital", isOn: $draft.asksCapital, points: $draft.capitalPoints)
-                    LabeledContent("Flag", value: "Coming soon")
-                        .foregroundStyle(.secondary)
+                    QuestionToggle(title: "Flag", isOn: $draft.asksFlag, points: $draft.flagPoints,
+                                   note: "Picking it from four flags earns half: \(QuizScoring.firstTry(.flag, base: draft.flagPoints)). Drawing it, coming later, earns it all.")
                 } header: {
                     Text("Questions for each country")
                 } footer: {
@@ -301,14 +301,12 @@ private struct QuizEditor: View {
     }
 
     /// Counts only questions really asked (no capital question for a place
-    /// without one, or for a city-state named like its capital).
+    /// without a capital, no flag question for one without a flag picture).
     private var maxPoints: Int {
         guard let atlas = atlasStore.atlas else { return 0 }
         let draft = draft
-        return QuizTarget.all(countryIDs: draft.countryIDs, asks: { kind in
-            kind == .name ? draft.asksName : draft.asksCapital
-        }, in: atlas).reduce(0) { total, target in
-            total + target.kinds.reduce(0) { $0 + ($1 == .name ? draft.namePoints : draft.capitalPoints) }
+        return QuizTarget.all(countryIDs: draft.countryIDs, asks: draft.asks, in: atlas).reduce(0) { total, target in
+            total + target.kinds.reduce(0) { $0 + QuizScoring.firstTry($1, base: draft.basePoints(for: $1)) }
         }
     }
 
@@ -330,13 +328,21 @@ private struct QuestionToggle: View {
     let title: String
     @Binding var isOn: Bool
     @Binding var points: Int
+    var note: String?
 
     var body: some View {
         Toggle(title, isOn: $isOn)
         if isOn {
             Stepper(value: $points, in: QuizDraft.pointsRange, step: 5) {
-                Text("^[\(points) point](inflect: true) each")
-                    .foregroundStyle(.secondary)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("^[\(points) point](inflect: true) each")
+                        .foregroundStyle(.secondary)
+                    if let note {
+                        Text(note)
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                    }
+                }
             }
             .padding(.leading, 20)
         }
