@@ -577,6 +577,20 @@
     ],
     "_why": "'languages of Guinea' is a category, not a language"
   },
+  "GQ": {
+    "capitals": [
+      "Malabo",
+      "Ciudad de la Paz"
+    ],
+    "capitalPoints": [
+      {
+        "name": "Malabo",
+        "lon": 8.7832,
+        "lat": 3.7504
+      }
+    ],
+    "_why": "Malabo first: the capital on kids' atlases and globes; Ciudad de la Paz is the new capital being built"
+  },
   "GR": {
     "landmarks": [
       {
@@ -899,7 +913,17 @@
       "Gilbertese",
       "English"
     ],
-    "_why": "local language first"
+    "_why": "local language first; 'Tarawa', as atlases label it (Wikidata: South Tarawa)",
+    "capitals": [
+      "Tarawa"
+    ],
+    "capitalPoints": [
+      {
+        "name": "Tarawa",
+        "lon": 172.9667,
+        "lat": 1.3333
+      }
+    ]
   },
   "KM": {
     "languages": [
@@ -1621,7 +1645,11 @@
       "Swazi",
       "English"
     ],
-    "_why": "national language first"
+    "_why": "national language first; Mbabane first: the capital atlases give (quizzes ask the first capital)",
+    "capitals": [
+      "Mbabane",
+      "Lobamba"
+    ]
   },
   "TF": {
     "population": null,
@@ -1862,7 +1890,7 @@
       "Xhosa",
       "English"
     ],
-    "_why": "rank by speakers in the country, not worldwide; hand-picked kid-recognizable landmarks (UNESCO ranking alone misses icons like the Eiffel Tower or Machu Picchu)",
+    "_why": "rank by speakers in the country, not worldwide; hand-picked kid-recognizable landmarks (UNESCO ranking alone misses icons like the Eiffel Tower or Machu Picchu); Pretoria first: the capital schools teach (quizzes ask the first capital)",
     "landmarks": [
       {
         "name": "Table Mountain",
@@ -1879,6 +1907,11 @@
         "lon": 18.4719,
         "lat": -34.3568
       }
+    ],
+    "capitals": [
+      "Pretoria",
+      "Cape Town",
+      "Bloemfontein"
     ]
   },
   "ZM": {

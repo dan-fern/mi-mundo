@@ -80,7 +80,7 @@ def distance(rings, lon, lat):
 # the big ones split so each has at most 14 independent countries, which
 # keeps a day's quiz a sensible size. Listed in display order.
 REGIONS = [
-    "North Africa", "West Africa: Atlantic", "West Africa: Gulf of Guinea",
+    "North Africa", "West Africa (west)", "West Africa (east)",
     "Central Africa", "East Africa", "Southern Africa",
     "North America", "Central America", "Caribbean", "South America",
     "Middle East", "Arabian Peninsula", "Central Asia and the Caucasus",
@@ -90,7 +90,7 @@ REGIONS = [
     "Antarctica and ocean islands",
 ]
 FROM_SUBREGION = {
-    "Northern Africa": "North Africa", "Western Africa": "West Africa: Atlantic",
+    "Northern Africa": "North Africa", "Western Africa": "West Africa (west)",
     "Middle Africa": "Central Africa", "Eastern Africa": "East Africa",
     "Southern Africa": "Southern Africa",
     "Northern America": "North America", "Central America": "Central America",
@@ -109,8 +109,9 @@ FROM_SUBREGION = {
 # Countries placed differently from their UN sub-region, to split the big
 # groups along lines schools use.
 REGION_OF = {
-    # West Africa (16) -> Atlantic side / Gulf of Guinea and the Niger.
-    **dict.fromkeys(["CI", "GH", "TG", "BJ", "NG", "BF", "NE"], "West Africa: Gulf of Guinea"),
+    # West Africa (16) -> its western and eastern halves (both have coast
+    # and Sahel, so the names say where, not what).
+    **dict.fromkeys(["CI", "GH", "TG", "BJ", "NG", "BF", "NE"], "West Africa (east)"),
     # East Africa (18) -> East Africa / Southern Africa.
     **dict.fromkeys(["MZ", "MW", "ZM", "ZW", "MG", "KM", "MU", "SC", "RE", "YT"], "Southern Africa"),
     # Western Asia (18) -> Middle East / Arabian Peninsula / Caucasus.
@@ -121,6 +122,10 @@ REGION_OF = {
     # Central America includes Mexico in the UN scheme; schools put it in
     # North America.
     "MX": "North America",
+    # Where schools teach them: Iran with the Middle East (UN: South Asia),
+    # Cyprus with Europe (UN and Natural Earth: Western Asia).
+    "IR": "Middle East",
+    "CY": "Southern Europe",
     # Natural Earth files these island countries under "open ocean".
     "MV": "South Asia",
 }

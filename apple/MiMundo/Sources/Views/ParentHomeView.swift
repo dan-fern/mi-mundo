@@ -14,6 +14,7 @@ struct ParentHomeView: View {
     @State private var editingKid: Profile?
     @State private var kidToDelete: Profile?
     @State private var showDiagnostics = false
+    @State private var movedAside = UserDefaults.standard.object(forKey: Persistence.movedAsideKey) as? Date
 
     private var kids: [Profile] { profiles.filter { !$0.isParent && !$0.isArchived } }
     private var archivedKids: [Profile] { profiles.filter { !$0.isParent && $0.isArchived } }
@@ -21,6 +22,19 @@ struct ParentHomeView: View {
     var body: some View {
         NavigationStack {
             List {
+                if let movedAside {
+                    Section {
+                        Label {
+                            Text("On \(movedAside.formatted(date: .abbreviated, time: .shortened)) the app's saved data couldn't be opened, so it started fresh. The old data was kept on this iPad as a backup; ask for help if you need it back.")
+                        } icon: {
+                            Image(systemName: "exclamationmark.triangle.fill").foregroundStyle(.orange)
+                        }
+                        Button("Dismiss") {
+                            UserDefaults.standard.removeObject(forKey: Persistence.movedAsideKey)
+                            self.movedAside = nil
+                        }
+                    }
+                }
                 Section {
                     NavigationLink {
                         ParentMapView(parent: parent)
@@ -81,7 +95,7 @@ struct ParentHomeView: View {
                 }
 
                 Section("About") {
-                    LabeledContent("New days start at", value: "10 pm US Eastern")
+                    LabeledContent("New days start at", value: "11 pm US Eastern")
                     NavigationLink("Credits") { CreditsView() }
                     DisclosureGroup("Diagnostics", isExpanded: $showDiagnostics) {
                         LabeledContent("Today's game day", value: gameDayLabel(day: Attendance.today()))
@@ -123,7 +137,7 @@ struct ParentHomeView: View {
                     if let kidToDelete { deleteForever(kidToDelete) }
                 }
             } message: {
-                Text("This permanently deletes their profile, attendance and history on this iPad. It can't be undone.")
+                Text("This permanently deletes their profile, attendance, quiz results and history on this iPad. It can't be undone.")
             }
         }
     }
@@ -144,8 +158,13 @@ struct ParentHomeView: View {
         do {
             try context.delete(model: Visit.self, where: #Predicate { $0.childID == kidID })
             try context.delete(model: Session.self, where: #Predicate { $0.profileID == kidID })
+            try context.delete(model: QuizAnswer.self, where: #Predicate { $0.profileID == kidID })
+            try context.delete(model: QuizAttempt.self, where: #Predicate { $0.profileID == kidID })
             context.delete(kid)
             try context.save()
+            // If they were the one who tried today's quiz, the queue
+            // mustn't move on tomorrow because of them.
+            QuizQueue.recountKidAttempts(in: context)
         } catch {
             dataLog.error("Delete kid failed: \(error, privacy: .public)")
             context.rollback()

@@ -25,6 +25,9 @@ struct QuizOfTheDaySection: View {
         Section("Quiz of the day") {
             if let today {
                 QuizRow(quiz: today, badge: .today)
+                // Parents take the same quiz as the kids (§3.8); their
+                // sittings never move the queue on.
+                TodayQuizButton(profile: parent, prominent: false)
             } else {
                 Text("No quiz today. Add one to the queue.")
                     .foregroundStyle(.secondary)
@@ -52,6 +55,7 @@ struct QuizQueueView: View {
     @Query private var records: [QueueRecord]
     @State private var adding = false
     @State private var editing: QuizSet?
+    @State private var editRefused = false
 
     private var todayID: UUID? { records.first?.currentQuizID }
     /// Someone started today's quiz: it can't be changed until tomorrow.
@@ -95,9 +99,9 @@ struct QuizQueueView: View {
                 if !quizzes.isEmpty { Text("\(quizzes.count) of \(queueMax()) quizzes") }
             } footer: {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Everyone gets the same quiz each day. At 10 pm US Eastern the queue moves on to the next quiz, but only if at least one kid tried today's. After the last quiz it starts again from the top, worth full points.")
+                    Text("Everyone gets the same quiz each day. At 11 pm US Eastern the queue moves on to the next quiz, but only if at least one kid tried today's. After the last quiz it starts again from the top, worth full points.")
                     if todayLocked {
-                        Text("Today's quiz has been started, so it can't be changed until tomorrow.")
+                        Text("A kid has started today's quiz, so it can't be changed until the queue moves on.")
                     }
                     if isFull { Text("The queue is full. Remove a quiz to add another.") }
                 }
@@ -115,9 +119,15 @@ struct QuizQueueView: View {
         }
         .sheet(item: $editing) { quiz in
             QuizEditor(heading: "Edit quiz", saveTitle: "Save", draft: QuizDraft(quiz)) { draft in
-                quiz.apply(draft)
-                context.saveOrRollback("edit quiz")
+                // Checked again here: a kid may have started it while the
+                // editor was open.
+                if !QuizQueue.edit(quiz, to: draft, in: context) { editRefused = true }
             }
+        }
+        .alert("Today's quiz was just started", isPresented: $editRefused) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text("A kid started it while you were editing, so your changes weren't saved. You can change it once the queue moves on.")
         }
     }
 
@@ -153,11 +163,13 @@ struct QuizRow: View {
     var badge: Badge?
     var locked = false
 
+    @Environment(AtlasStore.self) private var atlasStore
+
     var body: some View {
         HStack(spacing: 12) {
             VStack(alignment: .leading, spacing: 4) {
                 Text(quiz.title).font(.headline)
-                Text("^[\(quiz.countryIDs.count) country](inflect: true) · \(quiz.questionSummary) · up to \(quiz.maxPoints) points")
+                Text("^[\(quiz.countryIDs.count) country](inflect: true) · \(quiz.questionSummary) · \(quiz.perfectPoints(in: atlasStore.atlas)) points for a perfect first try")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
@@ -165,7 +177,7 @@ struct QuizRow: View {
             if locked {
                 Image(systemName: "lock.fill")
                     .foregroundStyle(.secondary)
-                    .accessibilityLabel("Started today, can't be changed until tomorrow")
+                    .accessibilityLabel("Started by a kid, can't be changed until the queue moves on")
             }
             if let badge {
                 Text(badge.text)
@@ -255,12 +267,12 @@ private struct QuizEditor: View {
                 } header: {
                     Text("Questions for each country")
                 } footer: {
-                    Text("Points are for a right answer the first time a quiz is taken. A second try that day is worth half, a third a quarter.")
+                    Text("Points are for a right answer on the first try. Each time a quiz comes up in the queue, a second try is worth half, a third a quarter, and after that it's just practice. A right answer always earns at least 1 point.")
                 }
 
                 if draft.isValid {
                     Section {
-                        LabeledContent("Most a kid can earn", value: "\(maxPoints) points")
+                        LabeledContent("Points for a perfect first try", value: "\(maxPoints) points")
                     }
                 }
             }
@@ -288,9 +300,16 @@ private struct QuizEditor: View {
         }
     }
 
+    /// Counts only questions really asked (no capital question for a place
+    /// without one, or for a city-state named like its capital).
     private var maxPoints: Int {
-        draft.countryIDs.count * ((draft.asksName ? draft.namePoints : 0)
-            + (draft.asksCapital ? draft.capitalPoints : 0))
+        guard let atlas = atlasStore.atlas else { return 0 }
+        let draft = draft
+        return QuizTarget.all(countryIDs: draft.countryIDs, asks: { kind in
+            kind == .name ? draft.asksName : draft.asksCapital
+        }, in: atlas).reduce(0) { total, target in
+            total + target.kinds.reduce(0) { $0 + ($1 == .name ? draft.namePoints : draft.capitalPoints) }
+        }
     }
 
     /// "France, Italy, Spain and 9 more".
@@ -482,6 +501,8 @@ private struct MapCountryPicker: View {
     @State private var noSelection: AtlasCountry?
     @State private var cardSide = false
     @State private var topBarBottom: CGFloat = 96
+    /// Why the last tap did nothing, shown briefly in the bar.
+    @State private var notice: String?
 
     private var chosen: Set<UInt32> {
         let ids = Set(selection)
@@ -501,8 +522,9 @@ private struct MapCountryPicker: View {
             .ignoresSafeArea()
 
             HStack(spacing: 14) {
-                Text("Tap countries to add or remove them")
+                Text(notice ?? "Tap countries to add or remove them")
                     .font(.headline)
+                    .foregroundStyle(notice == nil ? Color.primary : QuizColor.points)
                 Spacer()
                 Text("\(selection.count) chosen")
                     .font(.headline)
@@ -526,8 +548,16 @@ private struct MapCountryPicker: View {
     }
 
     private func toggle(_ country: AtlasCountry) {
-        // Only places with a country card can be quizzed.
-        guard country.facts != nil else { return }
+        // Only places with a country card can be quizzed; say so, or the
+        // parent would think the tap missed.
+        guard country.facts != nil else {
+            notice = "\(country.name) can't be in a quiz"
+            Task {
+                try? await Task.sleep(for: .seconds(2.5))
+                notice = nil
+            }
+            return
+        }
         let id = country.meta.id
         withAnimation(.snappy) {
             if let index = selection.firstIndex(of: id) {

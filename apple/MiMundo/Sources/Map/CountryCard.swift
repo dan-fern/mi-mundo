@@ -282,6 +282,13 @@ final class CardSpeaker: NSObject, AVSpeechSynthesizerDelegate {
         isSpeaking = last != nil
     }
 
+    /// Speaks this now, replacing anything being read (quiz buttons: each
+    /// tap reads its own thing; there is no "tap again to stop").
+    func say(_ sentences: [String]) {
+        stop()
+        toggle(sentences)
+    }
+
     func stop() {
         lastUtterance = nil
         synthesizer?.stopSpeaking(at: .immediate)

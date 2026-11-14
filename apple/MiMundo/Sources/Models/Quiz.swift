@@ -75,8 +75,8 @@ extension SchemaV2 {
         }
 
         var state: QueueState {
-            QueueState(current: currentQuizID?.uuidString, position: UInt32(max(position, 0)),
-                       run: UInt32(max(run, 0)), day: day,
+            QueueState(current: currentQuizID?.uuidString, position: UInt32(clamping: max(position, 0)),
+                       run: UInt32(clamping: max(run, 0)), day: day,
                        attemptedByKid: attemptedByKid, started: started)
         }
 
@@ -118,7 +118,8 @@ struct QuizDraft: Equatable {
     }
 
     var trimmedTitle: String { title.trimmingCharacters(in: .whitespaces) }
-    var asksAnything: Bool { asksName || asksCapital || asksFlag }
+    /// Flag questions don't exist yet (§3.3), so they don't count.
+    var asksAnything: Bool { asksName || asksCapital }
     var isValid: Bool { !trimmedTitle.isEmpty && !countryIDs.isEmpty && asksAnything }
 }
 
@@ -132,10 +133,16 @@ extension QuizSet {
         return kinds.joined(separator: " · ")
     }
 
-    /// Most points one sitting can earn (first attempt, no multiple choice).
-    var maxPoints: Int {
-        countryIDs.count * ((asksName ? namePoints : 0) + (asksCapital ? capitalPoints : 0)
-            + (asksFlag ? flagPoints : 0))
+    /// Points for a perfect first try. With the map loaded this counts only
+    /// the questions really asked (no capital question for a place without
+    /// one); without it, an estimate.
+    func perfectPoints(in atlas: Atlas?) -> Int {
+        guard let atlas else {
+            return countryIDs.count * ((asksName ? namePoints : 0) + (asksCapital ? capitalPoints : 0))
+        }
+        return QuizTarget.all(for: self, in: atlas).reduce(0) { total, target in
+            total + target.kinds.reduce(0) { $0 + basePoints(for: $1) }
+        }
     }
 }
 
@@ -173,12 +180,64 @@ enum QuizQueue {
             return nil
         }
         let before = record.state
-        let after = queueToday(state: before, queue: quizzes.map(\.id.uuidString), today: today)
+        var after = queueToday(state: before, queue: quizzes.map(\.id.uuidString), today: today)
+        // Once a kid has a sitting in this run, today's quiz stays locked for
+        // the whole run, even on later days (the core lifts `started` each
+        // new day): editing it would change the questions between sittings
+        // that are meant to be compared (§3.8) and under one in progress.
+        if !after.started, let id = after.current.flatMap(UUID.init(uuidString:)),
+           kidHasSitting(quiz: id, run: Int(after.run), in: context) {
+            after.started = true
+        }
         if after != before || record.modelContext == nil || record.hasChanges {
             record.update(after)
             context.saveOrRollback("refresh quiz queue")
         }
         return quizzes.first { $0.id == record.currentQuizID }
+    }
+
+    @MainActor
+    private static func kidHasSitting(quiz: UUID, run: Int, in context: ModelContext) -> Bool {
+        let child = Role.child.rawValue
+        let descriptor = FetchDescriptor<QuizAttempt>(
+            predicate: #Predicate { $0.quizSetID == quiz && $0.run == run && $0.roleRaw == child })
+        return ((try? context.fetchCount(descriptor)) ?? 0) > 0
+    }
+
+    /// Whether today's quiz is locked against edits (a kid has started it).
+    @MainActor
+    static func isLocked(_ quiz: QuizSet, in context: ModelContext) -> Bool {
+        refresh(in: context)
+        guard let record = try? context.fetch(FetchDescriptor<QueueRecord>()).first else { return false }
+        return record.currentQuizID == quiz.id && record.started
+    }
+
+    /// Saves an edit unless the quiz got locked while the editor was open.
+    @MainActor
+    @discardableResult
+    static func edit(_ quiz: QuizSet, to draft: QuizDraft, in context: ModelContext) -> Bool {
+        guard !isLocked(quiz, in: context) else { return false }
+        quiz.apply(draft)
+        return context.saveOrRollback("edit quiz")
+    }
+
+    /// After a kid is deleted: "a kid attempted today's quiz" must only
+    /// count kids who are still here, or the queue would move on tomorrow
+    /// because of someone who no longer exists.
+    @MainActor
+    static func recountKidAttempts(in context: ModelContext) {
+        guard let record = try? context.fetch(FetchDescriptor<QueueRecord>()).first,
+              let quizID = record.currentQuizID else { return }
+        let (run, child) = (record.run, Role.child.rawValue)
+        let attempts = (try? context.fetch(FetchDescriptor<QuizAttempt>(
+            predicate: #Predicate { $0.quizSetID == quizID && $0.run == run && $0.roleRaw == child }))) ?? []
+        let ids = Set(attempts.map(\.id))
+        let answered = ((try? context.fetch(FetchDescriptor<QuizAnswer>())) ?? []).contains { ids.contains($0.attemptID) }
+        if record.attemptedByKid != answered || record.started != !attempts.isEmpty {
+            record.attemptedByKid = answered
+            record.started = !attempts.isEmpty
+            context.saveOrRollback("recount kid attempts")
+        }
     }
 
     /// Adds a quiz at the end of the queue. Returns false if the queue is full.

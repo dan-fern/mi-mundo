@@ -82,6 +82,25 @@ Age-agnostic — fun for a young child, still useful for an adult.
   1. Country name
   2. Capital
   3. Flag (see 3.3)
+- **Answering (name and capital):** pick from four big buttons. The wrong
+  choices are nearby countries (or their capitals), never one already
+  answered in this quiz (its name is on the map). A question shows the same
+  four buttons each time it comes up in a sitting. City-states named like
+  their capital (Singapore, Monaco) are still asked for it; the same answer
+  is fine. Countries with several capitals are asked for the one schools teach
+  (listed first: Pretoria, Mbabane, Malabo, La Paz). Every button and the
+  question can be read aloud. **One try per question:** the right answer
+  is then shown either way, and a miss earns nothing; to do better, retake
+  the quiz (§3.4). Retakes are the practice: there is no separate "try your
+  misses again" round (Dan's decision).
+- On the map, a country still to do has a bold blue border; a finished one
+  is tinted green (all right) or amber (a miss) and shows its name.
+- **"Find one for me"** jumps to a country still to do, for tiny islands
+  and city states that are hard to find or tap.
+- A quiz left part-way **carries on** where it stopped when reopened the
+  same day. Finishing shows stars (three for 90% right, two for 60%, one
+  for anything right), how many were right and the points earned.
+- Kids open today's quiz from their top bar; parents from parent home.
 
 ### 3.3 Flag drawing
 Escalating help, from hardest to easiest:
@@ -131,7 +150,7 @@ Shows the child's own:
 - Shown next to the child's name.
 - Counts days the child **picked their profile** in the last 7 days, capped
   at 5. Parent sessions never count.
-- A day starts at **10 pm US Eastern time** (America/New_York, so it follows
+- A day starts at **11 pm US Eastern time** (America/New_York, so it follows
   daylight saving), wherever the iPad is. The day streak uses the same
   definition.
 - The gauge fills up and gets "hotter" in colour as it approaches 5.
@@ -212,10 +231,13 @@ So a parent can set up practice ahead of time (e.g. before work travel):
   A queued quiz is a region or custom set of countries plus its question
   types and point values.
 - The front of the queue is **today's quiz** for everyone. At the start of
-  each game day (10 pm US Eastern, §3.7) the queue moves on to the next quiz
-  **if at least one kid attempted** the current one. If no kid did, the same
-  quiz stays up, so a missed day never skips a quiz. Parents' attempts don't
-  count, so a parent can never use up the kids' quiz.
+  each game day (11 pm US Eastern, §3.7) the queue moves on to the next quiz
+  **if at least one kid attempted** the current one. A kid has attempted it
+  as soon as they answer one question. That means a kid who answers once
+  and stops still moves the queue on for a sibling who hadn't played yet;
+  that edge case is accepted (Dan's decision). If no kid did, the same
+  quiz stays up, so a missed day never skips a quiz. Parents' attempts
+  don't count, so a parent can never use up the kids' quiz.
 - A kid who doesn't attempt a quiz before it moves on simply has **no entry**
   for it: no score, no zero, and nothing counted against them in stats. They
   meet it again the next time the queue wraps around.
@@ -225,9 +247,15 @@ So a parent can set up practice ahead of time (e.g. before work travel):
   the 1st, worth full points (§3.4).
 - Parents can add, edit, reorder and remove queued quizzes and see which one
   is today's and which comes next. Today's quiz stays today's whatever is
-  reordered or added, and **once anyone has started it, it can't be edited
-  or removed until the next game day**. Before that a parent may still fix
-  or remove it (removing it brings up the quiz that takes its place).
+  reordered or added, and **once a kid has started it, it can't be edited
+  or removed until the queue moves on** (a parent trying it doesn't lock
+  it). Before that a parent may still fix or remove it (removing it brings
+  up the quiz that takes its place; removing the last one wraps to the
+  first). This replaces the earlier rule that changes only took effect from
+  the next game day (Dan's decision).
+- The day comes from the iPad's clock. Setting the clock back never moves
+  the queue on; setting it forward can (a family app: parents can see it in
+  the history).
 - The first quiz added to an empty queue is today's quiz straight away.
 - A quiz is built from a **whole region** or any hand-picked set (from a
   list, or by tapping countries on a map that shows country names),
@@ -252,8 +280,8 @@ How the v0.4 features fit the on-device data (SwiftData, versioned schema):
 | `Profile` | role (parent/child), name, avatar, PIN, archivedAt | Already exists; multiple parents need no schema change. |
 | `QuizSet` | id, title, country codes, question types, point values, position, createdBy, removedAt | One quiz in the family queue (max 20), ordered by position. Removing it sets `removedAt` so old attempts can still name it. (Built; there is no separate `QueueEntry`.) |
 | `QueueRecord` | current quiz, position, run number, day last checked, attempted by a kid, started by anyone | Single record mirroring the Rust core's `QueueState`. At a new game day it advances only if at least one kid attempted it; each advance starts a new run. The "today's quiz" rule lives in the Rust core (`core/src/queue.rs`) so it's unit-tested. (Built.) |
-| `Attempt` | id, profileID, quizSetID, run number, game day, attempt number, started/finished | One quiz sitting by anyone, kid or parent. Attempt numbers count within a run, so they reset when a quiz comes back around. |
-| `Answer` | attemptID, country, question type, correct, base points, multiple choice, points awarded | Scoring inputs stored per answer (§5.3). |
+| `QuizAttempt` | id, profileID, role, quizSetID, run number, game day, attempt number, started/finished | One quiz sitting by anyone, kid or parent. Attempt numbers count within a run, so they reset when a quiz comes back around. An unfinished sitting is resumed, not replaced. (Built.) |
+| `QuizAnswer` | attemptID, profileID, country, question type, chosen and correct answer, correct, base points, attempt number, multiple choice, points awarded | Scoring inputs stored per answer (§5.3). A kid's first answer marks today's quiz as attempted, which lets the queue move on. (Built.) |
 
 Kid-vs-grown-up comparisons are then a query: first `Attempt` per profile
 for a given `QuizSet` and run.

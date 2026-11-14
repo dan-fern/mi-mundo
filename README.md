@@ -5,7 +5,7 @@ countries, capitals and flags, and earn points for real-world rewards.
 
 Built with SwiftUI and a Rust core. Works offline.
 
-**Status:** in development — profiles, attendance, the explore map and the parents' quiz queue work; playing quizzes is next.
+**Status:** in development — profiles, attendance, the explore map, the parents' quiz queue and playing quizzes (name and capital) work; flag drawing is next.
 See [docs/REQUIREMENTS.md](docs/REQUIREMENTS.md)
 and [CHANGELOG.md](CHANGELOG.md).
 

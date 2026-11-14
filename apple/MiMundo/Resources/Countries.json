@@ -586,7 +586,7 @@
    "Bissa"
   ],
   "population": 23025776,
-  "region": "West Africa: Gulf of Guinea",
+  "region": "West Africa (east)",
   "wikidata": "Q965"
  },
  "BG": {
@@ -716,7 +716,7 @@
    "French"
   ],
   "population": 14111034,
-  "region": "West Africa: Gulf of Guinea",
+  "region": "West Africa (east)",
   "wikidata": "Q962"
  },
  "BL": {
@@ -1196,7 +1196,7 @@
    "French"
   ],
   "population": 31165654,
-  "region": "West Africa: Gulf of Guinea",
+  "region": "West Africa (east)",
   "wikidata": "Q1008"
  },
  "CK": {
@@ -1456,7 +1456,7 @@
    "Cape Verdean Creole"
   ],
   "population": 555988,
-  "region": "West Africa: Atlantic",
+  "region": "West Africa (west)",
   "wikidata": "Q1011"
  },
  "CW": {
@@ -1505,7 +1505,7 @@
    "Turkish"
   ],
   "population": 1344976,
-  "region": "Middle East",
+  "region": "Southern Europe",
   "wikidata": "Q644636"
  },
  "CZ": {
@@ -2269,7 +2269,7 @@
    "English"
   ],
   "population": 32833031,
-  "region": "West Africa: Gulf of Guinea",
+  "region": "West Africa (east)",
   "wikidata": "Q117"
  },
  "GL": {
@@ -2331,7 +2331,7 @@
    "English"
   ],
   "population": 2639916,
-  "region": "West Africa: Atlantic",
+  "region": "West Africa (west)",
   "wikidata": "Q1005"
  },
  "GN": {
@@ -2357,11 +2357,16 @@
    "French"
   ],
   "population": 17521167,
-  "region": "West Africa: Atlantic",
+  "region": "West Africa (west)",
   "wikidata": "Q1006"
  },
  "GQ": {
   "capitalPoints": [
+   {
+    "lat": 3.7504,
+    "lon": 8.7832,
+    "name": "Malabo"
+   },
    {
     "lat": 1.5917,
     "lon": 10.8222,
@@ -2369,6 +2374,7 @@
    }
   ],
   "capitals": [
+   "Malabo",
    "Ciudad de la Paz"
   ],
   "independent": true,
@@ -2512,7 +2518,7 @@
    "Portuguese"
   ],
   "population": 2200000,
-  "region": "West Africa: Atlantic",
+  "region": "West Africa (west)",
   "wikidata": "Q1007"
  },
  "GY": {
@@ -2952,7 +2958,7 @@
    "Persian"
   ],
   "population": 92417700,
-  "region": "South Asia",
+  "region": "Middle East",
   "wikidata": "Q794"
  },
  "IS": {
@@ -3266,11 +3272,11 @@
    {
     "lat": 1.3333,
     "lon": 172.9667,
-    "name": "South Tarawa"
+    "name": "Tarawa"
    }
   ],
   "capitals": [
-   "South Tarawa"
+   "Tarawa"
   ],
   "independent": true,
   "landmarks": [
@@ -3652,7 +3658,7 @@
    "English"
   ],
   "population": 5214030,
-  "region": "West Africa: Atlantic",
+  "region": "West Africa (west)",
   "wikidata": "Q1014"
  },
  "LS": {
@@ -4050,7 +4056,7 @@
    "French"
   ],
   "population": 22395489,
-  "region": "West Africa: Atlantic",
+  "region": "West Africa (west)",
   "wikidata": "Q912"
  },
  "MM": {
@@ -4179,7 +4185,7 @@
    "French"
   ],
   "population": 4736139,
-  "region": "West Africa: Atlantic",
+  "region": "West Africa (west)",
   "wikidata": "Q1025"
  },
  "MS": {
@@ -4506,7 +4512,7 @@
    "French"
   ],
   "population": 27000000,
-  "region": "West Africa: Gulf of Guinea",
+  "region": "West Africa (east)",
   "wikidata": "Q1032"
  },
  "NF": {
@@ -4563,7 +4569,7 @@
    "English"
   ],
   "population": 211400708,
-  "region": "West Africa: Gulf of Guinea",
+  "region": "West Africa (east)",
   "wikidata": "Q1033"
  },
  "NI": {
@@ -5630,7 +5636,7 @@
    "English"
   ],
   "population": 5633,
-  "region": "West Africa: Atlantic",
+  "region": "West Africa (west)",
   "wikidata": "Q192184"
  },
  "SI": {
@@ -5724,7 +5730,7 @@
    "Krio"
   ],
   "population": 8600000,
-  "region": "West Africa: Atlantic",
+  "region": "West Africa (west)",
   "wikidata": "Q1044"
  },
  "SM": {
@@ -5781,7 +5787,7 @@
    "French"
   ],
   "population": 16876720,
-  "region": "West Africa: Atlantic",
+  "region": "West Africa (west)",
   "wikidata": "Q1041"
  },
  "SO": {
@@ -5973,19 +5979,19 @@
  "SZ": {
   "capitalPoints": [
    {
-    "lat": -26.4465,
-    "lon": 31.2064,
-    "name": "Lobamba"
-   },
-   {
     "lat": -26.3167,
     "lon": 31.1333,
     "name": "Mbabane"
+   },
+   {
+    "lat": -26.4465,
+    "lon": 31.2064,
+    "name": "Lobamba"
    }
   ],
   "capitals": [
-   "Lobamba",
-   "Mbabane"
+   "Mbabane",
+   "Lobamba"
   ],
   "independent": true,
   "landmarks": [],
@@ -6092,7 +6098,7 @@
    "French"
   ],
   "population": 9700000,
-  "region": "West Africa: Gulf of Guinea",
+  "region": "West Africa (east)",
   "wikidata": "Q945"
  },
  "TH": {
@@ -6890,9 +6896,9 @@
  "ZA": {
   "capitalPoints": [
    {
-    "lat": -29.1,
-    "lon": 26.2167,
-    "name": "Bloemfontein"
+    "lat": -25.7464,
+    "lon": 28.1881,
+    "name": "Pretoria"
    },
    {
     "lat": -33.9253,
@@ -6900,15 +6906,15 @@
     "name": "Cape Town"
    },
    {
-    "lat": -25.7464,
-    "lon": 28.1881,
-    "name": "Pretoria"
+    "lat": -29.1,
+    "lon": 26.2167,
+    "name": "Bloemfontein"
    }
   ],
   "capitals": [
-   "Bloemfontein",
+   "Pretoria",
    "Cape Town",
-   "Pretoria"
+   "Bloemfontein"
   ],
   "independent": true,
   "landmarks": [

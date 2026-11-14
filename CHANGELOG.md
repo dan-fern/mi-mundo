@@ -10,6 +10,39 @@ Versions: [Semantic Versioning](https://semver.org/).
 ## [Unreleased]
 
 ### Added
+- Review of PRs #13–#15 (six reviewers): quiz questions can't be re-rolled
+  by tapping away and back; wrong answers skip countries already answered,
+  measure distance across the ±180° line and from capitals, and never
+  offer a capital that is also right (Jerusalem); a wrong name answer
+  shows where the picked country is; kind spoken and announced verdicts,
+  VoiceOver focus on each question; yellow (not red) highlight for the
+  country being asked; ✓ and ? marks so results don't rely on colour;
+  darker orange and green for contrast; Reduce Motion respected; speaker
+  buttons moved away from the answers; taps aimed at tiny targets; the
+  quiz fits the main landmass (France without Réunion); the top bar fits
+  an iPad mini in portrait. Rules: removing the last quiz wraps to the
+  first; a clock set ahead and corrected no longer freezes the queue; a
+  kid's sitting keeps today's quiz locked for its whole run (a parent's
+  doesn't); answers after 10 pm count for the new day; deleting a kid
+  recounts who tried today's quiz; quizzes with nothing to ask can't be
+  saved or played. Data: schema v4 saves what was offered and picked and
+  when, and snapshots the quiz per sitting; a store that can't be opened
+  is reported to parents. Content: Pretoria, Mbabane, Malabo and Tarawa;
+  Iran in the Middle East, Cyprus in Southern Europe; "West Africa
+  (west/east)"; "Bahamas" and "Gambia".
+- Playable quizzes (requirements §3.2): kids open today's quiz from their
+  top bar, parents from parent home. The map zooms to the quiz's
+  countries; tap one (or "Find one for me") and answer its name and
+  capital by picking from four, with every choice readable aloud. One try
+  per question, then the right answer is shown. Answered countries are
+  tinted and named, and their rivers, lakes and landmarks appear. A quiz
+  left part-way carries on later; the end screen shows stars, the score
+  and points. Second and third tries the same day earn half and a quarter.
+- Sittings and answers are saved (schema version 3), each answer with what
+  it was worth. A kid's first answer lets the queue move on the next day;
+  starting a quiz locks it against edits for the day.
+- Rust core: answer choices drawn from the nearest countries
+  (`quiz_choices`) and star ratings (`quiz_stars`), with 9 tests.
 - Parents can open the explore map from parent home.
 - Quiz editor: "Choose on the map" to tap countries in and out (the
   parent's map shows country names; chosen ones are tinted), and
@@ -135,6 +168,10 @@ Versions: [Semantic Versioning](https://semver.org/).
   changes don't lose data on the iPad.
 
 ### Changed
+- A new game day now starts at 11 pm US Eastern (was 10 pm), for
+  attendance, streaks and the quiz queue.
+- City-states named like their capital (Singapore, Monaco) are asked for
+  their capital again; the review had skipped them.
 - Explore map: landmark pins now show only for the selected country (like
   its capital star), at any zoom, so the map isn't cluttered. A landmark
   in the capital (the Colosseum in Rome) sits just beside the star. A

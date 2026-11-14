@@ -18,16 +18,29 @@ struct ChildHomeView: View {
             .onAppear { QuizQueue.refresh(in: context) }
     }
 
+    /// Everything fits in landscape; on a narrow screen (portrait, big text)
+    /// the name and streak words go, keeping the star and number.
     private var topBar: some View {
-        HStack(spacing: 14) {
-            ProfileAvatar(emoji: child.emoji, size: 52)
-            Text(child.name).font(.title2.bold()).lineLimit(1)
+        ViewThatFits(in: .horizontal) {
+            barContent(compact: false)
+            barContent(compact: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
+    }
+
+    private func barContent(compact: Bool) -> some View {
+        HStack(spacing: compact ? 10 : 14) {
+            ProfileAvatar(emoji: child.emoji, size: compact ? 44 : 52)
+            if !compact {
+                Text(child.name).font(.title2.bold()).lineLimit(1)
+            }
             WithAttendance(childID: child.id) { summary in
                 AttendanceGauge(summary: summary)
                 if summary.streak > 1 {
-                    // At big text sizes, just the star and the number.
+                    // When space is short, just the star and the number.
                     Label {
-                        Text(typeSize.isAccessibilitySize ? "\(summary.streak)" : "\(summary.streak) days in a row!")
+                        Text(compact || typeSize.isAccessibilitySize ? "\(summary.streak)" : "\(summary.streak) days in a row!")
                     } icon: {
                         Image(systemName: "star.fill").foregroundStyle(.yellow)
                     }
@@ -35,6 +48,7 @@ struct ChildHomeView: View {
                     .accessibilityLabel("\(summary.streak) days in a row")
                 }
             }
+            TodayQuizButton(profile: child, compact: compact)
             Button {
                 confirmingSwitch = true
             } label: {
@@ -52,9 +66,10 @@ struct ChildHomeView: View {
                 Text("\(child.name)'s map will stay right where it is.")
             }
         }
-        .padding(.horizontal, 16)
+        .padding(.horizontal, compact ? 12 : 16)
         .padding(.vertical, 10)
         .background(.regularMaterial, in: .capsule)
-        .frame(maxWidth: .infinity, alignment: .leading)
+        // Full size or not at all, so ViewThatFits can tell when it fits.
+        .fixedSize(horizontal: !compact, vertical: false)
     }
 }

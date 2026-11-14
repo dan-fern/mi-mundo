@@ -52,7 +52,7 @@ struct RootView: View {
                     activeID = nil
                 } else if let active, sessionID == nil {
                     // Same player coming back: new session, and count today
-                    // too in case a new game day started (10 pm ET).
+                    // too in case a new game day started (11 pm ET).
                     resume(active)
                 }
                 backgroundedAt = nil
