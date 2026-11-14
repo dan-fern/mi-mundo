@@ -263,7 +263,7 @@ private struct QuizEditor: View {
                     QuestionToggle(title: "Country name", isOn: $draft.asksName, points: $draft.namePoints)
                     QuestionToggle(title: "Capital", isOn: $draft.asksCapital, points: $draft.capitalPoints)
                     QuestionToggle(title: "Flag", isOn: $draft.asksFlag, points: $draft.flagPoints,
-                                   note: "For drawing it. Picking it from four flags instead earns half (\(QuizScoring.firstTry(base: draft.flagPoints, multipleChoice: true))), and so do flags too detailed to draw.")
+                                   note: "For drawing it, freehand or on an outline. Picking it from four flags instead earns half (\(QuizScoring.firstTry(base: draft.flagPoints, multipleChoice: true))).")
                 } header: {
                     Text("Questions for each country")
                 } footer: {

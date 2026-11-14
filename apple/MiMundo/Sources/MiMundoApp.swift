@@ -4,6 +4,12 @@ import SwiftUI
 @main
 struct MiMundoApp: App {
     private let container = Persistence.makeContainer()
+
+    init() {
+        #if DEBUG
+        FreehandSelfCheck.run()
+        #endif
+    }
     @State private var atlasStore = AtlasStore()
     @State private var cameraStore = MapCameraStore()
     @State private var gameDayClock = GameDayClock()

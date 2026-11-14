@@ -27,6 +27,9 @@ enum FlagOutlines {
         return all[country.meta.iso2.lowercased()]
     }
 
+    /// By flag code ("fr").
+    static func spec(code: String) -> FlagOutlineSpec? { all[code] }
+
     /// What's recorded as a drawn flag's answer: "v3:blue,white,red".
     static func summary(layout: String, colors: [String]) -> String {
         "\(layout):\(colors.joined(separator: ","))"
