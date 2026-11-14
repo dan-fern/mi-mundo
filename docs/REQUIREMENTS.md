@@ -125,6 +125,19 @@ against the flag pictures by tools/check-flag-layouts.py; flags no outline can
 describe (Union Jack ensigns, the USA, Nepal, South Africa, …) stay
 pick-from-four.
 
+Step 3 (freehand) is how every flag question now starts: "Draw the flag of
+X!" opens a drawing pad (paint box, three brush sizes, fill background, undo,
+clear). Grading (core/src/freehand.rs) shrinks the drawing and the real flag
+to a 48×36 grid and compares paint-box colours: emblems and detail (where the
+real flag differs from its outline, and colours under 6% of the flag) are
+never graded; a pixel matches if the colour is anywhere in the real flag's
+3×3 neighbourhood; close shades count. Right = 75% of graded pixels match,
+every main colour covers half its area, and no big patch is a colour the flag
+lacks (outside the emblem). Help, in order: "Use an outline" (full points),
+"Pick it from four" (half points). A debug self-check (launch with
+-flagSelfCheck) confirms every flag picture passes as its own drawing, every
+outline passes without its emblem, and a blank canvas never does.
+
 Grading:
 - Automatically graded on colours and approximate placement.
 - Very lenient on emblems and other hand-drawn detail (owner: *especially*

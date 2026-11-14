@@ -8,9 +8,9 @@ import UIKit
 enum QuestionKind: String, CaseIterable, Sendable {
     case name
     case capital
-    /// Draw the country's flag on a layout outline (full points), or, as
-    /// help, pick it from four (half points, §3.3). Flags too detailed for
-    /// an outline are always picked from four.
+    /// Draw the country's flag freehand (full points). Help: draw it on a
+    /// layout outline (still full points), or pick it from four (half
+    /// points, §3.3).
     case flag
 }
 
@@ -21,12 +21,11 @@ enum QuizScoring {
                              usedMultipleChoice: multipleChoice))
     }
 
-    /// The most a question can earn on a first try: a flag that can be
-    /// drawn earns full points, one that can only be picked from four half.
-    /// Without a country (no map yet) a flag counts as drawable.
+    /// The most a question can earn on a first try. Every flag question
+    /// can be drawn (freehand, or on an outline) for full points; picking
+    /// from four is the half-points help.
     static func best(_ kind: QuestionKind, base: Int, country: AtlasCountry?) -> Int {
-        let pickOnly = kind == .flag && country.map { FlagOutlines.spec(for: $0) == nil } == true
-        return firstTry(base: base, multipleChoice: pickOnly)
+        firstTry(base: base, multipleChoice: false)
     }
 }
 

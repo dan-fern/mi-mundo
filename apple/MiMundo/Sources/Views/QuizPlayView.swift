@@ -45,6 +45,8 @@ struct QuizPlayView: View {
     @State private var showingSummary = false
     @State private var confirmingStop = false
     @State private var saveFailed = false
+    /// The full-screen pad for drawing a flag freehand.
+    @State private var drawingPad = false
     /// Once the player uses a read-aloud button, verdicts are read too.
     @State private var readingAloud = false
     @State private var speaker = CardSpeaker()
@@ -62,14 +64,18 @@ struct QuizPlayView: View {
         let names: [String: String]
         /// Each answer's flag picture, for flag questions.
         let flags: [String: String]
-        /// A flag question that can be drawn on an outline (§3.3), with the
-        /// layouts offered. Nil: the flag is picked from four.
+        /// The flag's outline (§3.3), if it has one, with the layouts
+        /// offered when drawing on it.
         var outline: FlagOutlineSpec? = nil
         var layoutChoices: [String] = []
-        /// The kid asked for help: pick from four instead (half points).
-        var usingChoices = false
-        /// The checked drawing, once drawn.
+        /// How a flag question is being answered. It starts freehand; help
+        /// steps down to the outline (still full points), then to picking
+        /// from four (half points).
+        var flagMode: FlagMode = .freehand
+        /// The checked outline drawing, once drawn.
         var drawing: FlagDrawResult? = nil
+        /// The checked freehand drawing, once drawn.
+        var freehand: FreehandResult? = nil
         let askedAt: Date
         /// The side its card opens on, kept with it so the card leaves the
         /// way it came even if the next card opens on the other side.
@@ -79,9 +85,14 @@ struct QuizPlayView: View {
 
         var key: String { "\(target)-\(kind.rawValue)" }
 
-        var isDrawing: Bool { kind == .flag && outline != nil && !usingChoices }
+        var isDrawing: Bool { kind == .flag && flagMode == .outline && outline != nil }
+        var isFreehand: Bool { kind == .flag && flagMode == .freehand }
         /// Right, by the grader for a drawing, else by the button picked.
-        var isRight: Bool { drawing?.grade.correct ?? (picked == correct) }
+        var isRight: Bool { freehand?.grade.correct ?? drawing?.grade.correct ?? (picked == correct) }
+    }
+
+    enum FlagMode: Equatable {
+        case freehand, outline, choices
     }
 
     var body: some View {
@@ -111,7 +122,8 @@ struct QuizPlayView: View {
                             isLastForCountry: pendingKinds(for: target).isEmpty,
                             showsFlag: !quiz.asksFlag, speaker: speaker, promptFocused: $promptFocused,
                             onSpeak: { readingAloud = true }, onPick: choose, onNext: next,
-                            onDrawn: drawn, onUseChoices: useChoices
+                            onDrawn: drawn, onUseChoices: useChoices,
+                            onUseOutline: useOutline, onStartDrawing: { drawingPad = true }
                         )
                         .id(question.key)
                         .onGeometryChange(for: CGRect.self) { $0.frame(in: .global) } action: { frame in
@@ -151,6 +163,12 @@ struct QuizPlayView: View {
             Button("OK", role: .cancel) {}
         } message: {
             Text("Please try it again.")
+        }
+        .fullScreenCover(isPresented: $drawingPad) {
+            if let asked = question, let target = targets.first(where: { $0.id == asked.target }) {
+                FreehandPad(country: target.country, spec: asked.outline, onCheck: drew,
+                            onCancel: { drawingPad = false })
+            }
         }
     }
 
@@ -331,38 +349,52 @@ struct QuizPlayView: View {
         promptFocused = true
     }
 
-    /// The kid gave up drawing: the same question, picked from four.
-    private func useChoices() {
+    /// Help: the same question, picked from four (half points).
+    private func useChoices() { setFlagMode(.choices) }
+
+    /// Help: the same question, drawn on an outline (still full points).
+    private func useOutline() { setFlagMode(.outline) }
+
+    private func setFlagMode(_ mode: QuizPlayView.FlagMode) {
         guard var asked = question, asked.picked == nil else { return }
-        asked.usingChoices = true
+        asked.flagMode = mode
         withAnimation(reduceMotion ? nil : .snappy) { question = asked }
+    }
+
+    /// A checked freehand drawing: recorded with its grade, at full points.
+    private func drew(_ result: FreehandResult) {
+        drawingPad = false
+        choose("freehand:\(result.grade.scorePercent)%", drawing: nil, freehand: result, correctAnswer: "freehand")
     }
 
     /// A checked flag drawing: recorded with its grade, at full points.
     private func drawn(_ result: FlagDrawResult) {
         guard let outline = question?.outline else { return }
         choose(FlagOutlines.summary(layout: result.layout, colors: result.painted),
-               drawing: result, correctAnswer: FlagOutlines.summary(layout: outline.layout, colors: outline.colors))
+               drawing: result, freehand: nil, correctAnswer: FlagOutlines.summary(layout: outline.layout, colors: outline.colors))
     }
 
     private func choose(_ choice: String) {
-        choose(choice, drawing: nil, correctAnswer: nil)
+        choose(choice, drawing: nil, freehand: nil, correctAnswer: nil)
     }
 
-    private func choose(_ choice: String, drawing: FlagDrawResult?, correctAnswer: String?) {
+    private func choose(_ choice: String, drawing: FlagDrawResult?, freehand: FreehandResult?,
+                        correctAnswer: String?) {
         guard var asked = question, asked.picked == nil, let attempt, let atlas = atlasStore.atlas,
               let target = targets.first(where: { $0.id == asked.target }) else { return }
         speaker.stop()
-        let chosenCountry = drawing == nil
+        let drawn = drawing != nil || freehand != nil
+        let chosenCountry = !drawn
             ? asked.countryIDs[choice].flatMap { id in atlas.countries.first { $0.meta.id == id } }
             : nil
         // Name and capital buttons have always been full points; a flag
         // picked from four is the half-points help (§3.3).
-        let multipleChoice = asked.kind == .flag && drawing == nil
+        let multipleChoice = asked.kind == .flag && !drawn
         guard let saved = QuizPlay.record(choice, correctAnswer: correctAnswer ?? asked.correct, kind: asked.kind,
                                           country: target.country, chosenCountry: chosenCountry,
-                                          choices: drawing == nil ? asked.choices : asked.layoutChoices,
-                                          multipleChoice: multipleChoice, isCorrect: drawing?.grade.correct,
+                                          choices: drawing != nil ? asked.layoutChoices : (drawn ? [] : asked.choices),
+                                          multipleChoice: multipleChoice,
+                                          isCorrect: freehand?.grade.correct ?? drawing?.grade.correct,
                                           quiz: quiz, attempt: attempt,
                                           askedAt: asked.askedAt, in: context) else {
             saveFailed = true // nothing changes: the question can be answered again
@@ -370,6 +402,7 @@ struct QuizPlayView: View {
         }
         asked.picked = choice
         asked.drawing = drawing
+        asked.freehand = freehand
         asked.earned = saved.pointsAwarded
         let right = asked.isRight
         withAnimation(reduceMotion ? nil : .snappy) {
@@ -454,17 +487,26 @@ private struct QuestionCard: View {
     let onNext: () -> Void
     let onDrawn: (FlagDrawResult) -> Void
     let onUseChoices: () -> Void
+    let onUseOutline: () -> Void
+    let onStartDrawing: () -> Void
 
     private var prompt: String {
         switch question.kind {
         case .name: "Which country is this?"
         case .capital: "What is the capital of \(country.name)?"
-        case .flag: question.isDrawing ? "Draw the flag of \(country.name)!" : "Which flag belongs to \(country.name)?"
+        case .flag: question.flagMode == .choices || (question.flagMode == .outline && question.outline == nil)
+            ? "Which flag belongs to \(country.name)?" : "Draw the flag of \(country.name)!"
         }
     }
 
     /// What a wrong answer hears: the right answer, in words.
     static func missed(_ question: QuizPlayView.ActiveQuestion, country: AtlasCountry) -> String {
+        if let freehand = question.freehand {
+            let missing = freehand.grade.missingColours.map(FlagPaint.spoken)
+            return missing.isEmpty
+                ? "Good try! Some parts are different. Here's the flag of \(country.name)."
+                : "Good try! It needs \(ListFormatter.localizedString(byJoining: missing)) too. Here's the flag of \(country.name)."
+        }
         if let drawing = question.drawing {
             return drawing.grade.layoutRight
                 ? "Good try! Some colours are different. Here's the flag of \(country.name)."
@@ -505,7 +547,10 @@ private struct QuestionCard: View {
                     Spacer(minLength: 0)
                 }
 
-                if question.isDrawing, let outline = question.outline {
+                if question.isFreehand {
+                    FreehandPanel(country: country, result: question.freehand, hasOutline: question.outline != nil,
+                                  onStart: onStartDrawing, onUseOutline: onUseOutline, onUseChoices: onUseChoices)
+                } else if question.isDrawing, let outline = question.outline {
                     FlagDrawingPanel(country: country, spec: outline, layoutChoices: question.layoutChoices,
                                      result: question.drawing, onCheck: onDrawn, onUseChoices: onUseChoices)
                 } else if question.kind == .flag {
