@@ -14,7 +14,7 @@ final class MigrationTests: XCTestCase {
     private var directory: URL!
     private let parentID = UUID(), kidID = UUID(), quizID = UUID(), attemptID = UUID()
 
-    override func setUpWithError() throws {
+    override func setUp() async throws {
         directory = FileManager.default.temporaryDirectory.appendingPathComponent("migration-\(UUID().uuidString)")
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
     }
