@@ -31,7 +31,7 @@ final class MigrationTests: XCTestCase {
     }
 
     private func openCurrent(_ url: URL) throws -> ModelContainer {
-        let schema = Schema(versionedSchema: SchemaV5.self)
+        let schema = Schema(versionedSchema: SchemaV6.self)
         return try Persistence.open(schema, ModelConfiguration(schema: schema, url: url))
     }
 
@@ -45,7 +45,7 @@ final class MigrationTests: XCTestCase {
         guard let path = ProcessInfo.processInfo.environment["WRITE_FIXTURES_TO"], !path.isEmpty else {
             throw XCTSkip("Only runs with TEST_RUNNER_WRITE_FIXTURES_TO set")
         }
-        for version in 1...4 {
+        for version in 1...5 {
             let url = URL(fileURLWithPath: path).appendingPathComponent("v\(version).store")
             guard !FileManager.default.fileExists(atPath: url.path) else { continue }
             try F.write(version: version, to: url)
@@ -87,11 +87,11 @@ final class MigrationTests: XCTestCase {
     }
 
     func testEveryOldVersionOpensAndKeepsItsData() throws {
-        for version in [1, 2, 4] {
+        for version in [1, 2, 4, 5] {
             let container = try openCurrent(try fixtureCopy(version))
             try assertSurvived(version: version, in: container)
             // The newest tables exist and work after migrating.
-            XCTAssertEqual(try container.mainContext.fetchCount(FetchDescriptor<FlagDrawing>()), 0)
+            XCTAssertEqual(try container.mainContext.fetchCount(FetchDescriptor<FlagDrawing>()), version == 5 ? 2 : 0)
         }
     }
 
@@ -117,6 +117,28 @@ final class MigrationTests: XCTestCase {
         XCTAssertEqual(flag.pointsAwarded, 0)
         XCTAssertTrue(flag.usedMultipleChoice)
         XCTAssertEqual(flag.chosenCountryID, "ESP")
+    }
+
+    // MARK: - Version 5
+
+    /// Version 6 adds the app's part credit to drawings. Version 5 drawings
+    /// have none: they keep counting as all or nothing, and a parent's
+    /// verdict still wins.
+    func testV5DrawingsKeepTheirVerdictsWithoutPartCredit() throws {
+        let container = try openCurrent(try fixtureCopy(5))
+        try assertSurvived(version: 5, in: container)
+        let drawings = try container.mainContext.fetch(FetchDescriptor<FlagDrawing>())
+        XCTAssertEqual(Set(drawings.map(\.id)), Set(F.drawingIDs))
+        let reviewed = try XCTUnwrap(drawings.first { $0.id == F.drawingIDs[0] })
+        XCTAssertNil(reviewed.autoCreditPercent)
+        XCTAssertEqual(reviewed.appCreditPercent, 100)
+        XCTAssertEqual(reviewed.parentVerdict, false)
+        XCTAssertEqual(reviewed.creditPercent, 0)
+        XCTAssertEqual(reviewed.scorePercent, 88)
+        XCTAssertEqual(reviewed.decoded, .freehand(FlagSketch()))
+        let wrong = try XCTUnwrap(drawings.first { $0.id == F.drawingIDs[1] })
+        XCTAssertEqual(wrong.appCreditPercent, 0)
+        XCTAssertNil(wrong.parentVerdict)
     }
 
     // MARK: - Version 3

@@ -106,7 +106,21 @@ final class UniFFISmokeTests: XCTestCase {
         XCTAssertEqual(Set(choices).count, choices.count)
         XCTAssertEqual(quizStars(correct: 0, total: 10), 0)
         XCTAssertGreaterThan(quizStars(correct: 10, total: 10), 0)
-        XCTAssertEqual(pointsForAttempt(basePoints: 100, attempt: 2, usedMultipleChoice: true), 25)
+        XCTAssertEqual(pointsForAttempt(basePoints: 100, attempt: 2, usedMultipleChoice: true), 37)
         XCTAssertEqual(pointsForAttempt(basePoints: UInt32.max, attempt: 1, usedMultipleChoice: false), UInt32.max)
+        XCTAssertEqual(pointsWithCredit(basePoints: 15, attempt: 1, usedMultipleChoice: false, creditPercent: 75), 11)
+        XCTAssertEqual(drawCreditPercent(credit: .mirrored), 75)
+        XCTAssertEqual(drawCreditPercent(credit: .colours), 50)
+    }
+
+    func testRandomQuizAndShuffle() {
+        let candidates = [QuizCandidate(id: "FRA", region: "Western Europe", continent: "Europe"),
+                          QuizCandidate(id: "DEU", region: "Western Europe", continent: "Europe"),
+                          QuizCandidate(id: "PER", region: "South America", continent: "South America")]
+        let quiz = randomQuiz(candidates: candidates, count: 2, scope: .region, seed: 1)
+        XCTAssertEqual(quiz.countryIds, ["DEU", "FRA"])
+        XCTAssertEqual(quiz.area, "Western Europe")
+        XCTAssertNil(randomQuiz(candidates: candidates, count: 1, scope: .world, seed: 1).area)
+        XCTAssertEqual(Set(shuffledQueue(ids: ["a", "b", "c"], seed: 9)), ["a", "b", "c"])
     }
 }

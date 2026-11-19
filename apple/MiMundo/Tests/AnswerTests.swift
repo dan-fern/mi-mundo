@@ -34,11 +34,11 @@ final class AnswerTests: XCTestCase {
 
     @discardableResult
     private func answer(_ attempt: QuizAttempt, _ chosen: String = "France", kind: QuestionKind = .name,
-                        multipleChoice: Bool = false, isCorrect: Bool? = nil,
+                        multipleChoice: Bool = false, isCorrect: Bool? = nil, creditPercent: Int? = nil,
                         drawing: (content: FlagDrawingContent, scorePercent: Int)? = nil) -> QuizAnswer? {
         QuizPlay.record(chosen, correctAnswer: "France", kind: kind, country: france, chosenCountry: nil,
                         choices: ["France", "Spain"], multipleChoice: multipleChoice, isCorrect: isCorrect,
-                        drawing: drawing, quiz: quiz, attempt: attempt, askedAt: nil,
+                        creditPercent: creditPercent, drawing: drawing, quiz: quiz, attempt: attempt, askedAt: nil,
                         in: family.context, now: TestSupport.morning)
     }
 
@@ -57,10 +57,10 @@ final class AnswerTests: XCTestCase {
     }
 
     func testPointsPerSitting() async throws {
-        // Sittings 1, 2, 3 earn full, half and a quarter; the 4th and later
-        // earn nothing but are still recorded, as right, for the stats (§3.4).
-        // Each case starts from a fresh family, so none shares queue state.
-        for (number, expected) in [(1, 100), (2, 50), (3, 25), (4, 0), (5, 0)] {
+        // Sittings 1, 2, 3 earn full, three quarters and half; the 4th and
+        // later are just for fun, but still recorded, as right, for the stats
+        // (§3.4). Each case starts from a fresh family, so none shares queue state.
+        for (number, expected) in [(1, 100), (2, 75), (3, 50), (4, 0), (5, 0)] {
             let attempt = try await sitting(number: number)
             XCTAssertEqual(attempt.number, number)
             let result = try XCTUnwrap(answer(attempt))
@@ -73,7 +73,7 @@ final class AnswerTests: XCTestCase {
     }
 
     func testMultipleChoiceHalvesOnTopOfTheSitting() async throws {
-        for (number, expected) in [(1, 50), (2, 25), (3, 12), (4, 0)] {
+        for (number, expected) in [(1, 50), (2, 37), (3, 25), (4, 0)] {
             let attempt = try await sitting(number: number)
             let result = try XCTUnwrap(answer(attempt, "FRA", kind: .flag, multipleChoice: true, isCorrect: true))
             XCTAssertEqual(result.pointsAwarded, expected, "multiple choice, sitting \(number)")
@@ -202,7 +202,7 @@ final class AnswerTests: XCTestCase {
         let result = try XCTUnwrap(answer(attempt, "drawn", kind: .flag, isCorrect: false, drawing: (content, 10)))
         let drawing = try XCTUnwrap(family.fetchAll(FlagDrawing.self).first)
         XCTAssertTrue(DrawingReview.setVerdict(true, on: drawing, in: family.context))
-        XCTAssertEqual(result.pointsAwarded, 50, "second sitting: half")
+        XCTAssertEqual(result.pointsAwarded, 75, "second sitting: three quarters")
         XCTAssertTrue(DrawingReview.setVerdict(nil, on: drawing, in: family.context))
         XCTAssertEqual(result.pointsAwarded, 0)
         XCTAssertFalse(result.correct)
@@ -216,6 +216,53 @@ final class AnswerTests: XCTestCase {
         let drawing = try XCTUnwrap(family.fetchAll(FlagDrawing.self).first)
         XCTAssertTrue(DrawingReview.setVerdict(true, on: drawing, in: family.context))
         XCTAssertEqual(result.pointsAwarded, 50)
+    }
+
+    func testAMirrorImageEarnsThreeQuartersButIsNotRight() throws {
+        let attempt = try sitting()
+        let content = FlagDrawingContent.freehand(FlagSketch())
+        let result = try XCTUnwrap(answer(attempt, "drawn", kind: .flag, isCorrect: false, creditPercent: 75,
+                                          drawing: (content, 40)))
+        XCTAssertFalse(result.correct)
+        XCTAssertEqual(result.pointsAwarded, 75)
+        let drawing = try XCTUnwrap(family.fetchAll(FlagDrawing.self).first)
+        XCTAssertEqual(drawing.autoCreditPercent, 75)
+        XCTAssertEqual(drawing.creditPercent, 75)
+        XCTAssertFalse(drawing.isCorrect)
+    }
+
+    func testTheRightColoursEarnHalfOnTopOfTheSitting() async throws {
+        let attempt = try await sitting(number: 2)
+        let content = FlagDrawingContent.freehand(FlagSketch())
+        let result = try XCTUnwrap(answer(attempt, "drawn", kind: .flag, isCorrect: false, creditPercent: 50,
+                                          drawing: (content, 30)))
+        XCTAssertEqual(result.pointsAwarded, 37, "half of the second sitting's three quarters")
+    }
+
+    func testParentVerdictOnAPartlyRightDrawingAndClearingRestoresThePart() throws {
+        let attempt = try sitting()
+        let content = FlagDrawingContent.freehand(FlagSketch())
+        let result = try XCTUnwrap(answer(attempt, "drawn", kind: .flag, isCorrect: false, creditPercent: 75,
+                                          drawing: (content, 40)))
+        let drawing = try XCTUnwrap(family.fetchAll(FlagDrawing.self).first)
+        XCTAssertTrue(DrawingReview.setVerdict(true, on: drawing, in: family.context))
+        XCTAssertTrue(result.correct)
+        XCTAssertEqual(result.pointsAwarded, 100)
+        XCTAssertTrue(DrawingReview.setVerdict(false, on: drawing, in: family.context))
+        XCTAssertEqual(result.pointsAwarded, 0)
+        XCTAssertTrue(DrawingReview.setVerdict(nil, on: drawing, in: family.context))
+        XCTAssertFalse(result.correct)
+        XCTAssertEqual(result.pointsAwarded, 75, "back to the app's three quarters")
+    }
+
+    func testADrawingFromBeforePartCreditCountsAsAllOrNothing() {
+        let old = FlagDrawing(answerID: UUID(), profileID: family.kid.id, countryID: "FRA",
+                              content: .freehand(FlagSketch()), scorePercent: 90,
+                              autoCorrect: true, drawnAt: TestSupport.morning)
+        XCTAssertNil(old.autoCreditPercent)
+        XCTAssertEqual(old.appCreditPercent, 100)
+        old.autoCorrect = false
+        XCTAssertEqual(old.appCreditPercent, 0)
     }
 
     func testVerdictForADrawingWhoseAnswerIsMissingDoesNotCrash() throws {

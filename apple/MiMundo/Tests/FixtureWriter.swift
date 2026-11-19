@@ -15,18 +15,22 @@ import XCTest
 ///       xcodebuild test -only-testing:MiMundoTests/MigrationTests/testWriteFixtures …
 ///
 /// and commit the new file. (v1–v4 were written from the app's models at
-/// the time version 5 was added, which only added a model.)
+/// the time version 5 was added, which only added a model; v5 when version
+/// 6 added part credit to drawings.)
 enum FixtureWriter {
     static let parentID = UUID(uuidString: "00000000-0000-0000-0000-0000000000A1")!
     static let kidID = UUID(uuidString: "00000000-0000-0000-0000-0000000000B1")!
     static let quizID = UUID(uuidString: "00000000-0000-0000-0000-0000000000C1")!
     static let attemptID = UUID(uuidString: "00000000-0000-0000-0000-0000000000D1")!
+    static let drawingIDs = [UUID(uuidString: "00000000-0000-0000-0000-0000000000E1")!,
+                             UUID(uuidString: "00000000-0000-0000-0000-0000000000E2")!]
     static let day: Int32 = 20_000
     static let when = Date(timeIntervalSince1970: 1_768_392_000)
 
     @MainActor
     static func write(version: Int, to url: URL) throws {
-        let schemas: [any VersionedSchema.Type] = [SchemaV1.self, SchemaV2.self, SchemaV3.self, SchemaV4.self]
+        let schemas: [any VersionedSchema.Type] = [SchemaV1.self, SchemaV2.self, SchemaV3.self, SchemaV4.self,
+                                                   SchemaV5.self]
         let schema = Schema(versionedSchema: schemas[version - 1])
         let container = try ModelContainer(for: schema, configurations: ModelConfiguration(schema: schema, url: url))
         let context = container.mainContext
@@ -69,7 +73,7 @@ enum FixtureWriter {
                                                correct: true, basePoints: 10, attemptNumber: 2,
                                                usedMultipleChoice: false, pointsAwarded: 5, answeredAt: when))
         }
-        if version == 4 {
+        if version >= 4 {
             let quiz = try XCTUnwrap(try context.fetch(FetchDescriptor<QuizSet>()).first)
             let attempt = SchemaV4.QuizAttempt(profile: kid, quiz: quiz, run: 3, day: day, number: 2,
                                                startedAt: when, targets: [])
@@ -82,10 +86,25 @@ enum FixtureWriter {
                                                chosenCountryID: "FRA", correctAnswer: "France",
                                                choices: ["France", "Spain", "Italy", "Peru"], basePoints: 10,
                                                multipleChoice: false, askedAt: when, answeredAt: when.addingTimeInterval(7)))
-            context.insert(SchemaV4.QuizAnswer(attempt: attempt, countryID: "FRA", kind: .flag, chosen: "ESP",
-                                               chosenCountryID: "ESP", correctAnswer: "FRA",
-                                               choices: ["FRA", "ESP"], basePoints: 20, multipleChoice: true,
-                                               askedAt: when, answeredAt: when.addingTimeInterval(30)))
+            let flag = SchemaV4.QuizAnswer(attempt: attempt, countryID: "FRA", kind: .flag, chosen: "ESP",
+                                           chosenCountryID: "ESP", correctAnswer: "FRA",
+                                           choices: ["FRA", "ESP"], basePoints: 20, multipleChoice: true,
+                                           askedAt: when, answeredAt: when.addingTimeInterval(30))
+            context.insert(flag)
+            if version == 5 {
+                // Two drawings: one the app marked right that a parent marked
+                // wrong, one the app marked wrong. Version 5 had no part credit.
+                let content = try JSONEncoder().encode(FlagDrawingContent.freehand(FlagSketch()))
+                let reviewed = SchemaV5.FlagDrawing(id: drawingIDs[0], answerID: flag.id, profileID: kidID,
+                                                    countryID: "FRA", methodRaw: "freehand", content: content,
+                                                    scorePercent: 88, autoCorrect: true, drawnAt: when)
+                reviewed.parentVerdict = false
+                reviewed.reviewedAt = when.addingTimeInterval(3600)
+                context.insert(reviewed)
+                context.insert(SchemaV5.FlagDrawing(id: drawingIDs[1], answerID: UUID(), profileID: kidID,
+                                                    countryID: "FRA", methodRaw: "freehand", content: content,
+                                                    scorePercent: 20, autoCorrect: false, drawnAt: when))
+            }
         }
         try context.save()
         try checkpoint(url)
