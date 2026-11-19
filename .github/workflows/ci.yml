@@ -131,6 +131,9 @@ jobs:
           sys.exit("No iPad mini simulator found. Available: " + ", ".join(sorted({d["name"] for r in runtimes for d in data[r]})))
           ')
           echo "$SIM_LINE" | tee -a "$GITHUB_ENV"
+          # Before anything boots it: a connected hardware keyboard can make
+          # the UI tests' typeText fail ("no keyboard focus").
+          defaults write com.apple.iphonesimulator ConnectHardwareKeyboard -bool false
 
       # Build the app and both test bundles once (coverage on); the test steps
       # below only run them. Also proves the app compiles for the simulator.
@@ -190,8 +193,6 @@ jobs:
       - name: UI tests on iPad simulator
         if: github.event_name != 'pull_request'
         run: |
-          # A connected hardware keyboard can make typeText fail ("no keyboard focus").
-          defaults write com.apple.iphonesimulator ConnectHardwareKeyboard 0
           xcodebuild test-without-building \
             -quiet \
             -project apple/MiMundo/MiMundo.xcodeproj \

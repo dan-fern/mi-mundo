@@ -13,6 +13,11 @@ final class AnswerTests: XCTestCase {
     var quiz: QuizSet!
 
     override func setUp() async throws {
+        try await freshFamily()
+    }
+
+    /// A new in-memory family with one France quiz (name and flag worth 100).
+    private func freshFamily() async throws {
         family = try Family()
         atlas = try await TestSupport.atlas()
         france = try XCTUnwrap(atlas.countries.first { $0.meta.id == "FRA" })
@@ -40,7 +45,7 @@ final class AnswerTests: XCTestCase {
     /// A fresh family and quiz, with `count - 1` finished sittings behind it,
     /// and the next sitting open (so its number is `count`).
     private func sitting(number count: Int) async throws -> QuizAttempt {
-        try await setUp()
+        try await freshFamily()
         var attempt = try sitting()
         for n in 1..<count {
             XCTAssertEqual(attempt.number, n)

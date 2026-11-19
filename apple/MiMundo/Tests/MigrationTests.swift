@@ -36,14 +36,18 @@ final class MigrationTests: XCTestCase {
     }
 
     /// Run once per new schema version (see FixtureWriter): writes the
-    /// fixtures to $WRITE_FIXTURES_TO. Skipped otherwise.
+    /// fixtures missing from $WRITE_FIXTURES_TO. Skipped otherwise.
+    ///
+    /// It never overwrites one that's there: an old version's fixture must
+    /// stay as that version really wrote it. Rewriting it from today's model
+    /// classes would hide exactly the in-place model edit these tests catch.
     func testWriteFixtures() throws {
         guard let path = ProcessInfo.processInfo.environment["WRITE_FIXTURES_TO"], !path.isEmpty else {
             throw XCTSkip("Only runs with TEST_RUNNER_WRITE_FIXTURES_TO set")
         }
         for version in 1...4 {
             let url = URL(fileURLWithPath: path).appendingPathComponent("v\(version).store")
-            try? FileManager.default.removeItem(at: url)
+            guard !FileManager.default.fileExists(atPath: url.path) else { continue }
             try F.write(version: version, to: url)
         }
     }
@@ -173,11 +177,19 @@ final class MigrationTests: XCTestCase {
 
     // MARK: - A store that can't be opened
 
+    /// A throwaway `UserDefaults` for the moved-aside flag, removed after the test.
+    private func scratchDefaults() throws -> UserDefaults {
+        let name = "migration-\(UUID().uuidString)"
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: name))
+        addTeardownBlock { defaults.removePersistentDomain(forName: name) }
+        return defaults
+    }
+
     func testUnreadableStoreIsMovedAsideNotDeleted() throws {
         let store = directory.appendingPathComponent("default.store")
         let garbage = Data("not a database".utf8)
         try garbage.write(to: store)
-        let defaults = try XCTUnwrap(UserDefaults(suiteName: "migration-\(UUID().uuidString)"))
+        let defaults = try scratchDefaults()
 
         let container = Persistence.makeContainer(at: store, defaults: defaults)
 
@@ -196,7 +208,7 @@ final class MigrationTests: XCTestCase {
 
     func testReadableStoreIsNeverMovedAside() throws {
         let store = try fixtureCopy(4)
-        let defaults = try XCTUnwrap(UserDefaults(suiteName: "migration-\(UUID().uuidString)"))
+        let defaults = try scratchDefaults()
         let container = Persistence.makeContainer(at: store, defaults: defaults)
         XCTAssertNil(defaults.object(forKey: Persistence.movedAsideKey))
         try assertSurvived(version: 4, in: container)
