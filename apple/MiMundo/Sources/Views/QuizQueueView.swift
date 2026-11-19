@@ -267,12 +267,12 @@ private struct QuizEditor: View {
                     }
                     .disabled(atlasStore.atlas == nil)
                     NavigationLink {
-                        RegionPicker(regions: regions, selection: $draft.countryIDs, title: $draft.title)
+                        RegionPicker(regions: regions, draft: $draft)
                     } label: {
                         Label("Use whole regions", systemImage: "globe")
                     }
                     NavigationLink {
-                        RandomQuizPicker(regions: regions, selection: $draft.countryIDs, title: $draft.title)
+                        RandomQuizPicker(regions: regions, draft: $draft)
                     } label: {
                         Label("Pick at random", systemImage: "dice")
                     }
@@ -336,7 +336,7 @@ private struct QuizEditor: View {
         let draft = draft
         return QuizTarget.all(countryIDs: draft.countryIDs, asks: draft.asks, in: atlas).reduce(0) { total, target in
             total + target.kinds.reduce(0) {
-                $0 + QuizScoring.best($1, base: draft.basePoints(for: $1), country: target.country)
+                $0 + QuizScoring.best(base: draft.basePoints(for: $1))
             }
         }
     }
@@ -414,14 +414,11 @@ struct QuizRegion: Identifiable {
 /// `random_quiz`; "Pick again" rolls a new set.
 private struct RandomQuizPicker: View {
     let regions: [QuizRegion]
-    @Binding var selection: [String]
-    @Binding var title: String
+    @Binding var draft: QuizDraft
 
     @State private var count = 10
     @State private var scope: RandomQuizScope = .region
-    /// The name this screen last gave the quiz, so rolling again can rename
-    /// it, but a name the parent typed is kept.
-    @State private var givenTitle: String?
+    @State private var confirmingReplace = false
 
     private static let scopes: [(RandomQuizScope, String)] = [
         (.region, "Neighbours"), (.continent, "One continent"), (.world, "Anywhere"),
@@ -433,8 +430,10 @@ private struct RandomQuizPicker: View {
         }
     }
 
+    private var rolled: Bool { draft.rolledCountryIDs != nil && draft.rolledCountryIDs == draft.countryIDs }
+
     private var chosen: [AtlasCountry] {
-        var left = Set(selection)
+        var left = Set(draft.countryIDs)
         return regions.flatMap(\.countries).filter { left.remove($0.meta.id) != nil }.sorted { $0.name < $1.name }
     }
 
@@ -450,11 +449,12 @@ private struct RandomQuizPicker: View {
                 Text(scopeNote)
             }
             Section {
-                Button(selection.isEmpty || givenTitle == nil ? "Pick countries" : "Pick again", systemImage: "dice") {
-                    roll()
+                Button(rolled ? "Pick again" : "Pick countries", systemImage: "dice") {
+                    // Countries picked by hand are only replaced if the parent says so.
+                    if draft.countryIDs.isEmpty || rolled { roll() } else { confirmingReplace = true }
                 }
             }
-            if givenTitle != nil, !chosen.isEmpty {
+            if rolled, !chosen.isEmpty {
                 Section("^[\(chosen.count) country](inflect: true)") {
                     Text(chosen.map(\.name).joined(separator: ", "))
                         .foregroundStyle(.secondary)
@@ -462,6 +462,13 @@ private struct RandomQuizPicker: View {
             }
         }
         .navigationTitle("Random quiz")
+        .confirmationDialog("Replace the countries you chose?", isPresented: $confirmingReplace,
+                            titleVisibility: .visible) {
+            Button("Pick at random instead", role: .destructive, action: roll)
+            Button("Keep mine", role: .cancel) {}
+        } message: {
+            Text("^[\(draft.countryIDs.count) country](inflect: true) chosen so far.")
+        }
     }
 
     private var scopeNote: String {
@@ -475,11 +482,9 @@ private struct RandomQuizPicker: View {
     private func roll() {
         let quiz = randomQuiz(candidates: candidates, count: UInt32(count), scope: scope,
                               seed: .random(in: .min ... .max))
-        selection = quiz.countryIds
-        let name = "Random: " + (quiz.area ?? "the world")
-        let typed = title.trimmingCharacters(in: .whitespaces)
-        if typed.isEmpty || typed == givenTitle { title = name }
-        givenTitle = name
+        draft.countryIDs = quiz.countryIds
+        draft.rolledCountryIDs = quiz.countryIds
+        draft.nameAutomatically(QuizDraft.randomTitle(area: quiz.area))
     }
 }
 
@@ -490,8 +495,12 @@ private struct RandomQuizPicker: View {
 /// Countries picked another way are left alone.
 private struct RegionPicker: View {
     let regions: [QuizRegion]
-    @Binding var selection: [String]
-    @Binding var title: String
+    @Binding var draft: QuizDraft
+
+    private var selection: [String] {
+        get { draft.countryIDs }
+        nonmutating set { draft.countryIDs = newValue }
+    }
 
     private func isOn(_ region: QuizRegion) -> Bool {
         let ids = Set(selection)
@@ -549,10 +558,10 @@ private struct RegionPicker: View {
                 .background(.bar)
         }
         .onDisappear {
-            // Name the quiz after the regions if the parent hasn't named it.
+            // Name the quiz after the regions, unless the parent named it.
             let names = chosenRegions.map(\.name)
-            if title.trimmingCharacters(in: .whitespaces).isEmpty, !names.isEmpty {
-                title = ListFormatter.localizedString(byJoining: names)
+            if !names.isEmpty {
+                draft.nameAutomatically(ListFormatter.localizedString(byJoining: names))
             }
         }
     }

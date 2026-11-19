@@ -21,10 +21,9 @@ enum QuizScoring {
                              usedMultipleChoice: multipleChoice))
     }
 
-    /// The most a question can earn on a first try. Every flag question
-    /// can be drawn for full points; picking from four is the half-points
-    /// help.
-    static func best(_ kind: QuestionKind, base: Int, country: AtlasCountry?) -> Int {
+    /// The most a question can earn on a first try: every question,
+    /// flags included (drawn), can earn its full points.
+    static func best(base: Int) -> Int {
         firstTry(base: base, multipleChoice: false)
     }
 }
@@ -68,7 +67,7 @@ extension SchemaV4 {
             self.questionCount = targets.reduce(0) { $0 + $1.kinds.count }
             self.perfectPoints = targets.reduce(0) { total, target in
                 total + target.kinds.reduce(0) {
-                    $0 + QuizScoring.best($1, base: quiz.basePoints(for: $1), country: target.country)
+                    $0 + QuizScoring.best(base: quiz.basePoints(for: $1))
                 }
             }
         }

@@ -124,7 +124,9 @@ struct QuizPlayView: View {
                             isLastForCountry: pendingKinds(for: target).isEmpty,
                             showsFlag: !quiz.asksFlag, speaker: speaker, promptFocused: $promptFocused,
                             onSpeak: { readingAloud = true }, onPick: choose, onNext: next,
-                            onUseChoices: useChoices, onStartDrawing: { drawingPad = true }
+                            onUseChoices: useChoices, onStartDrawing: { drawingPad = true },
+                            // Never taller than the space under the top bar: it scrolls instead.
+                            maxHeight: max(240, viewSize.height - topBarBottom - 40)
                         )
                         .id(question.key)
                         .onGeometryChange(for: CGRect.self) { $0.frame(in: .global) } action: { frame in
@@ -360,18 +362,23 @@ struct QuizPlayView: View {
 
     /// A checked drawing: recorded with its grade (full points if right,
     /// part of them for a mirror image or the right colours).
-    private func drew(_ result: FreehandResult) {
-        drawingPad = false
-        choose("freehand:\(result.grade.scorePercent)%", freehand: result, correctAnswer: "freehand")
+    /// The pad closes only once it's saved; if saving fails it stays open
+    /// with the drawing, so nothing has to be drawn again.
+    private func drew(_ result: FreehandResult) -> Bool {
+        let saved = choose("freehand:\(result.grade.scorePercent)%", freehand: result, correctAnswer: "freehand")
+        if saved { drawingPad = false }
+        return saved
     }
 
     private func choose(_ choice: String) {
         choose(choice, freehand: nil, correctAnswer: nil)
     }
 
-    private func choose(_ choice: String, freehand: FreehandResult?, correctAnswer: String?) {
+    /// Records the answer; false if it couldn't be saved.
+    @discardableResult
+    private func choose(_ choice: String, freehand: FreehandResult?, correctAnswer: String?) -> Bool {
         guard var asked = question, asked.picked == nil, let attempt, let atlas = atlasStore.atlas,
-              let target = targets.first(where: { $0.id == asked.target }) else { return }
+              let target = targets.first(where: { $0.id == asked.target }) else { return false }
         speaker.stop()
         let drawn = freehand != nil
         let chosenCountry = !drawn
@@ -389,8 +396,10 @@ struct QuizPlayView: View {
                                           drawing: freehand.map { (FlagDrawingContent.freehand($0.sketch), Int($0.grade.scorePercent)) },
                                           quiz: quiz, attempt: attempt,
                                           askedAt: asked.askedAt, in: context) else {
-            saveFailed = true // nothing changes: the question can be answered again
-            return
+            // Nothing changes: the question can be answered again. (A drawing
+            // stays on its pad, which says so itself.)
+            if freehand == nil { saveFailed = true }
+            return false
         }
         asked.picked = choice
         asked.freehand = freehand
@@ -409,6 +418,7 @@ struct QuizPlayView: View {
         let verdict = QuestionCard.verdictText(asked, country: target.country)
         if readingAloud { speaker.say([verdict]) }
         AccessibilityNotification.Announcement(verdict).post()
+        return true
     }
 
     private func next() {
@@ -476,6 +486,11 @@ private struct QuestionCard: View {
     let onNext: () -> Void
     let onUseChoices: () -> Void
     let onStartDrawing: () -> Void
+    /// The most height the card may take; taller content scrolls.
+    let maxHeight: CGFloat
+
+    @State private var contentHeight: CGFloat = 0
+    @AccessibilityFocusState private var verdictFocused: Bool
 
     /// Tapping an answer only selects it; "Check my answer" sends it, so a
     /// stray tap can't answer (beta feedback). Reset with each question (the
@@ -496,11 +511,13 @@ private struct QuestionCard: View {
         if question.isRight {
             return question.earned > 0 ? "Yes! \(question.earned) points." : "Yes!"
         }
+        // No "+0" on a just-for-fun attempt.
+        let earned = question.earned > 0 ? " +\(question.earned)." : ""
         switch question.partialCredit {
         case .mirrored:
-            return "So close: it's a mirror image! +\(question.earned). Here's the flag of \(country.name)."
+            return "So close: it's a mirror image!\(earned) Here's the flag of \(country.name)."
         case .colours:
-            return "All the right colours! +\(question.earned). Here's how they go on the flag of \(country.name)."
+            return "All the right colours!\(earned) Here's how they go on the flag of \(country.name)."
         default:
             return missed(question, country: country)
         }
@@ -585,10 +602,16 @@ private struct QuestionCard: View {
                 }
             }
             .padding(24)
+            .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { contentHeight = $0 }
         }
         .scrollBounceBehavior(.basedOnSize)
-        .fixedSize(horizontal: false, vertical: true)
+        // As tall as its content, up to the space there is; then it scrolls.
+        .frame(height: min(contentHeight, maxHeight))
         .frame(maxWidth: 420)
+        .onChange(of: question.picked) { _, picked in
+            // The confirm button just went away: take VoiceOver to the verdict.
+            if picked != nil { verdictFocused = true }
+        }
         .background(.regularMaterial, in: .rect(cornerRadius: 28))
         .shadow(color: .black.opacity(0.2), radius: 16, y: 6)
         .dynamicTypeSize(...DynamicTypeSize.accessibility2)
@@ -657,6 +680,7 @@ private struct QuestionCard: View {
                 .fixedSize(horizontal: false, vertical: true)
         }
         .accessibilityElement(children: .combine)
+        .accessibilityFocused($verdictFocused)
     }
 }
 
@@ -686,7 +710,7 @@ private struct FlagChoice: View {
             if state != .open {
                 Text(name)
                     .font(.footnote.weight(.semibold))
-                    .lineLimit(2)
+                    .lineLimit(3)
                     .multilineTextAlignment(.center)
                     .minimumScaleFactor(0.8)
             }
@@ -730,7 +754,7 @@ private struct FlagChoice: View {
     private var accessibilityText: String {
         switch state {
         case .open: "Flag \(number)"
-        case .selected: "Flag \(number), selected"
+        case .selected: "Flag \(number)" // the .isSelected trait says "selected"
         case .right: "Flag \(number), \(name), the right answer"
         case .wrong: "Flag \(number), \(name), not right"
         case .faded: "Flag \(number), \(name)"

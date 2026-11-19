@@ -135,6 +135,13 @@ enum FlagLayoutShape {
             return [poly([(0, 0), (1 - t, 0), (0, 1 - t)]),
                     poly([(0, 1 - t), (1 - t, 0), (1, 0), (1, t), (t, 1), (0, 1)]),
                     poly([(1, t), (1, 1), (t, 1)])]
+        case "diagonal-down":
+            // A band from the top of the hoist to the bottom of the fly
+            // (Trinidad and Tobago): "diagonal" mirrored left to right.
+            let t: CGFloat = 0.16
+            return [poly([(1, 0), (t, 0), (1, 1 - t)]),
+                    poly([(0, 0), (t, 0), (1, 1 - t), (1, 1), (1 - t, 1), (0, t)]),
+                    poly([(0, t), (1 - t, 1), (0, 1)])]
         case "diagonal-split": return [poly([(0, 0), (1, 0), (0, 1)]), poly([(1, 0), (1, 1), (0, 1)])]
         case "canton": return [full, rect(0, 0, 0.5, 0.5)]
         case "canton-h2": return hStripes(2) + [rect(0, 0, 0.5 * h / w, 0.5)]
@@ -145,6 +152,12 @@ enum FlagLayoutShape {
     }
 
     /// Spoken name of a layout, for VoiceOver and read-aloud.
+    /// The regions' outlines for tracing: each region's parts merged, so a
+    /// cross is one shape (not two bars with a box where they overlap).
+    static func guide(_ layout: String, in r: CGRect) -> [Path] {
+        regions(layout, in: r).map { Path($0.cgPath.normalized()) }
+    }
+
     static func spoken(_ layout: String) -> String {
         switch layout {
         case "plain": "One colour"
@@ -168,6 +181,7 @@ enum FlagLayoutShape {
         case "bar-h3": "A bar with three stripes"
         case "saltire": "A big X"
         case "diagonal": "A diagonal band"
+        case "diagonal-down": "A diagonal band the other way"
         case "diagonal-split": "Split corner to corner"
         case "canton": "A box in the corner"
         case "canton-h2": "Two stripes with a corner box"
