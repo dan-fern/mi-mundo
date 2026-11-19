@@ -158,6 +158,66 @@ mod tests {
     use super::*;
     use proptest::prelude::*;
 
+    /// A queue of three played through the two DST nights: a kid attempts
+    /// each day's quiz, and the queue moves on exactly once per 11 pm boundary
+    /// even though those game days are 23 and 25 hours long.
+    #[test]
+    fn queue_advances_once_per_game_day_across_dst_nights() {
+        use crate::days::game_day;
+        use chrono::TimeZone;
+        use chrono_tz::America::New_York;
+        let et = |y, m, d, h, min| {
+            New_York
+                .with_ymd_and_hms(y, m, d, h, min, 0)
+                .single()
+                .unwrap()
+                .timestamp()
+        };
+        let queue = ids(&["a", "b", "c"]);
+        for (sat, sun, mon) in [
+            (
+                et(2026, 3, 7, 12, 0),
+                et(2026, 3, 8, 12, 0),
+                et(2026, 3, 9, 12, 0),
+            ),
+            (
+                et(2026, 10, 31, 12, 0),
+                et(2026, 11, 1, 12, 0),
+                et(2026, 11, 2, 12, 0),
+            ),
+        ] {
+            let mut state = queue_today(
+                queue_initial_state(game_day(sat)),
+                queue.clone(),
+                game_day(sat),
+            );
+            assert_eq!(current(&state), Some("a"));
+            state.attempted_by_kid = true;
+            // 10:59 pm: still the same game day, nothing moves.
+            let before = queue_today(
+                state.clone(),
+                queue.clone(),
+                game_day(sat + 10 * 3600 + 59 * 60),
+            );
+            assert_eq!(current(&before), Some("a"));
+            // 11 pm: next quiz.
+            let mut next = queue_today(state, queue.clone(), game_day(sat + 11 * 3600));
+            assert_eq!(current(&next), Some("b"));
+            // Calling again (and at the 2 am clock change) is idempotent.
+            next = queue_today(next, queue.clone(), game_day(sat + 15 * 3600));
+            assert_eq!(current(&next), Some("b"));
+            next.attempted_by_kid = true;
+            let sunday_late = queue_today(
+                next.clone(),
+                queue.clone(),
+                game_day(sun + 10 * 3600 + 59 * 60),
+            );
+            assert_eq!(current(&sunday_late), Some("b"));
+            let monday = queue_today(next, queue.clone(), game_day(mon));
+            assert_eq!(current(&monday), Some("c"));
+        }
+    }
+
     #[test]
     fn set_today_brings_the_chosen_quiz_up_as_a_new_run() {
         let queue = ids(&["a", "b", "c"]);

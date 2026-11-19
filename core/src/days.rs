@@ -189,4 +189,52 @@ mod tests {
         assert_eq!(label_at(et(2026, 12, 31, 22, 59)), "2026-12-31");
         assert_eq!(label_at(et(2026, 12, 31, 23, 0)), "2027-01-01");
     }
+
+    /// Spring forward: Sat 7 Mar 2026 11 pm is EST (UTC-5), Sun 8 Mar 11 pm
+    /// is EDT (UTC-4), so that game day is only 23 hours long.
+    #[test]
+    fn spring_forward_night_boundaries_and_length() {
+        let sat_11pm = et(2026, 3, 7, 23, 0); // 04:00Z on the 8th
+        let sun_11pm = et(2026, 3, 8, 23, 0); // 03:00Z on the 9th
+        assert_eq!(sat_11pm.rem_euclid(86_400), 4 * 3600);
+        assert_eq!(sun_11pm.rem_euclid(86_400), 3 * 3600);
+        assert_eq!(sun_11pm - sat_11pm, 23 * 3600);
+        assert_eq!(label_at(sat_11pm - 1), "2026-03-07");
+        assert_eq!(label_at(sat_11pm), "2026-03-08");
+        // Across the 2 am jump (07:00Z): still the same game day.
+        assert_eq!(label_at(sat_11pm + 3 * 3600), "2026-03-08");
+        assert_eq!(label_at(sun_11pm - 1), "2026-03-08");
+        assert_eq!(label_at(sun_11pm), "2026-03-09");
+        assert_eq!(game_day(sun_11pm) - game_day(sat_11pm), 1);
+    }
+
+    /// Fall back: Sat 31 Oct 2026 11 pm is EDT (UTC-4), Sun 1 Nov 11 pm is
+    /// EST (UTC-5), so that game day is 25 hours long.
+    #[test]
+    fn fall_back_night_boundaries_and_length() {
+        let sat_11pm = et(2026, 10, 31, 23, 0); // 03:00Z on 1 Nov
+        let sun_11pm = et(2026, 11, 1, 23, 0); // 04:00Z on 2 Nov
+        assert_eq!(sat_11pm.rem_euclid(86_400), 3 * 3600);
+        assert_eq!(sun_11pm.rem_euclid(86_400), 4 * 3600);
+        assert_eq!(sun_11pm - sat_11pm, 25 * 3600);
+        assert_eq!(label_at(sat_11pm - 1), "2026-10-31");
+        assert_eq!(label_at(sat_11pm), "2026-11-01");
+        // Both 1:30 ams and the hour after 2 am (the clocks went back).
+        assert_eq!(label_at(sat_11pm + 4 * 3600), "2026-11-01");
+        assert_eq!(label_at(sun_11pm - 1), "2026-11-01");
+        assert_eq!(label_at(sun_11pm), "2026-11-02");
+        assert_eq!(game_day(sun_11pm) - game_day(sat_11pm), 1);
+    }
+
+    #[test]
+    fn every_hour_across_the_transitions_never_skips_or_repeats_a_day() {
+        for (start, hours) in [(et(2026, 3, 7, 12, 0), 72), (et(2026, 10, 31, 12, 0), 72)] {
+            let mut last = game_day(start);
+            for h in 1..=hours {
+                let day = game_day(start + h * 3600);
+                assert!(day == last || day == last + 1, "jumped at +{h} h");
+                last = day;
+            }
+        }
+    }
 }
