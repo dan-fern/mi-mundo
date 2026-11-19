@@ -101,14 +101,18 @@ Age-agnostic — fun for a young child, still useful for an adult.
   same day. Finishing shows stars (three for 90% right, two for 60%, one
   for anything right), how many were right and the points earned.
 - Kids open today's quiz from their top bar; parents from parent home.
+- **Every answer is confirmed** (beta feedback, Nov 2026: stray taps were
+  answering): tapping a name, capital or flag only selects it (outlined);
+  "Check my answer" sends it. The button reads "Pick an answer" and can't be
+  used until something is selected.
 
 ### 3.3 Flag drawing
 Escalating help, from hardest to easiest:
 
-1. **Freehand** — draw the flag with Pencil or finger.
-2. **Layout outline** (no point penalty) — pick a layout (stripes, cross,
-   canton, …), fill regions with colours, then draw the emblem.
-3. **Multiple choice** — half the points; **no penalty to stats**.
+1. **Freehand** — draw the flag with Pencil or finger. The pad has an
+   "Add outline" button that lays the flag's shapes over the canvas as
+   dashed tracing lines (no point penalty).
+2. **Multiple choice** — half the points; **no penalty to stats**.
 
 Built in steps (owner decision, Nov 2026): multiple choice first (pick the
 flag from four, neighbours' flags as the wrong answers, look-alikes that can't
@@ -125,16 +129,24 @@ against the flag pictures by tools/check-flag-layouts.py; flags no outline can
 describe (Union Jack ensigns, the USA, Nepal, South Africa, …) stay
 pick-from-four.
 
+(Beta feedback, Nov 2026: the separate outline step, "Use an outline", was
+removed. Its shapes became the tracing outline on the freehand pad. Outline
+drawings made before then still show in parent review.)
+
 Step 3 (freehand) is how every flag question now starts: "Draw the flag of
-X!" opens a drawing pad (paint box, three brush sizes, fill background, undo,
-clear). Grading (core/src/freehand.rs) shrinks the drawing and the real flag
+X!" opens a drawing pad (paint box, three brush sizes, draw or fill, add
+outline, undo, clear; every tool at least 64 points so small fingers hit
+it). **Fill** works like a paint bucket: tapping fills the area around the
+tap up to the lines drawn, other colours, and the tracing outline if it's
+showing (it used to fill the whole canvas, even behind a line across it).
+Fills sit behind the lines. Grading (core/src/freehand.rs) shrinks the drawing and the real flag
 to a 48×36 grid and compares paint-box colours: emblems and detail (where the
 real flag differs from its outline, and colours under 6% of the flag) are
 never graded; a pixel matches if the colour is anywhere in the real flag's
 3×3 neighbourhood; close shades count. Right = 75% of graded pixels match,
 every main colour covers half its area, and no big patch is a colour the flag
-lacks (outside the emblem). Help, in order: "Use an outline" (full points),
-"Pick it from four" (half points). A debug self-check (launch with
+lacks (outside the emblem). The help is "Pick it from four instead", a
+button as big as "Start drawing" with "half points" in small print under it. A debug self-check (launch with
 -flagSelfCheck) confirms every flag picture passes as its own drawing, every
 outline passes without its emblem, and a blank canvas never does.
 
@@ -142,6 +154,15 @@ Grading:
 - Automatically graded on colours and approximate placement.
 - Very lenient on emblems and other hand-drawn detail (owner: *especially*
   lenient on emblems and anything hard to draw).
+- **Part credit** (owner's rule, Nov 2026), on top of the attempt factor:
+  - a **mirror image** of the right flag (flipped left-to-right, like France
+    drawn backwards, or upside down) earns **¾** of the points;
+  - **all the right colours** in the wrong places (every main colour of the
+    flag over at least a third of its area, and no big patch of a colour the
+    flag doesn't have) earns **½**.
+  A partly right drawing isn't counted as right in stats; the card says
+  "So close: it's a mirror image!" or "All the right colours!" with the
+  points.
 - Every drawing and its automatic verdict is saved for parent review (5.3).
 
 ### 3.4 Scoring
@@ -149,9 +170,11 @@ Grading:
 | Attempt at a quiz | Points per correct answer |
 |---|---|
 | 1st | full |
-| 2nd | ½ |
-| 3rd | ¼ |
-| 4th+ | 0 (still recorded in stats) |
+| 2nd | ¾ |
+| 3rd | ½ |
+| 4th+ | 0, just for fun (still recorded in stats) |
+
+(Owner's change, Nov 2026; it was full, ½, ¼.)
 
 - An **attempt is one quiz sitting**. Every question is scored again on each
   retake, including ones already answered correctly. The extra points from
@@ -159,7 +182,8 @@ Grading:
 - Attempts are counted **per time the quiz comes up** in the queue (§5.4):
   when a quiz comes back around, its attempts reset to the 1st (full points).
 - Flag multiple choice halves the points for that attempt, on top of the
-  attempt factor (e.g. 2nd attempt + multiple choice = ¼).
+  attempt factor (e.g. 2nd attempt + multiple choice = ⅜). A partly right
+  drawing (§3.3) multiplies in the same way.
 - Fractions round down, but a correct answer on attempts 1–3 always earns
   **at least 1 point** (unless the parent set the question to 0).
 
@@ -249,10 +273,13 @@ stats here than in child mode:
 ### 5.3 Drawing review
 - Browse every flag drawing with the app's verdict. (Built: parent home →
   "Flag drawings". Every freehand and outline drawing is saved with its
-  answer — SwiftData schema V5 adds `FlagDrawing` — and shown next to the
+  answer — SwiftData schema V5 adds `FlagDrawing`, V6 its part credit — and shown next to the
   real flag, newest first, filterable by kid, "marked wrong" and "changed
   by you". "Change" marks it right or wrong, or goes back to the app's
-  verdict; the answer is rescored straight away.)
+  verdict; the answer is rescored straight away. A partly right drawing
+  shows "Mirror image: ¾ points" or "Right colours: ½ points"; marking it
+  right gives full points, wrong takes the part away, and going back to the
+  app's verdict restores the part.)
 - Override any verdict and award any lost points. An overturned answer earns
   what that question was worth on that attempt, so each answer stores its
   scoring inputs (base points, attempt, multiple choice) when it's made.
@@ -299,6 +326,19 @@ So a parent can set up practice ahead of time (e.g. before work travel):
   14 independent countries, based on the UN sub-regions with the big ones
   split (e.g. Caribbean, Central America, Balkans, Arabian Peninsula,
   West Africa: Gulf of Guinea).
+- **New quizzes ask for the flag by default**, worth 15 points (name and
+  capital stay 10). (Beta feedback, Nov 2026: flags used to be off, at 20.)
+- **Random quiz**: "Pick at random" in the quiz editor picks a chosen
+  number of countries (1–40, default 10) from one region at random
+  ("Neighbours"), one continent at random, or anywhere. Only regions or
+  continents with enough countries are picked; if none has enough, the
+  biggest is used whole. "Pick again" rolls a new set. The quiz is named
+  "Random: <region or continent>" unless the parent named it. Self-governing
+  countries only, as for whole regions. The picking is the Rust core's
+  `random_quiz` (seeded, so it's unit-tested).
+- **Shuffle**: the queue's toolbar has a Shuffle button (three quizzes or
+  more) that puts the queue in a random order after a confirmation.
+  Today's quiz stays today's; the rest of the cycle follows the new order.
 - An empty queue means no quiz of the day (explore mode still works).
 
 ## 6. Open questions
