@@ -58,9 +58,26 @@ enum MiMundoMigrationPlan: SchemaMigrationPlan {
     static var stages: [MigrationStage] {
         [.lightweight(fromVersion: SchemaV1.self, toVersion: SchemaV2.self),
          .lightweight(fromVersion: SchemaV2.self, toVersion: SchemaV3.self),
-         .lightweight(fromVersion: SchemaV3.self, toVersion: SchemaV4.self),
+         .custom(fromVersion: SchemaV3.self, toVersion: SchemaV4.self,
+                 willMigrate: dropDuplicateV3Answers, didMigrate: nil),
          .lightweight(fromVersion: SchemaV4.self, toVersion: SchemaV5.self)]
     }
+}
+
+/// Version 3 had no uniqueness rule on answers; version 4 makes an answer
+/// unique per sitting, country and question, and a store holding two answers
+/// to the same question can't migrate (constraint violation): the family's
+/// data would be moved aside. So before migrating, keep the earliest answer
+/// to each question and drop the later ones (a later one could only have
+/// replaced the first, which is what the app now refuses to do too).
+private func dropDuplicateV3Answers(_ context: ModelContext) throws {
+    let answers = try context.fetch(FetchDescriptor<SchemaV3.QuizAnswer>(sortBy: [SortDescriptor(\.answeredAt)]))
+    var seen = Set<String>()
+    for answer in answers {
+        let key = "\(answer.attemptID)|\(answer.countryID)|\(answer.kindRaw)"
+        if !seen.insert(key).inserted { context.delete(answer) }
+    }
+    try context.save()
 }
 
 enum Persistence {
@@ -70,13 +87,15 @@ enum Persistence {
     /// Opens the on-device store. If it can't be opened (e.g. a test build
     /// from before the versioned schema), the old files are moved aside —
     /// not deleted — and a fresh store is created, so the app still launches.
+    /// `url` and `defaults` are for tests (a store somewhere else, and a
+    /// scratch `UserDefaults` for the moved-aside flag).
     @MainActor
-    static func makeContainer() -> ModelContainer {
+    static func makeContainer(at url: URL? = nil, defaults: UserDefaults = .standard) -> ModelContainer {
         #if DEBUG
-        if let container = UITestLaunch.makeContainer() { return container } // UI tests: in-memory store
+        if url == nil, let container = UITestLaunch.makeContainer() { return container } // UI tests: in-memory store
         #endif
         let schema = Schema(versionedSchema: SchemaV5.self)
-        let configuration = ModelConfiguration(schema: schema)
+        let configuration = url.map { ModelConfiguration(schema: schema, url: $0) } ?? ModelConfiguration(schema: schema)
         do {
             return try open(schema, configuration)
         } catch {
@@ -84,7 +103,7 @@ enum Persistence {
             moveStoreAside(at: configuration.url)
             // Tell a parent (parent home shows it) rather than silently
             // starting over: the old files are kept next to the new store.
-            UserDefaults.standard.set(Date.now, forKey: Persistence.movedAsideKey)
+            defaults.set(Date.now, forKey: Persistence.movedAsideKey)
             do {
                 return try open(schema, configuration)
             } catch {
