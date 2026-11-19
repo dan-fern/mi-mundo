@@ -125,6 +125,28 @@ final class QueueTests: XCTestCase {
         XCTAssertEqual(today()?.id, a.id)
     }
 
+    func testRemovingTheLastQuizWhileItIsTodayWrapsToTheFirst() {
+        XCTAssertTrue(QuizQueue.makeToday(c, in: ctx, now: TestSupport.morning))
+        QuizQueue.remove(c, in: ctx, now: TestSupport.morning)
+        XCTAssertEqual(today()?.id, a.id)
+        XCTAssertEqual(family.record?.position, 0)
+    }
+
+    /// `QuizQueue.remove` has no lock guard: the queue screen refuses to
+    /// delete a locked quiz (QuizQueueView.delete), so the model's rule is
+    /// just "remove, then the queue moves on". This pins that behaviour so
+    /// a change to either side is noticed.
+    func testRemoveIsNotGuardedByTheLockInTheModel() throws {
+        answerOne(a, try open(a, as: family.kid))
+        XCTAssertTrue(QuizQueue.isLocked(a, in: ctx, now: TestSupport.morning))
+        QuizQueue.remove(a, in: ctx, now: TestSupport.morning)
+        XCTAssertEqual(today()?.id, b.id)
+        XCTAssertFalse(QuizQueue.isLocked(b, in: ctx, now: TestSupport.morning))
+        // The kid's answer is kept, and still names the removed quiz.
+        XCTAssertEqual(family.fetchAll(QuizAnswer.self).count, 1)
+        XCTAssertEqual(family.fetchAll(QuizAttempt.self).first?.quizSetID, a.id)
+    }
+
     func testRemovingEveryQuizEmptiesTheQueue() {
         for quiz in [a!, b!, c!] { QuizQueue.remove(quiz, in: ctx, now: TestSupport.morning) }
         XCTAssertNil(today())
@@ -138,6 +160,24 @@ final class QueueTests: XCTestCase {
         // After a kid plays A (last), the cycle wraps to C.
         answerOne(a, try open(a, as: family.kid))
         XCTAssertEqual(today(TestSupport.nextMorning)?.id, c.id)
+    }
+
+    func testReorderAfterAKidAnsweredKeepsTodayAndTheLock() throws {
+        answerOne(a, try open(a, as: family.kid))
+        QuizQueue.reorder([b, c, a], in: ctx, now: TestSupport.morning)
+        XCTAssertEqual(today()?.id, a.id)
+        XCTAssertTrue(QuizQueue.isLocked(a, in: ctx, now: TestSupport.morning))
+        XCTAssertEqual(family.record?.position, 2, "position follows today's quiz")
+        // Tomorrow the cycle continues after A in the new order (wraps to B).
+        XCTAssertEqual(today(TestSupport.nextMorning)?.id, b.id)
+    }
+
+    func testMovingTodaysQuizToTheFrontMovesItsPosition() {
+        QuizQueue.reorder([b, c, a], in: ctx, now: TestSupport.morning)
+        XCTAssertEqual(family.record?.position, 2)
+        QuizQueue.reorder([a, b, c], in: ctx, now: TestSupport.morning)
+        XCTAssertEqual(today()?.id, a.id)
+        XCTAssertEqual(family.record?.position, 0)
     }
 
     func testRecountAfterAKidIsDeleted() throws {

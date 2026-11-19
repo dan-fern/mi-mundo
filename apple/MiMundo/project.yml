@@ -134,6 +134,11 @@ schemes:
       config: Debug
     test:
       config: Debug
+      # The unit tests are hosted by the real app: keep it off the device's
+      # on-disk store (an unreadable one would be moved aside) by running it
+      # with the in-memory store, as the UI tests do.
+      commandLineArguments:
+        "-uiTesting": true
       targets:
         - MiMundoTests
         - MiMundoUITests

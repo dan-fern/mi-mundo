@@ -13,6 +13,8 @@ final class FlagLayoutTests: XCTestCase {
             .deletingLastPathComponent().deletingLastPathComponent()
             .deletingLastPathComponent().deletingLastPathComponent()
             .appendingPathComponent("core/tests/fixtures/flag-layout-regions.json")
+        XCTAssertTrue(FileManager.default.fileExists(atPath: fixture.path),
+                      "Fixture not found at \(fixture.path): the tests find it relative to the source tree")
         let counts = try JSONDecoder().decode([String: Int].self, from: try Data(contentsOf: fixture))
         XCTAssertFalse(counts.isEmpty)
         let rect = CGRect(x: 0, y: 0, width: 300, height: 200)

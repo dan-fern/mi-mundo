@@ -62,8 +62,12 @@ final class MiMundoUITests: XCTestCase {
 
         tap(app.buttons["Switch player"])
         tap(app.buttons["Kit"])
-        // Kid home: the player's name and the switch-player button.
-        XCTAssertTrue(app.staticTexts["Kit"].waitForExistence(timeout: patient))
+        // Kid home, not parent home (which also shows "Kit" and "Switch
+        // player"): the "Days played" gauge only kid home has, and no parent controls.
+        let gauge = app.descendants(matching: .any).matching(
+            NSPredicate(format: "label == 'Days played'")).firstMatch
+        XCTAssertTrue(gauge.waitForExistence(timeout: patient), "Expected kid home's days-played gauge")
+        XCTAssertFalse(app.buttons["Add a kid"].exists, "Parent home is still showing")
         XCTAssertTrue(app.buttons["Switch player"].exists)
     }
 
@@ -102,6 +106,11 @@ final class MiMundoUITests: XCTestCase {
         let check = app.buttons["Check my flag"]
         XCTAssertTrue(check.waitForExistence(timeout: patient))
         XCTAssertTrue(check.isHittable, "The button must be on screen, not clipped by the card")
+        // isHittable only needs the centre on screen: the whole button must be
+        // inside the window and clear of the canvas.
+        let window = app.windows.firstMatch.frame
+        XCTAssertTrue(window.contains(check.frame), "Button \(check.frame) is clipped by the window \(window)")
+        XCTAssertFalse(check.frame.intersects(canvas.frame), "Button overlaps the drawing canvas")
         XCTAssertTrue(check.isEnabled)
         check.tap()
 

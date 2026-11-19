@@ -3,16 +3,13 @@ import SwiftData
 import XCTest
 @testable import MiMundo
 
-/// A store written by each older schema must open with the current migration
-/// plan and keep the family's data. The old stores are built here from the
-/// real versioned schema types (the V3 quiz models are the frozen copies in
-/// SchemaV3Frozen.swift), not committed as binary fixtures: that way they
-/// can't go stale against the OS's SQLite/SwiftData, and every future schema
-/// bump just adds a `write` case.
+/// A real store from each shipped schema version (V1–V4, committed under
+/// Fixtures/, see FixtureWriter.swift) must open with the current migration
+/// plan and keep the family's data. Each test opens a copy.
 @MainActor
 final class MigrationTests: XCTestCase {
     private var directory: URL!
-    private let parentID = UUID(), kidID = UUID(), quizID = UUID(), attemptID = UUID()
+    private typealias F = FixtureWriter
 
     override func setUp() async throws {
         directory = FileManager.default.temporaryDirectory.appendingPathComponent("migration-\(UUID().uuidString)")
@@ -23,73 +20,48 @@ final class MigrationTests: XCTestCase {
         try? FileManager.default.removeItem(at: directory)
     }
 
-    private func url(_ name: String) -> URL { directory.appendingPathComponent("\(name).store") }
+    /// A scratch copy of the committed fixture for `version`.
+    private func fixtureCopy(_ version: Int) throws -> URL {
+        let bundle = Bundle(for: MigrationTests.self)
+        let source = try XCTUnwrap(bundle.url(forResource: "v\(version)", withExtension: "store"),
+                                   "Missing fixture v\(version).store")
+        let copy = directory.appendingPathComponent("v\(version).store")
+        try FileManager.default.copyItem(at: source, to: copy)
+        return copy
+    }
 
     private func openCurrent(_ url: URL) throws -> ModelContainer {
         let schema = Schema(versionedSchema: SchemaV5.self)
         return try Persistence.open(schema, ModelConfiguration(schema: schema, url: url))
     }
 
-    /// Writes a store the way version `version` of the app would have.
-    private func write(version: Int, to url: URL) throws {
-        let schemas: [any VersionedSchema.Type] = [SchemaV1.self, SchemaV2.self, SchemaV3.self, SchemaV4.self]
-        let schema = Schema(versionedSchema: schemas[version - 1])
-        let container = try ModelContainer(for: schema, configurations: ModelConfiguration(schema: schema, url: url))
-        let context = container.mainContext
-        let day: Int32 = 20_000
-        let parent = Profile(name: "Mama", emoji: "🦊", role: .parent)
-        parent.id = parentID
-        parent.pinSalt = Data([1, 2, 3])
-        parent.pinHash = Data([4, 5, 6])
-        let kid = Profile(name: "Kid", emoji: "🐼", role: .child)
-        kid.id = kidID
-        context.insert(parent)
-        context.insert(kid)
-        context.insert(Visit(childID: kidID, day: day))
-        context.insert(Session(profile: kid, day: day, startedAt: TestSupport.morning))
-        if version >= 2 {
-            var draft = QuizDraft()
-            draft.title = "Europe"
-            draft.countryIDs = ["FRA", "ESP"]
-            draft.asksFlag = true
-            let quiz = QuizSet(draft: draft, position: 0, createdBy: parentID)
-            quiz.id = quizID
-            context.insert(quiz)
-            context.insert(QueueRecord(.init(current: quizID.uuidString, position: 0, run: 3, day: day,
-                                             attemptedByKid: true, started: true)))
+    /// Run once per new schema version (see FixtureWriter): writes the
+    /// fixtures to $WRITE_FIXTURES_TO. Skipped otherwise.
+    func testWriteFixtures() throws {
+        guard let path = ProcessInfo.processInfo.environment["WRITE_FIXTURES_TO"], !path.isEmpty else {
+            throw XCTSkip("Only runs with TEST_RUNNER_WRITE_FIXTURES_TO set")
         }
-        if version == 3 {
-            context.insert(SchemaV3.QuizAttempt(id: attemptID, profileID: kidID, roleRaw: "child", quizSetID: quizID,
-                                                run: 3, day: day, number: 2, startedAt: TestSupport.morning))
-            context.insert(SchemaV3.QuizAnswer(id: UUID(), attemptID: attemptID, profileID: kidID, countryID: "FRA",
-                                               kindRaw: "name", chosen: "France", correctAnswer: "France",
-                                               correct: true, basePoints: 10, attemptNumber: 2,
-                                               usedMultipleChoice: false, pointsAwarded: 5,
-                                               answeredAt: TestSupport.morning))
+        for version in 1...4 {
+            let url = URL(fileURLWithPath: path).appendingPathComponent("v\(version).store")
+            try? FileManager.default.removeItem(at: url)
+            try F.write(version: version, to: url)
         }
-        if version == 4 {
-            let quiz = try XCTUnwrap(try context.fetch(FetchDescriptor<QuizSet>()).first)
-            let attempt = SchemaV4.QuizAttempt(profile: kid, quiz: quiz, run: 3, day: day, number: 2,
-                                               startedAt: TestSupport.morning, targets: [])
-            attempt.id = attemptID
-            context.insert(attempt)
-            context.insert(SchemaV4.QuizAnswer(attempt: attempt, countryID: "FRA", kind: .name, chosen: "France",
-                                               chosenCountryID: "FRA", correctAnswer: "France",
-                                               choices: ["France", "Spain"], basePoints: 10, multipleChoice: false,
-                                               askedAt: TestSupport.morning, answeredAt: TestSupport.morning))
-        }
-        try context.save()
     }
+
+    // MARK: - What survives
 
     private func assertSurvived(version: Int, in container: ModelContainer, file: StaticString = #filePath,
                                 line: UInt = #line) throws {
         let context = container.mainContext
         let profiles = try context.fetch(FetchDescriptor<Profile>())
         XCTAssertEqual(Set(profiles.map(\.name)), ["Mama", "Kid"], file: file, line: line)
-        let parent = try XCTUnwrap(profiles.first { $0.id == parentID }, file: file, line: line)
+        let parent = try XCTUnwrap(profiles.first { $0.id == F.parentID }, file: file, line: line)
         XCTAssertEqual(parent.pinHash, Data([4, 5, 6]), "PIN survives", file: file, line: line)
+        XCTAssertEqual(parent.pinSalt, Data([1, 2, 3]), file: file, line: line)
         XCTAssertEqual(parent.role, .parent, file: file, line: line)
-        XCTAssertEqual(try context.fetchCount(FetchDescriptor<Visit>()), 1, file: file, line: line)
+        let visits = try context.fetch(FetchDescriptor<Visit>())
+        XCTAssertEqual(visits.map(\.childID), [F.kidID], file: file, line: line)
+        XCTAssertEqual(visits.first?.day, F.day, file: file, line: line)
         XCTAssertEqual(try context.fetchCount(FetchDescriptor<Session>()), 1, file: file, line: line)
         guard version >= 2 else { return }
         let quizzes = try context.fetch(FetchDescriptor<QuizSet>())
@@ -97,47 +69,101 @@ final class MigrationTests: XCTestCase {
         XCTAssertEqual(quizzes.first?.countryIDs, ["FRA", "ESP"], file: file, line: line)
         XCTAssertEqual(quizzes.first?.asksFlag, true, file: file, line: line)
         let queue = try XCTUnwrap(try context.fetch(FetchDescriptor<QueueRecord>()).first, file: file, line: line)
-        XCTAssertEqual(queue.currentQuizID, quizID, file: file, line: line)
+        XCTAssertEqual(queue.currentQuizID, F.quizID, file: file, line: line)
         XCTAssertEqual(queue.run, 3, file: file, line: line)
         XCTAssertTrue(queue.attemptedByKid, file: file, line: line)
         guard version >= 3 else { return }
         let attempts = try context.fetch(FetchDescriptor<QuizAttempt>())
         XCTAssertEqual(attempts.count, 1, file: file, line: line)
-        XCTAssertEqual(attempts.first?.id, attemptID, file: file, line: line)
+        XCTAssertEqual(attempts.first?.id, F.attemptID, file: file, line: line)
         XCTAssertEqual(attempts.first?.number, 2, file: file, line: line)
         XCTAssertEqual(attempts.first?.run, 3, file: file, line: line)
         XCTAssertEqual(attempts.first?.roleRaw, "child", file: file, line: line)
-        let answers = try context.fetch(FetchDescriptor<QuizAnswer>())
-        XCTAssertEqual(answers.count, 1, file: file, line: line)
-        XCTAssertEqual(answers.first?.attemptID, attemptID, file: file, line: line)
-        XCTAssertEqual(answers.first?.countryID, "FRA", file: file, line: line)
-        XCTAssertEqual(answers.first?.correct, true, file: file, line: line)
-        if version == 3 {
-            XCTAssertEqual(answers.first?.pointsAwarded, 5, file: file, line: line)
-            XCTAssertEqual(answers.first?.basePoints, 10, file: file, line: line)
-        }
+        XCTAssertEqual(attempts.first?.quizSetID, F.quizID, file: file, line: line)
     }
 
     func testEveryOldVersionOpensAndKeepsItsData() throws {
-        for version in 1...4 {
-            let store = url("v\(version)")
-            try write(version: version, to: store)
-            let container = try openCurrent(store)
+        for version in [1, 2, 4] {
+            let container = try openCurrent(try fixtureCopy(version))
             try assertSurvived(version: version, in: container)
-            // The new tables exist and work after migrating.
+            // The newest tables exist and work after migrating.
             XCTAssertEqual(try container.mainContext.fetchCount(FetchDescriptor<FlagDrawing>()), 0)
         }
     }
 
+    func testV4AnswersAndAttemptKeepTheirStats() throws {
+        let container = try openCurrent(try fixtureCopy(4))
+        let context = container.mainContext
+        try assertSurvived(version: 4, in: container)
+        let attempt = try XCTUnwrap(try context.fetch(FetchDescriptor<QuizAttempt>()).first)
+        XCTAssertEqual(attempt.finishedAt, F.when.addingTimeInterval(120))
+        XCTAssertEqual(attempt.questionCount, 3)
+        XCTAssertEqual(attempt.perfectPoints, 40)
+        XCTAssertEqual(attempt.quizCountryIDs, ["FRA", "ESP"])
+        let answers = try context.fetch(FetchDescriptor<QuizAnswer>(sortBy: [SortDescriptor(\.answeredAt)]))
+        XCTAssertEqual(answers.map(\.kindRaw), ["name", "flag"])
+        let name = answers[0], flag = answers[1]
+        XCTAssertEqual(name.pointsAwarded, 5, "attempt 2 earns half of 10")
+        XCTAssertTrue(name.correct)
+        XCTAssertEqual(name.chosenCountryID, "FRA")
+        XCTAssertEqual(name.choices, ["France", "Spain", "Italy", "Peru"])
+        XCTAssertEqual(name.askedAt, F.when)
+        XCTAssertEqual(name.answeredAt, F.when.addingTimeInterval(7))
+        XCTAssertFalse(flag.correct)
+        XCTAssertEqual(flag.pointsAwarded, 0)
+        XCTAssertTrue(flag.usedMultipleChoice)
+        XCTAssertEqual(flag.chosenCountryID, "ESP")
+    }
+
+    // MARK: - Version 3
+
+    /// Version 3 had no uniqueness rule, and version 4 adds one on
+    /// (sitting, country, question). A store holding two answers to the same
+    /// question has to open anyway (MiMundoMigrationPlan's custom stage drops
+    /// the later duplicate): otherwise the family's data would be moved aside.
+    func testV3StoreWithDuplicateAnswersStillOpens() throws {
+        let container = try openCurrent(try fixtureCopy(3))
+        try assertSurvived(version: 3, in: container)
+        let answers = try container.mainContext.fetch(FetchDescriptor<QuizAnswer>())
+        // The earliest answer to each question is kept; the duplicate is dropped.
+        let france = answers.filter { $0.countryID == "FRA" }
+        XCTAssertEqual(france.count, 1)
+        XCTAssertEqual(france.first?.chosen, "France")
+        XCTAssertEqual(france.first?.pointsAwarded, 5)
+        XCTAssertTrue(answers.contains { $0.countryID == "ESP" && $0.correct && $0.pointsAwarded == 5 })
+        XCTAssertEqual(answers.count, 2)
+        // And the store keeps working afterwards.
+        try container.mainContext.save()
+    }
+
+    func testV3AnswersGainDefaultedFields() throws {
+        let container = try openCurrent(try fixtureCopy(3))
+        let context = container.mainContext
+        let answers = try context.fetch(FetchDescriptor<QuizAnswer>())
+        XCTAssertFalse(answers.isEmpty)
+        for answer in answers {
+            XCTAssertEqual(answer.choices, [])
+            XCTAssertNil(answer.askedAt)
+            XCTAssertNil(answer.chosenCountryID)
+        }
+        let attempt = try XCTUnwrap(try context.fetch(FetchDescriptor<QuizAttempt>()).first)
+        XCTAssertEqual(attempt.quizCountryIDs, [])
+        XCTAssertEqual(attempt.questionCount, 0)
+        XCTAssertEqual(attempt.perfectPoints, 0)
+        // Version 5 adds only the drawings table, empty.
+        XCTAssertEqual(try context.fetchCount(FetchDescriptor<FlagDrawing>()), 0)
+    }
+
+    // MARK: - After migrating
+
     func testMigratedStoreAcceptsNewWritesAndReopens() throws {
-        let store = url("v4")
-        try write(version: 4, to: store)
+        let store = try fixtureCopy(4)
         do {
             let container = try openCurrent(store)
             let context = container.mainContext
-            context.insert(FlagDrawing(answerID: UUID(), profileID: kidID, countryID: "FRA",
+            context.insert(FlagDrawing(answerID: UUID(), profileID: F.kidID, countryID: "FRA",
                                        content: .freehand(FlagSketch()), scorePercent: 90,
-                                       autoCorrect: true, drawnAt: TestSupport.morning))
+                                       autoCorrect: true, drawnAt: F.when))
             try context.save()
         }
         let reopened = try openCurrent(store)
@@ -145,23 +171,36 @@ final class MigrationTests: XCTestCase {
         try assertSurvived(version: 4, in: reopened)
     }
 
-    func testV3AnswersCanBeMarkedAsCurrentModels() throws {
-        // V3 → V4 adds fields with defaults: they must read back sensibly.
-        let store = url("v3")
-        try write(version: 3, to: store)
-        let container = try openCurrent(store)
-        let answer = try XCTUnwrap(try container.mainContext.fetch(FetchDescriptor<QuizAnswer>()).first)
-        XCTAssertEqual(answer.choices, [])
-        XCTAssertNil(answer.askedAt)
-        XCTAssertNil(answer.chosenCountryID)
-        let attempt = try XCTUnwrap(try container.mainContext.fetch(FetchDescriptor<QuizAttempt>()).first)
-        XCTAssertEqual(attempt.quizCountryIDs, [])
-        XCTAssertEqual(attempt.questionCount, 0)
+    // MARK: - A store that can't be opened
+
+    func testUnreadableStoreIsMovedAsideNotDeleted() throws {
+        let store = directory.appendingPathComponent("default.store")
+        let garbage = Data("not a database".utf8)
+        try garbage.write(to: store)
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: "migration-\(UUID().uuidString)"))
+
+        let container = Persistence.makeContainer(at: store, defaults: defaults)
+
+        // The parent is told (parent home shows it)...
+        XCTAssertNotNil(defaults.object(forKey: Persistence.movedAsideKey))
+        // ...the old file is kept next to the new store, untouched...
+        let aside = try FileManager.default.contentsOfDirectory(atPath: directory.path)
+            .filter { $0.hasPrefix("default.store.unreadable-") }
+        XCTAssertEqual(aside.count, 1)
+        XCTAssertEqual(try Data(contentsOf: directory.appendingPathComponent(aside[0])), garbage)
+        // ...and the app starts fresh, with a store that works.
+        XCTAssertEqual(try container.mainContext.fetchCount(FetchDescriptor<Profile>()), 0)
+        container.mainContext.insert(Profile(name: "New", emoji: "🐢", role: .parent))
+        try container.mainContext.save()
     }
 
-    func testUnreadableStoreIsRejectedNotSilentlyEmptied() throws {
-        let store = url("garbage")
-        try Data("not a database".utf8).write(to: store)
-        XCTAssertThrowsError(try openCurrent(store))
+    func testReadableStoreIsNeverMovedAside() throws {
+        let store = try fixtureCopy(4)
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: "migration-\(UUID().uuidString)"))
+        let container = Persistence.makeContainer(at: store, defaults: defaults)
+        XCTAssertNil(defaults.object(forKey: Persistence.movedAsideKey))
+        try assertSurvived(version: 4, in: container)
+        XCTAssertFalse(try FileManager.default.contentsOfDirectory(atPath: directory.path)
+            .contains { $0.contains("unreadable") })
     }
 }

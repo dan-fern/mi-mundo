@@ -18,7 +18,10 @@ enum UITestLaunch {
         guard args.contains(flag) else { return nil }
         let schema = Schema(versionedSchema: SchemaV5.self)
         let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
-        guard let container = try? Persistence.open(schema, configuration) else { return nil }
+        // Never fall through to the real on-disk store while testing.
+        guard let container = try? Persistence.open(schema, configuration) else {
+            fatalError("UI tests: couldn't open the in-memory store")
+        }
         if args.contains(seedFlag) { seed(container.mainContext) }
         return container
     }
