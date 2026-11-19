@@ -88,6 +88,21 @@ targets:
         TEST_HOST: "$(BUILT_PRODUCTS_DIR)/MiMundo.app/MiMundo"
         BUNDLE_LOADER: "$(TEST_HOST)"
 
+  MiMundoUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: UITests
+    dependencies:
+      - target: MiMundo
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.danfern.mimundo.uitests
+        SWIFT_VERSION: "6.0"
+        GENERATE_INFOPLIST_FILE: YES
+        TARGETED_DEVICE_FAMILY: "2"
+        "EXCLUDED_ARCHS[sdk=iphonesimulator*]": x86_64
+
 schemes:
   MiMundo:
     build:
@@ -121,6 +136,7 @@ schemes:
       config: Debug
       targets:
         - MiMundoTests
+        - MiMundoUITests
     profile:
       config: Release
     analyze:

@@ -72,6 +72,9 @@ enum Persistence {
     /// not deleted — and a fresh store is created, so the app still launches.
     @MainActor
     static func makeContainer() -> ModelContainer {
+        #if DEBUG
+        if let container = UITestLaunch.makeContainer() { return container } // UI tests: in-memory store
+        #endif
         let schema = Schema(versionedSchema: SchemaV5.self)
         let configuration = ModelConfiguration(schema: schema)
         do {
