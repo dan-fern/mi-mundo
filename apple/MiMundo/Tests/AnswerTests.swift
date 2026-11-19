@@ -265,6 +265,24 @@ final class AnswerTests: XCTestCase {
         XCTAssertEqual(old.appCreditPercent, 0)
     }
 
+    /// Flags too alike to tell apart as buttons are never offered together,
+    /// even for neighbours (Romania's nearest country is Moldova).
+    func testLookAlikeFlagsAreNeverOfferedTogether() throws {
+        let byISO = Dictionary(atlas.countries.map { ($0.meta.iso2, $0) }, uniquingKeysWith: { a, _ in a })
+        for group in Atlas.flagLookAlikeGroups {
+            for code in group {
+                guard let country = byISO[code], country.hasFlag else { continue }
+                let others = Set(group.subtracting([code]).compactMap { byISO[$0]?.meta.id })
+                for seed: UInt64 in 0..<40 {
+                    let made = atlas.choices(for: .flag, about: country, seed: seed)
+                    XCTAssertTrue(others.isDisjoint(with: made.all), "\(code) offered with a look-alike: \(made.all)")
+                }
+            }
+        }
+        XCTAssertEqual(Atlas.flagLookAlikes["RO"], ["TD", "AD", "MD"])
+        XCTAssertEqual(Atlas.flagLookAlikes["MD"], ["TD", "AD", "RO"])
+    }
+
     func testVerdictForADrawingWhoseAnswerIsMissingDoesNotCrash() throws {
         let drawing = FlagDrawing(answerID: UUID(), profileID: family.kid.id, countryID: "FRA",
                                   content: .freehand(FlagSketch()), scorePercent: 50,

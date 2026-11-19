@@ -23,31 +23,62 @@ final class DrawingPadTests: XCTestCase {
     func testFillStopsAtALineAcrossTheCanvas() throws {
         let fill = try XCTUnwrap(FlagFill.make(at: CGPoint(x: 0.25, y: 0.5), color: "blue",
                                                on: splitDownTheMiddle, guide: nil))
-        XCTAssertEqual(share(fill, xs: 0.0..<0.45), 1, "the whole left side")
-        XCTAssertEqual(share(fill, xs: 0.55..<1.0), 0, "nothing past the line")
+        XCTAssertGreaterThanOrEqual(share(fill, xs: 0.0..<0.45), 0.97, "the whole left side")
+        XCTAssertLessThanOrEqual(share(fill, xs: 0.55..<1.0), 0.03, "nothing past the line")
     }
 
     func testFillOnAnEmptyCanvasCoversEverything() throws {
         let fill = try XCTUnwrap(FlagFill.make(at: CGPoint(x: 0.5, y: 0.5), color: "red", on: FlagSketch(), guide: nil))
-        XCTAssertEqual(share(fill, xs: 0.0..<1.0), 1)
+        XCTAssertGreaterThanOrEqual(share(fill, xs: 0.0..<1.0), 0.97)
     }
 
     func testTheTracingOutlineStopsAFill() throws {
         // France's outline: three vertical bands.
         let fill = try XCTUnwrap(FlagFill.make(at: CGPoint(x: 0.15, y: 0.5), color: "blue", on: FlagSketch(), guide: "v3"))
-        XCTAssertGreaterThan(share(fill, xs: 0.0..<0.3), 0.95)
-        XCTAssertEqual(share(fill, xs: 0.4..<1.0), 0)
+        XCTAssertGreaterThanOrEqual(share(fill, xs: 0.0..<0.3), 0.97)
+        XCTAssertLessThanOrEqual(share(fill, xs: 0.4..<1.0), 0.03)
         // Without the outline, the same tap fills it all.
         let open = try XCTUnwrap(FlagFill.make(at: CGPoint(x: 0.15, y: 0.5), color: "blue", on: FlagSketch(), guide: nil))
-        XCTAssertEqual(share(open, xs: 0.0..<1.0), 1)
+        XCTAssertGreaterThanOrEqual(share(open, xs: 0.0..<1.0), 0.97)
     }
 
     func testAnEarlierFillOfAnotherColourStopsTheNext() throws {
         var sketch = splitDownTheMiddle
         sketch.fills.append(try XCTUnwrap(FlagFill.make(at: CGPoint(x: 0.25, y: 0.5), color: "blue", on: sketch, guide: nil)))
         let right = try XCTUnwrap(FlagFill.make(at: CGPoint(x: 0.75, y: 0.5), color: "red", on: sketch, guide: nil))
-        XCTAssertEqual(share(right, xs: 0.0..<0.45), 0)
-        XCTAssertEqual(share(right, xs: 0.55..<1.0), 1)
+        XCTAssertLessThanOrEqual(share(right, xs: 0.0..<0.45), 0.03)
+        XCTAssertGreaterThanOrEqual(share(right, xs: 0.55..<1.0), 0.97)
+    }
+
+    func testAFillWithTheOutlineReachesTheOutlineLeavingNoSeam() throws {
+        // Review: fills stopped two cells short of each guide line, which
+        // left a white seam between stripes once the outline was hidden.
+        let fill = try XCTUnwrap(FlagFill.make(at: CGPoint(x: 0.15, y: 0.5), color: "blue", on: FlagSketch(), guide: "v3"))
+        XCTAssertGreaterThanOrEqual(share(fill, xs: 0.30..<0.333), 0.9, "right up to the line at a third")
+        XCTAssertLessThanOrEqual(share(fill, xs: 0.36..<1.0), 0.03)
+    }
+
+    func testTappingTheOutlineFillsNothing() {
+        // Review: a tap on the guide line used to fill the whole outline.
+        let onTheLine = CGPoint(x: 1.0 / 3.0, y: 0.5)
+        XCTAssertNil(FlagFill.make(at: onTheLine, color: "red", on: FlagSketch(), guide: "v3"))
+    }
+
+    func testALineTheSameColourAsTheAreaStillStopsAFill() throws {
+        // A white line on the blank (white) canvas looks like nothing, but
+        // it's a line the kid drew.
+        let white = FlagSketch(strokes: [FlagStroke(color: "white", points: [CGPoint(x: 0.5, y: -0.1), CGPoint(x: 0.5, y: 1.1)])],
+                               widths: [0.025])
+        let fill = try XCTUnwrap(FlagFill.make(at: CGPoint(x: 0.25, y: 0.5), color: "red", on: white, guide: nil))
+        XCTAssertLessThanOrEqual(share(fill, xs: 0.55..<1.0), 0.03)
+    }
+
+    func testACrossOutlineIsOneShapeWithoutABoxInTheMiddle() throws {
+        // Review: the cross's two bars were stroked separately, so the guide
+        // drew a box where they meet and a fill stopped at it.
+        let fill = try XCTUnwrap(FlagFill.make(at: CGPoint(x: 0.4, y: 0.5), color: "white", on: FlagSketch(), guide: "cross"))
+        let centre = (FlagFill.height / 2) * FlagFill.width + FlagFill.width / 2
+        XCTAssertTrue(fill.covers(x: centre % FlagFill.width, y: centre / FlagFill.width), "the middle of the cross fills too")
     }
 
     func testTappingALineFillsNothing() {

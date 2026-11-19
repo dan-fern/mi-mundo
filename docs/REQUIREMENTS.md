@@ -118,16 +118,16 @@ Built in steps (owner decision, Nov 2026): multiple choice first (pick the
 flag from four, neighbours' flags as the wrong answers, look-alikes that can't
 be told apart at button size — Monaco/Indonesia, Chad/Romania/Andorra/Moldova, Colombia/Ecuador/Venezuela, El Salvador/Nicaragua/Honduras, Slovakia/Slovenia/Russia, Mali/Senegal/Guinea, Netherlands/Luxembourg, Ireland/Côte d'Ivoire, Australia/New Zealand — never shown
 together), then the layout outline, then freehand, then parent review (5.3).
-Step 2 (layout outline) works like this: the kid picks the flag's shape from
-six, taps a colour from a nine-colour paint box (red, maroon, orange, yellow,
-green, light blue, blue, white, black) and taps each part to fill it, then may
-draw the emblem with a finger (never graded). It's right when the shape is
-right and every part's colour matches; blue/light blue and red/maroon count as
-the same. Full points. "Pick it from four instead" is the half-points help.
-The shapes and colours of ~160 flags are in tools/flag-layouts.txt, checked
-against the flag pictures by tools/check-flag-layouts.py; flags no outline can
-describe (Union Jack ensigns, the USA, Nepal, South Africa, …) stay
-pick-from-four.
+Step 2 (layout outline), as first built (Nov 2026, since replaced by the
+tracing outline): the kid picked the flag's shape from six, tapped a colour
+from a nine-colour paint box (red, maroon, orange, yellow, green, light blue,
+blue, white, black) and tapped each part to fill it. The shapes and colours of
+~160 flags stay in tools/flag-layouts.txt: they draw the tracing outline and
+tell the grader where the emblem is. tools/check-flag-layouts.py checks them
+against the flag pictures, including which way a diagonal band runs
+(Trinidad and Tobago's runs the other way from Tanzania's). Flags no outline
+can describe (Union Jack ensigns, the USA, Nepal, South Africa, …) have no
+tracing outline.
 
 (Beta feedback, Nov 2026: the separate outline step, "Use an outline", was
 removed. Its shapes became the tracing outline on the freehand pad. Outline
@@ -158,11 +158,20 @@ Grading:
   - a **mirror image** of the right flag (flipped left-to-right, like France
     drawn backwards, or upside down) earns **¾** of the points;
   - **all the right colours** in the wrong places (every main colour of the
-    flag over at least a third of its area, and no big patch of a colour the
+    flag over at least 60% of its area, so a dab of each isn't enough, and no big patch of a colour the
     flag doesn't have) earns **½**.
+  No ¾ for a flag whose mirror image is another country's flag (Ireland and
+  Côte d'Ivoire; Mali, Senegal and Guinea; Indonesia, Monaco and Poland;
+  Russia, Slovakia, Slovenia and Serbia; Bolivia, Ethiopia and Ghana):
+  drawing the other flag is the mix-up being tested, so it can earn only
+  the colours ½.
   A partly right drawing isn't counted as right in stats; the card says
   "So close: it's a mirror image!" or "All the right colours!" with the
   points.
+- Because emblems and close shades aren't marked, a few flags that differ
+  only there pass for each other (Netherlands/Luxembourg, Peru/Canada,
+  Romania/Chad/Moldova, Austria/Latvia). That's the leniency the owner asked
+  for; parent review (5.3) is where to catch those.
 - Every drawing and its automatic verdict is saved for parent review (5.3).
 
 ### 3.4 Scoring
@@ -268,7 +277,7 @@ stats here than in child mode:
 - Mastery heatmap of the region.
 - Trends: accuracy, streak history, points earned vs. spent.
 - Answer speed — recorded silently, never shown to the child.
-- Hint usage: how often outlines / multiple choice were needed for flags.
+- Hint usage: how often the tracing outline / multiple choice were needed for flags.
 
 ### 5.3 Drawing review
 - Browse every flag drawing with the app's verdict. (Built: parent home →
@@ -350,6 +359,13 @@ So a parent can set up practice ahead of time (e.g. before work travel):
 ## 7. Design notes (data model sketch)
 
 How the v0.4 features fit the on-device data (SwiftData, versioned schema):
+
+- **Saved data is never wiped.** A store that can't be read at all is moved
+  aside (kept next to the new one, and parent home says so). A store from a
+  newer version of the app (an older build installed over it) is left as it
+  is: the app shows "Please update Mi Mundo" instead of letting anyone set
+  up over it. Each schema version has a committed store fixture that the
+  migration tests open.
 
 | Model | Key fields | Notes |
 |---|---|---|

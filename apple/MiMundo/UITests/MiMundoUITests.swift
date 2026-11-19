@@ -36,7 +36,13 @@ final class MiMundoUITests: XCTestCase {
 
     /// Picks an answer and confirms it: a tap only selects (beta feedback:
     /// stray taps were answering), "Check my answer" sends it.
-    private func answer(_ choice: XCUIElement, in app: XCUIApplication) {
+    private func answer(_ choice: XCUIElement, in app: XCUIApplication,
+                        file: StaticString = #filePath, line: UInt = #line) {
+        // Every question starts with nothing selected (a pick from the last
+        // question must not carry over), so the confirm button can't be used.
+        let unpicked = app.buttons["Pick an answer"]
+        XCTAssertTrue(unpicked.waitForExistence(timeout: patient), "Nothing selected yet", file: file, line: line)
+        XCTAssertFalse(unpicked.isEnabled, file: file, line: line)
         let check = app.buttons["Check my answer"]
         tap(choice)
         XCTAssertTrue(check.waitForExistence(timeout: patient))
@@ -46,9 +52,6 @@ final class MiMundoUITests: XCTestCase {
 
     /// Answers the name and capital questions of the seeded quiz correctly.
     private func answerNameAndCapital(_ app: XCUIApplication) {
-        // Before a pick, the confirm button can't be used.
-        XCTAssertTrue(app.buttons["Pick an answer"].waitForExistence(timeout: patient))
-        XCTAssertFalse(app.buttons["Pick an answer"].isEnabled)
         answer(app.buttons["France"], in: app)
         tap(app.buttons["Next question"])
         answer(app.buttons["Paris"], in: app)
