@@ -85,6 +85,31 @@ mod tests {
     }
 
     #[test]
+    fn huge_bases_saturate_cleanly_at_every_attempt() {
+        for base in [u32::MAX, u32::MAX - 1, 1 << 31, (1 << 31) + 1] {
+            assert_eq!(points_for_attempt(base, 1, false), base);
+            assert_eq!(points_for_attempt(base, 1, true), base >> 1);
+            assert_eq!(points_for_attempt(base, 2, false), base >> 1);
+            assert_eq!(points_for_attempt(base, 2, true), base >> 2);
+            assert_eq!(points_for_attempt(base, 3, false), base >> 2);
+            assert_eq!(points_for_attempt(base, 3, true), base >> 3);
+            assert_eq!(points_for_attempt(base, 4, false), 0);
+        }
+        // Attempt numbers far past the last scored one (and u32::MAX) earn
+        // nothing and never shift out of range.
+        assert_eq!(points_for_attempt(u32::MAX, u32::MAX, true), 0);
+        assert_eq!(points_for_attempt(u32::MAX, u32::MAX, false), 0);
+    }
+
+    #[test]
+    fn a_family_total_of_max_questions_fits_in_u64() {
+        // Swift sums points as Int (64-bit): thousands of max-value answers
+        // still can't overflow it.
+        let one = u64::from(points_for_attempt(u32::MAX, 1, false));
+        assert!(one.checked_mul(1_000_000).is_some());
+    }
+
+    #[test]
     #[cfg(debug_assertions)]
     #[should_panic(expected = "attempt numbers start at 1")]
     fn attempt_zero_asserts_in_debug() {
