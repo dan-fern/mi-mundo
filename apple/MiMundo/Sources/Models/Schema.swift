@@ -1,3 +1,4 @@
+import CoreData
 import Foundation
 import SwiftData
 import os
@@ -71,7 +72,10 @@ enum MiMundoMigrationPlan: SchemaMigrationPlan {
 /// to each question and drop the later ones (a later one could only have
 /// replaced the first, which is what the app now refuses to do too).
 private func dropDuplicateV3Answers(_ context: ModelContext) throws {
-    let answers = try context.fetch(FetchDescriptor<SchemaV3.QuizAnswer>(sortBy: [SortDescriptor(\.answeredAt)]))
+    // Earliest first; the id breaks a tie, so which one is kept never
+    // depends on fetch order.
+    let answers = try context.fetch(FetchDescriptor<SchemaV3.QuizAnswer>())
+        .sorted { ($0.answeredAt, $0.id.uuidString) < ($1.answeredAt, $1.id.uuidString) }
     var seen = Set<String>()
     for answer in answers {
         let key = "\(answer.attemptID)|\(answer.countryID)|\(answer.kindRaw)"
@@ -83,6 +87,36 @@ private func dropDuplicateV3Answers(_ context: ModelContext) throws {
 enum Persistence {
     /// Set when the store couldn't be opened and was moved aside.
     static let movedAsideKey = "storeMovedAsideAt"
+
+    /// True when the saved data was written by a NEWER version of the app
+    /// (an older build installed over it): the data is left as it is, the
+    /// app runs on an empty in-memory store, and RootView asks for the newer
+    /// version instead of letting anyone set up over it.
+    @MainActor static private(set) var savedDataIsNewer = false
+
+    /// What's on disk, judged before anything is moved.
+    enum StoreCheck: Equatable {
+        /// No store yet, or one this build's migration plan knows.
+        case usable
+        /// A real store, but from a schema version this build doesn't know:
+        /// written by a newer app.
+        case newerVersion
+        /// Not a readable store at all.
+        case unreadable
+    }
+
+    static func check(storeAt url: URL) -> StoreCheck {
+        guard FileManager.default.fileExists(atPath: url.path) else { return .usable }
+        guard let metadata = try? NSPersistentStoreCoordinator.metadataForPersistentStore(
+            ofType: NSSQLiteStoreType, at: url) else { return .unreadable }
+        for version in MiMundoMigrationPlan.schemas {
+            if let model = NSManagedObjectModel.makeManagedObjectModel(for: version.models),
+               model.isConfiguration(withName: nil, compatibleWithStoreMetadata: metadata) {
+                return .usable
+            }
+        }
+        return .newerVersion
+    }
 
     /// Opens the on-device store. If it can't be opened (e.g. a test build
     /// from before the versioned schema), the old files are moved aside —
@@ -99,16 +133,37 @@ enum Persistence {
         do {
             return try open(schema, configuration)
         } catch {
+            // Data from a newer app is never moved aside: an older build
+            // (e.g. a test build of an earlier PR) must not make the family
+            // look wiped. Leave it and ask for the newer app.
+            if check(storeAt: configuration.url) == .newerVersion {
+                dataLog.error("Saved data is from a newer app version; leaving it untouched: \(error, privacy: .public)")
+                savedDataIsNewer = true
+                return inMemory(schema)
+            }
             dataLog.error("Couldn't open data store, moving it aside: \(error, privacy: .public)")
-            moveStoreAside(at: configuration.url)
+            guard moveStoreAside(at: configuration.url) else {
+                // Couldn't move it, so reopening would fail the same way:
+                // run without saving rather than crash at every launch.
+                return inMemory(schema)
+            }
             // Tell a parent (parent home shows it) rather than silently
             // starting over: the old files are kept next to the new store.
             defaults.set(Date.now, forKey: Persistence.movedAsideKey)
             do {
                 return try open(schema, configuration)
             } catch {
-                fatalError("Couldn't create a data store: \(error)")
+                dataLog.fault("Couldn't create a fresh data store: \(error, privacy: .public)")
+                return inMemory(schema)
             }
+        }
+    }
+
+    private static func inMemory(_ schema: Schema) -> ModelContainer {
+        do {
+            return try ModelContainer(for: schema, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+        } catch {
+            fatalError("Couldn't create even an in-memory data store: \(error)")
         }
     }
 
@@ -121,15 +176,27 @@ enum Persistence {
         )
     }
 
-    private static func moveStoreAside(at url: URL) {
-        let stamp = Int(Date.now.timeIntervalSince1970)
+    /// Moves the store's files aside (never deletes them). Returns false if
+    /// the main file couldn't be moved.
+    @discardableResult
+    static func moveStoreAside(at url: URL) -> Bool {
+        // A time stamp to read, plus a few random letters so two moves in the
+        // same second can't collide.
+        let stamp = "\(Int(Date.now.timeIntervalSince1970))-\(UUID().uuidString.prefix(6))"
         let fileManager = FileManager.default
+        var movedMain = true
         for suffix in ["", "-wal", "-shm"] {
             let file = URL(fileURLWithPath: url.path + suffix)
             guard fileManager.fileExists(atPath: file.path) else { continue }
             let aside = URL(fileURLWithPath: url.path + ".unreadable-\(stamp)" + suffix)
-            try? fileManager.moveItem(at: file, to: aside)
+            do {
+                try fileManager.moveItem(at: file, to: aside)
+            } catch {
+                dataLog.error("Couldn't move \(file.lastPathComponent, privacy: .public) aside: \(error, privacy: .public)")
+                if suffix.isEmpty { movedMain = false }
+            }
         }
+        return movedMain
     }
 }
 

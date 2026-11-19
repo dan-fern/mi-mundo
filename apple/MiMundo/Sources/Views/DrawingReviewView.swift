@@ -93,6 +93,9 @@ private struct DrawingRow: View {
 
     var body: some View {
         HStack(alignment: .center, spacing: 16) {
+            // The pictures and words read as one element; the Change menu
+            // stays its own control so VoiceOver can reach it.
+            HStack(alignment: .center, spacing: 16) {
             VStack(spacing: 4) {
                 drawingView.frame(width: 150)
                 Text(drawing.methodRaw == "outline" ? "On an outline" : "Freehand")
@@ -115,6 +118,8 @@ private struct DrawingRow: View {
                     .font(.subheadline).foregroundStyle(.secondary)
                 verdictLabel
             }
+            }
+            .accessibilityElement(children: .combine)
             Spacer(minLength: 8)
             Menu {
                 Button("Mark right", systemImage: "checkmark") { onVerdict(true) }
@@ -126,9 +131,10 @@ private struct DrawingRow: View {
                 Text("Change")
             }
             .buttonStyle(.bordered)
+            .accessibilityLabel("Change the verdict for \(country?.name ?? drawing.countryID)")
         }
         .padding(.vertical, 6)
-        .accessibilityElement(children: .combine)
+        .accessibilityElement(children: .contain)
     }
 
     @ViewBuilder

@@ -188,8 +188,22 @@ jobs:
           if-no-files-found: ignore
 
       # Three UI smoke flows (first run, play a country, freehand flag pad).
-      # About 1.5 min locally, so likely 3+ on a runner: on main and nightly
-      # only, not on every PR push, to keep PR CI near its ~10 minute budget.
+      # About 1.5 min locally, so likely 3+ on a runner: all three on main
+      # and nightly. PRs run just the flag-pad flow (about 35 s locally): it
+      # also answers the name and capital questions on the way, so a PR that
+      # breaks answering or the pad's layout doesn't go green.
+      - name: UI smoke test on iPad simulator (flag pad)
+        if: github.event_name == 'pull_request'
+        run: |
+          xcodebuild test-without-building \
+            -quiet \
+            -project apple/MiMundo/MiMundo.xcodeproj \
+            -scheme MiMundo \
+            -destination "platform=iOS Simulator,id=$SIM" \
+            -only-testing:MiMundoUITests/MiMundoUITests/testFreehandPadCheckButtonIsVisibleAndTappable \
+            -resultBundlePath build/MiMundoUITests.xcresult \
+            CODE_SIGNING_ALLOWED=NO
+
       - name: UI tests on iPad simulator
         if: github.event_name != 'pull_request'
         run: |
