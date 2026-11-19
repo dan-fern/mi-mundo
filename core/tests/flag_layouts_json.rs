@@ -105,3 +105,27 @@ fn well_known_flags_are_right() {
     check("jm", "saltire", &["green", "black", "yellow"]);
     check("ua", "h2", &["blue", "yellow"]);
 }
+
+/// `fixtures/flag-layout-regions.json` holds the region count of every
+/// layout as drawn by the app's Swift `FlagLayoutShape` (checked on the Swift
+/// side by `FlagLayoutTests`). Here the core's table must agree exactly.
+///
+/// Future work: move the region geometry into Rust so there is one source of
+/// truth instead of two tables kept in step by these tests.
+#[test]
+fn layout_region_counts_match_the_swift_shapes() {
+    let text = std::fs::read_to_string(concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/tests/fixtures/flag-layout-regions.json"
+    ))
+    .unwrap();
+    let swift: std::collections::BTreeMap<String, u32> = serde_json::from_str(&text).unwrap();
+    let core: std::collections::BTreeMap<String, u32> = FLAG_LAYOUTS
+        .iter()
+        .map(|(id, n)| ((*id).to_string(), *n))
+        .collect();
+    assert_eq!(core, swift);
+    for (id, n) in &swift {
+        assert_eq!(flag_layout_regions(id.clone()), *n, "{id}");
+    }
+}
