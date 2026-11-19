@@ -132,17 +132,18 @@ final class QueueTests: XCTestCase {
         XCTAssertEqual(family.record?.position, 0)
     }
 
-    /// `QuizQueue.remove` has no lock guard: the queue screen refuses to
-    /// delete a locked quiz (QuizQueueView.delete), so the model's rule is
-    /// just "remove, then the queue moves on". This pins that behaviour so
-    /// a change to either side is noticed.
-    func testRemoveIsNotGuardedByTheLockInTheModel() throws {
+    func testRemovingTodaysQuizIsRefusedOnceAKidAnswered() throws {
         answerOne(a, try open(a, as: family.kid))
+        XCTAssertFalse(QuizQueue.remove(a, in: ctx, now: TestSupport.morning))
+        XCTAssertNil(a.removedAt)
+        XCTAssertEqual(today()?.id, a.id)
         XCTAssertTrue(QuizQueue.isLocked(a, in: ctx, now: TestSupport.morning))
-        QuizQueue.remove(a, in: ctx, now: TestSupport.morning)
-        XCTAssertEqual(today()?.id, b.id)
-        XCTAssertFalse(QuizQueue.isLocked(b, in: ctx, now: TestSupport.morning))
-        // The kid's answer is kept, and still names the removed quiz.
+        // Other quizzes can still be removed.
+        XCTAssertTrue(QuizQueue.remove(c, in: ctx, now: TestSupport.morning))
+        // Once the queue moves on, the old quiz can go; the kid's answer is
+        // kept and still names it.
+        XCTAssertEqual(today(TestSupport.nextMorning)?.id, b.id)
+        XCTAssertTrue(QuizQueue.remove(a, in: ctx, now: TestSupport.nextMorning))
         XCTAssertEqual(family.fetchAll(QuizAnswer.self).count, 1)
         XCTAssertEqual(family.fetchAll(QuizAttempt.self).first?.quizSetID, a.id)
     }

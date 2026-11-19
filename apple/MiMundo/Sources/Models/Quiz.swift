@@ -294,11 +294,16 @@ enum QuizQueue {
         return true
     }
 
+    /// Refused (false) for today's quiz once a kid has answered in it, like
+    /// `edit` and `makeToday`: the rule lives here, not only in the screen.
     @MainActor
-    static func remove(_ quiz: QuizSet, in context: ModelContext, now: Date = .now) {
+    @discardableResult
+    static func remove(_ quiz: QuizSet, in context: ModelContext, now: Date = .now) -> Bool {
+        guard !isLocked(quiz, in: context, now: now) else { return false }
         quiz.removedAt = now
-        guard context.saveOrRollback("remove quiz") else { return }
+        guard context.saveOrRollback("remove quiz") else { return false }
         refresh(in: context, now: now)
+        return true
     }
 
     /// Saves a new order (every quiz in the queue, first to last).
