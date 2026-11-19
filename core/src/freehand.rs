@@ -19,6 +19,11 @@
 //!   the drawing is a colour the flag doesn't have at all (a white cross on
 //!   a flag with no white). Emblem colours count as the flag's, so drawing
 //!   the emblem never hurts.
+//!
+//! A drawing that isn't right can still earn part of the points
+//! ([`DrawCredit`], owner's rule): a mirror image (France drawn backwards,
+//! or upside down) earns ¾, and one with all the flag's colours but in the
+//! wrong places earns ½.
 
 use crate::flags::{PALETTE, flag_colours_match};
 
@@ -119,6 +124,35 @@ pub fn classify_pixels(rgba: Vec<u8>) -> Vec<u8> {
         .collect()
 }
 
+/// How much of a right answer a drawing earns.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, uniffi::Enum)]
+pub enum DrawCredit {
+    /// Right: full points.
+    Full,
+    /// Right if flipped left-to-right or upside down: ¾ of the points.
+    Mirrored,
+    /// Every main colour of the flag, in big enough patches, and no colour
+    /// the flag doesn't have, but not in the right places: ½ of the points.
+    Colours,
+    /// Nothing.
+    None,
+}
+
+/// The share of the points a [`DrawCredit`] earns, in percent.
+#[uniffi::export]
+pub fn draw_credit_percent(credit: DrawCredit) -> u32 {
+    match credit {
+        DrawCredit::Full => 100,
+        DrawCredit::Mirrored => 75,
+        DrawCredit::Colours => 50,
+        DrawCredit::None => 0,
+    }
+}
+
+/// A main colour counts as "there" for [`DrawCredit::Colours`] when the
+/// drawing has at least this share of the flag's area of it.
+pub const COLOURS_CREDIT_SHARE_PERCENT: u32 = 33;
+
 /// How a freehand drawing did.
 #[derive(Debug, Clone, PartialEq, Eq, uniffi::Record)]
 pub struct FreehandGrade {
@@ -130,7 +164,10 @@ pub struct FreehandGrade {
     pub extra_colours: Vec<String>,
     /// Pixels that were graded and didn't match (for showing where).
     pub wrong_cells: Vec<bool>,
+    /// Right: the same as `credit == DrawCredit::Full`.
     pub correct: bool,
+    /// How much of a right answer it earns.
+    pub credit: DrawCredit,
 }
 
 fn matches(a: u8, b: u8) -> bool {
@@ -160,6 +197,68 @@ pub fn grade_freehand(
     height: u32,
 ) -> FreehandGrade {
     let (w, h) = (width as usize, height as usize);
+    let mut grade = grade_as_drawn(&reference, &drawing, &outline, w, h);
+    if grade.correct || drawing.len() != w * h || reference.len() != w * h {
+        return grade;
+    }
+    let flipped = |flip: fn(usize, usize, usize, usize) -> usize| -> Vec<u8> {
+        (0..w * h)
+            .map(|i| drawing[flip(i % w, i / w, w, h)])
+            .collect()
+    };
+    let left_right = flipped(|x, y, w, _| y * w + (w - 1 - x));
+    let upside_down = flipped(|x, y, w, h| (h - 1 - y) * w + x);
+    grade.credit = if grade_as_drawn(&reference, &left_right, &outline, w, h).correct
+        || grade_as_drawn(&reference, &upside_down, &outline, w, h).correct
+    {
+        DrawCredit::Mirrored
+    } else if has_the_colours(&reference, &drawing, &grade) {
+        DrawCredit::Colours
+    } else {
+        DrawCredit::None
+    };
+    grade
+}
+
+/// Every main colour of the flag (one big enough to be graded) is drawn
+/// over at least [`COLOURS_CREDIT_SHARE_PERCENT`] of its own area,
+/// anywhere, and nothing big is drawn in a colour the flag doesn't have.
+fn has_the_colours(reference: &[u8], drawing: &[u8], grade: &FreehandGrade) -> bool {
+    if !grade.extra_colours.is_empty() || drawing.iter().all(|&c| c == BLANK) {
+        return false;
+    }
+    let n = reference.len();
+    let white = PALETTE.iter().position(|c| *c == "white").unwrap() as u8;
+    let mut area = [0usize; 9];
+    let mut drawn = [0usize; 9];
+    for (&r, &d) in reference.iter().zip(drawing) {
+        if (r as usize) < area.len() {
+            area[r as usize] += 1;
+        }
+        let d = if d == BLANK { white } else { d };
+        if (d as usize) < drawn.len() {
+            drawn[d as usize] += 1;
+        }
+    }
+    (0..9u8)
+        .filter(|&c| area[c as usize] * 100 >= n * MINOR_SHARE_PERCENT as usize)
+        .all(|c| {
+            let have: usize = (0..9u8)
+                .filter(|&d| matches(c, d))
+                .map(|d| drawn[d as usize])
+                .sum();
+            have * 100 >= area[c as usize] * COLOURS_CREDIT_SHARE_PERCENT as usize
+        })
+}
+
+/// Grades the drawing as it is (no flipping).
+fn grade_as_drawn(
+    reference: &[u8],
+    drawing: &[u8],
+    outline: &[u8],
+    w: usize,
+    h: usize,
+) -> FreehandGrade {
     let n = w * h;
     let fail = |n: usize| FreehandGrade {
         score_percent: 0,
@@ -167,6 +266,7 @@ pub fn grade_freehand(
         extra_colours: Vec::new(),
         wrong_cells: vec![false; n],
         correct: false,
+        credit: DrawCredit::None,
     };
     if n == 0
         || reference.len() != n
@@ -210,7 +310,7 @@ pub fn grade_freehand(
     let emblem = skip.clone();
     // Small colours are details too.
     let mut area = [0usize; 9];
-    for &c in &reference {
+    for &c in reference {
         if (c as usize) < area.len() {
             area[c as usize] += 1;
         }
@@ -262,10 +362,15 @@ pub fn grade_freehand(
         .filter(|&c| !reference.iter().any(|&r| matches(r, c)))
         .map(|c| PALETTE[c as usize].to_string())
         .collect();
+    let correct =
+        score_percent >= PASS_PERCENT && missing_colours.is_empty() && extra_colours.is_empty();
     FreehandGrade {
-        correct: score_percent >= PASS_PERCENT
-            && missing_colours.is_empty()
-            && extra_colours.is_empty(),
+        correct,
+        credit: if correct {
+            DrawCredit::Full
+        } else {
+            DrawCredit::None
+        },
         score_percent,
         missing_colours,
         extra_colours,
@@ -430,6 +535,73 @@ mod tests {
         });
         let d = grid(|_, y| if y < 0.5 { "red" } else { "blue" });
         assert!(!grade(&f, &d, &[]).correct);
+    }
+
+    fn credit(reference: &[u8], drawing: &[u8]) -> DrawCredit {
+        grade_freehand(
+            reference.to_vec(),
+            drawing.to_vec(),
+            vec![],
+            W as u32,
+            H as u32,
+        )
+        .credit
+    }
+
+    #[test]
+    fn a_right_drawing_earns_full_credit() {
+        let f = grid(france);
+        assert_eq!(credit(&f, &f), DrawCredit::Full);
+        assert_eq!(draw_credit_percent(DrawCredit::Full), 100);
+    }
+
+    #[test]
+    fn france_drawn_backwards_is_a_mirror_image() {
+        let f = grid(france);
+        let backwards = grid(|x, y| france(1.0 - x, y));
+        let g = grade_freehand(f.clone(), backwards, vec![], W as u32, H as u32);
+        assert!(!g.correct);
+        assert_eq!(g.credit, DrawCredit::Mirrored);
+        assert_eq!(draw_credit_percent(g.credit), 75);
+    }
+
+    #[test]
+    fn a_flag_drawn_upside_down_is_a_mirror_image() {
+        // Red over white (Indonesia/Monaco style) drawn white over red.
+        let f = grid(|_, y| if y < 0.5 { "red" } else { "white" });
+        let d = grid(|_, y| if y < 0.5 { "white" } else { "red" });
+        assert_eq!(credit(&f, &d), DrawCredit::Mirrored);
+    }
+
+    #[test]
+    fn all_the_colours_in_the_wrong_places_earn_half() {
+        // France's colours as horizontal stripes.
+        let f = grid(france);
+        let d = grid(|_, y| france(y, 0.0));
+        let g = grade_freehand(f, d, vec![], W as u32, H as u32);
+        assert!(!g.correct);
+        assert_eq!(g.credit, DrawCredit::Colours);
+        assert_eq!(draw_credit_percent(g.credit), 50);
+    }
+
+    #[test]
+    fn a_missing_or_extra_colour_earns_nothing() {
+        let f = grid(france);
+        // No red.
+        let two = grid(|x, _| if x < 0.5 { "blue" } else { "white" });
+        assert_eq!(credit(&f, &two), DrawCredit::None);
+        // Green, which France doesn't have, over a big patch.
+        let green = grid(|x, y| if y < 0.3 { "green" } else { france(y, x) });
+        assert_eq!(credit(&f, &green), DrawCredit::None);
+        // A dab of each colour isn't "all the colours".
+        let dabs = grid(|x, y| match (x < 0.1 && y < 0.1, x > 0.9 && y > 0.9) {
+            (true, _) => "blue",
+            (_, true) => "red",
+            _ => "white",
+        });
+        assert_eq!(credit(&f, &dabs), DrawCredit::None);
+        assert_eq!(credit(&f, &vec![BLANK; W * H]), DrawCredit::None);
+        assert_eq!(draw_credit_percent(DrawCredit::None), 0);
     }
 
     #[test]
