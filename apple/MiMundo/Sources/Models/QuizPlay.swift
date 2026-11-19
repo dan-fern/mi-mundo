@@ -323,7 +323,7 @@ extension Atlas {
         case .flag:
             // Buttons are flags: the choices are country codes, drawn as
             // flags. Look-alikes that can't be told apart at button size
-            // (Monaco and Indonesia, Chad and Romania) never meet.
+            // (Monaco and Indonesia, Romania and Moldova…) never meet.
             let lookAlikes = Self.flagLookAlikes[country.meta.iso2] ?? []
             var candidates: [String] = []
             for other in nearest where other.hasFlag && !lookAlikes.contains(other.meta.iso2) {
@@ -352,11 +352,26 @@ extension Atlas {
         }
     }
 
-    /// Flags too alike to tell apart as small buttons (by ISO code).
-    static let flagLookAlikes: [String: Set<String>] = [
-        "MC": ["ID"], "ID": ["MC"],
-        "TD": ["RO"], "RO": ["TD"],
+    /// Groups of flags too alike to tell apart as small buttons (by ISO
+    /// code): no two from one group are offered together. Wrong answers come
+    /// from the nearest countries, so neighbours matter most (Romania and
+    /// Moldova, Colombia and Ecuador, El Salvador and Nicaragua…).
+    static let flagLookAlikeGroups: [Set<String>] = [
+        ["MC", "ID"],                // red over white
+        ["TD", "RO", "AD", "MD"],    // blue, yellow, red
+        ["CO", "EC", "VE"],          // yellow, blue, red
+        ["HN", "SV", "NI"],          // blue, white, blue
+        ["SK", "SI", "RU"],          // white, blue, red
+        ["ML", "SN", "GN"],          // green, yellow, red, either way round
+        ["NL", "LU"],                // red, white, blue
+        ["IE", "CI"],                // green, white, orange, either way round
+        ["AU", "NZ"],                // blue ensign with stars
     ]
+
+    /// For each code, the codes it must never be offered with.
+    static let flagLookAlikes: [String: Set<String>] = flagLookAlikeGroups.reduce(into: [:]) { map, group in
+        for code in group { map[code, default: []].formUnion(group.subtracting([code])) }
+    }
 
     /// Distinctive words of a name (4+ letters), lowercased.
     private static func words(_ name: String) -> [String] {
