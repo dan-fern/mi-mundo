@@ -57,6 +57,7 @@ struct QuizQueueView: View {
     @State private var editing: QuizSet?
     @State private var editRefused = false
     @State private var swapRefused = false
+    @State private var confirmingShuffle = false
 
     private var todayID: UUID? { records.first?.currentQuizID }
     /// A kid answered in today's quiz: it can't be changed until the queue moves on.
@@ -127,7 +128,15 @@ struct QuizQueueView: View {
         }
         .navigationTitle("Quiz queue")
         .toolbar {
+            if quizzes.count > 2 {
+                Button("Shuffle", systemImage: "shuffle") { confirmingShuffle = true }
+            }
             if quizzes.count > 1 { EditButton() }
+        }
+        .confirmationDialog("Shuffle the queue?", isPresented: $confirmingShuffle, titleVisibility: .visible) {
+            Button("Shuffle") { QuizQueue.shuffle(in: context) }
+        } message: {
+            Text("The quizzes go in a random order. Today's quiz stays today's.")
         }
         .onAppear { QuizQueue.refresh(in: context) }
         .sheet(isPresented: $adding) {
@@ -262,6 +271,12 @@ private struct QuizEditor: View {
                     } label: {
                         Label("Use whole regions", systemImage: "globe")
                     }
+                    NavigationLink {
+                        RandomQuizPicker(regions: regions, selection: $draft.countryIDs, title: $draft.title)
+                    } label: {
+                        Label("Pick at random", systemImage: "dice")
+                    }
+                    .disabled(regions.isEmpty)
                     if !draft.countryIDs.isEmpty {
                         Text(chosenNames)
                             .font(.subheadline)
@@ -277,11 +292,11 @@ private struct QuizEditor: View {
                     QuestionToggle(title: "Country name", isOn: $draft.asksName, points: $draft.namePoints)
                     QuestionToggle(title: "Capital", isOn: $draft.asksCapital, points: $draft.capitalPoints)
                     QuestionToggle(title: "Flag", isOn: $draft.asksFlag, points: $draft.flagPoints,
-                                   note: "For drawing it, freehand or on an outline. Picking it from four flags instead earns half (\(QuizScoring.firstTry(base: draft.flagPoints, multipleChoice: true))).")
+                                   note: "For drawing it (a mirror image earns ¾, the right colours in the wrong places ½). Picking it from four flags instead earns half (\(QuizScoring.firstTry(base: draft.flagPoints, multipleChoice: true))).")
                 } header: {
                     Text("Questions for each country")
                 } footer: {
-                    Text("Points are for a right answer on the first try. Each time a quiz comes up in the queue, a second try is worth half, a third a quarter, and after that it's just practice. A right answer always earns at least 1 point.")
+                    Text("Points are for a right answer on the first try. Each time a quiz comes up in the queue, a second try is worth three quarters, a third half, and after that it's just for fun. A right answer always earns at least 1 point.")
                 }
 
                 if draft.isValid {
@@ -391,6 +406,80 @@ struct QuizRegion: Identifiable {
             let rank = { (r: QuizRegion) in continentOrder.firstIndex(of: r.continent) ?? continentOrder.count }
             return (rank($0), $0.name) < (rank($1), $1.name)
         }
+    }
+}
+
+/// A random quiz (beta feedback): how many countries, and from where (one
+/// region, one continent, or anywhere). The picking is the Rust core's
+/// `random_quiz`; "Pick again" rolls a new set.
+private struct RandomQuizPicker: View {
+    let regions: [QuizRegion]
+    @Binding var selection: [String]
+    @Binding var title: String
+
+    @State private var count = 10
+    @State private var scope: RandomQuizScope = .region
+    /// The name this screen last gave the quiz, so rolling again can rename
+    /// it, but a name the parent typed is kept.
+    @State private var givenTitle: String?
+
+    private static let scopes: [(RandomQuizScope, String)] = [
+        (.region, "Neighbours"), (.continent, "One continent"), (.world, "Anywhere"),
+    ]
+
+    private var candidates: [QuizCandidate] {
+        regions.flatMap { region in
+            region.independent.map { QuizCandidate(id: $0.meta.id, region: region.name, continent: region.continent) }
+        }
+    }
+
+    private var chosen: [AtlasCountry] {
+        var left = Set(selection)
+        return regions.flatMap(\.countries).filter { left.remove($0.meta.id) != nil }.sorted { $0.name < $1.name }
+    }
+
+    var body: some View {
+        Form {
+            Section {
+                Stepper("^[\(count) country](inflect: true)", value: $count, in: 1...40)
+                Picker("From", selection: $scope) {
+                    ForEach(Self.scopes, id: \.0) { Text($0.1).tag($0.0) }
+                }
+                .pickerStyle(.segmented)
+            } footer: {
+                Text(scopeNote)
+            }
+            Section {
+                Button(selection.isEmpty || givenTitle == nil ? "Pick countries" : "Pick again", systemImage: "dice") {
+                    roll()
+                }
+            }
+            if givenTitle != nil, !chosen.isEmpty {
+                Section("^[\(chosen.count) country](inflect: true)") {
+                    Text(chosen.map(\.name).joined(separator: ", "))
+                        .foregroundStyle(.secondary)
+                }
+            }
+        }
+        .navigationTitle("Random quiz")
+    }
+
+    private var scopeNote: String {
+        switch scope {
+        case .region: "All from one region, picked at random: countries next to each other."
+        case .continent: "All from one continent, picked at random."
+        case .world: "From anywhere in the world."
+        }
+    }
+
+    private func roll() {
+        let quiz = randomQuiz(candidates: candidates, count: UInt32(count), scope: scope,
+                              seed: .random(in: .min ... .max))
+        selection = quiz.countryIds
+        let name = "Random: " + (quiz.area ?? "the world")
+        let typed = title.trimmingCharacters(in: .whitespaces)
+        if typed.isEmpty || typed == givenTitle { title = name }
+        givenTitle = name
     }
 }
 

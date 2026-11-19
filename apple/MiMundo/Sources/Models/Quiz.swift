@@ -97,10 +97,11 @@ struct QuizDraft: Equatable {
     var countryIDs: [String] = []
     var asksName = true
     var asksCapital = true
-    var asksFlag = false
+    /// Flags are asked by default (beta feedback), worth 15.
+    var asksFlag = true
     var namePoints = 10
     var capitalPoints = 10
-    var flagPoints = 20
+    var flagPoints = 15
 
     static let pointsRange = 0...100
 
@@ -304,6 +305,16 @@ enum QuizQueue {
         guard context.saveOrRollback("remove quiz") else { return false }
         refresh(in: context, now: now)
         return true
+    }
+
+    /// Puts the queue in a random order. Today's quiz stays today's (as for
+    /// any reorder); the rest of the cycle follows the new order.
+    @MainActor
+    static func shuffle(in context: ModelContext, seed: UInt64 = .random(in: .min ... .max), now: Date = .now) {
+        let current = quizzes(in: context)
+        let byID = Dictionary(uniqueKeysWithValues: current.map { ($0.id.uuidString, $0) })
+        let order = shuffledQueue(ids: current.map(\.id.uuidString), seed: seed).compactMap { byID[$0] }
+        reorder(order, in: context, now: now)
     }
 
     /// Saves a new order (every quiz in the queue, first to last).

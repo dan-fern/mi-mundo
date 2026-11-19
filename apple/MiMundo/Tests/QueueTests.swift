@@ -191,6 +191,29 @@ final class QueueTests: XCTestCase {
         XCTAssertEqual(family.record?.started, false)
     }
 
+    func testShuffleKeepsEveryQuizAndTodaysQuiz() {
+        for seed: UInt64 in 0..<20 {
+            QuizQueue.shuffle(in: ctx, seed: seed, now: TestSupport.morning)
+            XCTAssertEqual(Set(QuizQueue.quizzes(in: ctx).map(\.title)), ["A", "B", "C"])
+            XCTAssertEqual(today()?.id, a.id, "shuffling doesn't change today's quiz")
+            let position = QuizQueue.quizzes(in: ctx).firstIndex { $0.id == a.id }
+            XCTAssertEqual(family.record.map { Int($0.position) }, position, "position follows today's quiz")
+        }
+        let orders = Set((0..<20).map { (seed: UInt64) -> [String] in
+            QuizQueue.shuffle(in: ctx, seed: seed, now: TestSupport.morning)
+            return QuizQueue.quizzes(in: ctx).map(\.title)
+        })
+        XCTAssertGreaterThan(orders.count, 2)
+    }
+
+    func testANewQuizAsksForTheFlagByDefaultAt15Points() {
+        let draft = QuizDraft()
+        XCTAssertTrue(draft.asksName)
+        XCTAssertTrue(draft.asksCapital)
+        XCTAssertTrue(draft.asksFlag)
+        XCTAssertEqual(draft.flagPoints, 15)
+    }
+
     private func draft(_ title: String) -> QuizDraft {
         var d = QuizDraft(a)
         d.title = title
