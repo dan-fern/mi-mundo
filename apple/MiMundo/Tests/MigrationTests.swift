@@ -197,6 +197,46 @@ final class MigrationTests: XCTestCase {
         try assertSurvived(version: 4, in: reopened)
     }
 
+    // MARK: - A store from a newer app
+
+    func testStoreChecksTellNewerFromUnreadable() throws {
+        XCTAssertEqual(Persistence.check(storeAt: directory.appendingPathComponent("none.store")), .usable)
+        XCTAssertEqual(Persistence.check(storeAt: try fixtureCopy(4)), .usable)
+        let garbage = directory.appendingPathComponent("garbage.store")
+        try Data("not a database".utf8).write(to: garbage)
+        XCTAssertEqual(Persistence.check(storeAt: garbage), .unreadable)
+        XCTAssertEqual(Persistence.check(storeAt: try futureStore()), .newerVersion)
+    }
+
+    /// Installing an older build over newer data (e.g. a test build of an
+    /// earlier PR) must not move the family's data aside.
+    func testNewerStoreIsLeftAloneNotMovedAside() throws {
+        let store = try futureStore()
+        let before = try Data(contentsOf: store)
+        let defaults = try scratchDefaults()
+
+        let container = Persistence.makeContainer(at: store, defaults: defaults)
+
+        XCTAssertTrue(Persistence.savedDataIsNewer)
+        XCTAssertNil(defaults.object(forKey: Persistence.movedAsideKey), "nothing was moved aside")
+        XCTAssertFalse(try FileManager.default.contentsOfDirectory(atPath: directory.path)
+            .contains { $0.contains("unreadable") })
+        XCTAssertEqual(try Data(contentsOf: store), before, "the newer data is untouched")
+        // The app runs on an empty, unsaved store meanwhile.
+        XCTAssertEqual(try container.mainContext.fetchCount(FetchDescriptor<Profile>()), 0)
+    }
+
+    /// A store written by a schema this build doesn't know: today's models
+    /// plus one more, as a future version might add.
+    private func futureStore() throws -> URL {
+        let url = directory.appendingPathComponent("future.store")
+        let schema = Schema(SchemaV5.models + [FutureModel.self])
+        let container = try ModelContainer(for: schema, configurations: ModelConfiguration(schema: schema, url: url))
+        container.mainContext.insert(Profile(name: "From the future", emoji: "🚀", role: .parent))
+        try container.mainContext.save()
+        return url
+    }
+
     // MARK: - A store that can't be opened
 
     /// A throwaway `UserDefaults` for the moved-aside flag, removed after the test.
@@ -237,4 +277,11 @@ final class MigrationTests: XCTestCase {
         XCTAssertFalse(try FileManager.default.contentsOfDirectory(atPath: directory.path)
             .contains { $0.contains("unreadable") })
     }
+}
+
+/// Stands in for a model a later version of the app adds.
+@Model
+final class FutureModel {
+    var name: String
+    init(name: String) { self.name = name }
 }

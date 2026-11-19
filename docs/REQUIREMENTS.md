@@ -116,7 +116,7 @@ Escalating help, from hardest to easiest:
 
 Built in steps (owner decision, Nov 2026): multiple choice first (pick the
 flag from four, neighbours' flags as the wrong answers, look-alikes that can't
-be told apart at button size — Monaco/Indonesia, Chad/Romania — never shown
+be told apart at button size — Monaco/Indonesia, Chad/Romania/Andorra/Moldova, Colombia/Ecuador/Venezuela, El Salvador/Nicaragua/Honduras, Slovakia/Slovenia/Russia, Mali/Senegal/Guinea, Netherlands/Luxembourg, Ireland/Côte d'Ivoire, Australia/New Zealand — never shown
 together), then the layout outline, then freehand, then parent review (5.3).
 Step 2 (layout outline) works like this: the kid picks the flag's shape from
 six, taps a colour from a nine-colour paint box (red, maroon, orange, yellow,
