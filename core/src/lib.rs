@@ -25,6 +25,7 @@ pub use flags::{
 };
 pub use freehand::{
     DrawCredit, FreehandGrade, classify_pixels, draw_credit_percent, grade_freehand,
+    mirror_credit_allowed,
 };
 pub use queue::{
     QueueState, queue_from_today, queue_initial_state, queue_max, queue_set_today, queue_today,

@@ -46,6 +46,12 @@ pub fn random_quiz(
     scope: RandomQuizScope,
     seed: u64,
 ) -> RandomQuiz {
+    if count == 0 {
+        return RandomQuiz {
+            country_ids: Vec::new(),
+            area: None,
+        };
+    }
     let mut rng = SplitMix64(seed);
     let mut unique: BTreeMap<String, QuizCandidate> = BTreeMap::new();
     for c in candidates {
@@ -62,7 +68,10 @@ pub fn random_quiz(
                 } else {
                     &c.continent
                 };
-                groups.entry(key.as_str()).or_default().push(c);
+                // A country with no region or continent can't make one up.
+                if !key.trim().is_empty() {
+                    groups.entry(key.as_str()).or_default().push(c);
+                }
             }
             let big: Vec<(&str, &Vec<&QuizCandidate>)> = groups
                 .iter()
@@ -222,6 +231,34 @@ mod tests {
                 area: None
             }
         );
+    }
+
+    #[test]
+    fn no_countries_means_no_area() {
+        let none = random_quiz(world(), 0, RandomQuizScope::Region, 1);
+        assert_eq!(
+            none,
+            RandomQuiz {
+                country_ids: vec![],
+                area: None
+            }
+        );
+    }
+
+    #[test]
+    fn a_blank_region_or_continent_is_never_an_area() {
+        let mut list = world();
+        list.push(c("XXA", "", ""));
+        list.push(c("XXB", " ", " "));
+        for seed in 0..50 {
+            for scope in [RandomQuizScope::Region, RandomQuizScope::Continent] {
+                let q = random_quiz(list.clone(), 2, scope, seed);
+                assert!(
+                    q.area.as_deref().is_some_and(|a| !a.trim().is_empty()),
+                    "{q:?}"
+                );
+            }
+        }
     }
 
     #[test]

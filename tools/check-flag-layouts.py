@@ -64,10 +64,20 @@ SAMPLES = {
     "bar-h3": [(0.05, 0.5), (0.9, 1 / 6), (0.9, 0.5), (0.9, 5 / 6)],
     "saltire": [(0.5, 0.04), (0.04, 0.5), (0.25, 0.25)],
     "diagonal": [(0.04, 0.06), (0.5, 0.5), (0.96, 0.94)],
+    "diagonal-down": [(0.96, 0.06), (0.5, 0.5), (0.04, 0.94)],
     "diagonal-split": [(0.04, 0.06), (0.96, 0.94)],
     "canton": [(0.9, 0.9), (0.03, 0.04)],
     "canton-h2": [(0.9, 0.25), (0.5, 0.9), (0.03, 0.04)],
     "diamond": [(0.03, 0.04), (0.2, 0.5), (0.5, 0.33)],
+}
+
+# Extra points that tell a layout from its mirror image, as (point, region):
+# the corners and centre of a diagonal band look the same whichever way it
+# runs, but a point between a corner and the centre doesn't.
+ORIENTATION = {
+    # On the other diagonal, in the far field (the emblems are near the hoist).
+    "diagonal": [((0.75, 0.75), 2)],
+    "diagonal-down": [((0.25, 0.75), 2)],
 }
 
 # Flags whose regions sit off the usual spots in their 4:3 picture.
@@ -136,7 +146,9 @@ def main():
             points = list(SAMPLES[entry["layout"]])
             for i, point in SAMPLE_OVERRIDES.get(code, {}).items():
                 points[i] = point
-            for i, ((fx, fy), want) in enumerate(zip(points, entry["colors"])):
+            checks = list(enumerate(zip(points, entry["colors"])))
+            checks += [(i, (point, entry["colors"][i])) for point, i in ORIENTATION.get(entry["layout"], [])]
+            for i, ((fx, fy), want) in checks:
                 x = min(width - 1, int(fx * width))
                 y = min(height - 1, int(fy * height))
                 rgb = pixel(x, y)

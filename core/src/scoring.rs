@@ -12,7 +12,7 @@ const QUARTERS_BY_ATTEMPT: [u64; LAST_SCORED_ATTEMPT as usize] = [4, 3, 2];
 /// - `base_points`: value the parent assigned to the question.
 /// - `attempt`: which sitting of this quiz this is, starting at 1. Every
 ///   question is scored again on each retake. `0` is not a valid attempt and
-///   scores 0 (debug builds assert).
+///   scores 0.
 /// - `used_multiple_choice`: flag questions answered via the multiple-choice
 ///   fallback earn half, on top of the attempt factor.
 ///
@@ -39,7 +39,6 @@ pub fn points_with_credit(
     used_multiple_choice: bool,
     credit_percent: u32,
 ) -> u32 {
-    debug_assert!(attempt >= 1, "attempt numbers start at 1");
     if base_points == 0 || attempt == 0 || attempt > LAST_SCORED_ATTEMPT || credit_percent == 0 {
         return 0;
     }
@@ -151,11 +150,11 @@ mod tests {
         }
     }
 
+    /// Called from the app, so never a panic: attempt 0 isn't a sitting.
     #[test]
-    #[cfg(debug_assertions)]
-    #[should_panic(expected = "attempt numbers start at 1")]
-    fn attempt_zero_asserts_in_debug() {
-        points_for_attempt(100, 0, false);
+    fn attempt_zero_scores_nothing() {
+        assert_eq!(points_for_attempt(100, 0, false), 0);
+        assert_eq!(points_with_credit(100, 0, true, 75), 0);
     }
 
     proptest! {
