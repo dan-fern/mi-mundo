@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
   pull_request:
+  # Nightly, so the UI tests (main only, below) also catch slow breakage.
+  schedule:
+    - cron: "17 6 * * *"
 
 permissions:
   contents: read
@@ -118,7 +121,24 @@ jobs:
             -project apple/MiMundo/MiMundo.xcodeproj \
             -scheme MiMundo \
             -destination "platform=iOS Simulator,id=$SIM" \
+            -only-testing:MiMundoTests \
             -resultBundlePath build/MiMundoTests.xcresult \
+            CODE_SIGNING_ALLOWED=NO
+
+      # Three UI smoke flows (first run, play a country, freehand flag pad).
+      # About 1.5 min locally, so likely 3+ on a runner: on main and nightly
+      # only, not on every PR push, to keep PR CI near its ~10 minute budget.
+      - name: UI tests on iPad simulator
+        if: github.event_name != 'pull_request'
+        run: |
+          SIM=$(xcrun simctl list devices available -j | python3 -c "import json,sys; print(next(d['udid'] for r,ds in json.load(sys.stdin)['devices'].items() if 'iOS' in r for d in ds if 'iPad' in d['name']))")
+          xcodebuild test \
+            -quiet \
+            -project apple/MiMundo/MiMundo.xcodeproj \
+            -scheme MiMundo \
+            -destination "platform=iOS Simulator,id=$SIM" \
+            -only-testing:MiMundoUITests \
+            -resultBundlePath build/MiMundoUITests.xcresult \
             CODE_SIGNING_ALLOWED=NO
 
       - name: Upload build results on failure

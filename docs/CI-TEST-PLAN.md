@@ -72,6 +72,11 @@ XCUITest on the simulator, three flows only:
 
 Run them on `main` only, or nightly if they push CI past 10 minutes.
 
+Done: target `MiMundoUITests`, driven by the DEBUG-only launch arguments
+`-uiTesting` (in-memory store) and `-uiTestSeed` (parent, kid, one-country
+France quiz), see `Sources/UITestLaunch.swift`. About 1.5 min locally, so CI
+runs them on pushes to `main` and nightly, not on PRs.
+
 ## Phase D: CI plumbing
 
 - Add `xcodebuild test` to the workflow (the build is already there, so it reuses the build products).
