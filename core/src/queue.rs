@@ -174,16 +174,31 @@ mod tests {
                 .timestamp()
         };
         let queue = ids(&["a", "b", "c"]);
-        for (sat, sun, mon) in [
+        for (sat, sun, mon, sun_11pm) in [
+            // 2026 and 2027 spring-forward and fall-back weekends.
             (
                 et(2026, 3, 7, 12, 0),
                 et(2026, 3, 8, 12, 0),
                 et(2026, 3, 9, 12, 0),
+                et(2026, 3, 8, 23, 0),
             ),
             (
                 et(2026, 10, 31, 12, 0),
                 et(2026, 11, 1, 12, 0),
                 et(2026, 11, 2, 12, 0),
+                et(2026, 11, 1, 23, 0),
+            ),
+            (
+                et(2027, 3, 13, 12, 0),
+                et(2027, 3, 14, 12, 0),
+                et(2027, 3, 15, 12, 0),
+                et(2027, 3, 14, 23, 0),
+            ),
+            (
+                et(2027, 11, 6, 12, 0),
+                et(2027, 11, 7, 12, 0),
+                et(2027, 11, 8, 12, 0),
+                et(2027, 11, 7, 23, 0),
             ),
         ] {
             let mut state = queue_today(
@@ -213,6 +228,11 @@ mod tests {
                 game_day(sun + 10 * 3600 + 59 * 60),
             );
             assert_eq!(current(&sunday_late), Some("b"));
+            // The end of that (23 h or 25 h) game day itself: one second
+            // before 11 pm Sunday nothing moves, at 11 pm it does.
+            let at = |t: i64| queue_today(next.clone(), queue.clone(), game_day(t));
+            assert_eq!(current(&at(sun_11pm - 1)), Some("b"));
+            assert_eq!(current(&at(sun_11pm)), Some("c"));
             let monday = queue_today(next, queue.clone(), game_day(mon));
             assert_eq!(current(&monday), Some("c"));
         }

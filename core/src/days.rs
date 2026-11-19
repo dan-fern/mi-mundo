@@ -229,12 +229,15 @@ mod tests {
     #[test]
     fn every_hour_across_the_transitions_never_skips_or_repeats_a_day() {
         for (start, hours) in [(et(2026, 3, 7, 12, 0), 72), (et(2026, 10, 31, 12, 0), 72)] {
-            let mut last = game_day(start);
+            let first = game_day(start);
+            let mut last = first;
             for h in 1..=hours {
                 let day = game_day(start + h * 3600);
                 assert!(day == last || day == last + 1, "jumped at +{h} h");
                 last = day;
             }
+            // Noon to noon, 72 h: exactly three 11 pm crossings.
+            assert_eq!(last - first, 3, "one new day per 11 pm crossing");
         }
     }
 }

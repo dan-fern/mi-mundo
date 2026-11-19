@@ -394,7 +394,8 @@ mod tests {
         assert!(grade(&with_star, &big_star, &outline).correct);
     }
 
-    /// Greece-like: nine equal stripes, blue first, alternating with white.
+    /// Nine alternating blue/white stripes, blue first (Greece's, without
+    /// the canton).
     fn stripes9(_: f32, y: f32) -> &'static str {
         if (y * 9.0) as usize % 2 == 0 {
             "blue"
