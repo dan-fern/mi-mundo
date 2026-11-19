@@ -234,8 +234,8 @@ enum QuizQueue {
     /// answered today's quiz yet. The queue carries on from there.
     @MainActor
     @discardableResult
-    static func makeToday(_ quiz: QuizSet, in context: ModelContext) -> Bool {
-        refresh(in: context)
+    static func makeToday(_ quiz: QuizSet, in context: ModelContext, now: Date = .now) -> Bool {
+        refresh(in: context, now: now)
         guard let record = try? context.fetch(FetchDescriptor<QueueRecord>()).first,
               !record.started else { return false }
         let after = queueSetToday(state: record.state, queue: quizzes(in: context).map(\.id.uuidString),
@@ -247,8 +247,8 @@ enum QuizQueue {
 
     /// Whether today's quiz is locked against edits (a kid has answered in it).
     @MainActor
-    static func isLocked(_ quiz: QuizSet, in context: ModelContext) -> Bool {
-        refresh(in: context)
+    static func isLocked(_ quiz: QuizSet, in context: ModelContext, now: Date = .now) -> Bool {
+        refresh(in: context, now: now)
         guard let record = try? context.fetch(FetchDescriptor<QueueRecord>()).first else { return false }
         return record.currentQuizID == quiz.id && record.started
     }
@@ -256,8 +256,8 @@ enum QuizQueue {
     /// Saves an edit unless the quiz got locked while the editor was open.
     @MainActor
     @discardableResult
-    static func edit(_ quiz: QuizSet, to draft: QuizDraft, in context: ModelContext) -> Bool {
-        guard !isLocked(quiz, in: context) else { return false }
+    static func edit(_ quiz: QuizSet, to draft: QuizDraft, in context: ModelContext, now: Date = .now) -> Bool {
+        guard !isLocked(quiz, in: context, now: now) else { return false }
         quiz.apply(draft)
         return context.saveOrRollback("edit quiz")
     }
@@ -284,30 +284,35 @@ enum QuizQueue {
     /// Adds a quiz at the end of the queue. Returns false if the queue is full.
     @MainActor
     @discardableResult
-    static func add(_ draft: QuizDraft, by parent: Profile?, in context: ModelContext) -> Bool {
+    static func add(_ draft: QuizDraft, by parent: Profile?, in context: ModelContext, now: Date = .now) -> Bool {
         let quizzes = quizzes(in: context)
         guard quizzes.count < Int(queueMax()) else { return false }
         let position = (quizzes.map(\.position).max() ?? -1) + 1
         context.insert(QuizSet(draft: draft, position: position, createdBy: parent?.id))
         guard context.saveOrRollback("add quiz") else { return false }
-        refresh(in: context)
+        refresh(in: context, now: now)
         return true
     }
 
+    /// Refused (false) for today's quiz once a kid has answered in it, like
+    /// `edit` and `makeToday`: the rule lives here, not only in the screen.
     @MainActor
-    static func remove(_ quiz: QuizSet, in context: ModelContext, now: Date = .now) {
+    @discardableResult
+    static func remove(_ quiz: QuizSet, in context: ModelContext, now: Date = .now) -> Bool {
+        guard !isLocked(quiz, in: context, now: now) else { return false }
         quiz.removedAt = now
-        guard context.saveOrRollback("remove quiz") else { return }
+        guard context.saveOrRollback("remove quiz") else { return false }
         refresh(in: context, now: now)
+        return true
     }
 
     /// Saves a new order (every quiz in the queue, first to last).
     @MainActor
-    static func reorder(_ ordered: [QuizSet], in context: ModelContext) {
+    static func reorder(_ ordered: [QuizSet], in context: ModelContext, now: Date = .now) {
         for (index, quiz) in ordered.enumerated() where quiz.position != index {
             quiz.position = index
         }
         guard context.saveOrRollback("reorder quizzes") else { return }
-        refresh(in: context)
+        refresh(in: context, now: now)
     }
 }

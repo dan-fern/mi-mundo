@@ -394,6 +394,44 @@ mod tests {
         assert!(grade(&with_star, &big_star, &outline).correct);
     }
 
+    /// Nine alternating blue/white stripes, blue first (Greece's, without
+    /// the canton).
+    fn stripes9(_: f32, y: f32) -> &'static str {
+        if (y * 9.0) as usize % 2 == 0 {
+            "blue"
+        } else {
+            "white"
+        }
+    }
+
+    #[test]
+    fn thin_stripes_drawn_as_two_big_ones_are_wrong() {
+        let f = grid(stripes9);
+        let d = grid(|_, y| if y < 0.5 { "blue" } else { "white" });
+        let g = grade(&f, &d, &[]);
+        assert!(!g.correct, "{g:?}");
+    }
+
+    #[test]
+    fn thin_stripes_copied_or_a_bit_off_are_right() {
+        let f = grid(stripes9);
+        assert!(grade(&f, &f, &[]).correct);
+        let d = grid(|x, y| stripes9(x, y + 0.02 * (x * 9.0).sin()));
+        assert!(grade(&f, &d, &[]).correct);
+    }
+
+    #[test]
+    fn five_stripes_drawn_as_two_is_wrong() {
+        // Thailand/Costa Rica style: red, white, blue(wide), white, red.
+        let f = grid(|_, y| match (y * 6.0) as usize {
+            0 | 5 => "red",
+            1 | 4 => "white",
+            _ => "blue",
+        });
+        let d = grid(|_, y| if y < 0.5 { "red" } else { "blue" });
+        assert!(!grade(&f, &d, &[]).correct);
+    }
+
     #[test]
     fn nothing_drawn_is_wrong() {
         let f = grid(france);

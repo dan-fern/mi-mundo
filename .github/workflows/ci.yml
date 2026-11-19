@@ -4,14 +4,19 @@ on:
   push:
     branches: [main]
   pull_request:
+  # Nightly, so the UI tests (main only, below) also catch slow breakage.
+  schedule:
+    - cron: "17 6 * * *"
 
 permissions:
   contents: read
 
 # A new push to the same PR cancels the run that's still going. Runs on main
-# are never cancelled, so every merged commit gets a result.
+# are never cancelled, so every merged commit gets a result. Only PRs share a
+# group (per ref); push and nightly runs each get their own, because GitHub
+# keeps just one *pending* run per group and would drop an older one.
 concurrency:
-  group: ci-${{ github.ref }}
+  group: ci-${{ github.event_name == 'pull_request' && github.ref || github.run_id }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
@@ -26,6 +31,14 @@ jobs:
       XCODE_APP: /Applications/Xcode_16.4.app
     steps:
       - uses: actions/checkout@v4
+
+      # Flag data vs the flag pictures. About 2 s (needs macOS `sips`), so it
+      # goes first: a mismatch fails the run before the long steps start. It
+      # rewrites FlagLayouts.json, which must come out identical to the commit.
+      - name: Flag layouts match the pictures
+        run: |
+          python3 -I tools/check-flag-layouts.py
+          git diff --exit-code -- apple/MiMundo/Resources/FlagLayouts.json
 
       - name: Select Xcode
         run: |
@@ -53,11 +66,12 @@ jobs:
         run: cargo clippy --all-targets --features cli,mapgen -- -D warnings
 
       # --features mapgen also runs the map-data generator tests. Property
-      # tests run 64 cases each here (256 locally) to keep CI quick.
+      # tests run 64 cases each on PRs and main to keep CI quick, and 256 in
+      # the nightly run (256 is also the local default).
       - name: Rust tests
         working-directory: core
         env:
-          PROPTEST_CASES: "64"
+          PROPTEST_CASES: ${{ github.event_name == 'schedule' && '256' || '64' }}
         run: cargo test --features mapgen
 
       # The committed map data must be exactly what the tools produce from the
@@ -98,14 +112,94 @@ jobs:
       - name: Build Rust core
         run: ./scripts/build-core.sh
 
-      - name: Build app for iPad simulator
+      # One simulator, picked once: the newest iOS runtime's iPad mini (the
+      # flag-pad layout test is size-sensitive, so don't take "any iPad").
+      - name: Pick iPad simulator
         run: |
-          xcodebuild build \
+          SIM_LINE=$(xcrun simctl list devices available -j | python3 -I -c '
+          import json, re, sys
+          data = json.load(sys.stdin)["devices"]
+          pattern = re.compile(r"SimRuntime\.iOS-(\d+)-(\d+)$")
+          def version(runtime):
+              return tuple(int(n) for n in pattern.search(runtime).groups())
+          runtimes = sorted((r for r in data if pattern.search(r)), key=version, reverse=True)
+          for runtime in runtimes:
+              for d in data[runtime]:
+                  if d["name"].startswith("iPad mini"):
+                      print("SIM=" + d["udid"])
+                      sys.exit(0)
+          sys.exit("No iPad mini simulator found. Available: " + ", ".join(sorted({d["name"] for r in runtimes for d in data[r]})))
+          ')
+          echo "$SIM_LINE" | tee -a "$GITHUB_ENV"
+          # Before anything boots it: a connected hardware keyboard can make
+          # the UI tests' typeText fail ("no keyboard focus").
+          defaults write com.apple.iphonesimulator ConnectHardwareKeyboard -bool false
+
+      # Build the app and both test bundles once (coverage on); the test steps
+      # below only run them. Also proves the app compiles for the simulator.
+      - name: Build app and tests for iPad simulator
+        run: |
+          xcodebuild build-for-testing \
             -quiet \
             -project apple/MiMundo/MiMundo.xcodeproj \
             -scheme MiMundo \
-            -destination 'generic/platform=iOS Simulator' \
+            -destination "platform=iOS Simulator,id=$SIM" \
+            -enableCodeCoverage YES \
             -resultBundlePath build/MiMundo.xcresult \
+            CODE_SIGNING_ALLOWED=NO
+
+      # Unit tests (migrations, answers, queue rules), hosted by the app.
+      # Coverage is summarised below (no thresholds; the trend is what we watch).
+      - name: Swift tests on iPad simulator
+        run: |
+          xcodebuild test-without-building \
+            -quiet \
+            -project apple/MiMundo/MiMundo.xcodeproj \
+            -scheme MiMundo \
+            -destination "platform=iOS Simulator,id=$SIM" \
+            -only-testing:MiMundoTests \
+            -enableCodeCoverage YES \
+            -resultBundlePath build/MiMundoTests.xcresult \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Swift coverage summary
+        run: |
+          xcrun xccov view --report --only-targets build/MiMundoTests.xcresult > build/swift-coverage.txt
+          xcrun xccov view --report --json build/MiMundoTests.xcresult > build/swift-coverage.json
+          cat build/swift-coverage.txt
+          # The app target's line, for the job summary.
+          python3 -I - >> "$GITHUB_STEP_SUMMARY" <<'PY'
+          import json
+          found = False
+          for t in json.load(open("build/swift-coverage.json"))["targets"]:
+              if t["name"].startswith("MiMundo") and "Tests" not in t["name"]:
+                  found = True
+                  print(f"**Swift coverage (MiMundo.app, unit tests):** {t['lineCoverage']*100:.1f}% of lines ({t['coveredLines']}/{t['executableLines']})")
+          if not found:
+              raise SystemExit("No app target in the coverage report: was it renamed?")
+          PY
+
+      - name: Upload Swift coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: swift-coverage
+          path: build/swift-coverage.*
+          retention-days: 30
+          if-no-files-found: ignore
+
+      # Three UI smoke flows (first run, play a country, freehand flag pad).
+      # About 1.5 min locally, so likely 3+ on a runner: on main and nightly
+      # only, not on every PR push, to keep PR CI near its ~10 minute budget.
+      - name: UI tests on iPad simulator
+        if: github.event_name != 'pull_request'
+        run: |
+          xcodebuild test-without-building \
+            -quiet \
+            -project apple/MiMundo/MiMundo.xcodeproj \
+            -scheme MiMundo \
+            -destination "platform=iOS Simulator,id=$SIM" \
+            -only-testing:MiMundoUITests \
+            -resultBundlePath build/MiMundoUITests.xcresult \
             CODE_SIGNING_ALLOWED=NO
 
       - name: Upload build results on failure
@@ -113,5 +207,52 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: xcresult
-          path: build/MiMundo.xcresult
+          path: build/*.xcresult
           if-no-files-found: ignore
+          retention-days: 7
+
+  # Rust coverage: main and nightly only (not PRs). Runs in parallel with the
+  # build job, so it adds no wall-clock time. No thresholds.
+  rust-coverage:
+    name: Rust coverage
+    if: github.event_name != 'pull_request'
+    runs-on: macos-15
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      # Its own cache key (instrumented builds), saved from main only.
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: core
+          key: coverage
+          save-if: ${{ github.ref == 'refs/heads/main' }}
+
+      - name: Add llvm-tools
+        working-directory: core
+        run: rustup component add llvm-tools-preview
+
+      # Downloads a prebuilt binary, pinned like Xcode and Rust.
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-llvm-cov@0.6.16
+
+      - name: Rust coverage
+        working-directory: core
+        env:
+          PROPTEST_CASES: ${{ github.event_name == 'schedule' && '256' || '64' }}
+        run: |
+          cargo llvm-cov --features mapgen --lcov --output-path ../rust-lcov.info
+          cargo llvm-cov report --summary-only | tee ../rust-coverage.txt
+          {
+            echo -n "**Rust coverage (core):** "
+            grep '^TOTAL' ../rust-coverage.txt | awk '{print $10 " of lines (" $8-$9 "/" $8 ")"}'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rust-coverage
+          path: |
+            rust-lcov.info
+            rust-coverage.txt
+          retention-days: 30

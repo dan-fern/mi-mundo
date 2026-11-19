@@ -200,7 +200,8 @@ enum QuizPlay {
     /// Saves one answer; nil if it couldn't be saved (nothing changes then,
     /// so the question can be answered again). A kid's first answer is what
     /// counts as "a kid attempted today's quiz", which lets the queue move on
-    /// at the next game day. The queue is brought up to date first, so an
+    /// at the next game day. A second answer to the same question is refused
+    /// (nil). The queue is brought up to date first, so an
     /// answer given just after 11 pm ET counts for the day it was given.
     @MainActor
     static func record(_ chosen: String, correctAnswer: String, kind: QuestionKind,
@@ -210,6 +211,16 @@ enum QuizPlay {
                        quiz: QuizSet, attempt: QuizAttempt, askedAt: Date?,
                        in context: ModelContext, now: Date = .now) -> QuizAnswer? {
         QuizQueue.refresh(in: context, now: now)
+        // One answer per sitting, country and question. The store's unique
+        // constraint would otherwise silently *replace* the first answer with
+        // this one (letting a wrong answer be "fixed" for points), so refuse.
+        let (attemptID, countryID, kindRaw) = (attempt.id, country.meta.id, kind.rawValue)
+        let existing = FetchDescriptor<QuizAnswer>(predicate: #Predicate {
+            $0.attemptID == attemptID && $0.countryID == countryID && $0.kindRaw == kindRaw })
+        guard ((try? context.fetchCount(existing)) ?? 0) == 0 else {
+            dataLog.error("Refused a second answer to the same question")
+            return nil
+        }
         let answer = QuizAnswer(attempt: attempt, countryID: country.meta.id, kind: kind,
                                 chosen: chosen, chosenCountryID: chosenCountry?.meta.id,
                                 correctAnswer: correctAnswer, choices: choices,

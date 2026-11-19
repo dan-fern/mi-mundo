@@ -84,6 +84,34 @@ mod tests {
         assert_eq!(points_for_attempt(u32::MAX, 2, true), u32::MAX / 2 / 2);
     }
 
+    /// A no-overflow guard (nothing here saturates: points are shifts of the
+    /// base). Literal expectations, so a change in the rule shows up.
+    #[test]
+    fn huge_bases_never_overflow_at_any_attempt() {
+        assert_eq!(points_for_attempt(u32::MAX, 1, false), 4_294_967_295);
+        assert_eq!(points_for_attempt(u32::MAX, 1, true), 2_147_483_647);
+        assert_eq!(points_for_attempt(u32::MAX, 2, false), 2_147_483_647);
+        assert_eq!(points_for_attempt(u32::MAX, 2, true), 1_073_741_823);
+        assert_eq!(points_for_attempt(u32::MAX, 3, false), 1_073_741_823);
+        assert_eq!(points_for_attempt(u32::MAX, 3, true), 536_870_911);
+        assert_eq!(points_for_attempt(u32::MAX, 4, false), 0);
+        assert_eq!(points_for_attempt(1 << 31, 1, true), 1_073_741_824);
+        // Attempt numbers far past the last scored one earn nothing.
+        assert_eq!(points_for_attempt(u32::MAX, u32::MAX, true), 0);
+        assert_eq!(points_for_attempt(u32::MAX, u32::MAX, false), 0);
+    }
+
+    #[test]
+    fn points_never_exceed_the_base() {
+        for base in [0, 1, 2, 3, 7, 100, 1 << 31, u32::MAX] {
+            for attempt in 1..=6 {
+                for mc in [false, true] {
+                    assert!(points_for_attempt(base, attempt, mc) <= base);
+                }
+            }
+        }
+    }
+
     #[test]
     #[cfg(debug_assertions)]
     #[should_panic(expected = "attempt numbers start at 1")]
