@@ -59,28 +59,68 @@ enum FlagGrid {
     }
 }
 
-/// What the kid drew: an optional background colour and strokes, all in
-/// fractions of the canvas so it draws the same at any size.
+/// What the kid drew: fills and strokes, in fractions of the canvas so it
+/// draws the same at any size. Fills sit behind every stroke (a stroke
+/// drawn later goes over a fill; a fill never covers a line).
 struct FlagSketch: Equatable, Codable {
+    /// A whole-canvas colour: only in drawings from before fills were
+    /// bounded by lines (the old "fill background" bucket).
     var background: String?
     var strokes: [FlagStroke] = []
     /// Stroke width per stroke, as a fraction of the canvas width.
     var widths: [CGFloat] = []
+    var fills: [FlagFill] = []
 
-    var isEmpty: Bool { background == nil && strokes.isEmpty }
+    init(background: String? = nil, strokes: [FlagStroke] = [], widths: [CGFloat] = [], fills: [FlagFill] = []) {
+        self.background = background
+        self.strokes = strokes
+        self.widths = widths
+        self.fills = fills
+    }
 
-    func render(in ctx: CGContext, size: CGSize) {
-        if let background {
-            ctx.setFillColor(UIColor(FlagPaint.color(background)).cgColor)
-            ctx.fill(CGRect(origin: .zero, size: size))
+    // Older saved drawings have no `fills`.
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        background = try c.decodeIfPresent(String.self, forKey: .background)
+        strokes = try c.decodeIfPresent([FlagStroke].self, forKey: .strokes) ?? []
+        widths = try c.decodeIfPresent([CGFloat].self, forKey: .widths) ?? []
+        fills = try c.decodeIfPresent([FlagFill].self, forKey: .fills) ?? []
+    }
+
+    var isEmpty: Bool { background == nil && strokes.isEmpty && fills.isEmpty }
+
+    /// Undo: the most recent stroke or fill (a fill made after all the
+    /// current strokes is the newest).
+    mutating func undo() {
+        if let fill = fills.last, fill.after >= strokes.count {
+            fills.removeLast()
+        } else if !strokes.isEmpty {
+            strokes.removeLast()
+            if !widths.isEmpty { widths.removeLast() }
+        } else {
+            background = nil
+        }
+    }
+
+    func render(in ctx: CGContext, size: CGSize, strokesOnly: Bool = false) {
+        let canvas = CGRect(origin: .zero, size: size)
+        if !strokesOnly {
+            if let background {
+                ctx.setFillColor(UIColor(FlagPaint.color(background)).cgColor)
+                ctx.fill(canvas)
+            }
+            for fill in fills {
+                fill.render(in: ctx, rect: canvas)
+            }
         }
         ctx.setLineCap(.round)
         ctx.setLineJoin(.round)
         for (i, stroke) in strokes.enumerated() {
             let points = stroke.points.map { CGPoint(x: $0.x * size.width, y: $0.y * size.height) }
             guard let first = points.first else { continue }
-            ctx.setStrokeColor(UIColor(FlagPaint.color(stroke.color)).cgColor)
-            ctx.setFillColor(UIColor(FlagPaint.color(stroke.color)).cgColor)
+            let color = strokesOnly ? UIColor.black.cgColor : UIColor(FlagPaint.color(stroke.color)).cgColor
+            ctx.setStrokeColor(color)
+            ctx.setFillColor(color)
             let width = (i < widths.count ? widths[i] : 0.05) * size.width
             if points.count == 1 {
                 // A dab.
@@ -92,6 +132,126 @@ struct FlagSketch: Equatable, Codable {
             ctx.addLines(between: points)
             ctx.strokePath()
         }
+    }
+}
+
+/// A paint-bucket fill: the area around where the kid tapped, up to the
+/// lines (and the tracing outline, if it was showing), worked out once on
+/// a small grid and kept as a mask so it draws the same every time.
+struct FlagFill: Equatable, Codable {
+    static let width = 192
+    static let height = 144
+
+    var color: String
+    /// One bit per cell of the `width`×`height` grid, row by row from the top.
+    var mask: Data
+    /// How many strokes there were when it was made (for undo order).
+    var after: Int
+
+    func covers(x: Int, y: Int) -> Bool {
+        let i = y * Self.width + x
+        return mask.count > i / 8 && mask[i / 8] & (1 << UInt8(i % 8)) != 0
+    }
+
+    func render(in ctx: CGContext, rect: CGRect) {
+        guard let image = maskImage() else { return }
+        ctx.saveGState()
+        // Images draw bottom-up; the sketch's coordinates run top-down.
+        ctx.translateBy(x: 0, y: rect.height)
+        ctx.scaleBy(x: 1, y: -1)
+        ctx.clip(to: rect, mask: image)
+        ctx.setFillColor(UIColor(FlagPaint.color(color)).cgColor)
+        ctx.fill(rect)
+        ctx.restoreGState()
+    }
+
+    private func maskImage() -> CGImage? {
+        var gray = [UInt8](repeating: 0, count: Self.width * Self.height)
+        for y in 0..<Self.height {
+            for x in 0..<Self.width where covers(x: x, y: y) { gray[y * Self.width + x] = 255 }
+        }
+        guard let provider = CGDataProvider(data: Data(gray) as CFData) else { return nil }
+        return CGImage(width: Self.width, height: Self.height, bitsPerComponent: 8, bitsPerPixel: 8,
+                       bytesPerRow: Self.width, space: CGColorSpaceCreateDeviceGray(),
+                       bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.none.rawValue),
+                       provider: provider, decode: nil, shouldInterpolate: true, intent: .defaultIntent)
+    }
+
+    /// The fill for a tap at `point` (fractions of the canvas): every grid
+    /// cell joined to it (sideways or up and down) that looks the same as
+    /// it does, so lines and other colours stop it. With `guide`, the
+    /// tracing outline's lines stop it too. Nil on a line.
+    static func make(at point: CGPoint, color: String, on sketch: FlagSketch, guide: String?) -> FlagFill? {
+        let (w, h) = (width, height)
+        let size = CGSize(width: w, height: h)
+        // What's there now, without smoothing so every cell is one colour.
+        let seen = pixels(size: size) { ctx in
+            ctx.setFillColor(UIColor.white.cgColor)
+            ctx.fill(CGRect(origin: .zero, size: size))
+            sketch.render(in: ctx, size: size)
+            if let guide {
+                ctx.setStrokeColor(UIColor.magenta.cgColor)
+                ctx.setLineWidth(2)
+                for path in FlagLayoutShape.regions(guide, in: CGRect(origin: .zero, size: size)) {
+                    ctx.addPath(path.cgPath)
+                    ctx.strokePath()
+                }
+            }
+        }
+        // Where the strokes are: the fill may reach one cell under them, so
+        // its edge hides beneath the line instead of leaving a gap.
+        let lines = pixels(size: size) { ctx in sketch.render(in: ctx, size: size, strokesOnly: true) }
+        guard !seen.isEmpty, !lines.isEmpty else { return nil }
+        let sx = min(max(Int(point.x * CGFloat(w)), 0), w - 1)
+        let sy = min(max(Int(point.y * CGFloat(h)), 0), h - 1)
+        let start = sy * w + sx
+        let target = seen[start]
+        guard lines[start] == 0 else { return nil } // tapped a line
+        var inside = [Bool](repeating: false, count: w * h)
+        var stack = [start]
+        inside[start] = true
+        while let i = stack.popLast() {
+            let (x, y) = (i % w, i / w)
+            for (nx, ny) in [(x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)]
+            where nx >= 0 && ny >= 0 && nx < w && ny < h {
+                let j = ny * w + nx
+                if !inside[j], seen[j] == target {
+                    inside[j] = true
+                    stack.append(j)
+                }
+            }
+        }
+        var grown = inside
+        for i in 0..<(w * h) where inside[i] {
+            let (x, y) = (i % w, i / w)
+            for (nx, ny) in [(x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)]
+            where nx >= 0 && ny >= 0 && nx < w && ny < h && lines[ny * w + nx] != 0 {
+                grown[ny * w + nx] = true
+            }
+        }
+        var bits = Data(repeating: 0, count: (w * h + 7) / 8)
+        for i in 0..<(w * h) where grown[i] { bits[i / 8] |= 1 << UInt8(i % 8) }
+        return FlagFill(color: color, mask: bits, after: sketch.strokes.count)
+    }
+
+    /// Renders into a small RGBA grid (top-left origin, no smoothing) and
+    /// returns one value per cell (0 where nothing was drawn).
+    private static func pixels(size: CGSize, draw: (CGContext) -> Void) -> [UInt32] {
+        let (w, h) = (Int(size.width), Int(size.height))
+        var out = [UInt32](repeating: 0, count: w * h)
+        let made: Bool = out.withUnsafeMutableBytes { buffer in
+            guard let ctx = CGContext(data: buffer.baseAddress, width: w, height: h, bitsPerComponent: 8,
+                                      bytesPerRow: w * 4, space: CGColorSpaceCreateDeviceRGB(),
+                                      bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)
+            else { return false }
+            ctx.translateBy(x: 0, y: size.height)
+            ctx.scaleBy(x: 1, y: -1)
+            ctx.setShouldAntialias(false)
+            ctx.interpolationQuality = .none
+            draw(ctx)
+            return true
+        }
+        return made ? out : []
     }
 }
 
@@ -117,7 +277,8 @@ struct FreehandResult: Equatable {
 }
 
 /// The full-screen drawing pad: a big canvas, the paint box, brush sizes,
-/// a bucket for the background, undo and clear.
+/// draw or fill, an optional tracing outline, undo and clear. Everything a
+/// kid taps is big (beta feedback: the tools were hard to hit).
 struct FreehandPad: View {
     let country: AtlasCountry
     let spec: FlagOutlineSpec?
@@ -127,11 +288,14 @@ struct FreehandPad: View {
     @State private var sketch = FlagSketch()
     @State private var brush = "red"
     @State private var width: CGFloat = 0.08
-    @State private var bucket = false
+    @State private var filling = false
+    @State private var showOutline = false
     @State private var drawingStroke = false
     @State private var checking = false
 
-    private static let sizes: [(String, CGFloat)] = [("Thin", 0.025), ("Medium", 0.08), ("Big", 0.16)]
+    private static let sizes: [(name: String, width: CGFloat)] = [("Thin", 0.025), ("Medium", 0.08), ("Big", 0.16)]
+    private static let toolSize: CGFloat = 64
+    private static let toolsWidth: CGFloat = 3 * 64 + 2 * 10
 
     var body: some View {
         VStack(spacing: 14) {
@@ -169,13 +333,17 @@ struct FreehandPad: View {
         GeometryReader { geo in
             let size = geo.size
             FlagSketchView(sketch: sketch)
+                .overlay {
+                    if showOutline, let spec {
+                        OutlineGuide(layout: spec.layout)
+                    }
+                }
                 .frame(width: size.width, height: size.height)
                 .contentShape(.rect)
                 .gesture(DragGesture(minimumDistance: 0)
                     .onChanged { drag in
-                        guard !bucket else { return }
-                        let p = CGPoint(x: min(max(drag.location.x / max(size.width, 1), 0), 1),
-                                        y: min(max(drag.location.y / max(size.height, 1), 0), 1))
+                        guard !filling else { return }
+                        let p = point(drag.location, in: size)
                         if drawingStroke {
                             sketch.strokes[sketch.strokes.count - 1].points.append(p)
                         } else {
@@ -184,84 +352,91 @@ struct FreehandPad: View {
                             drawingStroke = true
                         }
                     }
-                    .onEnded { _ in
+                    .onEnded { drag in
                         drawingStroke = false
-                        if bucket {
-                            sketch.background = brush
-                            bucket = false
+                        if filling, let fill = FlagFill.make(at: point(drag.location, in: size), color: brush,
+                                                             on: sketch, guide: showOutline ? spec?.layout : nil) {
+                            sketch.fills.append(fill)
                         }
                     })
                 .accessibilityElement()
                 .accessibilityLabel("Drawing canvas")
-                .accessibilityHint("Draw the flag with your finger or Apple Pencil")
+                .accessibilityHint(filling ? "Tap an area to fill it" : "Draw the flag with your finger or Apple Pencil")
         }
         .aspectRatio(4 / 3, contentMode: .fit)
     }
 
+    private func point(_ location: CGPoint, in size: CGSize) -> CGPoint {
+        CGPoint(x: min(max(location.x / max(size.width, 1), 0), 1),
+                y: min(max(location.y / max(size.height, 1), 0), 1))
+    }
+
     private var tools: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            LazyVGrid(columns: Array(repeating: GridItem(.fixed(48), spacing: 8), count: 3), spacing: 8) {
-                ForEach(FlagPaint.names, id: \.self) { name in
-                    Button {
-                        brush = name
-                    } label: {
-                        Circle()
-                            .fill(FlagPaint.color(name))
-                            .overlay(Circle().stroke(.black.opacity(0.25), lineWidth: 1))
-                            .overlay(Circle().stroke(Color.accentColor, lineWidth: brush == name ? 4 : 0).padding(-5))
-                            .frame(width: 40, height: 40)
-                            .frame(width: 48, height: 48)
-                            .contentShape(.rect)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 14) {
+                LazyVGrid(columns: Array(repeating: GridItem(.fixed(Self.toolSize), spacing: 10), count: 3), spacing: 10) {
+                    ForEach(FlagPaint.names, id: \.self) { name in
+                        Button {
+                            brush = name
+                        } label: {
+                            Circle()
+                                .fill(FlagPaint.color(name))
+                                .overlay(Circle().stroke(.black.opacity(0.25), lineWidth: 1))
+                                .overlay(Circle().stroke(Color.accentColor, lineWidth: brush == name ? 5 : 0).padding(-6))
+                                .frame(width: 52, height: 52)
+                                .frame(width: Self.toolSize, height: Self.toolSize)
+                                .contentShape(.rect)
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel(FlagPaint.spoken(name))
+                        .accessibilityAddTraits(brush == name ? .isSelected : [])
                     }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel(FlagPaint.spoken(name))
-                    .accessibilityAddTraits(brush == name ? .isSelected : [])
                 }
-            }
-            Picker("Brush", selection: $width) {
-                ForEach(Self.sizes, id: \.1) { label, value in
-                    Text(label).tag(value)
-                }
-            }
-            .pickerStyle(.segmented)
-            .frame(width: 160)
-            Button {
-                bucket.toggle()
-            } label: {
-                Label(bucket ? "Tap the flag" : "Fill background", systemImage: "drop.fill")
-                    .frame(maxWidth: 160, alignment: .leading)
-            }
-            .buttonStyle(.bordered)
-            .tint(bucket ? .orange : nil)
-            HStack {
-                Button {
-                    if !sketch.strokes.isEmpty {
-                        sketch.strokes.removeLast()
-                        sketch.widths.removeLast()
-                    } else {
-                        sketch.background = nil
+                HStack(spacing: 10) {
+                    ForEach(Self.sizes, id: \.width) { size in
+                        let on = width == size.width && !filling
+                        Button {
+                            width = size.width
+                            filling = false
+                        } label: {
+                            Circle()
+                                .fill(Color.primary)
+                                .frame(width: 8 + size.width * 140, height: 8 + size.width * 140)
+                                .frame(width: Self.toolSize, height: Self.toolSize)
+                                .background(on ? Color.accentColor.opacity(0.2) : Color(uiColor: .secondarySystemGroupedBackground),
+                                            in: .rect(cornerRadius: 14))
+                                .overlay(RoundedRectangle(cornerRadius: 14).stroke(Color.accentColor, lineWidth: on ? 3 : 0))
+                                .contentShape(.rect)
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel("\(size.name) brush")
+                        .accessibilityAddTraits(on ? .isSelected : [])
                     }
-                } label: {
-                    Label("Undo", systemImage: "arrow.uturn.backward")
                 }
-                Button(role: .destructive) {
-                    sketch = FlagSketch()
-                } label: {
-                    Label("Clear", systemImage: "trash")
+                HStack(spacing: 10) {
+                    ToolButton(title: "Fill", symbol: "drop.fill", on: filling) { filling.toggle() }
+                        .accessibilityHint("Then tap an area of the flag to fill it with the colour")
+                    ToolButton(title: "Undo", symbol: "arrow.uturn.backward") { sketch.undo() }
+                        .disabled(sketch.isEmpty)
                 }
-            }
-            .buttonStyle(.bordered)
-            .labelStyle(.iconOnly)
-            .font(.title3)
-            if spec?.emblem == true {
-                Text("Emblems and small details are just for fun: they're not marked.")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-                    .frame(width: 160, alignment: .leading)
-                    .fixedSize(horizontal: false, vertical: true)
+                HStack(spacing: 10) {
+                    if spec != nil {
+                        ToolButton(title: showOutline ? "Hide outline" : "Add outline", symbol: "square.dashed",
+                                   on: showOutline) { showOutline.toggle() }
+                            .accessibilityHint("Shows the flag's shapes as lines to trace and fill")
+                    }
+                    ToolButton(title: "Clear", symbol: "trash", role: .destructive) { sketch = FlagSketch() }
+                        .disabled(sketch.isEmpty)
+                }
+                if spec?.emblem == true {
+                    Text("Emblems and small details are just for fun: they're not marked.")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
             }
         }
-        .frame(width: 168)
+        .frame(width: Self.toolsWidth)
     }
 
     private func check() {
@@ -275,15 +450,55 @@ struct FreehandPad: View {
     }
 }
 
-/// The question card's part for freehand: start drawing, the help ladder,
-/// and afterwards the drawing beside the real flag.
+/// A big labelled tool button for the drawing pad.
+private struct ToolButton: View {
+    let title: String
+    let symbol: String
+    var on = false
+    var role: ButtonRole?
+    let action: () -> Void
+
+    var body: some View {
+        Button(role: role, action: action) {
+            VStack(spacing: 4) {
+                Image(systemName: symbol).font(.title2)
+                Text(title).font(.callout.weight(.semibold)).lineLimit(1).minimumScaleFactor(0.7)
+            }
+            .frame(maxWidth: .infinity, minHeight: 64)
+        }
+        .buttonStyle(.bordered)
+        .buttonBorderShape(.roundedRectangle(radius: 14))
+        .tint(on ? .orange : nil)
+        .accessibilityAddTraits(on ? .isSelected : [])
+    }
+}
+
+/// The flag's shapes as dashed lines over the canvas: a tracing guide. Not
+/// part of the drawing (it isn't graded), but fills stop at its lines.
+private struct OutlineGuide: View {
+    let layout: String
+
+    var body: some View {
+        GeometryReader { geo in
+            let rect = CGRect(origin: .zero, size: geo.size)
+            ZStack {
+                ForEach(Array(FlagLayoutShape.regions(layout, in: rect).enumerated()), id: \.offset) { _, path in
+                    path.stroke(Color.gray.opacity(0.8), style: StrokeStyle(lineWidth: 2.5, dash: [8, 6]))
+                }
+            }
+        }
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
+    }
+}
+
+/// The question card's part for a flag drawing: start drawing, or the help
+/// (pick from four, half points), and afterwards the drawing beside the
+/// real flag.
 struct FreehandPanel: View {
     let country: AtlasCountry
     let result: FreehandResult?
-    /// Whether the outline help exists for this flag.
-    let hasOutline: Bool
     let onStart: () -> Void
-    let onUseOutline: () -> Void
     let onUseChoices: () -> Void
 
     var body: some View {
@@ -309,7 +524,7 @@ struct FreehandPanel: View {
                 }
             }
         } else {
-            VStack(alignment: .leading, spacing: 12) {
+            VStack(spacing: 12) {
                 Button(action: onStart) {
                     Label("Start drawing", systemImage: "pencil.and.scribble")
                         .font(.title3.bold())
@@ -317,18 +532,18 @@ struct FreehandPanel: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .buttonBorderShape(.roundedRectangle(radius: 16))
-                if hasOutline {
-                    Button(action: onUseOutline) {
-                        Label("Use an outline (still full points)", systemImage: "square.split.2x1")
-                            .font(.callout)
-                    }
-                    .buttonStyle(.borderless)
-                }
                 Button(action: onUseChoices) {
-                    Label("Pick it from four instead (half points)", systemImage: "square.grid.2x2")
-                        .font(.callout)
+                    VStack(spacing: 2) {
+                        Label("Pick it from four instead", systemImage: "square.grid.2x2")
+                            .font(.title3.bold())
+                        Text("half points")
+                            .font(.footnote)
+                    }
+                    .frame(maxWidth: .infinity, minHeight: 52)
                 }
-                .buttonStyle(.borderless)
+                .buttonStyle(.bordered)
+                .buttonBorderShape(.roundedRectangle(radius: 16))
+                .accessibilityLabel("Pick it from four instead, half points")
             }
         }
     }

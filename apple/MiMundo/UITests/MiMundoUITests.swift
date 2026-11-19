@@ -34,11 +34,24 @@ final class MiMundoUITests: XCTestCase {
         tap(app.buttons["Find one for me"])
     }
 
+    /// Picks an answer and confirms it: a tap only selects (beta feedback:
+    /// stray taps were answering), "Check my answer" sends it.
+    private func answer(_ choice: XCUIElement, in app: XCUIApplication) {
+        let check = app.buttons["Check my answer"]
+        tap(choice)
+        XCTAssertTrue(check.waitForExistence(timeout: patient))
+        XCTAssertTrue(check.isEnabled, "Selecting an answer enables Check")
+        check.tap()
+    }
+
     /// Answers the name and capital questions of the seeded quiz correctly.
     private func answerNameAndCapital(_ app: XCUIApplication) {
-        tap(app.buttons["France"])
+        // Before a pick, the confirm button can't be used.
+        XCTAssertTrue(app.buttons["Pick an answer"].waitForExistence(timeout: patient))
+        XCTAssertFalse(app.buttons["Pick an answer"].isEnabled)
+        answer(app.buttons["France"], in: app)
         tap(app.buttons["Next question"])
-        tap(app.buttons["Paris"])
+        answer(app.buttons["Paris"], in: app)
         tap(app.buttons["Next question"])
     }
 
@@ -77,11 +90,11 @@ final class MiMundoUITests: XCTestCase {
         startQuiz(app)
         answerNameAndCapital(app)
 
-        tap(app.buttons["Pick it from four instead (half points)"])
+        tap(app.buttons["Pick it from four instead, half points"])
         let flags = app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Flag '"))
         XCTAssertTrue(flags.element(boundBy: 3).waitForExistence(timeout: patient), "Expected four flags")
         XCTAssertEqual(flags.count, 4)
-        flags.element(boundBy: 0).tap()
+        answer(flags.element(boundBy: 0), in: app)
         tap(app.buttons["Done"])
 
         // The summary: "+N points" (full for name and capital, plus half or 0 for the flag).
