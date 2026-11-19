@@ -69,6 +69,25 @@ targets:
           UIInterfaceOrientationLandscapeLeft
           UIInterfaceOrientationLandscapeRight
 
+  MiMundoTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: Tests
+    dependencies:
+      - target: MiMundo
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.danfern.mimundo.tests
+        SWIFT_VERSION: "6.0"
+        GENERATE_INFOPLIST_FILE: YES
+        TARGETED_DEVICE_FAMILY: "2"
+        "EXCLUDED_ARCHS[sdk=iphonesimulator*]": x86_64
+        # Hosted by the app: tests run inside it, so Bundle.main is the app
+        # (the atlas loads its map data from there).
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/MiMundo.app/MiMundo"
+        BUNDLE_LOADER: "$(TEST_HOST)"
+
 schemes:
   MiMundo:
     build:
@@ -100,6 +119,8 @@ schemes:
       config: Debug
     test:
       config: Debug
+      targets:
+        - MiMundoTests
     profile:
       config: Release
     analyze:

@@ -90,7 +90,8 @@ enum Persistence {
         }
     }
 
-    private static func open(_ schema: Schema, _ configuration: ModelConfiguration) throws -> ModelContainer {
+    /// Internal (not private) so tests can open a store at any URL.
+    static func open(_ schema: Schema, _ configuration: ModelConfiguration) throws -> ModelContainer {
         try ModelContainer(
             for: schema,
             migrationPlan: MiMundoMigrationPlan.self,

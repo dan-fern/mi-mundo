@@ -108,10 +108,23 @@ jobs:
             -resultBundlePath build/MiMundo.xcresult \
             CODE_SIGNING_ALLOWED=NO
 
+      # Unit tests (migrations, answers, queue rules), hosted by the app in
+      # an iPad simulator. Reuses the build products above.
+      - name: Swift tests on iPad simulator
+        run: |
+          SIM=$(xcrun simctl list devices available -j | python3 -c "import json,sys; print(next(d['udid'] for r,ds in json.load(sys.stdin)['devices'].items() if 'iOS' in r for d in ds if 'iPad' in d['name']))")
+          xcodebuild test \
+            -quiet \
+            -project apple/MiMundo/MiMundo.xcodeproj \
+            -scheme MiMundo \
+            -destination "platform=iOS Simulator,id=$SIM" \
+            -resultBundlePath build/MiMundoTests.xcresult \
+            CODE_SIGNING_ALLOWED=NO
+
       - name: Upload build results on failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: xcresult
-          path: build/MiMundo.xcresult
+          path: build/*.xcresult
           if-no-files-found: ignore
