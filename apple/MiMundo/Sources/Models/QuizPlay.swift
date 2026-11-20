@@ -1,12 +1,31 @@
 import Foundation
 import MiMundoCore
 import SwiftData
+import UIKit
 
-/// The kinds of question a quiz asks about a country (requirements §3.2).
-/// Flag questions arrive with flag drawing.
+/// The kinds of question a quiz asks about a country (requirements §3.2),
+/// asked in this order.
 enum QuestionKind: String, CaseIterable, Sendable {
     case name
     case capital
+    /// Draw the country's flag freehand (full points; a mirror image ¾, the
+    /// right colours ½), optionally over a tracing outline. Help: pick it
+    /// from four (half points, §3.3).
+    case flag
+}
+
+/// Points a right answer earns on a first try, by the Rust core's rules.
+enum QuizScoring {
+    static func firstTry(base: Int, multipleChoice: Bool) -> Int {
+        Int(pointsForAttempt(basePoints: UInt32(clamping: max(base, 0)), attempt: 1,
+                             usedMultipleChoice: multipleChoice))
+    }
+
+    /// The most a question can earn on a first try: every question,
+    /// flags included (drawn), can earn its full points.
+    static func best(base: Int) -> Int {
+        firstTry(base: base, multipleChoice: false)
+    }
 }
 
 extension SchemaV4 {
@@ -47,7 +66,9 @@ extension SchemaV4 {
             self.quizCountryIDs = quiz.countryIDs
             self.questionCount = targets.reduce(0) { $0 + $1.kinds.count }
             self.perfectPoints = targets.reduce(0) { total, target in
-                total + target.kinds.reduce(0) { $0 + quiz.basePoints(for: $1) }
+                total + target.kinds.reduce(0) {
+                    $0 + QuizScoring.best(base: quiz.basePoints(for: $1))
+                }
             }
         }
 
@@ -90,7 +111,14 @@ extension SchemaV4 {
 
         init(attempt: QuizAttempt, countryID: String, kind: QuestionKind, chosen: String,
              chosenCountryID: String?, correctAnswer: String, choices: [String],
-             basePoints: Int, askedAt: Date?, answeredAt: Date) {
+             basePoints: Int, multipleChoice: Bool, isCorrect: Bool? = nil, creditPercent: Int? = nil,
+             colourHint: Bool = false, askedAt: Date?, answeredAt: Date) {
+            // A drawn flag can be right without matching exactly (close
+            // shades count), so the grader's verdict wins when there is one,
+            // and it can be partly right (`creditPercent`, e.g. 75 for a
+            // mirror image): that earns part of the points but isn't "right".
+            let credit = creditPercent ?? ((isCorrect ?? (chosen == correctAnswer)) ? 100 : 0)
+            let right = credit >= 100
             self.id = UUID()
             self.attemptID = attempt.id
             self.profileID = attempt.profileID
@@ -99,16 +127,17 @@ extension SchemaV4 {
             self.chosen = chosen
             self.chosenCountryID = chosenCountryID
             self.correctAnswer = correctAnswer
-            self.correct = chosen == correctAnswer
+            self.correct = right
             self.choices = choices
             self.basePoints = basePoints
             self.attemptNumber = attempt.number
-            self.usedMultipleChoice = false
-            self.pointsAwarded = chosen == correctAnswer
-                ? Int(pointsForAttempt(basePoints: UInt32(clamping: max(basePoints, 0)),
-                                       attempt: UInt32(clamping: max(attempt.number, 1)),
-                                       usedMultipleChoice: false))
-                : 0
+            self.usedMultipleChoice = multipleChoice
+            // A flag's colour hint costs a quarter off the top (§3.4).
+            self.pointsAwarded = Int(pointsWithHelp(basePoints: UInt32(clamping: max(basePoints, 0)),
+                                                    attempt: UInt32(clamping: max(attempt.number, 1)),
+                                                    usedMultipleChoice: multipleChoice,
+                                                    creditPercent: UInt32(clamping: max(credit, 0)),
+                                                    colourHint: colourHint))
             self.askedAt = askedAt
             self.answeredAt = answeredAt
         }
@@ -122,6 +151,7 @@ extension QuizSet {
         switch kind {
         case .name: asksName
         case .capital: asksCapital
+        case .flag: asksFlag
         }
     }
 
@@ -129,6 +159,7 @@ extension QuizSet {
         switch kind {
         case .name: namePoints
         case .capital: capitalPoints
+        case .flag: flagPoints
         }
     }
 }
@@ -163,26 +194,52 @@ enum QuizPlay {
                                   targets: targets)
             context.insert(attempt)
         }
-        if !profile.isParent { record.started = true }
+        // Opening the quiz doesn't lock it: only a kid's first answer does
+        // (record), so a parent can still swap or remove a quiz nobody has
+        // really attempted.
         return context.saveOrRollback("start quiz attempt") ? attempt : nil
     }
 
     /// Saves one answer; nil if it couldn't be saved (nothing changes then,
     /// so the question can be answered again). A kid's first answer is what
     /// counts as "a kid attempted today's quiz", which lets the queue move on
-    /// at the next game day. The queue is brought up to date first, so an
+    /// at the next game day. A second answer to the same question is refused
+    /// (nil). The queue is brought up to date first, so an
     /// answer given just after 11 pm ET counts for the day it was given.
     @MainActor
     static func record(_ chosen: String, correctAnswer: String, kind: QuestionKind,
                        country: AtlasCountry, chosenCountry: AtlasCountry?, choices: [String],
+                       multipleChoice: Bool = false, isCorrect: Bool? = nil, creditPercent: Int? = nil,
+                       colourHint: Bool = false,
+                       drawing: (content: FlagDrawingContent, scorePercent: Int)? = nil,
                        quiz: QuizSet, attempt: QuizAttempt, askedAt: Date?,
                        in context: ModelContext, now: Date = .now) -> QuizAnswer? {
         QuizQueue.refresh(in: context, now: now)
+        // One answer per sitting, country and question. The store's unique
+        // constraint would otherwise silently *replace* the first answer with
+        // this one (letting a wrong answer be "fixed" for points), so refuse.
+        let (attemptID, countryID, kindRaw) = (attempt.id, country.meta.id, kind.rawValue)
+        let existing = FetchDescriptor<QuizAnswer>(predicate: #Predicate {
+            $0.attemptID == attemptID && $0.countryID == countryID && $0.kindRaw == kindRaw })
+        guard ((try? context.fetchCount(existing)) ?? 0) == 0 else {
+            dataLog.error("Refused a second answer to the same question")
+            return nil
+        }
         let answer = QuizAnswer(attempt: attempt, countryID: country.meta.id, kind: kind,
                                 chosen: chosen, chosenCountryID: chosenCountry?.meta.id,
                                 correctAnswer: correctAnswer, choices: choices,
-                                basePoints: quiz.basePoints(for: kind), askedAt: askedAt, answeredAt: now)
+                                basePoints: quiz.basePoints(for: kind), multipleChoice: multipleChoice,
+                                isCorrect: isCorrect, creditPercent: creditPercent, colourHint: colourHint,
+                                askedAt: askedAt, answeredAt: now)
         context.insert(answer)
+        // Every drawing is kept for parent review (§5.3).
+        if let drawing {
+            context.insert(FlagDrawing(answerID: answer.id, profileID: attempt.profileID,
+                                       countryID: country.meta.id, content: drawing.content,
+                                       scorePercent: drawing.scorePercent,
+                                       autoCorrect: answer.correct, autoCreditPercent: creditPercent,
+                                       drawnAt: now))
+        }
         if attempt.isKid,
            let record = try? context.fetch(FetchDescriptor<QueueRecord>()).first,
            record.currentQuizID == quiz.id, record.run == attempt.run {
@@ -218,7 +275,11 @@ struct QuizTarget: Identifiable {
         let wanted = Set(countryIDs)
         return atlas.countries.filter { wanted.contains($0.meta.id) }.compactMap { country in
             let kinds = QuestionKind.allCases.filter { kind in
-                asks(kind) && (kind != .capital || hasCapitalQuestion(country))
+                switch kind {
+                case .name: asks(kind)
+                case .capital: asks(kind) && hasCapitalQuestion(country)
+                case .flag: asks(kind) && country.hasFlag
+                }
             }
             return kinds.isEmpty ? nil : QuizTarget(country: country, kinds: kinds)
         }
@@ -265,6 +326,19 @@ extension Atlas {
             byAnswer[correct] = country
             let candidates = nearest.map(\.name)
             return (correct, quizChoices(correct: correct, candidates: candidates, seed: seed), byAnswer)
+        case .flag:
+            // Buttons are flags: the choices are country codes, drawn as
+            // flags. Look-alikes that can't be told apart at button size
+            // (Monaco and Indonesia, Romania and Moldova…) never meet.
+            let lookAlikes = Self.flagLookAlikes[country.meta.iso2] ?? []
+            var candidates: [String] = []
+            for other in nearest where other.hasFlag && !lookAlikes.contains(other.meta.iso2) {
+                candidates.append(other.meta.id)
+                byAnswer[other.meta.id] = other
+            }
+            correct = country.meta.id
+            byAnswer[correct] = country
+            return (correct, quizChoices(correct: correct, candidates: candidates, seed: seed), byAnswer)
         case .capital:
             let capitals = country.facts?.capitals ?? []
             correct = capitals.first ?? ""
@@ -282,6 +356,27 @@ extension Atlas {
             byAnswer[correct] = country
             return (correct, quizChoices(correct: correct, candidates: candidates, seed: seed), byAnswer)
         }
+    }
+
+    /// Groups of flags too alike to tell apart as small buttons (by ISO
+    /// code): no two from one group are offered together. Wrong answers come
+    /// from the nearest countries, so neighbours matter most (Romania and
+    /// Moldova, Colombia and Ecuador, El Salvador and Nicaragua…).
+    static let flagLookAlikeGroups: [Set<String>] = [
+        ["MC", "ID"],                // red over white
+        ["TD", "RO", "AD", "MD"],    // blue, yellow, red
+        ["CO", "EC", "VE"],          // yellow, blue, red
+        ["HN", "SV", "NI"],          // blue, white, blue
+        ["SK", "SI", "RU"],          // white, blue, red
+        ["ML", "SN", "GN"],          // green, yellow, red, either way round
+        ["NL", "LU"],                // red, white, blue
+        ["IE", "CI"],                // green, white, orange, either way round
+        ["AU", "NZ"],                // blue ensign with stars
+    ]
+
+    /// For each code, the codes it must never be offered with.
+    static let flagLookAlikes: [String: Set<String>] = flagLookAlikeGroups.reduce(into: [:]) { map, group in
+        for code in group { map[code, default: []].formUnion(group.subtracting([code])) }
     }
 
     /// Distinctive words of a name (4+ letters), lowercased.

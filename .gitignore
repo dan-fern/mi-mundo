@@ -21,3 +21,7 @@ apple/MiMundo/Config/Local.xcconfig
 
 # Raw downloads (tools/fetch-data.sh)
 data/raw/
+
+# SQLite side files (opening a fixture store creates them)
+apple/MiMundo/Tests/Fixtures/*.store-wal
+apple/MiMundo/Tests/Fixtures/*.store-shm

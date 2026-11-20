@@ -97,12 +97,31 @@ struct QuizDraft: Equatable {
     var countryIDs: [String] = []
     var asksName = true
     var asksCapital = true
-    var asksFlag = false
+    /// Flags are asked by default (beta feedback), worth 15.
+    var asksFlag = true
     var namePoints = 10
     var capitalPoints = 10
-    var flagPoints = 20
+    var flagPoints = 15
 
     static let pointsRange = 0...100
+
+    /// The name a picker gave the quiz ("Balkans", "Random: Africa"), so a
+    /// later pick can rename it. A name the parent typed is never replaced.
+    var autoTitle: String?
+    /// The countries the last random roll picked, so rolling again replaces
+    /// them without asking (but not countries picked by hand).
+    var rolledCountryIDs: [String]?
+
+    /// The name for a random quiz from `area` (nil: the whole world).
+    static func randomTitle(area: String?) -> String { "Random: " + (area ?? "the world") }
+
+    /// Names the quiz after a pick, unless the parent named it.
+    mutating func nameAutomatically(_ name: String) {
+        let typed = title.trimmingCharacters(in: .whitespaces)
+        guard typed.isEmpty || typed == autoTitle else { return }
+        title = name
+        autoTitle = name
+    }
 
     init() {}
 
@@ -118,9 +137,24 @@ struct QuizDraft: Equatable {
     }
 
     var trimmedTitle: String { title.trimmingCharacters(in: .whitespaces) }
-    /// Flag questions don't exist yet (§3.3), so they don't count.
-    var asksAnything: Bool { asksName || asksCapital }
+    var asksAnything: Bool { asksName || asksCapital || asksFlag }
     var isValid: Bool { !trimmedTitle.isEmpty && !countryIDs.isEmpty && asksAnything }
+
+    func asks(_ kind: QuestionKind) -> Bool {
+        switch kind {
+        case .name: asksName
+        case .capital: asksCapital
+        case .flag: asksFlag
+        }
+    }
+
+    func basePoints(for kind: QuestionKind) -> Int {
+        switch kind {
+        case .name: namePoints
+        case .capital: capitalPoints
+        case .flag: flagPoints
+        }
+    }
 }
 
 extension QuizSet {
@@ -138,10 +172,14 @@ extension QuizSet {
     /// one); without it, an estimate.
     func perfectPoints(in atlas: Atlas?) -> Int {
         guard let atlas else {
-            return countryIDs.count * ((asksName ? namePoints : 0) + (asksCapital ? capitalPoints : 0))
+            return countryIDs.count * QuestionKind.allCases.filter(asks).reduce(0) {
+                $0 + QuizScoring.best(base: basePoints(for: $1))
+            }
         }
         return QuizTarget.all(for: self, in: atlas).reduce(0) { total, target in
-            total + target.kinds.reduce(0) { $0 + basePoints(for: $1) }
+            total + target.kinds.reduce(0) {
+                $0 + QuizScoring.best(base: basePoints(for: $1))
+            }
         }
     }
 }
@@ -181,13 +219,15 @@ enum QuizQueue {
         }
         let before = record.state
         var after = queueToday(state: before, queue: quizzes.map(\.id.uuidString), today: today)
-        // Once a kid has a sitting in this run, today's quiz stays locked for
+        // Once a kid has answered in this run, today's quiz stays locked for
         // the whole run, even on later days (the core lifts `started` each
         // new day): editing it would change the questions between sittings
-        // that are meant to be compared (§3.8) and under one in progress.
-        if !after.started, let id = after.current.flatMap(UUID.init(uuidString:)),
-           kidHasSitting(quiz: id, run: Int(after.run), in: context) {
-            after.started = true
+        // that are meant to be compared (§3.8). Just opening it doesn't
+        // lock it, so a parent can still swap or remove it.
+        // Recomputed every time, so a lock left by an older build (which
+        // locked as soon as a kid opened the quiz) lifts by itself.
+        if let id = after.current.flatMap(UUID.init(uuidString:)) {
+            after.started = kidHasAnswered(quiz: id, run: Int(after.run), in: context)
         }
         if after != before || record.modelContext == nil || record.hasChanges {
             record.update(after)
@@ -197,17 +237,37 @@ enum QuizQueue {
     }
 
     @MainActor
-    private static func kidHasSitting(quiz: UUID, run: Int, in context: ModelContext) -> Bool {
+    private static func kidHasAnswered(quiz: UUID, run: Int, in context: ModelContext) -> Bool {
         let child = Role.child.rawValue
-        let descriptor = FetchDescriptor<QuizAttempt>(
-            predicate: #Predicate { $0.quizSetID == quiz && $0.run == run && $0.roleRaw == child })
-        return ((try? context.fetchCount(descriptor)) ?? 0) > 0
+        let attempts = (try? context.fetch(FetchDescriptor<QuizAttempt>(
+            predicate: #Predicate { $0.quizSetID == quiz && $0.run == run && $0.roleRaw == child }))) ?? []
+        for attempt in attempts {
+            let id = attempt.id
+            let answers = FetchDescriptor<QuizAnswer>(predicate: #Predicate { $0.attemptID == id })
+            if ((try? context.fetchCount(answers)) ?? 0) > 0 { return true }
+        }
+        return false
     }
 
-    /// Whether today's quiz is locked against edits (a kid has started it).
+    /// Makes another quiz today's (a new run for it), if no kid has
+    /// answered today's quiz yet. The queue carries on from there.
     @MainActor
-    static func isLocked(_ quiz: QuizSet, in context: ModelContext) -> Bool {
-        refresh(in: context)
+    @discardableResult
+    static func makeToday(_ quiz: QuizSet, in context: ModelContext, now: Date = .now) -> Bool {
+        refresh(in: context, now: now)
+        guard let record = try? context.fetch(FetchDescriptor<QueueRecord>()).first,
+              !record.started else { return false }
+        let after = queueSetToday(state: record.state, queue: quizzes(in: context).map(\.id.uuidString),
+                                  id: quiz.id.uuidString)
+        guard after.current == quiz.id.uuidString else { return false }
+        record.update(after)
+        return context.saveOrRollback("make today's quiz")
+    }
+
+    /// Whether today's quiz is locked against edits (a kid has answered in it).
+    @MainActor
+    static func isLocked(_ quiz: QuizSet, in context: ModelContext, now: Date = .now) -> Bool {
+        refresh(in: context, now: now)
         guard let record = try? context.fetch(FetchDescriptor<QueueRecord>()).first else { return false }
         return record.currentQuizID == quiz.id && record.started
     }
@@ -215,8 +275,8 @@ enum QuizQueue {
     /// Saves an edit unless the quiz got locked while the editor was open.
     @MainActor
     @discardableResult
-    static func edit(_ quiz: QuizSet, to draft: QuizDraft, in context: ModelContext) -> Bool {
-        guard !isLocked(quiz, in: context) else { return false }
+    static func edit(_ quiz: QuizSet, to draft: QuizDraft, in context: ModelContext, now: Date = .now) -> Bool {
+        guard !isLocked(quiz, in: context, now: now) else { return false }
         quiz.apply(draft)
         return context.saveOrRollback("edit quiz")
     }
@@ -233,9 +293,9 @@ enum QuizQueue {
             predicate: #Predicate { $0.quizSetID == quizID && $0.run == run && $0.roleRaw == child }))) ?? []
         let ids = Set(attempts.map(\.id))
         let answered = ((try? context.fetch(FetchDescriptor<QuizAnswer>())) ?? []).contains { ids.contains($0.attemptID) }
-        if record.attemptedByKid != answered || record.started != !attempts.isEmpty {
+        if record.attemptedByKid != answered || record.started != answered {
             record.attemptedByKid = answered
-            record.started = !attempts.isEmpty
+            record.started = answered
             context.saveOrRollback("recount kid attempts")
         }
     }
@@ -243,30 +303,45 @@ enum QuizQueue {
     /// Adds a quiz at the end of the queue. Returns false if the queue is full.
     @MainActor
     @discardableResult
-    static func add(_ draft: QuizDraft, by parent: Profile?, in context: ModelContext) -> Bool {
+    static func add(_ draft: QuizDraft, by parent: Profile?, in context: ModelContext, now: Date = .now) -> Bool {
         let quizzes = quizzes(in: context)
         guard quizzes.count < Int(queueMax()) else { return false }
         let position = (quizzes.map(\.position).max() ?? -1) + 1
         context.insert(QuizSet(draft: draft, position: position, createdBy: parent?.id))
         guard context.saveOrRollback("add quiz") else { return false }
-        refresh(in: context)
+        refresh(in: context, now: now)
         return true
     }
 
+    /// Refused (false) for today's quiz once a kid has answered in it, like
+    /// `edit` and `makeToday`: the rule lives here, not only in the screen.
     @MainActor
-    static func remove(_ quiz: QuizSet, in context: ModelContext, now: Date = .now) {
+    @discardableResult
+    static func remove(_ quiz: QuizSet, in context: ModelContext, now: Date = .now) -> Bool {
+        guard !isLocked(quiz, in: context, now: now) else { return false }
         quiz.removedAt = now
-        guard context.saveOrRollback("remove quiz") else { return }
+        guard context.saveOrRollback("remove quiz") else { return false }
         refresh(in: context, now: now)
+        return true
+    }
+
+    /// Puts the queue in a random order. Today's quiz stays today's (as for
+    /// any reorder); the rest of the cycle follows the new order.
+    @MainActor
+    static func shuffle(in context: ModelContext, seed: UInt64 = .random(in: .min ... .max), now: Date = .now) {
+        let current = quizzes(in: context)
+        let byID = Dictionary(uniqueKeysWithValues: current.map { ($0.id.uuidString, $0) })
+        let order = shuffledQueue(ids: current.map(\.id.uuidString), seed: seed).compactMap { byID[$0] }
+        reorder(order, in: context, now: now)
     }
 
     /// Saves a new order (every quiz in the queue, first to last).
     @MainActor
-    static func reorder(_ ordered: [QuizSet], in context: ModelContext) {
+    static func reorder(_ ordered: [QuizSet], in context: ModelContext, now: Date = .now) {
         for (index, quiz) in ordered.enumerated() where quiz.position != index {
             quiz.position = index
         }
         guard context.saveOrRollback("reorder quizzes") else { return }
-        refresh(in: context)
+        refresh(in: context, now: now)
     }
 }

@@ -1,6 +1,7 @@
 import Foundation
 import MiMundoCore
 import SwiftUI
+import UIKit
 import os
 
 private let mapLog = Logger(subsystem: "com.danfern.mimundo", category: "map")
@@ -125,6 +126,10 @@ struct AtlasCountry: Identifiable, Sendable {
     /// Asset name in Flags.xcassets, if this country has a flag.
     var flagAsset: String? {
         meta.iso2 == "-99" ? nil : "flag-\(meta.iso2.lowercased())"
+    }
+    /// Whether the app has a flag picture for it (a few territories don't).
+    var hasFlag: Bool {
+        flagAsset.map { UIImage(named: $0) != nil } ?? false
     }
 }
 

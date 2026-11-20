@@ -45,6 +45,14 @@ struct ParentHomeView: View {
 
                 QuizOfTheDaySection(parent: parent)
 
+                Section {
+                    NavigationLink {
+                        DrawingReviewView()
+                    } label: {
+                        Label("Flag drawings", systemImage: "flag.fill")
+                    }
+                }
+
                 Section("Kids") {
                     if kids.isEmpty {
                         Text("No kids yet. Add one to get started.")

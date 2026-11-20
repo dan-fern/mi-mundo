@@ -6,9 +6,12 @@ pub mod attendance;
 #[cfg(feature = "mapgen")]
 pub mod datagen;
 pub mod days;
+pub mod flags;
+pub mod freehand;
 pub mod map;
 pub mod queue;
 pub mod quiz;
+pub mod random_quiz;
 pub mod scoring;
 
 pub use attendance::{
@@ -16,9 +19,19 @@ pub use attendance::{
     days_played_last_7,
 };
 pub use days::{game_day, game_day_label};
-pub use queue::{QueueState, queue_from_today, queue_initial_state, queue_max, queue_today};
+pub use flags::{
+    FlagOutlineGrade, flag_colours_match, flag_layout_choices, flag_layout_regions, flag_palette,
+    grade_flag_outline,
+};
+pub use freehand::{
+    DrawCredit, FreehandGrade, classify_pixels, draw_credit_percent, grade_freehand,
+};
+pub use queue::{
+    QueueState, queue_from_today, queue_initial_state, queue_max, queue_set_today, queue_today,
+};
 pub use quiz::{quiz_choices, quiz_stars};
-pub use scoring::points_for_attempt;
+pub use random_quiz::{QuizCandidate, RandomQuiz, RandomQuizScope, random_quiz, shuffled_queue};
+pub use scoring::{points_for_attempt, points_with_credit, points_with_help};
 
 uniffi::setup_scaffolding!();
 

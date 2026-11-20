@@ -45,6 +45,8 @@ struct QuizPlayView: View {
     @State private var showingSummary = false
     @State private var confirmingStop = false
     @State private var saveFailed = false
+    /// The full-screen pad for drawing a flag freehand.
+    @State private var drawingPad = false
     /// Once the player uses a read-aloud button, verdicts are read too.
     @State private var readingAloud = false
     @State private var speaker = CardSpeaker()
@@ -58,6 +60,22 @@ struct QuizPlayView: View {
         let choices: [String]
         /// Which country each button stands for (stats: "confused with").
         let countryIDs: [String: String]
+        /// Each answer's country name: flag answers are country codes.
+        let names: [String: String]
+        /// Each answer's flag picture, for flag questions.
+        let flags: [String: String]
+        /// The flag's outline (§3.3), if it has one: the drawing pad can
+        /// lay it over the canvas as a tracing guide, and the grader skips
+        /// its emblem.
+        var outline: FlagOutlineSpec? = nil
+        /// How a flag question is being answered: drawn, or (the help, half
+        /// points) picked from four.
+        var flagMode: FlagMode = .freehand
+        /// The checked drawing, once drawn.
+        var freehand: FreehandResult? = nil
+        /// The kid asked to see the flag's colours on the drawing pad: a
+        /// quarter of the points, however the question is then answered.
+        var colourHint = false
         let askedAt: Date
         /// The side its card opens on, kept with it so the card leaves the
         /// way it came even if the next card opens on the other side.
@@ -66,6 +84,20 @@ struct QuizPlayView: View {
         var earned = 0
 
         var key: String { "\(target)-\(kind.rawValue)" }
+
+        var isFreehand: Bool { kind == .flag && flagMode == .freehand }
+        /// Right, by the grader for a drawing, else by the button picked.
+        var isRight: Bool { freehand?.grade.correct ?? (picked == correct) }
+        /// A drawing that earned part of the points (a mirror image, or the
+        /// right colours), if this is one.
+        var partialCredit: DrawCredit? {
+            guard let credit = freehand?.grade.credit, credit == .mirrored || credit == .colours else { return nil }
+            return credit
+        }
+    }
+
+    enum FlagMode: Equatable {
+        case freehand, choices
     }
 
     var body: some View {
@@ -94,7 +126,10 @@ struct QuizPlayView: View {
                             country: target.country, question: question,
                             isLastForCountry: pendingKinds(for: target).isEmpty,
                             showsFlag: !quiz.asksFlag, speaker: speaker, promptFocused: $promptFocused,
-                            onSpeak: { readingAloud = true }, onPick: choose, onNext: next
+                            onSpeak: { readingAloud = true }, onPick: choose, onNext: next,
+                            onUseChoices: useChoices, onStartDrawing: { drawingPad = true },
+                            // Never taller than the space under the top bar: it scrolls instead.
+                            maxHeight: max(240, viewSize.height - topBarBottom - 40)
                         )
                         .id(question.key)
                         .onGeometryChange(for: CGRect.self) { $0.frame(in: .global) } action: { frame in
@@ -134,6 +169,17 @@ struct QuizPlayView: View {
             Button("OK", role: .cancel) {}
         } message: {
             Text("Please try it again.")
+        }
+        .fullScreenCover(isPresented: $drawingPad) {
+            if let asked = question, let target = targets.first(where: { $0.id == asked.target }) {
+                FreehandPad(country: target.country, spec: asked.outline,
+                            colourHint: Binding(get: { question?.colourHint ?? false },
+                                                set: { shown in
+                                                    if shown, question?.picked == nil { question?.colourHint = true }
+                                                }),
+                            onCheck: drew,
+                            onCancel: { drawingPad = false })
+            }
         }
     }
 
@@ -301,41 +347,87 @@ struct QuizPlayView: View {
         let seed = QuestionSeed.make(attempt: attempt.id, country: target.country.meta.id, kind: kind)
         let answeredIDs = Set(targets.filter { answered[$0.id]?[.name] != nil }.map(\.id))
         let made = atlas.choices(for: kind, about: target.country, excluding: answeredIDs, seed: seed)
-        let asked = ActiveQuestion(target: target.id, kind: kind, correct: made.correct, choices: made.all,
-                                   countryIDs: made.countries.mapValues(\.meta.id), askedAt: .now,
+        var asked = ActiveQuestion(target: target.id, kind: kind, correct: made.correct, choices: made.all,
+                                   countryIDs: made.countries.mapValues(\.meta.id),
+                                   names: made.countries.mapValues(\.name),
+                                   flags: made.countries.compactMapValues(\.flagAsset), askedAt: .now,
                                    leading: cardOnLeadingSide)
+        if kind == .flag {
+            asked.outline = FlagOutlines.spec(for: target.country)
+        }
         withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.25)) { question = asked }
         promptFocused = true
     }
 
+    /// Help: the same question, picked from four (half points).
+    private func useChoices() { setFlagMode(.choices) }
+
+    private func setFlagMode(_ mode: QuizPlayView.FlagMode) {
+        guard var asked = question, asked.picked == nil else { return }
+        asked.flagMode = mode
+        withAnimation(reduceMotion ? nil : .snappy) { question = asked }
+    }
+
+    /// A checked drawing: recorded with its grade (full points if right,
+    /// part of them for a mirror image or the right colours).
+    /// The pad closes only once it's saved; if saving fails it stays open
+    /// with the drawing, so nothing has to be drawn again.
+    private func drew(_ result: FreehandResult) -> Bool {
+        let saved = choose("freehand:\(result.grade.scorePercent)%", freehand: result, correctAnswer: "freehand")
+        if saved { drawingPad = false }
+        return saved
+    }
+
     private func choose(_ choice: String) {
+        choose(choice, freehand: nil, correctAnswer: nil)
+    }
+
+    /// Records the answer; false if it couldn't be saved.
+    @discardableResult
+    private func choose(_ choice: String, freehand: FreehandResult?, correctAnswer: String?) -> Bool {
         guard var asked = question, asked.picked == nil, let attempt, let atlas = atlasStore.atlas,
-              let target = targets.first(where: { $0.id == asked.target }) else { return }
+              let target = targets.first(where: { $0.id == asked.target }) else { return false }
         speaker.stop()
-        let chosenCountry = asked.countryIDs[choice].flatMap { id in atlas.countries.first { $0.meta.id == id } }
-        guard let saved = QuizPlay.record(choice, correctAnswer: asked.correct, kind: asked.kind,
+        let drawn = freehand != nil
+        let chosenCountry = !drawn
+            ? asked.countryIDs[choice].flatMap { id in atlas.countries.first { $0.meta.id == id } }
+            : nil
+        // Name and capital buttons have always been full points; a flag
+        // picked from four is the half-points help (§3.3).
+        let multipleChoice = asked.kind == .flag && !drawn
+        guard let saved = QuizPlay.record(choice, correctAnswer: correctAnswer ?? asked.correct, kind: asked.kind,
                                           country: target.country, chosenCountry: chosenCountry,
-                                          choices: asked.choices, quiz: quiz, attempt: attempt,
+                                          choices: drawn ? [] : asked.choices,
+                                          multipleChoice: multipleChoice,
+                                          isCorrect: freehand?.grade.correct,
+                                          creditPercent: freehand.map { Int(drawCreditPercent(credit: $0.grade.credit)) },
+                                          colourHint: asked.colourHint,
+                                          drawing: freehand.map { (FlagDrawingContent.freehand($0.sketch), Int($0.grade.scorePercent)) },
+                                          quiz: quiz, attempt: attempt,
                                           askedAt: asked.askedAt, in: context) else {
-            saveFailed = true // nothing changes: the question can be answered again
-            return
+            // Nothing changes: the question can be answered again. (A drawing
+            // stays on its pad, which says so itself.)
+            if freehand == nil { saveFailed = true }
+            return false
         }
-        let right = choice == asked.correct
         asked.picked = choice
+        asked.freehand = freehand
         asked.earned = saved.pointsAwarded
+        let right = asked.isRight
         withAnimation(reduceMotion ? nil : .snappy) {
             question = asked
             answered[target.id, default: [:]][asked.kind] = right
             points += asked.earned
-            if !right, asked.kind == .name, let chosenCountry, chosenCountry.id != target.id {
+            // Show where the wrong pick is: the country tapped by name, or
+            // the country whose flag was picked.
+            if !right, asked.kind != .capital, let chosenCountry, chosenCountry.id != target.id {
                 wrongPick = chosenCountry.id
             }
         }
-        let verdict = right
-            ? (asked.earned > 0 ? "Yes! \(asked.earned) points." : "Yes!")
-            : "Good try! It's \(asked.correct)."
+        let verdict = QuestionCard.verdictText(asked, country: target.country)
         if readingAloud { speaker.say([verdict]) }
         AccessibilityNotification.Announcement(verdict).post()
+        return true
     }
 
     private func next() {
@@ -401,13 +493,64 @@ private struct QuestionCard: View {
     let onSpeak: () -> Void
     let onPick: (String) -> Void
     let onNext: () -> Void
+    let onUseChoices: () -> Void
+    let onStartDrawing: () -> Void
+    /// The most height the card may take; taller content scrolls.
+    let maxHeight: CGFloat
+
+    @State private var contentHeight: CGFloat = 0
+    @AccessibilityFocusState private var verdictFocused: Bool
+
+    /// Tapping an answer only selects it; "Check my answer" sends it, so a
+    /// stray tap can't answer (beta feedback). Reset with each question (the
+    /// card is rebuilt per question).
+    @State private var selected: String?
 
     private var prompt: String {
         switch question.kind {
         case .name: "Which country is this?"
         case .capital: "What is the capital of \(country.name)?"
+        case .flag: question.flagMode == .choices
+            ? "Which flag belongs to \(country.name)?" : "Draw the flag of \(country.name)!"
         }
     }
+
+    /// What the verdict says (and is read aloud), right or not.
+    static func verdictText(_ question: QuizPlayView.ActiveQuestion, country: AtlasCountry) -> String {
+        if question.isRight {
+            return question.earned > 0 ? "Yes! \(question.earned) points." : "Yes!"
+        }
+        // No "+0" on a just-for-fun attempt.
+        let earned = question.earned > 0 ? " +\(question.earned)." : ""
+        switch question.partialCredit {
+        case .mirrored:
+            return "So close: it's a mirror image!\(earned) Here's the flag of \(country.name)."
+        case .colours:
+            return "All the right colours!\(earned) Here's how they go on the flag of \(country.name)."
+        default:
+            return missed(question, country: country)
+        }
+    }
+
+    /// What a wrong answer hears: the right answer, in words.
+    static func missed(_ question: QuizPlayView.ActiveQuestion, country: AtlasCountry) -> String {
+        if let freehand = question.freehand {
+            let missing = freehand.grade.missingColours.map(FlagPaint.spoken)
+            return missing.isEmpty
+                ? "Good try! Some parts are different. Here's the flag of \(country.name)."
+                : "Good try! It needs \(ListFormatter.localizedString(byJoining: missing)) too. Here's the flag of \(country.name)."
+        }
+        guard question.kind == .flag else { return "Good try! It's \(question.correct)." }
+        let picked = question.picked.flatMap { question.names[$0] }
+        return picked.map { "Good try! That's the flag of \($0)." } ?? "Good try!"
+    }
+
+    /// Flags are read out by number: their names would give the answer.
+    private var spokenChoices: [String] {
+        question.kind == .flag ? [] : question.choices.map { $0 + "." }
+    }
+
+    private var asksForAPick: Bool { question.picked == nil && !question.isFreehand }
 
     var body: some View {
         ScrollView {
@@ -415,7 +558,7 @@ private struct QuestionCard: View {
                 HStack(alignment: .top, spacing: 12) {
                     SpeakButton(label: "Read the question") {
                         onSpeak()
-                        speaker.say([prompt] + question.choices.map { $0 + "." })
+                        speaker.say([prompt] + spokenChoices)
                     }
                     if showsFlag, question.kind == .capital, let flag = country.flagAsset {
                         Image(flag)
@@ -434,28 +577,30 @@ private struct QuestionCard: View {
                     Spacer(minLength: 0)
                 }
 
-                ForEach(question.choices, id: \.self) { choice in
-                    // The speaker sits on the leading side, well away from
-                    // the answer, so reaching for it can't pick an answer.
-                    HStack(spacing: 22) {
-                        SpeakButton(label: "Read \(choice)") {
-                            onSpeak()
-                            speaker.say([choice])
-                        }
-                        Button {
-                            onPick(choice)
-                        } label: {
-                            ChoiceLabel(text: choice, state: state(of: choice))
-                        }
-                        .buttonStyle(.plain)
-                        // Not .disabled: that would grey out the green and
-                        // red verdict colours.
-                        .allowsHitTesting(question.picked == nil)
-                    }
+                if question.isFreehand {
+                    FreehandPanel(country: country, result: question.freehand,
+                                  onStart: onStartDrawing, onUseChoices: onUseChoices)
+                } else if question.kind == .flag {
+                    flagGrid
+                } else {
+                    wordChoices
                 }
 
-                if let picked = question.picked {
-                    verdict(picked)
+                if asksForAPick {
+                    Button {
+                        if let selected { onPick(selected) }
+                    } label: {
+                        Text(selected == nil ? "Pick an answer" : "Check my answer")
+                            .font(.title3.bold())
+                            .frame(maxWidth: .infinity, minHeight: 52)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .buttonBorderShape(.roundedRectangle(radius: 16))
+                    .disabled(selected == nil)
+                }
+
+                if question.picked != nil {
+                    verdict
                     Button(action: onNext) {
                         Text(isLastForCountry ? "Done" : "Next question")
                             .font(.title3.bold())
@@ -466,43 +611,168 @@ private struct QuestionCard: View {
                 }
             }
             .padding(24)
+            .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { contentHeight = $0 }
         }
         .scrollBounceBehavior(.basedOnSize)
-        .fixedSize(horizontal: false, vertical: true)
+        // As tall as its content, up to the space there is; then it scrolls.
+        .frame(height: min(contentHeight, maxHeight))
         .frame(maxWidth: 420)
+        .onChange(of: question.picked) { _, picked in
+            // The confirm button just went away: take VoiceOver to the verdict.
+            if picked != nil { verdictFocused = true }
+        }
         .background(.regularMaterial, in: .rect(cornerRadius: 28))
         .shadow(color: .black.opacity(0.2), radius: 16, y: 6)
         .dynamicTypeSize(...DynamicTypeSize.accessibility2)
     }
 
+    /// Four flags, two by two. Once answered, each shows whose it is.
+    private var flagGrid: some View {
+        Grid(horizontalSpacing: 14, verticalSpacing: 14) {
+            ForEach(Array(stride(from: 0, to: question.choices.count, by: 2)), id: \.self) { row in
+                GridRow {
+                    ForEach(question.choices[row..<min(row + 2, question.choices.count)], id: \.self) { choice in
+                        let number = (question.choices.firstIndex(of: choice) ?? 0) + 1
+                        Button {
+                            selected = choice
+                        } label: {
+                            FlagChoice(asset: question.flags[choice], number: number,
+                                       name: question.names[choice] ?? "", state: state(of: choice))
+                        }
+                        .buttonStyle(.plain)
+                        .allowsHitTesting(question.picked == nil)
+                    }
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var wordChoices: some View {
+        ForEach(question.choices, id: \.self) { choice in
+            // The speaker sits on the leading side, well away from
+            // the answer, so reaching for it can't pick an answer.
+            HStack(spacing: 22) {
+                SpeakButton(label: "Read \(choice)") {
+                    onSpeak()
+                    speaker.say([choice])
+                }
+                Button {
+                    selected = choice
+                } label: {
+                    ChoiceLabel(text: choice, state: state(of: choice))
+                }
+                .buttonStyle(.plain)
+                // Not .disabled: that would grey out the green and
+                // red verdict colours.
+                .allowsHitTesting(question.picked == nil)
+            }
+        }
+    }
+
     private func state(of choice: String) -> ChoiceLabel.State {
-        guard let picked = question.picked else { return .open }
+        guard let picked = question.picked else { return choice == selected ? .selected : .open }
         if choice == question.correct { return .right }
         return choice == picked ? .wrong : .faded
     }
 
-    @ViewBuilder
-    private func verdict(_ picked: String) -> some View {
-        let right = picked == question.correct
-        HStack(spacing: 10) {
-            Image(systemName: right ? "checkmark.circle.fill" : "lightbulb.fill")
+    private var verdict: some View {
+        let right = question.isRight
+        let partly = question.partialCredit != nil
+        return HStack(spacing: 10) {
+            Image(systemName: right ? "checkmark.circle.fill" : partly ? "star.circle.fill" : "lightbulb.fill")
                 .font(.title2)
                 .foregroundStyle(right ? QuizColor.right : QuizColor.points)
-            if right {
-                Text(question.earned > 0 ? "Yes! +\(question.earned)" : "Yes!")
-                    .font(.title3.bold())
-            } else {
-                Text("Good try! It's \(question.correct).")
-                    .font(.title3.bold())
-                    .fixedSize(horizontal: false, vertical: true)
-            }
+            Text(right ? (question.earned > 0 ? "Yes! +\(question.earned)" : "Yes!")
+                       : Self.verdictText(question, country: country))
+                .font(.title3.bold())
+                .fixedSize(horizontal: false, vertical: true)
         }
         .accessibilityElement(children: .combine)
+        .accessibilityFocused($verdictFocused)
+    }
+}
+
+/// One flag answer. Before answering it's just the flag (its name would
+/// give it away); after, the right one turns green, a wrong pick red, and
+/// each says whose flag it is.
+private struct FlagChoice: View {
+    let asset: String?
+    let number: Int
+    let name: String
+    let state: ChoiceLabel.State
+
+    var body: some View {
+        VStack(spacing: 6) {
+            Group {
+                if let asset {
+                    Image(asset)
+                        .resizable()
+                        .scaledToFit()
+                        .clipShape(.rect(cornerRadius: 4))
+                        .overlay(RoundedRectangle(cornerRadius: 4).stroke(.black.opacity(0.2)))
+                } else {
+                    Image(systemName: "flag").font(.largeTitle)
+                }
+            }
+            .frame(maxWidth: .infinity, minHeight: 90, maxHeight: 90)
+            if state != .open {
+                Text(name)
+                    .font(.footnote.weight(.semibold))
+                    .lineLimit(3)
+                    .multilineTextAlignment(.center)
+                    .minimumScaleFactor(0.8)
+            }
+        }
+        .padding(10)
+        .frame(maxWidth: .infinity)
+        .foregroundStyle(state == .right || state == .wrong ? Color.white : Color.primary)
+        .background(background, in: .rect(cornerRadius: 16))
+        .overlay(RoundedRectangle(cornerRadius: 16).stroke(Color.accentColor, lineWidth: state == .selected ? 4 : 0))
+        .overlay(alignment: .topTrailing) {
+            switch state {
+            case .right: badge("checkmark")
+            case .wrong: badge("xmark")
+            default: EmptyView()
+            }
+        }
+        .opacity(state == .faded ? 0.45 : 1)
+        .contentShape(.rect)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(accessibilityText)
+        .accessibilityAddTraits(state == .selected ? .isSelected : [])
+    }
+
+    private func badge(_ symbol: String) -> some View {
+        Image(systemName: symbol)
+            .font(.headline.bold())
+            .padding(6)
+            .background(background, in: .circle)
+            .offset(x: 6, y: -6)
+    }
+
+    private var background: Color {
+        switch state {
+        case .open, .faded: Color(uiColor: .secondarySystemBackground)
+        case .selected: Color.accentColor.opacity(0.18)
+        case .right: QuizColor.right
+        case .wrong: QuizColor.wrong
+        }
+    }
+
+    private var accessibilityText: String {
+        switch state {
+        case .open: "Flag \(number)"
+        case .selected: "Flag \(number)" // the .isSelected trait says "selected"
+        case .right: "Flag \(number), \(name), the right answer"
+        case .wrong: "Flag \(number), \(name), not right"
+        case .faded: "Flag \(number), \(name)"
+        }
     }
 }
 
 private struct ChoiceLabel: View {
-    enum State { case open, right, wrong, faded }
+    enum State { case open, selected, right, wrong, faded }
 
     let text: String
     let state: State
@@ -524,14 +794,17 @@ private struct ChoiceLabel: View {
         .frame(maxWidth: .infinity, minHeight: 60, alignment: .leading)
         .foregroundStyle(state == .right || state == .wrong ? Color.white : Color.primary)
         .background(background, in: .rect(cornerRadius: 16))
+        .overlay(RoundedRectangle(cornerRadius: 16).stroke(Color.accentColor, lineWidth: state == .selected ? 4 : 0))
         .opacity(state == .faded ? 0.45 : 1)
         .contentShape(.rect)
         .accessibilityLabel(accessibilityText)
+        .accessibilityAddTraits(state == .selected ? .isSelected : [])
     }
 
     private var background: Color {
         switch state {
         case .open, .faded: Color(uiColor: .secondarySystemBackground)
+        case .selected: Color.accentColor.opacity(0.18)
         case .right: QuizColor.right
         case .wrong: QuizColor.wrong
         }
@@ -653,24 +926,24 @@ private struct QuizSummary: View {
 }
 
 /// What a sitting is worth, in words (the numbers are the Rust core's:
-/// full, half, a quarter, then practice only; requirements §3.4). Tries are
+/// full, three quarters, half, then just for fun; requirements §3.4). Tries are
 /// counted for each time the quiz comes up in the queue, not per day.
 enum QuizWorth {
     static func short(forAttempt number: Int) -> String {
         switch number {
         case ...1: "Full points"
-        case 2: "Half points"
-        case 3: "Quarter points"
-        default: "Just for practice"
+        case 2: "¾ points"
+        case 3: "Half points"
+        default: "Just for fun"
         }
     }
 
     static func note(forAttempt number: Int) -> String {
         switch number {
         case ...1: "First try: full points."
-        case 2: "Second try: half points."
-        case 3: "Third try: quarter points."
-        default: "Practice round: no points this time."
+        case 2: "Second try: three quarters of the points."
+        case 3: "Third try: half points."
+        default: "Just for fun: no points this time."
         }
     }
 }
