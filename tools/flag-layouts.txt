@@ -138,7 +138,7 @@ tz diagonal green black lightblue emblem
 cd diagonal lightblue red lightblue emblem
 na diagonal blue red green emblem
 cg diagonal green yellow red
-tt diagonal red black red
+tt diagonal-down red black red
 kn diagonal green black red emblem
 sb diagonal blue yellow green emblem
 bt diagonal-split yellow orange emblem

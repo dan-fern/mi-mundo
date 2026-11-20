@@ -128,10 +128,161 @@ pub fn queue_from_today(queue: Vec<String>, current: Option<String>) -> Vec<Stri
     ordered
 }
 
+/// A parent picks a different quiz to be today's (requirements §5.4).
+///
+/// Only while no kid has attempted today's quiz: once one has, the state is
+/// returned unchanged (the app also hides the action). The chosen quiz
+/// comes up as a new run, as if the queue had moved on to it, and the queue
+/// carries on from there tomorrow. Picking today's own quiz, or one that
+/// isn't in the queue, changes nothing.
+#[uniffi::export]
+pub fn queue_set_today(state: QueueState, queue: Vec<String>, id: String) -> QueueState {
+    if state.attempted_by_kid || state.current.as_deref() == Some(id.as_str()) {
+        return state;
+    }
+    let Some(position) = queue.iter().position(|q| *q == id) else {
+        return state;
+    };
+    QueueState {
+        current: Some(id),
+        position: position as u32,
+        run: state.run.wrapping_add(1),
+        day: state.day,
+        attempted_by_kid: false,
+        started: false,
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
     use proptest::prelude::*;
+
+    /// A queue of three played through the two DST nights: a kid attempts
+    /// each day's quiz, and the queue moves on exactly once per 11 pm boundary
+    /// even though those game days are 23 and 25 hours long.
+    #[test]
+    fn queue_advances_once_per_game_day_across_dst_nights() {
+        use crate::days::game_day;
+        use chrono::TimeZone;
+        use chrono_tz::America::New_York;
+        let et = |y, m, d, h, min| {
+            New_York
+                .with_ymd_and_hms(y, m, d, h, min, 0)
+                .single()
+                .unwrap()
+                .timestamp()
+        };
+        let queue = ids(&["a", "b", "c"]);
+        for (sat, sun, mon, sun_11pm) in [
+            // 2026 and 2027 spring-forward and fall-back weekends.
+            (
+                et(2026, 3, 7, 12, 0),
+                et(2026, 3, 8, 12, 0),
+                et(2026, 3, 9, 12, 0),
+                et(2026, 3, 8, 23, 0),
+            ),
+            (
+                et(2026, 10, 31, 12, 0),
+                et(2026, 11, 1, 12, 0),
+                et(2026, 11, 2, 12, 0),
+                et(2026, 11, 1, 23, 0),
+            ),
+            (
+                et(2027, 3, 13, 12, 0),
+                et(2027, 3, 14, 12, 0),
+                et(2027, 3, 15, 12, 0),
+                et(2027, 3, 14, 23, 0),
+            ),
+            (
+                et(2027, 11, 6, 12, 0),
+                et(2027, 11, 7, 12, 0),
+                et(2027, 11, 8, 12, 0),
+                et(2027, 11, 7, 23, 0),
+            ),
+        ] {
+            let mut state = queue_today(
+                queue_initial_state(game_day(sat)),
+                queue.clone(),
+                game_day(sat),
+            );
+            assert_eq!(current(&state), Some("a"));
+            state.attempted_by_kid = true;
+            // 10:59 pm: still the same game day, nothing moves.
+            let before = queue_today(
+                state.clone(),
+                queue.clone(),
+                game_day(sat + 10 * 3600 + 59 * 60),
+            );
+            assert_eq!(current(&before), Some("a"));
+            // 11 pm: next quiz.
+            let mut next = queue_today(state, queue.clone(), game_day(sat + 11 * 3600));
+            assert_eq!(current(&next), Some("b"));
+            // Calling again (and at the 2 am clock change) is idempotent.
+            next = queue_today(next, queue.clone(), game_day(sat + 15 * 3600));
+            assert_eq!(current(&next), Some("b"));
+            next.attempted_by_kid = true;
+            let sunday_late = queue_today(
+                next.clone(),
+                queue.clone(),
+                game_day(sun + 10 * 3600 + 59 * 60),
+            );
+            assert_eq!(current(&sunday_late), Some("b"));
+            // The end of that (23 h or 25 h) game day itself: one second
+            // before 11 pm Sunday nothing moves, at 11 pm it does.
+            let at = |t: i64| queue_today(next.clone(), queue.clone(), game_day(t));
+            assert_eq!(current(&at(sun_11pm - 1)), Some("b"));
+            assert_eq!(current(&at(sun_11pm)), Some("c"));
+            let monday = queue_today(next, queue.clone(), game_day(mon));
+            assert_eq!(current(&monday), Some("c"));
+        }
+    }
+
+    #[test]
+    fn set_today_brings_the_chosen_quiz_up_as_a_new_run() {
+        let queue = ids(&["a", "b", "c"]);
+        let state = queue_today(queue_initial_state(10), queue.clone(), 10);
+        let after = queue_set_today(state.clone(), queue.clone(), "c".into());
+        assert_eq!(current(&after), Some("c"));
+        assert_eq!(after.position, 2);
+        assert_eq!(after.run, state.run + 1);
+        assert_eq!(after.day, 10);
+        // Tomorrow, after a kid tries it, the queue carries on from "c".
+        let tried = QueueState {
+            attempted_by_kid: true,
+            ..after
+        };
+        assert_eq!(current(&queue_today(tried, queue, 11)), Some("a"));
+    }
+
+    #[test]
+    fn set_today_is_refused_once_a_kid_attempted() {
+        let queue = ids(&["a", "b"]);
+        let state = QueueState {
+            attempted_by_kid: true,
+            ..queue_today(queue_initial_state(3), queue.clone(), 3)
+        };
+        assert_eq!(queue_set_today(state.clone(), queue, "b".into()), state);
+    }
+
+    #[test]
+    fn set_today_ignores_unknown_and_current_quizzes() {
+        let queue = ids(&["a", "b"]);
+        let state = queue_today(queue_initial_state(3), queue.clone(), 3);
+        assert_eq!(
+            queue_set_today(state.clone(), queue.clone(), "zz".into()),
+            state
+        );
+        assert_eq!(queue_set_today(state.clone(), queue, "a".into()), state);
+    }
+
+    #[test]
+    fn set_today_then_same_day_refresh_keeps_it() {
+        let queue = ids(&["a", "b", "c"]);
+        let state = queue_today(queue_initial_state(5), queue.clone(), 5);
+        let after = queue_set_today(state, queue.clone(), "b".into());
+        assert_eq!(queue_today(after.clone(), queue, 5), after);
+    }
 
     fn ids(names: &[&str]) -> Vec<String> {
         names.iter().map(|s| s.to_string()).collect()

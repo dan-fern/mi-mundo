@@ -22,7 +22,13 @@ struct RootView: View {
 
     var body: some View {
         Group {
-            if !profiles.contains(where: \.isParent) {
+            if Persistence.savedDataIsNewer {
+                ContentUnavailableView {
+                    Label("Please update Mi Mundo", systemImage: "arrow.down.app")
+                } description: {
+                    Text("This copy of the app is older than the family's saved data. Install the newest version to carry on. Nothing has been deleted.")
+                }
+            } else if !profiles.contains(where: \.isParent) {
                 FirstRunView { parent in begin(parent) }
             } else if let active, active.isParent {
                 ParentHomeView(parent: active, onSwitchPlayer: switchPlayer)

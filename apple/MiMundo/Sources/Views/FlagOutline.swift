@@ -27,6 +27,9 @@ enum FlagOutlines {
         return all[country.meta.iso2.lowercased()]
     }
 
+    /// By flag code ("fr").
+    static func spec(code: String) -> FlagOutlineSpec? { all[code] }
+
     /// What's recorded as a drawn flag's answer: "v3:blue,white,red".
     static func summary(layout: String, colors: [String]) -> String {
         "\(layout):\(colors.joined(separator: ","))"
@@ -132,6 +135,13 @@ enum FlagLayoutShape {
             return [poly([(0, 0), (1 - t, 0), (0, 1 - t)]),
                     poly([(0, 1 - t), (1 - t, 0), (1, 0), (1, t), (t, 1), (0, 1)]),
                     poly([(1, t), (1, 1), (t, 1)])]
+        case "diagonal-down":
+            // A band from the top of the hoist to the bottom of the fly
+            // (Trinidad and Tobago): "diagonal" mirrored left to right.
+            let t: CGFloat = 0.16
+            return [poly([(1, 0), (t, 0), (1, 1 - t)]),
+                    poly([(0, 0), (t, 0), (1, 1 - t), (1, 1), (1 - t, 1), (0, t)]),
+                    poly([(0, t), (1 - t, 1), (0, 1)])]
         case "diagonal-split": return [poly([(0, 0), (1, 0), (0, 1)]), poly([(1, 0), (1, 1), (0, 1)])]
         case "canton": return [full, rect(0, 0, 0.5, 0.5)]
         case "canton-h2": return hStripes(2) + [rect(0, 0, 0.5 * h / w, 0.5)]
@@ -142,6 +152,12 @@ enum FlagLayoutShape {
     }
 
     /// Spoken name of a layout, for VoiceOver and read-aloud.
+    /// The regions' outlines for tracing: each region's parts merged, so a
+    /// cross is one shape (not two bars with a box where they overlap).
+    static func guide(_ layout: String, in r: CGRect) -> [Path] {
+        regions(layout, in: r).map { Path($0.cgPath.normalized()) }
+    }
+
     static func spoken(_ layout: String) -> String {
         switch layout {
         case "plain": "One colour"
@@ -165,6 +181,7 @@ enum FlagLayoutShape {
         case "bar-h3": "A bar with three stripes"
         case "saltire": "A big X"
         case "diagonal": "A diagonal band"
+        case "diagonal-down": "A diagonal band the other way"
         case "diagonal-split": "Split corner to corner"
         case "canton": "A box in the corner"
         case "canton-h2": "Two stripes with a corner box"
@@ -215,234 +232,7 @@ struct FlagOutlineCanvas: View {
 }
 
 /// One line of the emblem, in fractions of the flag's size.
-struct FlagStroke: Equatable {
+struct FlagStroke: Equatable, Codable {
     var color: String
     var points: [CGPoint]
-}
-
-/// Drawing a flag on an outline: pick the layout, paint the regions, maybe
-/// draw the emblem, then check. Grading (layout and colours only) is the
-/// Rust core's `grade_flag_outline`.
-struct FlagDrawingPanel: View {
-    let country: AtlasCountry
-    let spec: FlagOutlineSpec
-    let layoutChoices: [String]
-    /// Set once the drawing has been checked.
-    let result: FlagDrawResult?
-    let onCheck: (FlagDrawResult) -> Void
-    let onUseChoices: () -> Void
-
-    @State private var layout: String?
-    @State private var painted: [String?] = []
-    @State private var brush = "red"
-    @State private var drawingEmblem = false
-    @State private var strokes: [FlagStroke] = []
-    @State private var drawingStroke = false
-
-    var body: some View {
-        if let result {
-            checked(result)
-        } else if let layout {
-            painting(layout)
-        } else {
-            layoutPicker
-        }
-    }
-
-    // MARK: Step 1: the layout
-
-    private var layoutPicker: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("What shape is it?")
-                .font(.headline)
-            LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12),
-                                GridItem(.flexible(), spacing: 12)], spacing: 12) {
-                ForEach(layoutChoices, id: \.self) { choice in
-                    Button {
-                        pick(choice)
-                    } label: {
-                        FlagOutlineCanvas(layout: choice)
-                            .padding(8)
-                            .background(Color(uiColor: .secondarySystemBackground), in: .rect(cornerRadius: 12))
-                            .contentShape(.rect)
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel(FlagLayoutShape.spoken(choice))
-                }
-            }
-            helpButton
-        }
-    }
-
-    private func pick(_ choice: String) {
-        layout = choice
-        painted = Array(repeating: nil, count: Int(flagLayoutRegions(layout: choice)))
-        strokes = []
-        drawingEmblem = false
-    }
-
-    // MARK: Step 2: the colours (and the emblem)
-
-    private func painting(_ layout: String) -> some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text(drawingEmblem ? "Draw the emblem. It's just for fun!" : "Tap a colour, then tap the flag.")
-                .font(.headline)
-                .fixedSize(horizontal: false, vertical: true)
-            GeometryReader { geo in
-                let size = geo.size
-                FlagOutlineCanvas(layout: layout, painted: painted, strokes: strokes)
-                    .frame(width: size.width, height: size.height)
-                    .contentShape(.rect)
-                    // One gesture for both: painting fills the part under a
-                    // tap; drawing the emblem follows the finger.
-                    .gesture(DragGesture(minimumDistance: 0)
-                        .onChanged { drag in
-                            guard drawingEmblem else { return }
-                            let p = CGPoint(x: drag.location.x / max(size.width, 1),
-                                            y: drag.location.y / max(size.height, 1))
-                            if drawingStroke {
-                                strokes[strokes.count - 1].points.append(p)
-                            } else {
-                                strokes.append(FlagStroke(color: brush, points: [p]))
-                                drawingStroke = true
-                            }
-                        }
-                        .onEnded { drag in
-                            drawingStroke = false
-                            guard !drawingEmblem,
-                                  let i = FlagOutlineCanvas.region(at: drag.startLocation, layout: layout, size: size),
-                                  i < painted.count else { return }
-                            painted[i] = brush
-                        })
-                    .accessibilityElement()
-                    .accessibilityLabel("Your flag")
-                    .accessibilityValue(paintedDescription)
-            }
-            .aspectRatio(4 / 3, contentMode: .fit)
-            // Small enough that the whole card fits on an iPad mini in
-            // landscape, with the map's top bar above it.
-            .frame(maxWidth: 236)
-            .frame(maxWidth: .infinity)
-
-            palette
-
-            HStack(spacing: 10) {
-                Button {
-                    self.layout = nil
-                } label: {
-                    Label("Shapes", systemImage: "chevron.backward")
-                }
-                .buttonStyle(.bordered)
-                if spec.emblem || drawingEmblem {
-                    Button {
-                        drawingEmblem.toggle()
-                    } label: {
-                        Label(drawingEmblem ? "Paint" : "Emblem",
-                              systemImage: drawingEmblem ? "paintbrush.fill" : "pencil.tip")
-                    }
-                    .buttonStyle(.bordered)
-                }
-                if !strokes.isEmpty {
-                    Button {
-                        strokes.removeLast()
-                    } label: {
-                        Label("Undo", systemImage: "arrow.uturn.backward")
-                    }
-                    .buttonStyle(.bordered)
-                }
-                Spacer(minLength: 0)
-            }
-            .font(.callout.weight(.semibold))
-            .labelStyle(.titleAndIcon)
-
-            Button {
-                check(layout)
-            } label: {
-                Text(painted.contains(nil) ? "Paint every part" : "Check my flag")
-                    .font(.title3.bold())
-                    .frame(maxWidth: .infinity, minHeight: 48)
-            }
-            .buttonStyle(.borderedProminent)
-            .buttonBorderShape(.roundedRectangle(radius: 16))
-            .disabled(painted.contains(nil))
-            helpButton
-        }
-    }
-
-    private var paintedDescription: String {
-        painted.enumerated().map { i, name in
-            "part \(i + 1) \(name.map(FlagPaint.spoken) ?? "blank")"
-        }.joined(separator: ", ")
-    }
-
-    private var palette: some View {
-        HStack(spacing: 6) {
-            ForEach(FlagPaint.names, id: \.self) { name in
-                Button {
-                    brush = name
-                } label: {
-                    Circle()
-                        .fill(FlagPaint.color(name))
-                        .overlay(Circle().stroke(.black.opacity(0.25), lineWidth: 1))
-                        .overlay(Circle().stroke(Color.accentColor, lineWidth: brush == name ? 4 : 0).padding(-5))
-                        .frame(width: 30, height: 30)
-                        .frame(maxWidth: .infinity, minHeight: 44)
-                        .contentShape(.rect)
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel(FlagPaint.spoken(name))
-                .accessibilityAddTraits(brush == name ? .isSelected : [])
-            }
-        }
-    }
-
-    private var helpButton: some View {
-        Button(action: onUseChoices) {
-            Label("Pick it from four instead (half points)", systemImage: "square.grid.2x2")
-                .font(.callout)
-        }
-        .buttonStyle(.borderless)
-    }
-
-    private func check(_ layout: String) {
-        let colors = painted.map { $0 ?? "" }
-        let grade = gradeFlagOutline(layout: spec.layout, colors: spec.colors,
-                                     chosenLayout: layout, painted: colors)
-        onCheck(FlagDrawResult(layout: layout, painted: colors, strokes: strokes, grade: grade))
-    }
-
-    // MARK: After checking
-
-    private func checked(_ result: FlagDrawResult) -> some View {
-        let wrong = Set(result.grade.regionsRight.enumerated().filter { !$0.element }.map(\.offset))
-        return HStack(alignment: .top, spacing: 12) {
-            VStack(spacing: 4) {
-                FlagOutlineCanvas(layout: result.layout, painted: result.painted, strokes: result.strokes,
-                                  wrongRegions: wrong)
-                Text("Yours").font(.footnote.weight(.semibold)).foregroundStyle(.secondary)
-            }
-            .accessibilityElement(children: .ignore)
-            .accessibilityLabel("Your flag")
-            if !result.grade.correct, let asset = country.flagAsset {
-                VStack(spacing: 4) {
-                    Image(asset)
-                        .resizable()
-                        .aspectRatio(4 / 3, contentMode: .fit)
-                        .clipShape(.rect(cornerRadius: 4))
-                        .overlay(RoundedRectangle(cornerRadius: 4).stroke(.black.opacity(0.3)))
-                    Text(country.name).font(.footnote.weight(.semibold)).foregroundStyle(.secondary)
-                }
-                .accessibilityElement(children: .ignore)
-                .accessibilityLabel("The flag of \(country.name)")
-            }
-        }
-    }
-}
-
-/// A checked outline drawing.
-struct FlagDrawResult: Equatable {
-    let layout: String
-    let painted: [String]
-    let strokes: [FlagStroke]
-    let grade: FlagOutlineGrade
 }
