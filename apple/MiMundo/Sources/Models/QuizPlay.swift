@@ -8,20 +8,23 @@ import UIKit
 enum QuestionKind: String, CaseIterable, Sendable {
     case name
     case capital
-    /// Pick the country's flag from four. This is the easiest of the three
-    /// levels of help in §3.3, so it earns half points (multiple choice);
-    /// drawing the flag comes in later steps.
+    /// Draw the country's flag freehand (full points; a mirror image ¾, the
+    /// right colours ½), optionally over a tracing outline. Help: pick it
+    /// from four (half points, §3.3).
     case flag
-
-    /// Flag questions are multiple choice for now (§3.3: half points).
-    var usesMultipleChoice: Bool { self == .flag }
 }
 
 /// Points a right answer earns on a first try, by the Rust core's rules.
 enum QuizScoring {
-    static func firstTry(_ kind: QuestionKind, base: Int) -> Int {
+    static func firstTry(base: Int, multipleChoice: Bool) -> Int {
         Int(pointsForAttempt(basePoints: UInt32(clamping: max(base, 0)), attempt: 1,
-                             usedMultipleChoice: kind.usesMultipleChoice))
+                             usedMultipleChoice: multipleChoice))
+    }
+
+    /// The most a question can earn on a first try: every question,
+    /// flags included (drawn), can earn its full points.
+    static func best(base: Int) -> Int {
+        firstTry(base: base, multipleChoice: false)
     }
 }
 
@@ -63,7 +66,9 @@ extension SchemaV4 {
             self.quizCountryIDs = quiz.countryIDs
             self.questionCount = targets.reduce(0) { $0 + $1.kinds.count }
             self.perfectPoints = targets.reduce(0) { total, target in
-                total + target.kinds.reduce(0) { $0 + QuizScoring.firstTry($1, base: quiz.basePoints(for: $1)) }
+                total + target.kinds.reduce(0) {
+                    $0 + QuizScoring.best(base: quiz.basePoints(for: $1))
+                }
             }
         }
 
@@ -106,7 +111,14 @@ extension SchemaV4 {
 
         init(attempt: QuizAttempt, countryID: String, kind: QuestionKind, chosen: String,
              chosenCountryID: String?, correctAnswer: String, choices: [String],
-             basePoints: Int, askedAt: Date?, answeredAt: Date) {
+             basePoints: Int, multipleChoice: Bool, isCorrect: Bool? = nil, creditPercent: Int? = nil,
+             colourHint: Bool = false, askedAt: Date?, answeredAt: Date) {
+            // A drawn flag can be right without matching exactly (close
+            // shades count), so the grader's verdict wins when there is one,
+            // and it can be partly right (`creditPercent`, e.g. 75 for a
+            // mirror image): that earns part of the points but isn't "right".
+            let credit = creditPercent ?? ((isCorrect ?? (chosen == correctAnswer)) ? 100 : 0)
+            let right = credit >= 100
             self.id = UUID()
             self.attemptID = attempt.id
             self.profileID = attempt.profileID
@@ -115,16 +127,17 @@ extension SchemaV4 {
             self.chosen = chosen
             self.chosenCountryID = chosenCountryID
             self.correctAnswer = correctAnswer
-            self.correct = chosen == correctAnswer
+            self.correct = right
             self.choices = choices
             self.basePoints = basePoints
             self.attemptNumber = attempt.number
-            self.usedMultipleChoice = kind.usesMultipleChoice
-            self.pointsAwarded = chosen == correctAnswer
-                ? Int(pointsForAttempt(basePoints: UInt32(clamping: max(basePoints, 0)),
-                                       attempt: UInt32(clamping: max(attempt.number, 1)),
-                                       usedMultipleChoice: kind.usesMultipleChoice))
-                : 0
+            self.usedMultipleChoice = multipleChoice
+            // A flag's colour hint costs a quarter off the top (§3.4).
+            self.pointsAwarded = Int(pointsWithHelp(basePoints: UInt32(clamping: max(basePoints, 0)),
+                                                    attempt: UInt32(clamping: max(attempt.number, 1)),
+                                                    usedMultipleChoice: multipleChoice,
+                                                    creditPercent: UInt32(clamping: max(credit, 0)),
+                                                    colourHint: colourHint))
             self.askedAt = askedAt
             self.answeredAt = answeredAt
         }
@@ -181,26 +194,52 @@ enum QuizPlay {
                                   targets: targets)
             context.insert(attempt)
         }
-        if !profile.isParent { record.started = true }
+        // Opening the quiz doesn't lock it: only a kid's first answer does
+        // (record), so a parent can still swap or remove a quiz nobody has
+        // really attempted.
         return context.saveOrRollback("start quiz attempt") ? attempt : nil
     }
 
     /// Saves one answer; nil if it couldn't be saved (nothing changes then,
     /// so the question can be answered again). A kid's first answer is what
     /// counts as "a kid attempted today's quiz", which lets the queue move on
-    /// at the next game day. The queue is brought up to date first, so an
+    /// at the next game day. A second answer to the same question is refused
+    /// (nil). The queue is brought up to date first, so an
     /// answer given just after 11 pm ET counts for the day it was given.
     @MainActor
     static func record(_ chosen: String, correctAnswer: String, kind: QuestionKind,
                        country: AtlasCountry, chosenCountry: AtlasCountry?, choices: [String],
+                       multipleChoice: Bool = false, isCorrect: Bool? = nil, creditPercent: Int? = nil,
+                       colourHint: Bool = false,
+                       drawing: (content: FlagDrawingContent, scorePercent: Int)? = nil,
                        quiz: QuizSet, attempt: QuizAttempt, askedAt: Date?,
                        in context: ModelContext, now: Date = .now) -> QuizAnswer? {
         QuizQueue.refresh(in: context, now: now)
+        // One answer per sitting, country and question. The store's unique
+        // constraint would otherwise silently *replace* the first answer with
+        // this one (letting a wrong answer be "fixed" for points), so refuse.
+        let (attemptID, countryID, kindRaw) = (attempt.id, country.meta.id, kind.rawValue)
+        let existing = FetchDescriptor<QuizAnswer>(predicate: #Predicate {
+            $0.attemptID == attemptID && $0.countryID == countryID && $0.kindRaw == kindRaw })
+        guard ((try? context.fetchCount(existing)) ?? 0) == 0 else {
+            dataLog.error("Refused a second answer to the same question")
+            return nil
+        }
         let answer = QuizAnswer(attempt: attempt, countryID: country.meta.id, kind: kind,
                                 chosen: chosen, chosenCountryID: chosenCountry?.meta.id,
                                 correctAnswer: correctAnswer, choices: choices,
-                                basePoints: quiz.basePoints(for: kind), askedAt: askedAt, answeredAt: now)
+                                basePoints: quiz.basePoints(for: kind), multipleChoice: multipleChoice,
+                                isCorrect: isCorrect, creditPercent: creditPercent, colourHint: colourHint,
+                                askedAt: askedAt, answeredAt: now)
         context.insert(answer)
+        // Every drawing is kept for parent review (§5.3).
+        if let drawing {
+            context.insert(FlagDrawing(answerID: answer.id, profileID: attempt.profileID,
+                                       countryID: country.meta.id, content: drawing.content,
+                                       scorePercent: drawing.scorePercent,
+                                       autoCorrect: answer.correct, autoCreditPercent: creditPercent,
+                                       drawnAt: now))
+        }
         if attempt.isKid,
            let record = try? context.fetch(FetchDescriptor<QueueRecord>()).first,
            record.currentQuizID == quiz.id, record.run == attempt.run {
