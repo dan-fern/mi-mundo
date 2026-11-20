@@ -8,9 +8,9 @@ import UIKit
 enum QuestionKind: String, CaseIterable, Sendable {
     case name
     case capital
-    /// Draw the country's flag freehand (full points). Help: draw it on a
-    /// layout outline (still full points), or pick it from four (half
-    /// points, §3.3).
+    /// Draw the country's flag freehand (full points; a mirror image ¾, the
+    /// right colours ½), optionally over a tracing outline. Help: pick it
+    /// from four (half points, §3.3).
     case flag
 }
 
@@ -21,10 +21,9 @@ enum QuizScoring {
                              usedMultipleChoice: multipleChoice))
     }
 
-    /// The most a question can earn on a first try. Every flag question
-    /// can be drawn (freehand, or on an outline) for full points; picking
-    /// from four is the half-points help.
-    static func best(_ kind: QuestionKind, base: Int, country: AtlasCountry?) -> Int {
+    /// The most a question can earn on a first try: every question,
+    /// flags included (drawn), can earn its full points.
+    static func best(base: Int) -> Int {
         firstTry(base: base, multipleChoice: false)
     }
 }
@@ -68,7 +67,7 @@ extension SchemaV4 {
             self.questionCount = targets.reduce(0) { $0 + $1.kinds.count }
             self.perfectPoints = targets.reduce(0) { total, target in
                 total + target.kinds.reduce(0) {
-                    $0 + QuizScoring.best($1, base: quiz.basePoints(for: $1), country: target.country)
+                    $0 + QuizScoring.best(base: quiz.basePoints(for: $1))
                 }
             }
         }
@@ -112,11 +111,14 @@ extension SchemaV4 {
 
         init(attempt: QuizAttempt, countryID: String, kind: QuestionKind, chosen: String,
              chosenCountryID: String?, correctAnswer: String, choices: [String],
-             basePoints: Int, multipleChoice: Bool, isCorrect: Bool? = nil,
-             askedAt: Date?, answeredAt: Date) {
+             basePoints: Int, multipleChoice: Bool, isCorrect: Bool? = nil, creditPercent: Int? = nil,
+             colourHint: Bool = false, askedAt: Date?, answeredAt: Date) {
             // A drawn flag can be right without matching exactly (close
-            // shades count), so the grader's verdict wins when there is one.
-            let right = isCorrect ?? (chosen == correctAnswer)
+            // shades count), so the grader's verdict wins when there is one,
+            // and it can be partly right (`creditPercent`, e.g. 75 for a
+            // mirror image): that earns part of the points but isn't "right".
+            let credit = creditPercent ?? ((isCorrect ?? (chosen == correctAnswer)) ? 100 : 0)
+            let right = credit >= 100
             self.id = UUID()
             self.attemptID = attempt.id
             self.profileID = attempt.profileID
@@ -130,11 +132,12 @@ extension SchemaV4 {
             self.basePoints = basePoints
             self.attemptNumber = attempt.number
             self.usedMultipleChoice = multipleChoice
-            self.pointsAwarded = right
-                ? Int(pointsForAttempt(basePoints: UInt32(clamping: max(basePoints, 0)),
-                                       attempt: UInt32(clamping: max(attempt.number, 1)),
-                                       usedMultipleChoice: multipleChoice))
-                : 0
+            // A flag's colour hint costs a quarter off the top (§3.4).
+            self.pointsAwarded = Int(pointsWithHelp(basePoints: UInt32(clamping: max(basePoints, 0)),
+                                                    attempt: UInt32(clamping: max(attempt.number, 1)),
+                                                    usedMultipleChoice: multipleChoice,
+                                                    creditPercent: UInt32(clamping: max(credit, 0)),
+                                                    colourHint: colourHint))
             self.askedAt = askedAt
             self.answeredAt = answeredAt
         }
@@ -206,7 +209,8 @@ enum QuizPlay {
     @MainActor
     static func record(_ chosen: String, correctAnswer: String, kind: QuestionKind,
                        country: AtlasCountry, chosenCountry: AtlasCountry?, choices: [String],
-                       multipleChoice: Bool = false, isCorrect: Bool? = nil,
+                       multipleChoice: Bool = false, isCorrect: Bool? = nil, creditPercent: Int? = nil,
+                       colourHint: Bool = false,
                        drawing: (content: FlagDrawingContent, scorePercent: Int)? = nil,
                        quiz: QuizSet, attempt: QuizAttempt, askedAt: Date?,
                        in context: ModelContext, now: Date = .now) -> QuizAnswer? {
@@ -225,14 +229,16 @@ enum QuizPlay {
                                 chosen: chosen, chosenCountryID: chosenCountry?.meta.id,
                                 correctAnswer: correctAnswer, choices: choices,
                                 basePoints: quiz.basePoints(for: kind), multipleChoice: multipleChoice,
-                                isCorrect: isCorrect, askedAt: askedAt, answeredAt: now)
+                                isCorrect: isCorrect, creditPercent: creditPercent, colourHint: colourHint,
+                                askedAt: askedAt, answeredAt: now)
         context.insert(answer)
         // Every drawing is kept for parent review (§5.3).
         if let drawing {
             context.insert(FlagDrawing(answerID: answer.id, profileID: attempt.profileID,
                                        countryID: country.meta.id, content: drawing.content,
                                        scorePercent: drawing.scorePercent,
-                                       autoCorrect: answer.correct, drawnAt: now))
+                                       autoCorrect: answer.correct, autoCreditPercent: creditPercent,
+                                       drawnAt: now))
         }
         if attempt.isKid,
            let record = try? context.fetch(FetchDescriptor<QueueRecord>()).first,

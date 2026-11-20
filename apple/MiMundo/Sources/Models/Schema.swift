@@ -52,16 +52,17 @@ typealias QuizSet = SchemaV2.QuizSet
 typealias QueueRecord = SchemaV2.QueueRecord
 typealias QuizAttempt = SchemaV4.QuizAttempt
 typealias QuizAnswer = SchemaV4.QuizAnswer
-typealias FlagDrawing = SchemaV5.FlagDrawing
+typealias FlagDrawing = SchemaV6.FlagDrawing
 
 enum MiMundoMigrationPlan: SchemaMigrationPlan {
-    static var schemas: [any VersionedSchema.Type] { [SchemaV1.self, SchemaV2.self, SchemaV3.self, SchemaV4.self, SchemaV5.self] }
+    static var schemas: [any VersionedSchema.Type] { [SchemaV1.self, SchemaV2.self, SchemaV3.self, SchemaV4.self, SchemaV5.self, SchemaV6.self] }
     static var stages: [MigrationStage] {
         [.lightweight(fromVersion: SchemaV1.self, toVersion: SchemaV2.self),
          .lightweight(fromVersion: SchemaV2.self, toVersion: SchemaV3.self),
          .custom(fromVersion: SchemaV3.self, toVersion: SchemaV4.self,
                  willMigrate: dropDuplicateV3Answers, didMigrate: nil),
-         .lightweight(fromVersion: SchemaV4.self, toVersion: SchemaV5.self)]
+         .lightweight(fromVersion: SchemaV4.self, toVersion: SchemaV5.self),
+         .lightweight(fromVersion: SchemaV5.self, toVersion: SchemaV6.self)]
     }
 }
 
@@ -128,7 +129,7 @@ enum Persistence {
         #if DEBUG
         if url == nil, let container = UITestLaunch.makeContainer() { return container } // UI tests: in-memory store
         #endif
-        let schema = Schema(versionedSchema: SchemaV5.self)
+        let schema = Schema(versionedSchema: SchemaV6.self)
         let configuration = url.map { ModelConfiguration(schema: schema, url: $0) } ?? ModelConfiguration(schema: schema)
         do {
             return try open(schema, configuration)

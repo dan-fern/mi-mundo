@@ -97,12 +97,31 @@ struct QuizDraft: Equatable {
     var countryIDs: [String] = []
     var asksName = true
     var asksCapital = true
-    var asksFlag = false
+    /// Flags are asked by default (beta feedback), worth 15.
+    var asksFlag = true
     var namePoints = 10
     var capitalPoints = 10
-    var flagPoints = 20
+    var flagPoints = 15
 
     static let pointsRange = 0...100
+
+    /// The name a picker gave the quiz ("Balkans", "Random: Africa"), so a
+    /// later pick can rename it. A name the parent typed is never replaced.
+    var autoTitle: String?
+    /// The countries the last random roll picked, so rolling again replaces
+    /// them without asking (but not countries picked by hand).
+    var rolledCountryIDs: [String]?
+
+    /// The name for a random quiz from `area` (nil: the whole world).
+    static func randomTitle(area: String?) -> String { "Random: " + (area ?? "the world") }
+
+    /// Names the quiz after a pick, unless the parent named it.
+    mutating func nameAutomatically(_ name: String) {
+        let typed = title.trimmingCharacters(in: .whitespaces)
+        guard typed.isEmpty || typed == autoTitle else { return }
+        title = name
+        autoTitle = name
+    }
 
     init() {}
 
@@ -154,12 +173,12 @@ extension QuizSet {
     func perfectPoints(in atlas: Atlas?) -> Int {
         guard let atlas else {
             return countryIDs.count * QuestionKind.allCases.filter(asks).reduce(0) {
-                $0 + QuizScoring.best($1, base: basePoints(for: $1), country: nil)
+                $0 + QuizScoring.best(base: basePoints(for: $1))
             }
         }
         return QuizTarget.all(for: self, in: atlas).reduce(0) { total, target in
             total + target.kinds.reduce(0) {
-                $0 + QuizScoring.best($1, base: basePoints(for: $1), country: target.country)
+                $0 + QuizScoring.best(base: basePoints(for: $1))
             }
         }
     }
@@ -304,6 +323,16 @@ enum QuizQueue {
         guard context.saveOrRollback("remove quiz") else { return false }
         refresh(in: context, now: now)
         return true
+    }
+
+    /// Puts the queue in a random order. Today's quiz stays today's (as for
+    /// any reorder); the rest of the cycle follows the new order.
+    @MainActor
+    static func shuffle(in context: ModelContext, seed: UInt64 = .random(in: .min ... .max), now: Date = .now) {
+        let current = quizzes(in: context)
+        let byID = Dictionary(uniqueKeysWithValues: current.map { ($0.id.uuidString, $0) })
+        let order = shuffledQueue(ids: current.map(\.id.uuidString), seed: seed).compactMap { byID[$0] }
+        reorder(order, in: context, now: now)
     }
 
     /// Saves a new order (every quiz in the queue, first to last).

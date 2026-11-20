@@ -34,11 +34,12 @@ final class AnswerTests: XCTestCase {
 
     @discardableResult
     private func answer(_ attempt: QuizAttempt, _ chosen: String = "France", kind: QuestionKind = .name,
-                        multipleChoice: Bool = false, isCorrect: Bool? = nil,
+                        multipleChoice: Bool = false, isCorrect: Bool? = nil, creditPercent: Int? = nil,
+                        colourHint: Bool = false,
                         drawing: (content: FlagDrawingContent, scorePercent: Int)? = nil) -> QuizAnswer? {
         QuizPlay.record(chosen, correctAnswer: "France", kind: kind, country: france, chosenCountry: nil,
                         choices: ["France", "Spain"], multipleChoice: multipleChoice, isCorrect: isCorrect,
-                        drawing: drawing, quiz: quiz, attempt: attempt, askedAt: nil,
+                        creditPercent: creditPercent, colourHint: colourHint, drawing: drawing, quiz: quiz, attempt: attempt, askedAt: nil,
                         in: family.context, now: TestSupport.morning)
     }
 
@@ -57,10 +58,10 @@ final class AnswerTests: XCTestCase {
     }
 
     func testPointsPerSitting() async throws {
-        // Sittings 1, 2, 3 earn full, half and a quarter; the 4th and later
-        // earn nothing but are still recorded, as right, for the stats (§3.4).
-        // Each case starts from a fresh family, so none shares queue state.
-        for (number, expected) in [(1, 100), (2, 50), (3, 25), (4, 0), (5, 0)] {
+        // Sittings 1, 2, 3 earn full, three quarters and half; the 4th and
+        // later are just for fun, but still recorded, as right, for the stats
+        // (§3.4). Each case starts from a fresh family, so none shares queue state.
+        for (number, expected) in [(1, 100), (2, 75), (3, 50), (4, 0), (5, 0)] {
             let attempt = try await sitting(number: number)
             XCTAssertEqual(attempt.number, number)
             let result = try XCTUnwrap(answer(attempt))
@@ -73,7 +74,7 @@ final class AnswerTests: XCTestCase {
     }
 
     func testMultipleChoiceHalvesOnTopOfTheSitting() async throws {
-        for (number, expected) in [(1, 50), (2, 25), (3, 12), (4, 0)] {
+        for (number, expected) in [(1, 50), (2, 37), (3, 25), (4, 0)] {
             let attempt = try await sitting(number: number)
             let result = try XCTUnwrap(answer(attempt, "FRA", kind: .flag, multipleChoice: true, isCorrect: true))
             XCTAssertEqual(result.pointsAwarded, expected, "multiple choice, sitting \(number)")
@@ -202,7 +203,7 @@ final class AnswerTests: XCTestCase {
         let result = try XCTUnwrap(answer(attempt, "drawn", kind: .flag, isCorrect: false, drawing: (content, 10)))
         let drawing = try XCTUnwrap(family.fetchAll(FlagDrawing.self).first)
         XCTAssertTrue(DrawingReview.setVerdict(true, on: drawing, in: family.context))
-        XCTAssertEqual(result.pointsAwarded, 50, "second sitting: half")
+        XCTAssertEqual(result.pointsAwarded, 75, "second sitting: three quarters")
         XCTAssertTrue(DrawingReview.setVerdict(nil, on: drawing, in: family.context))
         XCTAssertEqual(result.pointsAwarded, 0)
         XCTAssertFalse(result.correct)
@@ -216,6 +217,113 @@ final class AnswerTests: XCTestCase {
         let drawing = try XCTUnwrap(family.fetchAll(FlagDrawing.self).first)
         XCTAssertTrue(DrawingReview.setVerdict(true, on: drawing, in: family.context))
         XCTAssertEqual(result.pointsAwarded, 50)
+    }
+
+    func testAMirrorImageEarnsThreeQuartersButIsNotRight() throws {
+        let attempt = try sitting()
+        let content = FlagDrawingContent.freehand(FlagSketch())
+        let result = try XCTUnwrap(answer(attempt, "drawn", kind: .flag, isCorrect: false, creditPercent: 75,
+                                          drawing: (content, 40)))
+        XCTAssertFalse(result.correct)
+        XCTAssertEqual(result.pointsAwarded, 75)
+        let drawing = try XCTUnwrap(family.fetchAll(FlagDrawing.self).first)
+        XCTAssertEqual(drawing.autoCreditPercent, 75)
+        XCTAssertEqual(drawing.creditPercent, 75)
+        XCTAssertFalse(drawing.isCorrect)
+    }
+
+    func testTheRightColoursEarnHalfOnTopOfTheSitting() async throws {
+        let attempt = try await sitting(number: 2)
+        let content = FlagDrawingContent.freehand(FlagSketch())
+        let result = try XCTUnwrap(answer(attempt, "drawn", kind: .flag, isCorrect: false, creditPercent: 50,
+                                          drawing: (content, 30)))
+        XCTAssertEqual(result.pointsAwarded, 37, "half of the second sitting's three quarters")
+    }
+
+    func testParentVerdictOnAPartlyRightDrawingAndClearingRestoresThePart() throws {
+        let attempt = try sitting()
+        let content = FlagDrawingContent.freehand(FlagSketch())
+        let result = try XCTUnwrap(answer(attempt, "drawn", kind: .flag, isCorrect: false, creditPercent: 75,
+                                          drawing: (content, 40)))
+        let drawing = try XCTUnwrap(family.fetchAll(FlagDrawing.self).first)
+        XCTAssertTrue(DrawingReview.setVerdict(true, on: drawing, in: family.context))
+        XCTAssertTrue(result.correct)
+        XCTAssertEqual(result.pointsAwarded, 100)
+        XCTAssertTrue(DrawingReview.setVerdict(false, on: drawing, in: family.context))
+        XCTAssertEqual(result.pointsAwarded, 0)
+        XCTAssertTrue(DrawingReview.setVerdict(nil, on: drawing, in: family.context))
+        XCTAssertFalse(result.correct)
+        XCTAssertEqual(result.pointsAwarded, 75, "back to the app's three quarters")
+    }
+
+    // MARK: The colour hint (§3.4): a quarter off the top
+
+    private var hinted: FlagDrawingContent {
+        var sketch = FlagSketch()
+        sketch.colourHint = true
+        return .freehand(sketch)
+    }
+
+    func testTheColourHintCostsAQuarterOfARightDrawing() throws {
+        let attempt = try sitting()
+        let result = try XCTUnwrap(answer(attempt, "drawn", kind: .flag, isCorrect: true, colourHint: true,
+                                          drawing: (hinted, 95)))
+        XCTAssertTrue(result.correct, "still right: the hint costs points, not the verdict")
+        XCTAssertEqual(result.pointsAwarded, 75)
+        XCTAssertTrue(try XCTUnwrap(family.fetchAll(FlagDrawing.self).first).usedColourHint)
+    }
+
+    func testPartCreditAndRetakesComeOutOfWhatTheHintLeaves() async throws {
+        let mirror = try XCTUnwrap(answer(try sitting(), "drawn", kind: .flag, isCorrect: false,
+                                          creditPercent: 75, colourHint: true, drawing: (hinted, 40)))
+        XCTAssertEqual(mirror.pointsAwarded, 56, "¾ of the 75 the hint leaves")
+        let retake = try await sitting(number: 2)
+        let colours = try XCTUnwrap(answer(retake, "drawn", kind: .flag, isCorrect: false,
+                                           creditPercent: 50, colourHint: true, drawing: (hinted, 30)))
+        XCTAssertEqual(colours.pointsAwarded, 28, "100 × ¾ hint × ¾ second sitting × ½ colours, rounded down")
+    }
+
+    func testTheColourHintAlsoCostsAFlagPickedFromFour() throws {
+        let result = try XCTUnwrap(answer(try sitting(), "France", kind: .flag, multipleChoice: true, colourHint: true))
+        XCTAssertEqual(result.pointsAwarded, 37, "half of the 75 the hint leaves")
+    }
+
+    func testAParentVerdictKeepsTheColourHintsQuarterOff() throws {
+        let result = try XCTUnwrap(answer(try sitting(), "drawn", kind: .flag, isCorrect: false,
+                                          creditPercent: 50, colourHint: true, drawing: (hinted, 30)))
+        let drawing = try XCTUnwrap(family.fetchAll(FlagDrawing.self).first)
+        XCTAssertTrue(DrawingReview.setVerdict(true, on: drawing, in: family.context))
+        XCTAssertEqual(result.pointsAwarded, 75)
+        XCTAssertTrue(DrawingReview.setVerdict(nil, on: drawing, in: family.context))
+        XCTAssertEqual(result.pointsAwarded, 37)
+    }
+
+    func testADrawingFromBeforePartCreditCountsAsAllOrNothing() {
+        let old = FlagDrawing(answerID: UUID(), profileID: family.kid.id, countryID: "FRA",
+                              content: .freehand(FlagSketch()), scorePercent: 90,
+                              autoCorrect: true, drawnAt: TestSupport.morning)
+        XCTAssertNil(old.autoCreditPercent)
+        XCTAssertEqual(old.appCreditPercent, 100)
+        old.autoCorrect = false
+        XCTAssertEqual(old.appCreditPercent, 0)
+    }
+
+    /// Flags too alike to tell apart as buttons are never offered together,
+    /// even for neighbours (Romania's nearest country is Moldova).
+    func testLookAlikeFlagsAreNeverOfferedTogether() throws {
+        let byISO = Dictionary(atlas.countries.map { ($0.meta.iso2, $0) }, uniquingKeysWith: { a, _ in a })
+        for group in Atlas.flagLookAlikeGroups {
+            for code in group {
+                guard let country = byISO[code], country.hasFlag else { continue }
+                let others = Set(group.subtracting([code]).compactMap { byISO[$0]?.meta.id })
+                for seed: UInt64 in 0..<40 {
+                    let made = atlas.choices(for: .flag, about: country, seed: seed)
+                    XCTAssertTrue(others.isDisjoint(with: made.all), "\(code) offered with a look-alike: \(made.all)")
+                }
+            }
+        }
+        XCTAssertEqual(Atlas.flagLookAlikes["RO"], ["TD", "AD", "MD"])
+        XCTAssertEqual(Atlas.flagLookAlikes["MD"], ["TD", "AD", "RO"])
     }
 
     func testVerdictForADrawingWhoseAnswerIsMissingDoesNotCrash() throws {

@@ -16,7 +16,7 @@ enum UITestLaunch {
     static func makeContainer() -> ModelContainer? {
         let args = CommandLine.arguments
         guard args.contains(flag) else { return nil }
-        let schema = Schema(versionedSchema: SchemaV5.self)
+        let schema = Schema(versionedSchema: SchemaV6.self)
         let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
         // Never fall through to the real on-disk store while testing.
         guard let container = try? Persistence.open(schema, configuration) else {

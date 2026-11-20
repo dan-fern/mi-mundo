@@ -9,7 +9,7 @@ enum TestSupport {
     @MainActor
     static func memoryContainer() throws -> ModelContainer {
         try ModelContainer(
-            for: Schema(versionedSchema: SchemaV5.self),
+            for: Schema(versionedSchema: SchemaV6.self),
             configurations: ModelConfiguration(isStoredInMemoryOnly: true)
         )
     }

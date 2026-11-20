@@ -191,6 +191,61 @@ final class QueueTests: XCTestCase {
         XCTAssertEqual(family.record?.started, false)
     }
 
+    func testShuffleKeepsEveryQuizAndTodaysQuiz() {
+        for seed: UInt64 in 0..<20 {
+            QuizQueue.shuffle(in: ctx, seed: seed, now: TestSupport.morning)
+            XCTAssertEqual(Set(QuizQueue.quizzes(in: ctx).map(\.title)), ["A", "B", "C"])
+            XCTAssertEqual(today()?.id, a.id, "shuffling doesn't change today's quiz")
+            let position = QuizQueue.quizzes(in: ctx).firstIndex { $0.id == a.id }
+            XCTAssertEqual(family.record.map { Int($0.position) }, position, "position follows today's quiz")
+        }
+        let orders = Set((0..<20).map { (seed: UInt64) -> [String] in
+            QuizQueue.shuffle(in: ctx, seed: seed, now: TestSupport.morning)
+            return QuizQueue.quizzes(in: ctx).map(\.title)
+        })
+        XCTAssertGreaterThan(orders.count, 2)
+    }
+
+    func testShufflingALockedQueueKeepsTodayAndItsLock() throws {
+        answerOne(a, try open(a, as: family.kid))
+        for seed: UInt64 in 0..<10 {
+            QuizQueue.shuffle(in: ctx, seed: seed, now: TestSupport.morning)
+            XCTAssertEqual(today()?.id, a.id)
+            XCTAssertTrue(QuizQueue.isLocked(a, in: ctx, now: TestSupport.morning))
+            let position = QuizQueue.quizzes(in: ctx).firstIndex { $0.id == a.id }
+            XCTAssertEqual(family.record.map { Int($0.position) }, position)
+            XCTAssertEqual(family.record?.currentQuizID, a.id)
+        }
+    }
+
+    func testPickersNameTheQuizButNeverOverATypedName() {
+        var draft = QuizDraft()
+        draft.nameAutomatically("Balkans")
+        XCTAssertEqual(draft.title, "Balkans")
+        // A random pick renames a picker's name, even after leaving the screen.
+        draft.nameAutomatically(QuizDraft.randomTitle(area: "Western Africa"))
+        XCTAssertEqual(draft.title, "Random: Western Africa")
+        draft.nameAutomatically(QuizDraft.randomTitle(area: nil))
+        XCTAssertEqual(draft.title, "Random: the world")
+        // A name the parent typed stays.
+        draft.title = "Kit's tricky ones"
+        draft.nameAutomatically("Balkans")
+        XCTAssertEqual(draft.title, "Kit's tricky ones")
+        // An edited quiz's own name counts as typed.
+        var edited = QuizDraft()
+        edited.title = "Europe"
+        edited.nameAutomatically("Balkans")
+        XCTAssertEqual(edited.title, "Europe")
+    }
+
+    func testANewQuizAsksForTheFlagByDefaultAt15Points() {
+        let draft = QuizDraft()
+        XCTAssertTrue(draft.asksName)
+        XCTAssertTrue(draft.asksCapital)
+        XCTAssertTrue(draft.asksFlag)
+        XCTAssertEqual(draft.flagPoints, 15)
+    }
+
     private func draft(_ title: String) -> QuizDraft {
         var d = QuizDraft(a)
         d.title = title

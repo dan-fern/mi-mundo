@@ -31,7 +31,7 @@ pub const CLOSE_SHADES: [(&str, &str); 2] = [("blue", "lightblue"), ("red", "mar
 /// Every layout the outline can draw, with how many regions it has. The
 /// region order (which the app draws, and the data's colours follow) is
 /// described for each in `apple/MiMundo/Sources/Views/FlagOutline.swift`.
-pub const FLAG_LAYOUTS: [(&str, u32); 25] = [
+pub const FLAG_LAYOUTS: [(&str, u32); 26] = [
     ("plain", 1),
     ("h2", 2),
     ("h3", 3),
@@ -53,6 +53,7 @@ pub const FLAG_LAYOUTS: [(&str, u32); 25] = [
     ("bar-h3", 4),
     ("saltire", 3),
     ("diagonal", 3),
+    ("diagonal-down", 3),
     ("diagonal-split", 2),
     ("canton", 2),
     ("canton-h2", 3),

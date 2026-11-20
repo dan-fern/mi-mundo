@@ -54,7 +54,7 @@ struct DrawingReviewView: View {
                     }
                 }
             } footer: {
-                Text("The app is lenient: emblems and small details aren't marked. If it got one wrong, change it here. A drawing you mark right earns what it was worth on that try.")
+                Text("The app is lenient: emblems and small details aren't marked. If it got one wrong, change it here. A drawing you mark right earns what it was worth on that try; marking it wrong takes away any part points (a mirror image earns ¾, the right colours ½).")
             }
 
             if shown.isEmpty {
@@ -150,11 +150,20 @@ private struct DrawingRow: View {
     }
 
     private var verdictLabel: some View {
-        let right = drawing.isCorrect
+        let credit = drawing.creditPercent
         let by = drawing.parentVerdict == nil ? "the app" : "you"
-        return Label(right ? "Right (\(by))" : "Not right (\(by))",
-                     systemImage: right ? "checkmark.circle.fill" : "xmark.circle.fill")
+        let verdict = switch credit {
+        case 100: "Right (\(by))"
+        case 75: "Mirror image: ¾ points (\(by))"
+        case 50: "Right colours: ½ points (\(by))"
+        default: "Not right (\(by))"
+        }
+        // The hint's quarter is off whatever the verdict.
+        let text = verdict + (drawing.usedColourHint ? ", colours shown" : "")
+        let color = credit == 100 ? QuizColor.right : credit > 0 ? QuizColor.points : QuizColor.wrong
+        return Label(text, systemImage: credit == 100 ? "checkmark.circle.fill"
+                                        : credit > 0 ? "star.circle.fill" : "xmark.circle.fill")
             .font(.subheadline.weight(.semibold))
-            .foregroundStyle(right ? QuizColor.right : QuizColor.wrong)
+            .foregroundStyle(color)
     }
 }
