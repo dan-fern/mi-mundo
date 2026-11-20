@@ -70,6 +70,10 @@ struct FlagSketch: Equatable, Codable {
     /// Stroke width per stroke, as a fraction of the canvas width.
     var widths: [CGFloat] = []
     var fills: [FlagFill] = []
+    /// The kid asked to see the flag's colours (it cost a quarter of the
+    /// points, §3.4). Set when the drawing is checked; a parent's review
+    /// rescores with it.
+    var colourHint = false
 
     init(background: String? = nil, strokes: [FlagStroke] = [], widths: [CGFloat] = [], fills: [FlagFill] = []) {
         self.background = background
@@ -85,6 +89,7 @@ struct FlagSketch: Equatable, Codable {
         strokes = try c.decodeIfPresent([FlagStroke].self, forKey: .strokes) ?? []
         widths = try c.decodeIfPresent([CGFloat].self, forKey: .widths) ?? []
         fills = try c.decodeIfPresent([FlagFill].self, forKey: .fills) ?? []
+        colourHint = try c.decodeIfPresent(Bool.self, forKey: .colourHint) ?? false
     }
 
     var isEmpty: Bool { background == nil && strokes.isEmpty && fills.isEmpty }
@@ -298,6 +303,9 @@ struct FreehandResult: Equatable {
 struct FreehandPad: View {
     let country: AtlasCountry
     let spec: FlagOutlineSpec?
+    /// The colour hint was shown for this question. Kept by the question,
+    /// not the pad, so leaving the pad and coming back doesn't undo it.
+    @Binding var colourHint: Bool
     /// Saves the drawing as the answer; false if it couldn't be saved (the
     /// pad stays open with the drawing, to try again).
     let onCheck: (FreehandResult) -> Bool
@@ -317,6 +325,9 @@ struct FreehandPad: View {
     @State private var confirmingClear = false
     @State private var saveFailed = false
     @State private var confirmingLeave = false
+    @State private var confirmingHint = false
+    /// The flag's main colours, once the hint is shown.
+    @State private var hintColours: [String] = []
 
     private static let sizes: [(name: String, width: CGFloat)] = [("Thin", 0.025), ("Medium", 0.08), ("Big", 0.16)]
     private static let toolSize: CGFloat = 64
@@ -375,6 +386,17 @@ struct FreehandPad: View {
             }
             Button("Keep it", role: .cancel) {}
         }
+        .confirmationDialog("Show the flag's colours?", isPresented: $confirmingHint, titleVisibility: .visible) {
+            Button("Show colours") { colourHint = true }
+            Button("Not now", role: .cancel) {}
+        } message: {
+            Text("It costs a quarter of the points for this flag.")
+        }
+        .onChange(of: colourHint, initial: true) { _, shown in
+            if shown, hintColours.isEmpty, let asset = country.flagAsset {
+                hintColours = flagMainColours(reference: Data(FlagGrid.reference(asset: asset)))
+            }
+        }
         .onChange(of: touching) { _, now in
             if !now { currentStroke = nil }
         }
@@ -429,6 +451,10 @@ struct FreehandPad: View {
             VStack(alignment: .leading, spacing: 14) {
                 LazyVGrid(columns: Array(repeating: GridItem(.fixed(Self.toolSize), spacing: 10), count: 3), spacing: 10) {
                     ForEach(FlagPaint.names, id: \.self) { name in
+                        // With the colour hint, the flag's colours get a star
+                        // and the others fade (they can still be used).
+                        let inFlag = hintColours.contains(name)
+                        let faded = !hintColours.isEmpty && !inFlag
                         Button {
                             brush = name
                         } label: {
@@ -437,11 +463,21 @@ struct FreehandPad: View {
                                 .overlay(Circle().stroke(.black.opacity(0.25), lineWidth: 1))
                                 .overlay(Circle().stroke(Color.accentColor, lineWidth: brush == name ? 5 : 0).padding(-6))
                                 .frame(width: 52, height: 52)
+                                .opacity(faded ? 0.3 : 1)
+                                .overlay(alignment: .topTrailing) {
+                                    if inFlag {
+                                        Image(systemName: "star.circle.fill")
+                                            .font(.title3)
+                                            .symbolRenderingMode(.palette)
+                                            .foregroundStyle(.white, Color.orange)
+                                            .offset(x: 6, y: -6)
+                                    }
+                                }
                                 .frame(width: Self.toolSize, height: Self.toolSize)
                                 .contentShape(.rect)
                         }
                         .buttonStyle(.plain)
-                        .accessibilityLabel(FlagPaint.spoken(name))
+                        .accessibilityLabel(FlagPaint.spoken(name) + (inFlag ? ", in the flag" : ""))
                         .accessibilityAddTraits(brush == name ? .isSelected : [])
                     }
                 }
@@ -485,6 +521,21 @@ struct FreehandPad: View {
                     ToolButton(title: "Clear", symbol: "trash", role: .destructive) { confirmingClear = true }
                         .disabled(sketch.isEmpty)
                 }
+                if country.flagAsset != nil {
+                    HStack(spacing: 10) {
+                        ToolButton(title: colourHint ? "Colours shown" : "Show colours", symbol: "paintpalette.fill",
+                                   on: colourHint) { confirmingHint = true }
+                            .disabled(colourHint)
+                            .accessibilityHint("Marks the flag's colours in the paint box. Costs a quarter of the points.")
+                        if !colourHint {
+                            Text("costs ¼ of the points")
+                                .font(.footnote)
+                                .foregroundStyle(.secondary)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .accessibilityHidden(true)
+                        }
+                    }
+                }
                 if spec?.emblem == true {
                     Text("Emblems and small details are just for fun: they're not marked.")
                         .font(.footnote)
@@ -499,11 +550,13 @@ struct FreehandPad: View {
     private func check() {
         guard let asset = country.flagAsset else { return }
         checking = true
+        var drawn = sketch
+        drawn.colourHint = colourHint
         let grade = gradeFreehand(reference: Data(FlagGrid.reference(asset: asset)),
-                                  drawing: Data(FlagGrid.drawing(sketch)),
+                                  drawing: Data(FlagGrid.drawing(drawn)),
                                   outline: Data(FlagGrid.outline(spec)),
                                   width: UInt32(FlagGrid.width), height: UInt32(FlagGrid.height))
-        if !onCheck(FreehandResult(sketch: sketch, grade: grade)) {
+        if !onCheck(FreehandResult(sketch: drawn, grade: grade)) {
             checking = false
             saveFailed = true
         }

@@ -112,7 +112,7 @@ extension SchemaV4 {
         init(attempt: QuizAttempt, countryID: String, kind: QuestionKind, chosen: String,
              chosenCountryID: String?, correctAnswer: String, choices: [String],
              basePoints: Int, multipleChoice: Bool, isCorrect: Bool? = nil, creditPercent: Int? = nil,
-             askedAt: Date?, answeredAt: Date) {
+             colourHint: Bool = false, askedAt: Date?, answeredAt: Date) {
             // A drawn flag can be right without matching exactly (close
             // shades count), so the grader's verdict wins when there is one,
             // and it can be partly right (`creditPercent`, e.g. 75 for a
@@ -132,10 +132,12 @@ extension SchemaV4 {
             self.basePoints = basePoints
             self.attemptNumber = attempt.number
             self.usedMultipleChoice = multipleChoice
-            self.pointsAwarded = Int(pointsWithCredit(basePoints: UInt32(clamping: max(basePoints, 0)),
-                                                      attempt: UInt32(clamping: max(attempt.number, 1)),
-                                                      usedMultipleChoice: multipleChoice,
-                                                      creditPercent: UInt32(clamping: max(credit, 0))))
+            // A flag's colour hint costs a quarter off the top (§3.4).
+            self.pointsAwarded = Int(pointsWithHelp(basePoints: UInt32(clamping: max(basePoints, 0)),
+                                                    attempt: UInt32(clamping: max(attempt.number, 1)),
+                                                    usedMultipleChoice: multipleChoice,
+                                                    creditPercent: UInt32(clamping: max(credit, 0)),
+                                                    colourHint: colourHint))
             self.askedAt = askedAt
             self.answeredAt = answeredAt
         }
@@ -208,6 +210,7 @@ enum QuizPlay {
     static func record(_ chosen: String, correctAnswer: String, kind: QuestionKind,
                        country: AtlasCountry, chosenCountry: AtlasCountry?, choices: [String],
                        multipleChoice: Bool = false, isCorrect: Bool? = nil, creditPercent: Int? = nil,
+                       colourHint: Bool = false,
                        drawing: (content: FlagDrawingContent, scorePercent: Int)? = nil,
                        quiz: QuizSet, attempt: QuizAttempt, askedAt: Date?,
                        in context: ModelContext, now: Date = .now) -> QuizAnswer? {
@@ -226,7 +229,7 @@ enum QuizPlay {
                                 chosen: chosen, chosenCountryID: chosenCountry?.meta.id,
                                 correctAnswer: correctAnswer, choices: choices,
                                 basePoints: quiz.basePoints(for: kind), multipleChoice: multipleChoice,
-                                isCorrect: isCorrect, creditPercent: creditPercent,
+                                isCorrect: isCorrect, creditPercent: creditPercent, colourHint: colourHint,
                                 askedAt: askedAt, answeredAt: now)
         context.insert(answer)
         // Every drawing is kept for parent review (§5.3).

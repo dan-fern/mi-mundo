@@ -248,22 +248,16 @@ fn has_the_colours(reference: &[u8], drawing: &[u8], grade: &FreehandGrade) -> b
     if !grade.extra_colours.is_empty() || drawing.iter().all(|&c| c == BLANK) {
         return false;
     }
-    let n = reference.len();
     let white = PALETTE.iter().position(|c| *c == "white").unwrap() as u8;
-    let mut area = [0usize; 9];
+    let area = colour_areas(reference);
     let mut drawn = [0usize; 9];
-    for (&r, &d) in reference.iter().zip(drawing) {
-        if (r as usize) < area.len() {
-            area[r as usize] += 1;
-        }
+    for &d in drawing {
         let d = if d == BLANK { white } else { d };
         if (d as usize) < drawn.len() {
             drawn[d as usize] += 1;
         }
     }
-    let main: Vec<u8> = (0..9u8)
-        .filter(|&c| area[c as usize] * 100 >= n * MINOR_SHARE_PERCENT as usize)
-        .collect();
+    let main = main_colours(reference);
     // A flag with no main colour (bad input) has no colours to get right.
     !main.is_empty()
         && main.iter().all(|&c| {
@@ -273,6 +267,41 @@ fn has_the_colours(reference: &[u8], drawing: &[u8], grade: &FreehandGrade) -> b
                 .sum();
             have * 100 >= area[c as usize] * COLOURS_CREDIT_SHARE_PERCENT as usize
         })
+}
+
+/// How many cells of the grid are each paint-box colour.
+fn colour_areas(cells: &[u8]) -> [usize; 9] {
+    let mut area = [0usize; 9];
+    for &c in cells {
+        if (c as usize) < area.len() {
+            area[c as usize] += 1;
+        }
+    }
+    area
+}
+
+/// The flag's main colours (palette indices, in palette order): each
+/// covers at least [`MINOR_SHARE_PERCENT`] of it, so it's graded.
+fn main_colours(reference: &[u8]) -> Vec<u8> {
+    let area = colour_areas(reference);
+    (0..9u8)
+        .filter(|&c| {
+            let a = area[c as usize];
+            a > 0 && a * 100 >= reference.len() * MINOR_SHARE_PERCENT as usize
+        })
+        .collect()
+}
+
+/// The colour hint on the drawing pad: the flag's main colours (paint-box
+/// names, in paint-box order), the ones the grader marks. `reference` is
+/// the real flag, classified ([`classify_pixels`]). Emblem and other
+/// small details aren't marked, so they aren't given away either.
+#[uniffi::export]
+pub fn flag_main_colours(reference: Vec<u8>) -> Vec<String> {
+    main_colours(&reference)
+        .into_iter()
+        .map(|c| PALETTE[c as usize].to_string())
+        .collect()
 }
 
 /// Not right, with `n` unmarked cells.
@@ -682,6 +711,19 @@ mod tests {
         let backwards = grid(|x, y| france(1.0 - x, y));
         let g = grade_freehand(real, backwards, outline, W as u32, H as u32);
         assert_eq!(g.credit, DrawCredit::Mirrored, "{g:?}");
+    }
+
+    #[test]
+    fn the_colour_hint_names_the_main_colours_only() {
+        // France with a small yellow detail: the hint is the three bands.
+        let detail = |x: f32, y: f32| x > 0.45 && x < 0.5 && y < 0.1;
+        let flag = grid(|x, y| if detail(x, y) { "yellow" } else { france(x, y) });
+        assert_eq!(
+            flag_main_colours(flag),
+            ["red", "blue", "white"].map(String::from)
+        );
+        assert!(flag_main_colours(Vec::new()).is_empty());
+        assert!(flag_main_colours(vec![BLANK; 12]).is_empty());
     }
 
     #[test]

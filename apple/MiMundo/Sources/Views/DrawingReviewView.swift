@@ -152,12 +152,14 @@ private struct DrawingRow: View {
     private var verdictLabel: some View {
         let credit = drawing.creditPercent
         let by = drawing.parentVerdict == nil ? "the app" : "you"
-        let text = switch credit {
+        let verdict = switch credit {
         case 100: "Right (\(by))"
         case 75: "Mirror image: ¾ points (\(by))"
         case 50: "Right colours: ½ points (\(by))"
         default: "Not right (\(by))"
         }
+        // The hint's quarter is off whatever the verdict.
+        let text = verdict + (drawing.usedColourHint ? ", colours shown" : "")
         let color = credit == 100 ? QuizColor.right : credit > 0 ? QuizColor.points : QuizColor.wrong
         return Label(text, systemImage: credit == 100 ? "checkmark.circle.fill"
                                         : credit > 0 ? "star.circle.fill" : "xmark.circle.fill")

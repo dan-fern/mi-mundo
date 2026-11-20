@@ -187,12 +187,13 @@ jobs:
           retention-days: 30
           if-no-files-found: ignore
 
-      # Three UI smoke flows (first run, play a country, freehand flag pad).
-      # About 1.5 min locally, so likely 3+ on a runner: all three on main
-      # and nightly. PRs run just the flag-pad flow (about 35 s locally): it
-      # also answers the name and capital questions on the way, so a PR that
-      # breaks answering or the pad's layout doesn't go green.
-      - name: UI smoke test on iPad simulator (flag pad)
+      # Four UI smoke flows (first run, play a country, freehand flag pad,
+      # colour hint). About 2 min locally, so likely 4+ on a runner: all four
+      # on main and nightly. PRs run the two drawing-pad flows (about 70 s
+      # locally): they also answer the name and capital questions on the
+      # way, so a PR that breaks answering, the pad's layout or the colour
+      # hint (it costs points) doesn't go green.
+      - name: UI smoke tests on iPad simulator (flag pad)
         if: github.event_name == 'pull_request'
         run: |
           xcodebuild test-without-building \
@@ -201,6 +202,7 @@ jobs:
             -scheme MiMundo \
             -destination "platform=iOS Simulator,id=$SIM" \
             -only-testing:MiMundoUITests/MiMundoUITests/testFreehandPadCheckButtonIsVisibleAndTappable \
+            -only-testing:MiMundoUITests/MiMundoUITests/testColourHintMarksTheFlagsColoursAndStaysUsed \
             -resultBundlePath build/MiMundoUITests.xcresult \
             CODE_SIGNING_ALLOWED=NO
 

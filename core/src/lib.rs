@@ -31,7 +31,7 @@ pub use queue::{
 };
 pub use quiz::{quiz_choices, quiz_stars};
 pub use random_quiz::{QuizCandidate, RandomQuiz, RandomQuizScope, random_quiz, shuffled_queue};
-pub use scoring::{points_for_attempt, points_with_credit};
+pub use scoring::{points_for_attempt, points_with_credit, points_with_help};
 
 uniffi::setup_scaffolding!();
 

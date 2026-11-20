@@ -1,6 +1,6 @@
 import XCTest
 
-/// Three smoke flows through the real UI. The app is launched with
+/// Smoke flows through the real UI. The app is launched with
 /// `-uiTesting` (fresh in-memory store); `-uiTestSeed` adds a parent, a kid
 /// and a one-country quiz about France (see UITestLaunch.swift).
 @MainActor
@@ -133,5 +133,37 @@ final class MiMundoUITests: XCTestCase {
         // Checking returns to the card, with a verdict and a way on.
         XCTAssertTrue(app.buttons["Done"].waitForExistence(timeout: patient))
         XCTAssertFalse(check.exists)
+    }
+
+    // 4. The colour hint: asks first (it costs a quarter of the points),
+    // marks the flag's colours, and leaving the pad doesn't take it back.
+    func testColourHintMarksTheFlagsColoursAndStaysUsed() {
+        let app = launch(seeded: true)
+        startQuiz(app)
+        answerNameAndCapital(app)
+        tap(app.buttons["Start drawing"])
+
+        tap(app.buttons["Show colours"])
+        // The confirmation, not the tool: the tool's button is the first match.
+        let confirm = app.sheets.buttons["Show colours"].exists
+            ? app.sheets.buttons["Show colours"] : app.buttons.matching(identifier: "Show colours").element(boundBy: 1)
+        tap(confirm)
+        let shown = app.buttons["Colours shown"]
+        XCTAssertTrue(shown.waitForExistence(timeout: patient))
+        XCTAssertFalse(shown.isEnabled, "the hint can't be bought twice")
+        XCTAssertTrue(app.buttons["red, in the flag"].exists, "France's red is marked")
+        XCTAssertTrue(app.buttons["green"].exists, "green isn't in France's flag")
+
+        // Back (nothing drawn, so no question) and in again: still shown.
+        tap(app.buttons["Back"].firstMatch)
+        tap(app.buttons["Start drawing"])
+        XCTAssertTrue(app.buttons["Colours shown"].waitForExistence(timeout: patient))
+        XCTAssertFalse(app.buttons["Show colours"].exists)
+
+        let canvas = app.otherElements["Drawing canvas"]
+        canvas.coordinate(withNormalizedOffset: CGVector(dx: 0.2, dy: 0.5))
+            .press(forDuration: 0.1, thenDragTo: canvas.coordinate(withNormalizedOffset: CGVector(dx: 0.8, dy: 0.5)))
+        tap(app.buttons["Check my flag"])
+        XCTAssertTrue(app.buttons["Done"].waitForExistence(timeout: patient))
     }
 }

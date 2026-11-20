@@ -1,4 +1,5 @@
 import CoreGraphics
+import MiMundoCore
 import XCTest
 @testable import MiMundo
 
@@ -122,5 +123,19 @@ final class DrawingPadTests: XCTestCase {
         XCTAssertEqual(sketch.background, "red")
         XCTAssertTrue(sketch.fills.isEmpty)
         XCTAssertFalse(sketch.isEmpty)
+        XCTAssertFalse(sketch.colourHint, "drawings from before the colour hint didn't use it")
+    }
+
+    func testTheColourHintIsSavedWithTheDrawing() throws {
+        var sketch = splitDownTheMiddle
+        sketch.colourHint = true
+        let back = try JSONDecoder().decode(FlagSketch.self, from: JSONEncoder().encode(sketch))
+        XCTAssertTrue(back.colourHint)
+    }
+
+    func testTheColourHintShowsTheFlagsMainColours() async throws {
+        let atlas = try await TestSupport.atlas()
+        let france = try XCTUnwrap(atlas.countries.first { $0.meta.iso2 == "FR" }?.flagAsset)
+        XCTAssertEqual(flagMainColours(reference: Data(FlagGrid.reference(asset: france))), ["red", "blue", "white"])
     }
 }

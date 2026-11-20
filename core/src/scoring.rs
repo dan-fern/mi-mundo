@@ -39,6 +39,33 @@ pub fn points_with_credit(
     used_multiple_choice: bool,
     credit_percent: u32,
 ) -> u32 {
+    points_with_help(
+        base_points,
+        attempt,
+        used_multiple_choice,
+        credit_percent,
+        false,
+    )
+}
+
+/// Share of a flag question's points left after the kid asks to see the
+/// flag's colours, in quarters: the colour hint costs a quarter.
+const QUARTERS_AFTER_COLOUR_HINT: u64 = 3;
+
+/// [`points_with_credit`], for a flag question where the kid may have
+/// asked to see the flag's colours (`colour_hint`). The hint takes a
+/// quarter off the top, and the attempt, multiple-choice and credit
+/// factors then apply to what's left: a 15-point flag with the hint is
+/// worth 11¼, a mirror image of it ¾ of that, a retake ¾ of that again.
+/// Rounded down once, at the end; any credit still earns at least 1 point.
+#[uniffi::export]
+pub fn points_with_help(
+    base_points: u32,
+    attempt: u32,
+    used_multiple_choice: bool,
+    credit_percent: u32,
+    colour_hint: bool,
+) -> u32 {
     if base_points == 0 || attempt == 0 || attempt > LAST_SCORED_ATTEMPT || credit_percent == 0 {
         return 0;
     }
@@ -46,7 +73,12 @@ pub fn points_with_credit(
     let quarters = QUARTERS_BY_ATTEMPT[(attempt - 1) as usize];
     let credit = u64::from(credit_percent.min(100));
     let halves = if used_multiple_choice { 2 } else { 1 };
-    let points = u64::from(base_points) * quarters * credit / (4 * 100 * halves);
+    let hint = if colour_hint {
+        QUARTERS_AFTER_COLOUR_HINT
+    } else {
+        4
+    };
+    let points = u64::from(base_points) * quarters * credit * hint / (4 * 100 * halves * 4);
     (points as u32).max(1)
 }
 
@@ -157,7 +189,51 @@ mod tests {
         assert_eq!(points_with_credit(100, 0, true, 75), 0);
     }
 
+    #[test]
+    fn the_colour_hint_costs_a_quarter_off_the_top() {
+        // A 15-point flag: the hint leaves 11¼, rounded down at the end.
+        assert_eq!(points_with_help(15, 1, false, 100, false), 15);
+        assert_eq!(points_with_help(15, 1, false, 100, true), 11);
+        // Part credit and retakes come out of what's left.
+        assert_eq!(points_with_help(15, 1, false, 75, true), 8); // 8.4
+        assert_eq!(points_with_help(15, 1, false, 50, true), 5); // 5.6
+        assert_eq!(points_with_help(100, 1, false, 100, true), 75);
+        assert_eq!(points_with_help(100, 2, false, 100, true), 56); // 56.25
+        assert_eq!(points_with_help(100, 3, false, 50, true), 18); // 18.75
+        assert_eq!(points_with_help(100, 1, true, 100, true), 37); // picked from four
+        // Still nothing for a wrong answer or a just-for-fun attempt, and
+        // still at least a point for any credit.
+        assert_eq!(points_with_help(100, 1, false, 0, true), 0);
+        assert_eq!(points_with_help(100, 4, false, 100, true), 0);
+        assert_eq!(points_with_help(1, 3, true, 50, true), 1);
+        assert_eq!(
+            points_with_help(u32::MAX, 1, false, 100, true),
+            3_221_225_471
+        );
+    }
+
+    #[test]
+    fn without_the_hint_it_is_the_same_as_points_with_credit() {
+        for base in [0, 1, 7, 15, 100, u32::MAX] {
+            for attempt in 0..=5 {
+                for mc in [false, true] {
+                    for credit in [0, 50, 75, 100, 150] {
+                        assert_eq!(
+                            points_with_help(base, attempt, mc, credit, false),
+                            points_with_credit(base, attempt, mc, credit)
+                        );
+                    }
+                }
+            }
+        }
+    }
+
     proptest! {
+        #[test]
+        fn the_hint_never_earns_more(base: u32, attempt in 1u32..6, mc: bool, credit in 0u32..=100) {
+            prop_assert!(points_with_help(base, attempt, mc, credit, true) <= points_with_help(base, attempt, mc, credit, false));
+        }
+
         #[test]
         fn later_attempts_never_earn_more(base in 0u32..10_000, mc: bool) {
             for attempt in 1..=5 {

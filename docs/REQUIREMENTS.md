@@ -146,7 +146,20 @@ never graded; a pixel matches if the colour is anywhere in the real flag's
 3×3 neighbourhood; close shades count. Right = 75% of graded pixels match,
 every main colour covers half its area, and no big patch is a colour the flag
 lacks (outside the emblem). The help is "Pick it from four instead", a
-button as big as "Start drawing" with "half points" in small print under it. A debug self-check (launch with
+button as big as "Start drawing" with "half points" in small print under it.
+
+**Colour hint** (owner's request, Nov 2026): a "Show colours" tool on the
+pad, next to "Add outline", with "costs ¼ of the points" beside it. It asks
+first ("Show the flag's colours? It costs a quarter of the points for this
+flag."). Once shown, the flag's main colours (the ones graded: 6% of the
+flag or more, so an emblem's colours aren't given away) get a star in the
+paint box and the other colours fade; they can all still be used. It can't
+be hidden again, and it stays used for that question if the kid leaves the
+pad and comes back, or picks the flag from four instead. The drawing
+remembers it (`FlagSketch.colourHint`), so parent review rescores with it.
+The main colours come from the Rust core (`flag_main_colours`).
+
+A debug self-check (launch with
 -flagSelfCheck) confirms every flag picture passes as its own drawing, every
 outline passes without its emblem, and a blank canvas never does.
 
@@ -191,6 +204,12 @@ Grading:
 - Flag multiple choice halves the points for that attempt, on top of the
   attempt factor (e.g. 2nd attempt + multiple choice = ⅜). A partly right
   drawing (§3.3) multiplies in the same way.
+- The flag **colour hint** (§3.3) costs a quarter off the top: the question
+  is then worth ¾ of its points, and every other factor (attempt, multiple
+  choice, part credit) comes out of that. A 100-point flag with the hint:
+  75 if right, 56 for a mirror image, 37 picked from four; on the 2nd
+  attempt with the right colours, 100 × ¾ × ¾ × ½ = 28. Rounded down once,
+  at the end (`points_with_help` in core/src/scoring.rs).
 - Fractions round down, but a correct answer on attempts 1–3 always earns
   **at least 1 point** (unless the parent set the question to 0).
 
@@ -275,7 +294,7 @@ stats here than in child mode:
 - Mastery heatmap of the region.
 - Trends: accuracy, streak history, points earned vs. spent.
 - Answer speed — recorded silently, never shown to the child.
-- Hint usage: how often the tracing outline / multiple choice were needed for flags.
+- Hint usage: how often the tracing outline / colour hint / multiple choice were needed for flags.
 
 ### 5.3 Drawing review
 - Browse every flag drawing with the app's verdict. (Built: parent home →
@@ -286,7 +305,9 @@ stats here than in child mode:
   verdict; the answer is rescored straight away. A partly right drawing
   shows "Mirror image: ¾ points" or "Right colours: ½ points"; marking it
   right gives full points, wrong takes the part away, and going back to the
-  app's verdict restores the part.)
+  app's verdict restores the part. A drawing made with the colour hint says
+  ", colours shown", and its quarter stays off whatever the verdict: the
+  parent judges the drawing, not the help.)
 - Override any verdict and award any lost points. An overturned answer earns
   what that question was worth on that attempt, so each answer stores its
   scoring inputs (base points, attempt, multiple choice) when it's made.

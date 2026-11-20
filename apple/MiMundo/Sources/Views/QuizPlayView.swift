@@ -73,6 +73,9 @@ struct QuizPlayView: View {
         var flagMode: FlagMode = .freehand
         /// The checked drawing, once drawn.
         var freehand: FreehandResult? = nil
+        /// The kid asked to see the flag's colours on the drawing pad: a
+        /// quarter of the points, however the question is then answered.
+        var colourHint = false
         let askedAt: Date
         /// The side its card opens on, kept with it so the card leaves the
         /// way it came even if the next card opens on the other side.
@@ -169,7 +172,12 @@ struct QuizPlayView: View {
         }
         .fullScreenCover(isPresented: $drawingPad) {
             if let asked = question, let target = targets.first(where: { $0.id == asked.target }) {
-                FreehandPad(country: target.country, spec: asked.outline, onCheck: drew,
+                FreehandPad(country: target.country, spec: asked.outline,
+                            colourHint: Binding(get: { question?.colourHint ?? false },
+                                                set: { shown in
+                                                    if shown, question?.picked == nil { question?.colourHint = true }
+                                                }),
+                            onCheck: drew,
                             onCancel: { drawingPad = false })
             }
         }
@@ -393,6 +401,7 @@ struct QuizPlayView: View {
                                           multipleChoice: multipleChoice,
                                           isCorrect: freehand?.grade.correct,
                                           creditPercent: freehand.map { Int(drawCreditPercent(credit: $0.grade.credit)) },
+                                          colourHint: asked.colourHint,
                                           drawing: freehand.map { (FlagDrawingContent.freehand($0.sketch), Int($0.grade.scorePercent)) },
                                           quiz: quiz, attempt: attempt,
                                           askedAt: asked.askedAt, in: context) else {

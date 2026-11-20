@@ -35,10 +35,11 @@ final class AnswerTests: XCTestCase {
     @discardableResult
     private func answer(_ attempt: QuizAttempt, _ chosen: String = "France", kind: QuestionKind = .name,
                         multipleChoice: Bool = false, isCorrect: Bool? = nil, creditPercent: Int? = nil,
+                        colourHint: Bool = false,
                         drawing: (content: FlagDrawingContent, scorePercent: Int)? = nil) -> QuizAnswer? {
         QuizPlay.record(chosen, correctAnswer: "France", kind: kind, country: france, chosenCountry: nil,
                         choices: ["France", "Spain"], multipleChoice: multipleChoice, isCorrect: isCorrect,
-                        creditPercent: creditPercent, drawing: drawing, quiz: quiz, attempt: attempt, askedAt: nil,
+                        creditPercent: creditPercent, colourHint: colourHint, drawing: drawing, quiz: quiz, attempt: attempt, askedAt: nil,
                         in: family.context, now: TestSupport.morning)
     }
 
@@ -253,6 +254,48 @@ final class AnswerTests: XCTestCase {
         XCTAssertTrue(DrawingReview.setVerdict(nil, on: drawing, in: family.context))
         XCTAssertFalse(result.correct)
         XCTAssertEqual(result.pointsAwarded, 75, "back to the app's three quarters")
+    }
+
+    // MARK: The colour hint (§3.4): a quarter off the top
+
+    private var hinted: FlagDrawingContent {
+        var sketch = FlagSketch()
+        sketch.colourHint = true
+        return .freehand(sketch)
+    }
+
+    func testTheColourHintCostsAQuarterOfARightDrawing() throws {
+        let attempt = try sitting()
+        let result = try XCTUnwrap(answer(attempt, "drawn", kind: .flag, isCorrect: true, colourHint: true,
+                                          drawing: (hinted, 95)))
+        XCTAssertTrue(result.correct, "still right: the hint costs points, not the verdict")
+        XCTAssertEqual(result.pointsAwarded, 75)
+        XCTAssertTrue(try XCTUnwrap(family.fetchAll(FlagDrawing.self).first).usedColourHint)
+    }
+
+    func testPartCreditAndRetakesComeOutOfWhatTheHintLeaves() async throws {
+        let mirror = try XCTUnwrap(answer(try sitting(), "drawn", kind: .flag, isCorrect: false,
+                                          creditPercent: 75, colourHint: true, drawing: (hinted, 40)))
+        XCTAssertEqual(mirror.pointsAwarded, 56, "¾ of the 75 the hint leaves")
+        let retake = try await sitting(number: 2)
+        let colours = try XCTUnwrap(answer(retake, "drawn", kind: .flag, isCorrect: false,
+                                           creditPercent: 50, colourHint: true, drawing: (hinted, 30)))
+        XCTAssertEqual(colours.pointsAwarded, 28, "100 × ¾ hint × ¾ second sitting × ½ colours, rounded down")
+    }
+
+    func testTheColourHintAlsoCostsAFlagPickedFromFour() throws {
+        let result = try XCTUnwrap(answer(try sitting(), "France", kind: .flag, multipleChoice: true, colourHint: true))
+        XCTAssertEqual(result.pointsAwarded, 37, "half of the 75 the hint leaves")
+    }
+
+    func testAParentVerdictKeepsTheColourHintsQuarterOff() throws {
+        let result = try XCTUnwrap(answer(try sitting(), "drawn", kind: .flag, isCorrect: false,
+                                          creditPercent: 50, colourHint: true, drawing: (hinted, 30)))
+        let drawing = try XCTUnwrap(family.fetchAll(FlagDrawing.self).first)
+        XCTAssertTrue(DrawingReview.setVerdict(true, on: drawing, in: family.context))
+        XCTAssertEqual(result.pointsAwarded, 75)
+        XCTAssertTrue(DrawingReview.setVerdict(nil, on: drawing, in: family.context))
+        XCTAssertEqual(result.pointsAwarded, 37)
     }
 
     func testADrawingFromBeforePartCreditCountsAsAllOrNothing() {

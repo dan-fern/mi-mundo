@@ -63,6 +63,10 @@ extension SchemaV6 {
         var creditPercent: Int { parentVerdict.map { $0 ? 100 : 0 } ?? appCreditPercent }
         /// The verdict that counts: the parent's if they gave one.
         var isCorrect: Bool { creditPercent == 100 }
+        /// The kid asked to see the flag's colours (a quarter off the top).
+        var usedColourHint: Bool {
+            if case .freehand(let sketch) = decoded { sketch.colourHint } else { false }
+        }
     }
 }
 
@@ -83,7 +87,9 @@ enum DrawingReview {
     /// Sets (or clears, with nil) a parent's verdict, and rescores the answer:
     /// an answer marked right earns what that question was worth on that
     /// attempt (§5.3); one marked wrong earns nothing; clearing puts back
-    /// the app's share (which may be part of the points).
+    /// the app's share (which may be part of the points). The colour hint's
+    /// quarter stays off either way: a parent judges the drawing, not the
+    /// help.
     @MainActor
     static func setVerdict(_ verdict: Bool?, on drawing: FlagDrawing, in context: ModelContext,
                            now: Date = .now) -> Bool {
@@ -95,11 +101,12 @@ enum DrawingReview {
         if let answer {
             let credit = drawing.creditPercent
             answer.correct = credit == 100
-            answer.pointsAwarded = Int(pointsWithCredit(
+            answer.pointsAwarded = Int(pointsWithHelp(
                 basePoints: UInt32(clamping: max(answer.basePoints, 0)),
                 attempt: UInt32(clamping: max(answer.attemptNumber, 1)),
                 usedMultipleChoice: answer.usedMultipleChoice,
-                creditPercent: UInt32(clamping: credit)))
+                creditPercent: UInt32(clamping: credit),
+                colourHint: drawing.usedColourHint))
         }
         return context.saveOrRollback("review flag drawing")
     }
