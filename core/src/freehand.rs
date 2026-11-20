@@ -155,22 +155,6 @@ pub fn draw_credit_percent(credit: DrawCredit) -> u32 {
 /// colours" (blank counts as white).
 pub const COLOURS_CREDIT_SHARE_PERCENT: u32 = 60;
 
-/// Flags (ISO codes) whose mirror image is another country's flag: drawn
-/// flipped, the kid has drawn that other flag, which is the mix-up being
-/// tested, so no ¾ for a mirror image (the right colours can still earn ½).
-/// Left-right: Ireland and Côte d'Ivoire; Mali, Senegal and Guinea.
-/// Upside down: Indonesia and Monaco with Poland; Russia, Slovakia and
-/// Slovenia with Serbia; Bolivia with Ethiopia and Ghana.
-pub const MIRROR_TWINS: [&str; 15] = [
-    "IE", "CI", "ML", "SN", "GN", "ID", "MC", "PL", "RU", "SK", "SI", "RS", "BO", "ET", "GH",
-];
-
-/// Whether a mirror image of this flag (by ISO code) earns ¾.
-#[uniffi::export]
-pub fn mirror_credit_allowed(iso2: String) -> bool {
-    !MIRROR_TWINS.contains(&iso2.to_uppercase().as_str())
-}
-
 /// How a freehand drawing did.
 #[derive(Debug, Clone, PartialEq, Eq, uniffi::Record)]
 pub struct FreehandGrade {
@@ -698,16 +682,6 @@ mod tests {
         let backwards = grid(|x, y| france(1.0 - x, y));
         let g = grade_freehand(real, backwards, outline, W as u32, H as u32);
         assert_eq!(g.credit, DrawCredit::Mirrored, "{g:?}");
-    }
-
-    #[test]
-    fn flags_whose_mirror_is_another_flag_get_no_mirror_credit() {
-        for code in ["IE", "ci", "PL", "ID", "MC", "RU", "RS", "ML", "GN"] {
-            assert!(!mirror_credit_allowed(code.into()), "{code}");
-        }
-        for code in ["FR", "IT", "TT", "JP", "DE"] {
-            assert!(mirror_credit_allowed(code.into()), "{code}");
-        }
     }
 
     #[test]

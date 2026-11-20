@@ -160,11 +160,9 @@ Grading:
   - **all the right colours** in the wrong places (every main colour of the
     flag over at least 60% of its area, so a dab of each isn't enough, and no big patch of a colour the
     flag doesn't have) earns **½**.
-  No ¾ for a flag whose mirror image is another country's flag (Ireland and
-  Côte d'Ivoire; Mali, Senegal and Guinea; Indonesia, Monaco and Poland;
-  Russia, Slovakia, Slovenia and Serbia; Bolivia, Ethiopia and Ghana):
-  drawing the other flag is the mix-up being tested, so it can earn only
-  the colours ½.
+  A mirror image earns ¾ even when it's another country's flag (Ireland
+  drawn backwards is Côte d'Ivoire; Poland upside down is Indonesia):
+  owner's call, Nov 2026.
   A partly right drawing isn't counted as right in stats; the card says
   "So close: it's a mirror image!" or "All the right colours!" with the
   points.

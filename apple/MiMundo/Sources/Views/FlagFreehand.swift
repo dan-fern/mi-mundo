@@ -499,16 +499,10 @@ struct FreehandPad: View {
     private func check() {
         guard let asset = country.flagAsset else { return }
         checking = true
-        var grade = gradeFreehand(reference: Data(FlagGrid.reference(asset: asset)),
+        let grade = gradeFreehand(reference: Data(FlagGrid.reference(asset: asset)),
                                   drawing: Data(FlagGrid.drawing(sketch)),
                                   outline: Data(FlagGrid.outline(spec)),
                                   width: UInt32(FlagGrid.width), height: UInt32(FlagGrid.height))
-        // Some flags' mirror image is another country's flag (Ireland and
-        // Côte d'Ivoire): that's a mix-up, not "so close", so only the
-        // right-colours half.
-        if grade.credit == .mirrored, !mirrorCreditAllowed(iso2: country.meta.iso2) {
-            grade.credit = .colours
-        }
         if !onCheck(FreehandResult(sketch: sketch, grade: grade)) {
             checking = false
             saveFailed = true
