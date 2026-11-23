@@ -444,6 +444,17 @@ mod tests {
     }
 
     #[test]
+    fn emptying_the_queue_forgets_the_position_and_takes_the_new_day() {
+        // Mutation testing: the empty-queue state kept the old position, so
+        // a refilled queue started part way down instead of at the top.
+        let state = playing("c", 2, 100);
+        let empty = queue_today(state, vec![], 101);
+        assert_eq!((empty.position, empty.day), (0, 101));
+        let refilled = queue_today(empty, ids(&["x", "y", "z", "w"]), 101);
+        assert_eq!(current(&refilled), Some("x"));
+    }
+
+    #[test]
     fn a_clock_set_backwards_moves_nothing_on() {
         let mut state = playing("a", 0, 100);
         state.attempted_by_kid = true;

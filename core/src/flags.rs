@@ -364,6 +364,18 @@ mod tests {
     }
 
     #[test]
+    fn the_right_layout_comes_up_in_every_slot() {
+        // Mutation testing: an off-by-one in the slot draw kept it out of
+        // the last place.
+        let mut slots = [false; LAYOUT_CHOICES as usize];
+        for seed in 0..300 {
+            let choices = flag_layout_choices("v3".into(), seed);
+            slots[choices.iter().position(|c| c == "v3").unwrap()] = true;
+        }
+        assert_eq!(slots, [true; LAYOUT_CHOICES as usize]);
+    }
+
+    #[test]
     fn every_layout_has_regions_and_there_are_enough_to_choose_from() {
         assert!(FLAG_LAYOUTS.iter().all(|(_, n)| *n >= 1));
         assert!(LAYOUT_CHOICES as usize <= FLAG_LAYOUTS.len());

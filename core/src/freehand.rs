@@ -367,12 +367,7 @@ fn grade_as_drawn(
     // The emblem area: anything drawn there is fine.
     let emblem = skip.clone();
     // Small colours are details too.
-    let mut area = [0usize; 9];
-    for &c in reference {
-        if (c as usize) < area.len() {
-            area[c as usize] += 1;
-        }
-    }
+    let area = colour_areas(reference);
     let minor = |c: u8| {
         (c as usize) >= area.len() || area[c as usize] * 100 < n * MINOR_SHARE_PERCENT as usize
     };
@@ -1049,6 +1044,74 @@ mod tests {
         // Blue's cells next to the red band match (the 3×3 tolerance).
         assert!((50..=53).contains(&g.score_percent), "{}", g.score_percent);
         assert_eq!(g.missing_colours, ["blue"]);
+    }
+
+    // ---- Gaps mutation testing found ----------------------------------------
+
+    #[test]
+    fn a_colour_exactly_between_two_paints_goes_to_the_earlier_one() {
+        // (229, 84, 45) is as close to a red shade as to an orange one.
+        assert_eq!(nearest_paint(229, 84, 45), idx("red"));
+    }
+
+    #[test]
+    fn a_flag_that_changes_down_its_rows_drawn_backwards_is_a_mirror_image() {
+        // Blue hoist, white over red on the fly side (every row differs from
+        // the first, unlike vertical stripes).
+        let flag = grid(|x, y| {
+            if x < 1.0 / 3.0 {
+                "blue"
+            } else if y < 0.5 {
+                "white"
+            } else {
+                "red"
+            }
+        });
+        assert_eq!(
+            credit(&flag, &flipped_left_right(&flag)),
+            DrawCredit::Mirrored
+        );
+    }
+
+    #[test]
+    fn a_blank_canvas_counts_as_white_for_colours_credit() {
+        // Red over white; drawn as red on the left, the rest left blank.
+        let flag = grid(|_, y| if y < 0.5 { "red" } else { "white" });
+        let drawing = grid(|x, _| if x < 0.5 { "red" } else { BLANK_NAME });
+        assert_eq!(credit(&flag, &drawing), DrawCredit::Colours);
+    }
+
+    #[test]
+    fn grading_refuses_buffers_of_the_wrong_size_itself() {
+        // `grade_freehand` checks sizes first; the inner grader must too.
+        let g = grade_as_drawn(&[0, 0, 0], &[0, 0, 0, 0], &[], 2, 2);
+        assert_eq!(g.score_percent, 0);
+        assert!(g.wrong_cells.is_empty() && !g.correct);
+        let g = grade_as_drawn(&[0; 4], &[0; 3], &[], 2, 2);
+        assert!(g.wrong_cells.is_empty() && !g.correct);
+        let g = grade_as_drawn(&[0; 4], &[0; 4], &[0; 2], 2, 2);
+        assert!(g.wrong_cells.is_empty() && !g.correct);
+    }
+
+    #[test]
+    fn a_colour_on_exactly_six_percent_is_graded_not_detail() {
+        // On a 50×50 grid, a 10×15 block is exactly 6%: a main colour, so
+        // leaving it out is wrong. Grading and the colour hint agree.
+        let (w, h) = (50usize, 50usize);
+        let flag: Vec<u8> = (0..w * h)
+            .map(|i| {
+                if i % w < 10 && i / w < 15 {
+                    idx("blue")
+                } else {
+                    idx("red")
+                }
+            })
+            .collect();
+        assert_eq!(flag_main_colours(flag.clone()), ["red", "blue"]);
+        let all_red = vec![idx("red"); w * h];
+        let g = grade_freehand(flag, all_red, vec![], w as u32, h as u32);
+        assert_eq!(g.missing_colours, ["blue"]);
+        assert!(!g.correct);
     }
 
     // ---- Generated striped flags ------------------------------------------
