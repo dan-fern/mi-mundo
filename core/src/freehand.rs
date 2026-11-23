@@ -235,7 +235,12 @@ pub fn grade_freehand(
         || grade_as_drawn(&reference, &upside_down, &outline, w, h).correct
     {
         DrawCredit::Mirrored
-    } else if has_the_colours(&reference, &drawing, &grade) {
+    } else if has_the_colours(
+        &reference,
+        &drawing,
+        &emblem_mask(&reference, &outline, w, h),
+        &grade,
+    ) {
         DrawCredit::Colours
     } else {
         DrawCredit::None
@@ -246,12 +251,24 @@ pub fn grade_freehand(
 /// Every main colour of the flag (one big enough to be graded) is drawn
 /// over at least [`COLOURS_CREDIT_SHARE_PERCENT`] of its own area,
 /// anywhere, and nothing big is drawn in a colour the flag doesn't have.
-fn has_the_colours(reference: &[u8], drawing: &[u8], grade: &FreehandGrade) -> bool {
+/// The emblem doesn't count (owner, Nov 2026): a colour is measured only
+/// outside it, so one that's only in the emblem needn't be drawn.
+fn has_the_colours(
+    reference: &[u8],
+    drawing: &[u8],
+    emblem: &[bool],
+    grade: &FreehandGrade,
+) -> bool {
     if !grade.extra_colours.is_empty() || drawing.iter().all(|&c| c == BLANK) {
         return false;
     }
     let white = PALETTE.iter().position(|c| *c == "white").unwrap() as u8;
-    let area = colour_areas(reference);
+    let outside: Vec<u8> = reference
+        .iter()
+        .zip(emblem)
+        .map(|(&c, &e)| if e { BLANK } else { c })
+        .collect();
+    let area = colour_areas(&outside);
     let mut drawn = [0usize; 9];
     for &d in drawing {
         let d = if d == BLANK { white } else { d };
@@ -259,7 +276,7 @@ fn has_the_colours(reference: &[u8], drawing: &[u8], grade: &FreehandGrade) -> b
             drawn[d as usize] += 1;
         }
     }
-    let main = main_colours(reference);
+    let main = main_colours(&outside);
     // A flag with no main colour (bad input) has no colours to get right.
     !main.is_empty()
         && main.iter().all(|&c| {
@@ -269,6 +286,30 @@ fn has_the_colours(reference: &[u8], drawing: &[u8], grade: &FreehandGrade) -> b
                 .sum();
             have * 100 >= area[c as usize] * COLOURS_CREDIT_SHARE_PERCENT as usize
         })
+}
+
+/// Cell `i` of a `w`×`h` grid and the up to 8 around it, clipped at the edges.
+fn neighbours(i: usize, w: usize, h: usize) -> impl Iterator<Item = usize> {
+    let (x, y) = (i % w, i / w);
+    let xs = x.saturating_sub(1)..=(x + 1).min(w - 1);
+    (y.saturating_sub(1)..=(y + 1).min(h - 1))
+        .flat_map(move |ny| xs.clone().map(move |nx| ny * w + nx))
+}
+
+/// The emblem: where the real flag isn't its plain outline, and around it.
+/// All false without an outline. Sizes must already match.
+fn emblem_mask(reference: &[u8], outline: &[u8], w: usize, h: usize) -> Vec<bool> {
+    let mut emblem = vec![false; reference.len()];
+    if !outline.is_empty() {
+        for i in 0..reference.len() {
+            if !matches(reference[i], outline[i]) {
+                for j in neighbours(i, w, h) {
+                    emblem[j] = true;
+                }
+            }
+        }
+    }
+    emblem
 }
 
 /// How many cells of the grid are each paint-box colour.
@@ -347,27 +388,9 @@ fn grade_as_drawn(
             drawing[i]
         }
     };
-    // The cell and the up to 8 around it, clipped at the edges.
-    let neighbours = |i: usize| {
-        let (x, y) = (i % w, i / w);
-        let xs = x.saturating_sub(1)..=(x + 1).min(w - 1);
-        (y.saturating_sub(1)..=(y + 1).min(h - 1))
-            .flat_map(move |ny| xs.clone().map(move |nx| ny * w + nx))
-    };
-
-    // Detail: where the real flag isn't its plain outline, and around it.
-    let mut skip = vec![false; n];
-    if !outline.is_empty() {
-        for i in 0..n {
-            if !matches(reference[i], outline[i]) {
-                for j in neighbours(i) {
-                    skip[j] = true;
-                }
-            }
-        }
-    }
-    // The emblem area: anything drawn there is fine.
-    let emblem = skip.clone();
+    // The emblem area is detail: anything drawn there is fine.
+    let emblem = emblem_mask(reference, outline, w, h);
+    let mut skip = emblem.clone();
     // Small colours are details too.
     let area = colour_areas(reference);
     let minor = |c: u8| {
@@ -390,7 +413,7 @@ fn grade_as_drawn(
         graded += 1;
         let c = reference[i] as usize;
         per_colour[c].0 += 1;
-        if neighbours(i).any(|j| matches(reference[j], drawn(i))) {
+        if neighbours(i, w, h).any(|j| matches(reference[j], drawn(i))) {
             matched += 1;
             per_colour[c].1 += 1;
         } else {
@@ -1049,6 +1072,35 @@ mod tests {
         // 864 red cells plus blue's first row of 48: 912 / 1728.
         assert_eq!(g.score_percent, 52);
         assert_eq!(g.missing_colours, ["blue"]);
+    }
+
+    /// A colour only in the emblem isn't needed for colours credit (owner,
+    /// Nov 2026): the stripes in the wrong order, emblem skipped, still earn ½.
+    #[test]
+    fn colours_credit_ignores_a_colour_only_in_the_emblem() {
+        let disc = |x: f32, y: f32| (x - 0.5).abs() < 0.2 && (y - 0.5).abs() < 0.2;
+        let flag = grid(|x, y| if disc(x, y) { "black" } else { france(x, y) });
+        assert!(flag_main_colours(flag.clone()).contains(&"black".to_string()));
+        let outline = grid(france);
+        // White, red, blue: neither the right order nor a mirror image.
+        let rotated = grid(|x, y| france((x + 1.0 / 3.0) % 1.0, y));
+        let g = grade(&flag, &rotated, &outline);
+        assert!(!g.correct);
+        assert_eq!(g.credit, DrawCredit::Colours, "{g:?}");
+        // Without an outline there's no emblem, so black is a main colour.
+        assert_eq!(grade(&flag, &rotated, &[]).credit, DrawCredit::None);
+    }
+
+    /// A colour in the emblem and the bands is measured outside the emblem
+    /// only, and must still be drawn there.
+    #[test]
+    fn colours_credit_still_needs_a_band_colour_the_emblem_shares() {
+        let disc = |x: f32, y: f32| (x - 0.5).abs() < 0.2 && (y - 0.5).abs() < 0.2;
+        let flag = grid(|x, y| if disc(x, y) { "blue" } else { france(x, y) });
+        let outline = grid(france);
+        // No blue at all: white and red only.
+        let no_blue = grid(|x, _| if x < 0.5 { "white" } else { "red" });
+        assert_eq!(grade(&flag, &no_blue, &outline).credit, DrawCredit::None);
     }
 
     /// The 3×3 tolerance reaches every side: one row or column of blue

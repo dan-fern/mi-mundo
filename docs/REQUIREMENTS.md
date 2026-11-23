@@ -172,7 +172,9 @@ Grading:
     drawn backwards, or upside down) earns **¾** of the points;
   - **all the right colours** in the wrong places (every main colour of the
     flag over at least 60% of its area, so a dab of each isn't enough, and no big patch of a colour the
-    flag doesn't have) earns **½**.
+    flag doesn't have) earns **½**. The emblem doesn't count here either: a
+    colour is measured outside the emblem only, so one that's only in the
+    emblem needn't be drawn (owner's call, Nov 2026).
   A mirror image earns ¾ even when it's another country's flag (Ireland
   drawn backwards is Côte d'Ivoire; Poland upside down is Indonesia):
   owner's call, Nov 2026.
