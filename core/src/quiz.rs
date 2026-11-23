@@ -196,6 +196,29 @@ mod tests {
         assert_eq!(quiz_stars(u32::MAX, u32::MAX), 3);
     }
 
+    #[test]
+    fn stars_change_exactly_at_ninety_and_sixty_percent() {
+        assert_eq!(quiz_stars(90, 100), 3);
+        assert_eq!(quiz_stars(89, 100), 2);
+        assert_eq!(quiz_stars(60, 100), 2);
+        assert_eq!(quiz_stars(59, 100), 1);
+        assert_eq!(quiz_stars(1, 1000), 1);
+    }
+
+    #[test]
+    fn the_pool_counts_usable_candidates_not_raw_ones() {
+        // Blanks and repeats ahead of the 8 usable ones don't push the 8th
+        // out of the pool; the 9th usable one never comes up.
+        let mut candidates = names(&["", " ", "A", "A", "Peru"]);
+        candidates.extend(names(&["B", "C", "D", "E", "F", "G", "H", "Far"]));
+        let mut used = std::collections::BTreeSet::new();
+        for seed in 0..300 {
+            used.extend(quiz_choices("Peru".into(), candidates.clone(), seed));
+        }
+        assert!(used.contains("H"), "the 8th usable candidate is used");
+        assert!(!used.contains("Far"), "the 9th isn't");
+    }
+
     proptest! {
         #[test]
         fn choices_are_always_well_formed(

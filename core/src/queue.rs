@@ -513,6 +513,34 @@ mod tests {
         assert_eq!(queue_max(), 20);
     }
 
+    #[test]
+    fn from_today_leaves_the_queue_as_is_without_a_current_quiz_in_it() {
+        let q = ids(&["a", "b", "c"]);
+        assert_eq!(queue_from_today(q.clone(), None), q);
+        assert_eq!(queue_from_today(q.clone(), Some("gone".into())), q);
+        assert!(queue_from_today(vec![], Some("a".into())).is_empty());
+        assert_eq!(
+            queue_from_today(q.clone(), Some("c".into())),
+            ids(&["c", "a", "b"])
+        );
+    }
+
+    #[test]
+    fn set_today_on_an_empty_queue_changes_nothing() {
+        let state = queue_initial_state(5);
+        assert_eq!(queue_set_today(state.clone(), vec![], "a".into()), state);
+    }
+
+    #[test]
+    fn set_today_keeps_the_day_and_lifts_the_edit_lock() {
+        let mut state = playing("a", 0, 40);
+        state.started = true;
+        let next = queue_set_today(state, ids(&["a", "b"]), "b".into());
+        assert_eq!(current(&next), Some("b"));
+        assert_eq!((next.position, next.run, next.day), (1, 2, 40));
+        assert!(!next.started && !next.attempted_by_kid);
+    }
+
     proptest! {
         /// Kids attempting every day play every quiz in order, round and
         /// round, with a new run each day.
@@ -568,6 +596,56 @@ mod tests {
             let next = queue_today(state, queue.clone(), gap);
             let expected = if attempted { (start + 1) % len } else { start };
             prop_assert_eq!(next.current.as_deref(), Some(queue[expected].as_str()));
+        }
+    }
+
+    proptest! {
+        /// Reordering the queue, on the same day or a later one with no
+        /// kid attempt, never changes today's quiz or its run.
+        #[test]
+        fn without_a_kids_attempt_todays_quiz_stays(
+            order in Just((0..12).map(|i| format!("q{i}")).collect::<Vec<_>>()).prop_shuffle(),
+            pick in 0usize..12, later in 0i32..30, started: bool,
+        ) {
+            let mut state = playing(&format!("q{pick}"), pick as u32, 10);
+            state.started = started;
+            let next = queue_today(state.clone(), order.clone(), 10 + later);
+            prop_assert_eq!(&next.current, &state.current);
+            prop_assert_eq!(next.run, state.run);
+            prop_assert_eq!(&order[next.position as usize], &format!("q{pick}"));
+        }
+
+        /// Removing some other quiz never changes today's.
+        #[test]
+        fn removing_another_quiz_keeps_todays(len in 2usize..=20, pick in 0usize..20, gone in 0usize..20, attempted: bool) {
+            let (pick, gone) = (pick % len, gone % len);
+            prop_assume!(pick != gone);
+            let mut queue: Vec<String> = (0..len).map(|i| format!("q{i}")).collect();
+            let mut state = playing(&queue[pick], pick as u32, 3);
+            state.attempted_by_kid = attempted;
+            queue.remove(gone);
+            let next = queue_today(state.clone(), queue, 3);
+            prop_assert_eq!(next.current, state.current);
+        }
+
+        /// Once a kid has attempted today's quiz, a parent can't swap it.
+        #[test]
+        fn set_today_never_applies_after_a_kids_attempt(len in 1usize..=20, pick in 0usize..20, to in 0usize..20) {
+            let queue: Vec<String> = (0..len).map(|i| format!("q{i}")).collect();
+            let mut state = playing(&queue[pick % len], (pick % len) as u32, 8);
+            state.attempted_by_kid = true;
+            prop_assert_eq!(queue_set_today(state.clone(), queue.clone(), queue[to % len].clone()), state);
+        }
+
+        /// A parent's pick holds for the rest of the day.
+        #[test]
+        fn set_today_then_the_same_day_keeps_the_pick(len in 1usize..=20, pick in 0usize..20, to in 0usize..20) {
+            let queue: Vec<String> = (0..len).map(|i| format!("q{i}")).collect();
+            let state = playing(&queue[pick % len], (pick % len) as u32, 8);
+            let chosen = queue_set_today(state, queue.clone(), queue[to % len].clone());
+            let later = queue_today(chosen.clone(), queue.clone(), 8);
+            prop_assert_eq!(later.current.as_deref(), Some(queue[to % len].as_str()));
+            prop_assert_eq!(later, chosen);
         }
     }
 }

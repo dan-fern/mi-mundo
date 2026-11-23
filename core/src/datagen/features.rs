@@ -719,4 +719,141 @@ mod tests {
         let err = run("/nonexistent/a", "/b", "/c", "/d", "/e").unwrap_err();
         assert!(err.contains("/nonexistent/a"), "{err}");
     }
+
+    fn shaped(kind: &str, coordinates: Value) -> Value {
+        json!({"type": "Feature", "properties": {}, "geometry": {"type": kind, "coordinates": coordinates}})
+    }
+
+    #[test]
+    fn lines_come_single_or_multi_and_nothing_else() {
+        let single = project_lines(&shaped("LineString", json!([[0.0, 0.0], [1.0, 1.0]]))).unwrap();
+        assert_eq!(single.len(), 1);
+        assert_eq!(single[0].len(), 4);
+        let multi = project_lines(&shaped(
+            "MultiLineString",
+            json!([
+                [[0.0, 0.0], [1.0, 1.0]],
+                [[2.0, 2.0], [3.0, 3.0], [4.0, 4.0]]
+            ]),
+        ))
+        .unwrap();
+        assert_eq!(multi.iter().map(Vec::len).collect::<Vec<_>>(), [4, 6]);
+        let err = project_lines(&shaped("Polygon", json!([rect(0.0, 0.0, 1.0, 1.0)]))).unwrap_err();
+        assert!(err.contains("expected lines"), "{err}");
+        let err = project_lines(&shaped("MultiLineString", json!("oops"))).unwrap_err();
+        assert!(err.contains("bad MultiLineString"), "{err}");
+        assert!(project_lines(&shaped("LineString", json!([["x", 1.0]]))).is_err());
+    }
+
+    #[test]
+    fn rings_come_from_polygons_or_multipolygons_and_nothing_else() {
+        let holed = project_rings(&shaped(
+            "Polygon",
+            json!([rect(0.0, 0.0, 10.0, 10.0), rect(4.0, 4.0, 6.0, 6.0)]),
+        ))
+        .unwrap();
+        assert_eq!(holed.len(), 2, "outer ring and hole");
+        let islands = project_rings(&shaped(
+            "MultiPolygon",
+            json!([[rect(0.0, 0.0, 1.0, 1.0)], [rect(5.0, 5.0, 6.0, 6.0)]]),
+        ))
+        .unwrap();
+        assert_eq!(islands.len(), 2);
+        let err =
+            project_rings(&shaped("LineString", json!([[0.0, 0.0], [1.0, 1.0]]))).unwrap_err();
+        assert!(err.contains("expected polygons"), "{err}");
+        let err = project_rings(&shaped("MultiPolygon", json!(7))).unwrap_err();
+        assert!(err.contains("bad MultiPolygon"), "{err}");
+        assert!(project_rings(&shaped("Polygon", json!("oops"))).is_err());
+    }
+
+    /// Runs featuregen on the given layers (plus Lake Malawi) and loads the
+    /// result.
+    fn layers_of(
+        dir: &std::path::Path,
+        rivers: Vec<Value>,
+        lakes: Vec<Value>,
+        regions: Vec<Value>,
+        peaks: Vec<Value>,
+    ) -> Vec<PhysicalFeature> {
+        // `run` insists on Lake Malawi (its label is placed by hand).
+        let mut lakes = lakes;
+        lakes.push(json!({"type": "Feature", "properties": {"label": "Lake Malawi", "min_zoom": 3.0, "min_label": 4.0},
+                          "geometry": {"type": "Polygon", "coordinates": [rect(34.0, -14.0, 35.0, -9.5)]}}));
+        let paths = [
+            write_collection(dir, "rivers.json", rivers),
+            write_collection(dir, "lakes.json", lakes),
+            write_collection(dir, "regions.json", regions),
+            write_collection(dir, "peaks.json", peaks),
+        ];
+        let out = dir.join("Features.bin");
+        run(
+            &paths[0],
+            &paths[1],
+            &paths[2],
+            &paths[3],
+            out.to_str().unwrap(),
+        )
+        .unwrap();
+        load_features(std::fs::read(out).unwrap()).unwrap()
+    }
+
+    #[test]
+    fn dropped_rivers_regions_and_peaks_are_left_out() {
+        let river = |name: &str, lon: f64, lat: f64| {
+            json!({"type": "Feature",
+                   "properties": {"featurecla": "River", "name_en": name, "min_zoom": 2.0, "min_label": 3.0},
+                   "geometry": {"type": "LineString", "coordinates": [[lon, lat], [lon + 2.0, lat + 2.0]]}})
+        };
+        let features = layers_of(
+            &temp_dir("featuregen-dropped"),
+            // Madison is on the drop list; Bolivia's Grande is dropped by place.
+            vec![
+                river("Madison", -111.0, 45.0),
+                river("Grande", -63.0, -18.0),
+                river("Grande", -105.0, 30.0),
+            ],
+            vec![],
+            vec![
+                json!({"type": "Feature", "properties": {"NAME": "Caatinga", "FEATURECLA": "Desert", "MIN_LABEL": 3.0},
+                        "geometry": {"type": "Polygon", "coordinates": [rect(-42.0, -10.0, -38.0, -6.0)]}}),
+            ],
+            vec![json!({"type": "Feature",
+                        "properties": {"featurecla": "mountain", "name": "Spruce Knob", "elevation": 1482.0, "min_zoom": 5.0},
+                        "geometry": {"type": "Point", "coordinates": [-79.53, 38.7]}})],
+        );
+        let names: Vec<&str> = features
+            .iter()
+            .filter(|f| f.kind != FeatureKind::Peak || f.name == "Spruce Knob")
+            .filter(|f| f.name != "Lake Malawi")
+            .map(|f| f.name.as_str())
+            .collect();
+        assert_eq!(names, ["Grande"], "only the US/Mexico Rio Grande stays");
+    }
+
+    #[test]
+    fn features_too_small_to_label_are_left_out() {
+        let features = layers_of(
+            &temp_dir("featuregen-nolabel"),
+            vec![json!({"type": "Feature",
+                        "properties": {"featurecla": "River", "name_en": "Dot", "min_zoom": 2.0, "min_label": 3.0},
+                        "geometry": {"type": "LineString", "coordinates": [[1.0, 1.0]]}})],
+            vec![
+                json!({"type": "Feature", "properties": {"label": "Speck", "min_zoom": 3.0, "min_label": 4.0},
+                        "geometry": {"type": "Polygon", "coordinates": [[[1.0, 1.0], [2.0, 2.0]]]}}),
+            ],
+            vec![
+                json!({"type": "Feature", "properties": {"NAME": "Ridge", "FEATURECLA": "Range/mtn", "MIN_LABEL": 3.0},
+                        "geometry": {"type": "Polygon", "coordinates": [[[1.0, 1.0], [2.0, 2.0]]]}}),
+            ],
+            vec![],
+        );
+        assert!(
+            features
+                .iter()
+                .all(|f| f.kind == FeatureKind::Peak || f.name == "Lake Malawi"),
+            "{:?}",
+            features.iter().map(|f| &f.name).collect::<Vec<_>>()
+        );
+    }
 }

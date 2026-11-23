@@ -290,4 +290,12 @@ mod tests {
             }
         }
     }
+
+    #[test]
+    fn rings_of_four_points_or_fewer_are_left_as_they_are() {
+        let triangle = vec![0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0];
+        assert_eq!(simplify_ring(&triangle, 100.0), triangle);
+        assert!(simplify_ring(&[], 1.0).is_empty());
+        assert_eq!(simplify_ring(&[3.0, 4.0], 1.0), [3.0, 4.0]);
+    }
 }

@@ -286,6 +286,66 @@ mod tests {
         assert!(orders.len() > 10);
     }
 
+    #[test]
+    fn a_one_country_quiz_works_in_every_scope() {
+        for scope in [
+            RandomQuizScope::Region,
+            RandomQuizScope::Continent,
+            RandomQuizScope::World,
+        ] {
+            for seed in 0..20 {
+                let q = random_quiz(world(), 1, scope, seed);
+                assert_eq!(q.country_ids.len(), 1, "{scope:?}");
+                assert_eq!(q.area.is_some(), scope != RandomQuizScope::World);
+            }
+        }
+    }
+
+    #[test]
+    fn a_region_exactly_big_enough_is_used_whole() {
+        let mut seen = false;
+        for seed in 0..100 {
+            let q = random_quiz(world(), 3, RandomQuizScope::Region, seed);
+            if q.area.as_deref() == Some("Southern Europe") {
+                assert_eq!(q.country_ids, ["ESP", "ITA", "PRT"]);
+                seen = true;
+            }
+        }
+        assert!(seen, "Southern Europe (3 countries) comes up");
+    }
+
+    #[test]
+    fn when_no_region_is_big_enough_a_tie_goes_to_the_first_name() {
+        let small = vec![
+            c("B1", "Bravo", "X"),
+            c("B2", "Bravo", "X"),
+            c("A1", "Alpha", "Y"),
+            c("A2", "Alpha", "Y"),
+        ];
+        for seed in 0..20 {
+            let q = random_quiz(small.clone(), 5, RandomQuizScope::Region, seed);
+            assert_eq!(q.area.as_deref(), Some("Alpha"));
+            assert_eq!(q.country_ids, ["A1", "A2"]);
+        }
+    }
+
+    #[test]
+    fn a_repeated_country_keeps_its_first_region() {
+        let candidates = vec![
+            c("FRA", "Western Europe", "Europe"),
+            c("FRA", "Nowhere", "Nowhere"),
+        ];
+        let q = random_quiz(candidates, 1, RandomQuizScope::Region, 3);
+        assert_eq!(q.area.as_deref(), Some("Western Europe"));
+        assert_eq!(q.country_ids, ["FRA"]);
+    }
+
+    #[test]
+    fn shuffling_nothing_or_one_quiz() {
+        assert!(shuffled_queue(Vec::new(), 9).is_empty());
+        assert_eq!(shuffled_queue(vec!["only".into()], 9), ["only"]);
+    }
+
     proptest! {
         #[test]
         fn shuffle_keeps_every_quiz_once(n in 0usize..30, seed: u64) {
@@ -305,6 +365,28 @@ mod tests {
             prop_assert_eq!(set.len(), q.country_ids.len());
             prop_assert!(q.country_ids.len() <= count as usize);
             prop_assert!(q.country_ids.iter().all(|id| world().iter().any(|c| &c.id == id)));
+        }
+    }
+
+    proptest! {
+        #[test]
+        fn the_order_candidates_come_in_never_matters(count in 0u32..14, seed: u64, which in 0usize..3) {
+            let scope = [RandomQuizScope::Region, RandomQuizScope::Continent, RandomQuizScope::World][which];
+            let mut reversed = world();
+            reversed.reverse();
+            prop_assert_eq!(random_quiz(world(), count, scope, seed), random_quiz(reversed, count, scope, seed));
+        }
+
+        #[test]
+        fn region_and_continent_quizzes_name_their_area(count in 1u32..14, seed: u64, region: bool) {
+            let scope = if region { RandomQuizScope::Region } else { RandomQuizScope::Continent };
+            let q = random_quiz(world(), count, scope, seed);
+            let area = q.area.clone().expect("an area");
+            for id in &q.country_ids {
+                let home = if region { region_of(id) } else { continent_of(id) };
+                prop_assert_eq!(&home, &area);
+            }
+            prop_assert!(random_quiz(world(), count, RandomQuizScope::World, seed).area.is_none());
         }
     }
 }

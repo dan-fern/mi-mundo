@@ -274,6 +274,101 @@ mod tests {
         assert_eq!(flag_palette().len(), PALETTE.len());
     }
 
+    #[test]
+    fn colour_matching_is_symmetric_and_every_colour_matches_itself() {
+        for a in PALETTE {
+            assert!(flag_colours_match(a.into(), a.into()), "{a}");
+            for b in PALETTE {
+                assert_eq!(
+                    flag_colours_match(a.into(), b.into()),
+                    flag_colours_match(b.into(), a.into()),
+                    "{a} / {b}"
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn only_the_close_shades_match_another_colour() {
+        let mut pairs = Vec::new();
+        for (i, a) in PALETTE.iter().enumerate() {
+            for b in &PALETTE[i + 1..] {
+                if flag_colours_match((*a).into(), (*b).into()) {
+                    pairs.push((*a, *b));
+                }
+            }
+        }
+        assert_eq!(pairs, [("red", "maroon"), ("lightblue", "blue")]);
+    }
+
+    #[test]
+    fn unknown_colour_names_match_only_themselves() {
+        assert!(flag_colours_match("teal".into(), "teal".into()));
+        assert!(!flag_colours_match("teal".into(), "blue".into()));
+        assert!(!flag_colours_match("".into(), "white".into()));
+        assert!(
+            !flag_colours_match("Red".into(), "red".into()),
+            "names are exact"
+        );
+    }
+
+    #[test]
+    fn the_paint_box_order_is_pinned() {
+        assert_eq!(
+            flag_palette(),
+            [
+                "red",
+                "maroon",
+                "orange",
+                "yellow",
+                "green",
+                "lightblue",
+                "blue",
+                "white",
+                "black"
+            ]
+        );
+    }
+
+    #[test]
+    fn an_outline_with_no_regions_is_never_right() {
+        let g = grade_flag_outline("v3".into(), vec![], "v3".into(), vec![]);
+        assert!(g.layout_right);
+        assert!(g.regions_right.is_empty());
+        assert!(!g.correct);
+    }
+
+    #[test]
+    fn an_unknown_layout_is_still_offered_once_with_five_real_ones() {
+        for seed in 0..50 {
+            let choices = flag_layout_choices("zigzag".into(), seed);
+            assert_eq!(choices.len(), LAYOUT_CHOICES as usize);
+            assert_eq!(choices.iter().filter(|c| *c == "zigzag").count(), 1);
+            assert_eq!(
+                choices
+                    .iter()
+                    .filter(|c| flag_layout_regions((*c).clone()) > 0)
+                    .count(),
+                5
+            );
+        }
+    }
+
+    #[test]
+    fn every_layout_comes_up_as_a_wrong_choice() {
+        let mut seen = std::collections::BTreeSet::new();
+        for seed in 0..200 {
+            seen.extend(flag_layout_choices("v3".into(), seed));
+        }
+        assert_eq!(seen.len(), FLAG_LAYOUTS.len(), "{seen:?}");
+    }
+
+    #[test]
+    fn every_layout_has_regions_and_there_are_enough_to_choose_from() {
+        assert!(FLAG_LAYOUTS.iter().all(|(_, n)| *n >= 1));
+        assert!(LAYOUT_CHOICES as usize <= FLAG_LAYOUTS.len());
+    }
+
     proptest! {
         #[test]
         fn layout_choices_hold_the_answer_once(i in 0usize..FLAG_LAYOUTS.len(), seed in any::<u64>()) {

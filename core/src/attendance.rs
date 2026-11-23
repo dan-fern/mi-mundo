@@ -166,6 +166,19 @@ mod tests {
         assert_eq!(day_streak(vec![i32::MIN], i32::MIN), 1);
     }
 
+    #[test]
+    fn a_missed_day_breaks_the_streak() {
+        assert_eq!(
+            day_streak(vec![TODAY, TODAY - 1, TODAY - 3, TODAY - 4], TODAY),
+            2
+        );
+        assert_eq!(
+            day_streak(vec![TODAY - 2, TODAY - 3], TODAY),
+            0,
+            "yesterday missed"
+        );
+    }
+
     proptest! {
         #[test]
         fn days_played_is_at_most_seven_and_the_distinct_visits(
@@ -205,5 +218,23 @@ mod tests {
         // Missing one day in the middle cuts it back to the days since.
         let gap: Vec<i32> = year.into_iter().filter(|&d| d != TODAY - 100).collect();
         assert_eq!(day_streak(gap, TODAY), 100);
+    }
+
+    proptest! {
+        #[test]
+        fn the_level_is_days_played_capped(visits in proptest::collection::vec(TODAY - 20..TODAY + 5, 0..40)) {
+            let played = days_played_last_7(visits.clone(), TODAY);
+            prop_assert_eq!(attendance_level_for(visits, TODAY), played.min(ATTENDANCE_MAX));
+        }
+
+        #[test]
+        fn a_streak_needs_today_or_yesterday_and_real_visits(visits in proptest::collection::vec(TODAY - 30..TODAY + 5, 0..60)) {
+            let streak = day_streak(visits.clone(), TODAY);
+            let distinct: std::collections::BTreeSet<i32> = visits.iter().copied().filter(|d| *d <= TODAY).collect();
+            prop_assert!(streak as usize <= distinct.len());
+            if streak > 0 {
+                prop_assert!(distinct.contains(&TODAY) || distinct.contains(&(TODAY - 1)));
+            }
+        }
     }
 }
