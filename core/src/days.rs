@@ -144,6 +144,22 @@ mod tests {
         assert_eq!(game_day_label(i32::MIN), format!("day {}", i32::MIN));
     }
 
+    #[test]
+    fn days_before_1970_have_dates_too() {
+        assert_eq!(game_day_label(-1), "1969-12-31");
+        assert_eq!(game_day_label(-25_567), "1900-01-01");
+        assert_eq!(game_day(et(1969, 12, 31, 12, 0)), -1);
+        assert_eq!(game_day(et(1969, 12, 30, 23, 0)), -1);
+    }
+
+    /// The clamp ends are real dates: 1900-01-01 00:00Z is 7 pm ET on
+    /// 31 Dec 1899, and 9999-12-31 23:59:59Z is still that day in ET.
+    #[test]
+    fn clamp_ends_have_labels() {
+        assert_eq!(label_at(MIN_UNIX_SECONDS), "1899-12-31");
+        assert_eq!(label_at(MAX_UNIX_SECONDS), "9999-12-31");
+    }
+
     proptest! {
         #[test]
         fn noon_on_consecutive_dates_is_consecutive_days(offset in 0i64..47_000) {
@@ -219,7 +235,9 @@ mod tests {
         assert_eq!(sun_11pm - sat_11pm, 25 * 3600);
         assert_eq!(label_at(sat_11pm - 1), "2026-10-31");
         assert_eq!(label_at(sat_11pm), "2026-11-01");
-        // Both 1:30 ams and the hour after 2 am (the clocks went back).
+        // 1:00 EDT, 1:00 EST (the repeated hour) and 2:00 EST just after it.
+        assert_eq!(label_at(sat_11pm + 2 * 3600), "2026-11-01");
+        assert_eq!(label_at(sat_11pm + 3 * 3600), "2026-11-01");
         assert_eq!(label_at(sat_11pm + 4 * 3600), "2026-11-01");
         assert_eq!(label_at(sun_11pm - 1), "2026-11-01");
         assert_eq!(label_at(sun_11pm), "2026-11-02");
@@ -238,6 +256,21 @@ mod tests {
             }
             // Noon to noon, 72 h: exactly three 11 pm crossings.
             assert_eq!(last - first, 3, "one new day per 11 pm crossing");
+        }
+    }
+
+    proptest! {
+        /// Time never goes backwards in game days, clamped ends included.
+        #[test]
+        fn later_instants_are_never_earlier_days(a in -3_000_000_000i64..260_000_000_000, step in 0i64..10_000_000) {
+            prop_assert!(game_day(a) <= game_day(a.saturating_add(step)));
+        }
+
+        /// An hour later is the same game day or the next one, never two on.
+        #[test]
+        fn an_hour_moves_at_most_one_day(t in -2_208_988_800i64..253_402_296_000) {
+            let d = game_day(t + 3600) - game_day(t);
+            prop_assert!(d == 0 || d == 1, "{}", d);
         }
     }
 }

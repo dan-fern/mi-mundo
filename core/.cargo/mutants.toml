@@ -1,0 +1,17 @@
+# cargo-mutants settings: run `cargo mutants` from core/.
+
+# The data tests read ../apple/..., which cargo-mutants' copy of core/ doesn't
+# have. The gameplay modules' own tests are all unit tests. This also leaves
+# out tests/ and the mapgen-only datagen code.
+additional_cargo_test_args = ["--lib"]
+
+# Mutants that can't change behaviour (checked by hand, Nov 2026):
+exclude_re = [
+    # 24 - 23 == 24 / 23 == 1.
+    "src/days.rs:.*replace - with / in game_day",
+    # Cells are cleaned to 0..9 or BLANK first, so a colour index is never 9.
+    "src/freehand.rs:.*replace < with <= in has_the_colours",
+    "src/freehand.rs:.*replace < with <= in colour_areas",
+    # A colour never graded (g == 0) is never matched (m == 0) either.
+    "src/freehand.rs:.*replace > with >= in grade_as_drawn",
+]

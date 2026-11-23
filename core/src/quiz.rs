@@ -147,6 +147,11 @@ mod tests {
         let choices = quiz_choices("  ".into(), names(&["Lima", "Quito"]), 1);
         assert_eq!(choices.iter().filter(|c| *c == "  ").count(), 1);
         assert_eq!(choices.len(), 3);
+        // A blank candidate equal to the blank answer isn't offered again.
+        assert_eq!(
+            quiz_choices("  ".into(), names(&["  ", "Lima"]), 1).len(),
+            2
+        );
     }
 
     #[test]
@@ -194,6 +199,34 @@ mod tests {
         assert_eq!(quiz_stars(24, 24), 3);
         assert_eq!(quiz_stars(99, 10), 3, "more right than asked is capped");
         assert_eq!(quiz_stars(u32::MAX, u32::MAX), 3);
+    }
+
+    #[test]
+    fn stars_change_exactly_at_ninety_and_sixty_percent() {
+        assert_eq!(quiz_stars(90, 100), 3);
+        assert_eq!(quiz_stars(89, 100), 2);
+        assert_eq!(quiz_stars(60, 100), 2);
+        assert_eq!(quiz_stars(59, 100), 1);
+        assert_eq!(quiz_stars(1, 1000), 1);
+        // Not a multiple of ten: 81.8%, 90.9%, 54.5% and 63.6%.
+        assert_eq!(quiz_stars(9, 11), 2);
+        assert_eq!(quiz_stars(10, 11), 3);
+        assert_eq!(quiz_stars(6, 11), 1);
+        assert_eq!(quiz_stars(7, 11), 2);
+    }
+
+    #[test]
+    fn the_pool_counts_usable_candidates_not_raw_ones() {
+        // Blanks and repeats ahead of the 8 usable ones don't push the 8th
+        // out of the pool; the 9th usable one never comes up.
+        let mut candidates = names(&["", " ", "A", "A", "Peru"]);
+        candidates.extend(names(&["B", "C", "D", "E", "F", "G", "H", "Far"]));
+        let mut used = std::collections::BTreeSet::new();
+        for seed in 0..300 {
+            used.extend(quiz_choices("Peru".into(), candidates.clone(), seed));
+        }
+        assert!(used.contains("H"), "the 8th usable candidate is used");
+        assert!(!used.contains("Far"), "the 9th isn't");
     }
 
     proptest! {

@@ -291,3 +291,25 @@ fn only_peaks_have_heights() {
         );
     }
 }
+
+#[test]
+fn trailing_bytes_after_the_last_feature_are_refused() {
+    let path = concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/../apple/MiMundo/Resources/Features.bin"
+    );
+    let mut bytes = std::fs::read(path).expect("Features.bin is committed");
+    bytes.push(0);
+    let err = load_features(bytes).expect_err("an extra byte");
+    assert!(err.to_string().contains("trailing"), "{err}");
+}
+
+#[test]
+fn a_file_cut_short_is_refused() {
+    let path = concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/../apple/MiMundo/Resources/Features.bin"
+    );
+    let bytes = std::fs::read(path).expect("Features.bin is committed");
+    load_features(bytes[..bytes.len() - 1].to_vec()).expect_err("one byte short");
+}

@@ -228,6 +228,109 @@ mod tests {
         }
     }
 
+    #[test]
+    fn the_hint_with_credit_above_100_counts_as_100() {
+        assert_eq!(points_with_help(100, 1, false, 250, true), 75);
+        assert_eq!(points_with_help(100, 1, false, u32::MAX, true), 75);
+        // Credit is clamped before it multiplies, so the biggest base can't overflow.
+        assert_eq!(
+            points_with_help(u32::MAX, 1, false, u32::MAX, true),
+            3_221_225_471
+        );
+        assert_eq!(
+            points_with_help(u32::MAX, 1, true, u32::MAX, true),
+            1_610_612_735
+        );
+    }
+
+    #[test]
+    fn the_hint_out_of_attempts_scores_nothing() {
+        assert_eq!(points_with_help(100, 0, false, 100, true), 0);
+        assert_eq!(points_with_help(u32::MAX, 5, true, 100, true), 0);
+        assert_eq!(points_with_help(u32::MAX, u32::MAX, false, 100, true), 0);
+    }
+
+    #[test]
+    fn the_hint_on_a_zero_point_question_scores_nothing() {
+        assert_eq!(points_with_help(0, 1, false, 100, true), 0);
+    }
+
+    /// Rounding down happens once, at the end: rounding after each factor
+    /// would give one point less in every one of these.
+    #[test]
+    fn the_hint_rounds_down_once_at_the_end() {
+        assert_eq!(points_with_help(9, 1, false, 75, true), 5); // 5.06
+        assert_eq!(points_with_help(9, 2, false, 100, true), 5); // 5.06
+        assert_eq!(points_with_help(10, 2, false, 75, true), 4); // 4.2
+        assert_eq!(points_with_help(10, 2, true, 75, true), 2); // 2.1
+        assert_eq!(points_with_help(5, 2, false, 75, true), 2); // 2.1
+    }
+
+    /// The worked example in requirements §3.4.
+    #[test]
+    fn second_attempt_with_the_right_colours_and_the_hint_is_28() {
+        assert_eq!(points_with_help(100, 2, false, 50, true), 28);
+    }
+
+    /// Every rule at once for a 100-point question, so any change to one
+    /// factor shows up here. Rows: attempt; columns: credit 100, 75, 50.
+    #[test]
+    fn every_combination_for_a_hundred_point_question() {
+        /// Points by attempt (rows) and credit (columns).
+        type Table = [[u32; 3]; 4];
+        #[rustfmt::skip]
+        let expected: [((bool, bool), Table); 4] = [
+            // (multiple choice, hint)
+            ((false, false), [[100, 75, 50], [75, 56, 37], [50, 37, 25], [0, 0, 0]]),
+            ((true, false),  [[50, 37, 25], [37, 28, 18], [25, 18, 12], [0, 0, 0]]),
+            ((false, true),  [[75, 56, 37], [56, 42, 28], [37, 28, 18], [0, 0, 0]]),
+            ((true, true),   [[37, 28, 18], [28, 21, 14], [18, 14, 9], [0, 0, 0]]),
+        ];
+        for ((mc, hint), rows) in expected {
+            for (a, row) in rows.iter().enumerate() {
+                for (c, want) in [100, 75, 50].iter().zip(row) {
+                    assert_eq!(
+                        points_with_help(100, a as u32 + 1, mc, *c, hint),
+                        *want,
+                        "attempt {} mc {mc} hint {hint} credit {c}",
+                        a + 1
+                    );
+                }
+            }
+        }
+    }
+
+    proptest! {
+        #[test]
+        fn with_the_hint_more_credit_never_earns_less(base: u32, attempt in 1u32..=LAST_SCORED_ATTEMPT, mc: bool, credit in 0u32..100) {
+            prop_assert!(points_with_help(base, attempt, mc, credit, true) <= points_with_help(base, attempt, mc, credit + 1, true));
+        }
+
+        #[test]
+        fn with_the_hint_any_credit_earns_a_point(base in 1u32.., attempt in 1u32..=LAST_SCORED_ATTEMPT, mc: bool, credit in 1u32..=100) {
+            prop_assert!(points_with_help(base, attempt, mc, credit, true) >= 1);
+        }
+
+        #[test]
+        fn with_the_hint_never_more_than_three_quarters(base: u32, attempt: u32, mc: bool, credit: u32) {
+            // ¾ of the question, or the 1-point minimum on tiny questions.
+            let cap = (base - base / 4).max(1).min(base);
+            prop_assert!(points_with_help(base, attempt, mc, credit, true) <= cap);
+        }
+
+        #[test]
+        fn with_the_hint_later_attempts_never_earn_more(base in 0u32..10_000, mc: bool, credit in 0u32..=100) {
+            for attempt in 1..=5 {
+                prop_assert!(points_with_help(base, attempt + 1, mc, credit, true) <= points_with_help(base, attempt, mc, credit, true));
+            }
+        }
+
+        #[test]
+        fn with_the_hint_multiple_choice_never_earns_more(base in 0u32..10_000, attempt in 1u32..6, credit in 0u32..=100) {
+            prop_assert!(points_with_help(base, attempt, true, credit, true) <= points_with_help(base, attempt, false, credit, true));
+        }
+    }
+
     proptest! {
         #[test]
         fn the_hint_never_earns_more(base: u32, attempt in 1u32..6, mc: bool, credit in 0u32..=100) {

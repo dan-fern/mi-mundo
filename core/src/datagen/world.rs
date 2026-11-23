@@ -391,4 +391,15 @@ mod tests {
         let err = run(&coarse, &broken, dir.join("c.bin").to_str().unwrap()).unwrap_err();
         assert!(err.contains("MAPCOLOR7"), "{err}");
     }
+
+    #[test]
+    fn a_transfer_fails_loudly_if_the_source_is_a_single_polygon() {
+        let mut features = russia_and_ukraine();
+        features[0]["geometry"] =
+            json!({"type": "Polygon", "coordinates": [rect(40.0, 50.0, 60.0, 60.0)]});
+        let before = features.clone();
+        let err = apply_transfers(&mut features, "test").unwrap_err();
+        assert!(err.contains("RUS is not a MultiPolygon"), "{err}");
+        assert_eq!(features, before, "nothing half-moved");
+    }
 }

@@ -219,7 +219,9 @@ pub fn grade_freehand(
     };
     let (reference, drawing, outline) = (clean(reference), clean(drawing), clean(outline));
     let mut grade = grade_as_drawn(&reference, &drawing, &outline, w, h);
-    if grade.correct || drawing.len() != w * h || reference.len() != w * h {
+    // A drawing or outline of the wrong size earns nothing more.
+    let bad_outline = !outline.is_empty() && outline.len() != w * h;
+    if grade.correct || drawing.len() != w * h || bad_outline {
         return grade;
     }
     let flipped = |flip: fn(usize, usize, usize, usize) -> usize| -> Vec<u8> {
@@ -233,7 +235,12 @@ pub fn grade_freehand(
         || grade_as_drawn(&reference, &upside_down, &outline, w, h).correct
     {
         DrawCredit::Mirrored
-    } else if has_the_colours(&reference, &drawing, &grade) {
+    } else if has_the_colours(
+        &reference,
+        &drawing,
+        &emblem_mask(&reference, &outline, w, h),
+        &grade,
+    ) {
         DrawCredit::Colours
     } else {
         DrawCredit::None
@@ -244,12 +251,24 @@ pub fn grade_freehand(
 /// Every main colour of the flag (one big enough to be graded) is drawn
 /// over at least [`COLOURS_CREDIT_SHARE_PERCENT`] of its own area,
 /// anywhere, and nothing big is drawn in a colour the flag doesn't have.
-fn has_the_colours(reference: &[u8], drawing: &[u8], grade: &FreehandGrade) -> bool {
+/// The emblem doesn't count (owner, Nov 2026): a colour is measured only
+/// outside it, so one that's only in the emblem needn't be drawn.
+fn has_the_colours(
+    reference: &[u8],
+    drawing: &[u8],
+    emblem: &[bool],
+    grade: &FreehandGrade,
+) -> bool {
     if !grade.extra_colours.is_empty() || drawing.iter().all(|&c| c == BLANK) {
         return false;
     }
     let white = PALETTE.iter().position(|c| *c == "white").unwrap() as u8;
-    let area = colour_areas(reference);
+    let outside: Vec<u8> = reference
+        .iter()
+        .zip(emblem)
+        .map(|(&c, &e)| if e { BLANK } else { c })
+        .collect();
+    let area = colour_areas(&outside);
     let mut drawn = [0usize; 9];
     for &d in drawing {
         let d = if d == BLANK { white } else { d };
@@ -257,7 +276,7 @@ fn has_the_colours(reference: &[u8], drawing: &[u8], grade: &FreehandGrade) -> b
             drawn[d as usize] += 1;
         }
     }
-    let main = main_colours(reference);
+    let main = main_colours(&outside);
     // A flag with no main colour (bad input) has no colours to get right.
     !main.is_empty()
         && main.iter().all(|&c| {
@@ -267,6 +286,30 @@ fn has_the_colours(reference: &[u8], drawing: &[u8], grade: &FreehandGrade) -> b
                 .sum();
             have * 100 >= area[c as usize] * COLOURS_CREDIT_SHARE_PERCENT as usize
         })
+}
+
+/// Cell `i` of a `w`×`h` grid and the up to 8 around it, clipped at the edges.
+fn neighbours(i: usize, w: usize, h: usize) -> impl Iterator<Item = usize> {
+    let (x, y) = (i % w, i / w);
+    let xs = x.saturating_sub(1)..=(x + 1).min(w - 1);
+    (y.saturating_sub(1)..=(y + 1).min(h - 1))
+        .flat_map(move |ny| xs.clone().map(move |nx| ny * w + nx))
+}
+
+/// The emblem: where the real flag isn't its plain outline, and around it.
+/// All false without an outline. Sizes must already match.
+fn emblem_mask(reference: &[u8], outline: &[u8], w: usize, h: usize) -> Vec<bool> {
+    let mut emblem = vec![false; reference.len()];
+    if !outline.is_empty() {
+        for i in 0..reference.len() {
+            if !matches(reference[i], outline[i]) {
+                for j in neighbours(i, w, h) {
+                    emblem[j] = true;
+                }
+            }
+        }
+    }
+    emblem
 }
 
 /// How many cells of the grid are each paint-box colour.
@@ -345,34 +388,11 @@ fn grade_as_drawn(
             drawing[i]
         }
     };
-    let neighbours = |i: usize| {
-        let (x, y) = ((i % w) as isize, (i / w) as isize);
-        (-1..=1)
-            .flat_map(move |dy| (-1..=1).map(move |dx| (x + dx, y + dy)))
-            .filter(move |&(nx, ny)| nx >= 0 && ny >= 0 && (nx as usize) < w && (ny as usize) < h)
-            .map(move |(nx, ny)| ny as usize * w + nx as usize)
-    };
-
-    // Detail: where the real flag isn't its plain outline, and around it.
-    let mut skip = vec![false; n];
-    if !outline.is_empty() {
-        for i in 0..n {
-            if !matches(reference[i], outline[i]) {
-                for j in neighbours(i) {
-                    skip[j] = true;
-                }
-            }
-        }
-    }
-    // The emblem area: anything drawn there is fine.
-    let emblem = skip.clone();
+    // The emblem area is detail: anything drawn there is fine.
+    let emblem = emblem_mask(reference, outline, w, h);
+    let mut skip = emblem.clone();
     // Small colours are details too.
-    let mut area = [0usize; 9];
-    for &c in reference {
-        if (c as usize) < area.len() {
-            area[c as usize] += 1;
-        }
-    }
+    let area = colour_areas(reference);
     let minor = |c: u8| {
         (c as usize) >= area.len() || area[c as usize] * 100 < n * MINOR_SHARE_PERCENT as usize
     };
@@ -393,7 +413,7 @@ fn grade_as_drawn(
         graded += 1;
         let c = reference[i] as usize;
         per_colour[c].0 += 1;
-        if neighbours(i).any(|j| matches(reference[j], drawn(i))) {
+        if neighbours(i, w, h).any(|j| matches(reference[j], drawn(i))) {
             matched += 1;
             per_colour[c].1 += 1;
         } else {
@@ -834,6 +854,362 @@ mod tests {
         assert_eq!(classify_pixels(px), vec![idx("white"), idx("black"), BLANK]);
     }
 
+    // ---- Thresholds, exactly at the line -------------------------------
+
+    /// A grid from a function of the cell (x, y).
+    fn cells(f: impl Fn(usize, usize) -> u8) -> Vec<u8> {
+        (0..W * H).map(|i| f(i % W, i / W)).collect()
+    }
+
+    /// Red over the top 27 rows (1296 cells), blue under (432 cells).
+    fn red_over_blue() -> Vec<u8> {
+        cells(|_, y| if y < 27 { idx("red") } else { idx("blue") })
+    }
+
+    /// `red_over_blue` with its first `k` cells (raster order) repainted.
+    /// Cells in rows 0..26 have no blue neighbour, so blue there never
+    /// matches.
+    fn with_first_cells(base: &[u8], k: usize, colour: &str) -> Vec<u8> {
+        let mut d = base.to_vec();
+        for c in d.iter_mut().take(k) {
+            *c = idx(colour);
+        }
+        d
+    }
+
+    #[test]
+    fn seventy_five_percent_matched_passes_and_one_cell_less_does_not() {
+        // 1728 graded cells: 432 wrong is exactly 75%.
+        let r = red_over_blue();
+        let at = grade(&r, &with_first_cells(&r, 432, "blue"), &[]);
+        assert_eq!(at.score_percent, PASS_PERCENT);
+        assert!(at.correct, "{at:?}");
+        let below = grade(&r, &with_first_cells(&r, 433, "blue"), &[]);
+        assert_eq!(below.score_percent, PASS_PERCENT - 1);
+        assert!(below.missing_colours.is_empty() && below.extra_colours.is_empty());
+        assert!(!below.correct, "{below:?}");
+    }
+
+    #[test]
+    fn a_colour_half_there_is_present_and_one_cell_less_is_missing() {
+        // Blue's 432 cells: rows 29.. (336 cells) have no red neighbour.
+        let r = red_over_blue();
+        let repaint = |k: usize| {
+            let mut d = r.clone();
+            for c in d.iter_mut().skip(29 * W).take(k) {
+                *c = idx("red");
+            }
+            d
+        };
+        let half = grade(&r, &repaint(216), &[]);
+        assert!(half.missing_colours.is_empty(), "{half:?}");
+        assert!(half.correct);
+        let less = grade(&r, &repaint(217), &[]);
+        assert_eq!(less.missing_colours, ["blue"]);
+        assert!(!less.correct);
+    }
+
+    #[test]
+    fn a_colour_on_six_percent_of_the_flag_is_main_and_less_is_detail() {
+        // 6% of 1728 cells is 103.68.
+        let r = cells(|_, _| idx("red"));
+        assert_eq!(
+            flag_main_colours(with_first_cells(&r, 104, "blue")),
+            ["red", "blue"]
+        );
+        assert_eq!(
+            flag_main_colours(with_first_cells(&r, 103, "blue")),
+            ["red"]
+        );
+        // Detail isn't graded: all red is right with 103 blue cells.
+        let all_red = r.clone();
+        assert!(grade(&with_first_cells(&r, 103, "blue"), &all_red, &[]).correct);
+    }
+
+    #[test]
+    fn colours_credit_needs_sixty_percent_of_each_colour() {
+        // Red over blue, 864 cells each; drawn as red then blue down the
+        // columns (side by side, so not right and not a mirror image).
+        let flag = cells(|_, y| if y < H / 2 { idx("red") } else { idx("blue") });
+        let drawn = |red_cells: usize| -> Vec<u8> {
+            let mut d = vec![idx("blue"); W * H];
+            for k in 0..red_cells {
+                d[(k % H) * W + k / H] = idx("red");
+            }
+            d
+        };
+        // 60% of 864 is 518.4: 519 red cells is enough, 518 isn't.
+        assert_eq!(credit(&flag, &drawn(519)), DrawCredit::Colours);
+        assert_eq!(credit(&flag, &drawn(518)), DrawCredit::None);
+        // And the same for blue at the other end.
+        assert_eq!(credit(&flag, &drawn(W * H - 519)), DrawCredit::Colours);
+        assert_eq!(credit(&flag, &drawn(W * H - 518)), DrawCredit::None);
+    }
+
+    #[test]
+    fn a_pixel_is_blank_below_half_opacity() {
+        assert_eq!(classify_pixels(vec![206, 17, 38, 127]), [BLANK]);
+        assert_eq!(classify_pixels(vec![206, 17, 38, 128]), [idx("red")]);
+        assert_eq!(classify_pixels(vec![0, 0, 0, 0]), [BLANK]);
+    }
+
+    // ---- The paint box ---------------------------------------------------
+
+    #[test]
+    fn every_typical_shade_is_named_as_its_own_colour() {
+        assert_eq!(SHADES.len(), PALETTE.len());
+        for (i, shades) in SHADES.iter().enumerate() {
+            assert!(!shades.is_empty(), "{}", PALETTE[i]);
+            for &(r, g, b) in *shades {
+                assert_eq!(
+                    nearest_paint(r, g, b) as usize,
+                    i,
+                    "{:?} for {}",
+                    (r, g, b),
+                    PALETTE[i]
+                );
+            }
+        }
+    }
+
+    #[test]
+    fn classify_ignores_a_partial_pixel_and_handles_nothing() {
+        assert!(classify_pixels(Vec::new()).is_empty());
+        assert_eq!(classify_pixels(vec![0, 0, 0, 255, 9, 9]), [idx("black")]);
+    }
+
+    #[test]
+    fn more_of_a_right_answer_is_worth_more() {
+        let order = [
+            DrawCredit::Full,
+            DrawCredit::Mirrored,
+            DrawCredit::Colours,
+            DrawCredit::None,
+        ];
+        let percents: Vec<u32> = order.iter().map(|c| draw_credit_percent(*c)).collect();
+        assert_eq!(percents, [100, 75, 50, 0]);
+    }
+
+    // ---- Part credit with close shades, extras and bad input -------------
+
+    #[test]
+    fn a_mirror_image_in_a_close_shade_is_still_a_mirror_image() {
+        let flag = grid(france);
+        let backwards_maroon = grid(|x, y| match france(1.0 - x, y) {
+            "red" => "maroon",
+            c => c,
+        });
+        assert_eq!(credit(&flag, &backwards_maroon), DrawCredit::Mirrored);
+    }
+
+    #[test]
+    fn the_right_colours_in_close_shades_earn_half() {
+        let flag = grid(|_, y| if y < 0.5 { "red" } else { "blue" });
+        let side_by_side = grid(|x, _| if x < 0.5 { "maroon" } else { "lightblue" });
+        assert_eq!(credit(&flag, &side_by_side), DrawCredit::Colours);
+    }
+
+    #[test]
+    fn a_mirror_image_with_a_big_extra_colour_earns_nothing() {
+        let flag = grid(france);
+        let backwards_with_green = grid(|x, y| if y < 0.2 { "green" } else { france(1.0 - x, y) });
+        let g = grade(&flag, &backwards_with_green, &[]);
+        assert_eq!(g.extra_colours, ["green"]);
+        assert_eq!(g.credit, DrawCredit::None);
+    }
+
+    #[test]
+    fn an_outline_of_the_wrong_size_is_never_right() {
+        let flag = grid(france);
+        let g = grade(&flag, &flag, &[idx("blue"); 10]);
+        assert!(!g.correct);
+        assert_eq!(g.credit, DrawCredit::None);
+    }
+
+    #[test]
+    fn a_blank_reference_earns_nothing() {
+        let blank = vec![BLANK; W * H];
+        for drawing in [blank.clone(), grid(france)] {
+            let g = grade(&blank, &drawing, &[]);
+            assert!(!g.correct);
+            assert_eq!(g.credit, DrawCredit::None);
+        }
+    }
+
+    #[test]
+    fn nothing_in_the_emblem_is_marked_wrong() {
+        let emblem = |x: f32, y: f32| (x - 0.5).abs() < 0.12 && (y - 0.5).abs() < 0.2;
+        let flag = grid(|x, y| if emblem(x, y) { "yellow" } else { france(x, y) });
+        let outline = grid(france);
+        // Black scribbled over the emblem and a wrong (red) left band.
+        let drawing = grid(|x, y| {
+            if emblem(x, y) {
+                "black"
+            } else if x < 1.0 / 3.0 {
+                "red"
+            } else {
+                france(x, y)
+            }
+        });
+        let g = grade(&flag, &drawing, &outline);
+        for i in 0..W * H {
+            let (x, y) = ((i % W) as f32 / W as f32, (i / W) as f32 / H as f32);
+            if emblem(x, y) {
+                assert!(!g.wrong_cells[i], "cell {i} is in the emblem");
+            }
+        }
+        assert!(g.wrong_cells.iter().any(|w| *w), "the left band is wrong");
+        // The black scribble is over 6% of the flag but isn't an extra colour.
+        assert!(g.extra_colours.is_empty(), "{g:?}");
+    }
+
+    #[test]
+    fn a_half_wrong_drawing_scores_about_half() {
+        let flag = grid(|_, y| if y < 0.5 { "red" } else { "blue" });
+        let all_red = grid(|_, _| "red");
+        let g = grade(&flag, &all_red, &[]);
+        // Blue's cells next to the red band match (the 3×3 tolerance).
+        // 864 red cells plus blue's first row of 48: 912 / 1728.
+        assert_eq!(g.score_percent, 52);
+        assert_eq!(g.missing_colours, ["blue"]);
+    }
+
+    /// A colour only in the emblem isn't needed for colours credit (owner,
+    /// Nov 2026): the stripes in the wrong order, emblem skipped, still earn ½.
+    #[test]
+    fn colours_credit_ignores_a_colour_only_in_the_emblem() {
+        let disc = |x: f32, y: f32| (x - 0.5).abs() < 0.2 && (y - 0.5).abs() < 0.2;
+        let flag = grid(|x, y| if disc(x, y) { "black" } else { france(x, y) });
+        assert!(flag_main_colours(flag.clone()).contains(&"black".to_string()));
+        let outline = grid(france);
+        // White, red, blue: neither the right order nor a mirror image.
+        let rotated = grid(|x, y| france((x + 1.0 / 3.0) % 1.0, y));
+        let g = grade(&flag, &rotated, &outline);
+        assert!(!g.correct);
+        assert_eq!(g.credit, DrawCredit::Colours, "{g:?}");
+        // Without an outline there's no emblem, so black is a main colour.
+        assert_eq!(grade(&flag, &rotated, &[]).credit, DrawCredit::None);
+    }
+
+    /// A colour in the emblem and the bands is measured outside the emblem
+    /// only, and must still be drawn there.
+    #[test]
+    fn colours_credit_still_needs_a_band_colour_the_emblem_shares() {
+        let disc = |x: f32, y: f32| (x - 0.5).abs() < 0.2 && (y - 0.5).abs() < 0.2;
+        let flag = grid(|x, y| if disc(x, y) { "blue" } else { france(x, y) });
+        let outline = grid(france);
+        // No blue at all: white and red only.
+        let no_blue = grid(|x, _| if x < 0.5 { "white" } else { "red" });
+        assert_eq!(grade(&flag, &no_blue, &outline).credit, DrawCredit::None);
+    }
+
+    /// The 3×3 tolerance reaches every side: one row or column of blue
+    /// next to red matches, whichever side the red is on.
+    #[test]
+    fn the_tolerance_reaches_up_down_left_and_right() {
+        let all_red = grid(|_, _| "red");
+        let halves: [fn(f32, f32) -> &'static str; 4] = [
+            |_, y| if y < 0.5 { "red" } else { "blue" },
+            |_, y| if y < 0.5 { "blue" } else { "red" },
+            |x, _| if x < 0.5 { "red" } else { "blue" },
+            |x, _| if x < 0.5 { "blue" } else { "red" },
+        ];
+        for (i, half) in halves.into_iter().enumerate() {
+            // 864 red cells plus one 48-cell row or 36-cell column of blue.
+            let g = grade(&grid(half), &all_red, &[]);
+            assert_eq!(g.score_percent, 52, "case {i}");
+        }
+    }
+
+    // ---- Gaps mutation testing found ----------------------------------------
+
+    #[test]
+    fn a_colour_exactly_between_two_paints_goes_to_the_earlier_one() {
+        // (229, 84, 45) is as close to a red shade as to an orange one.
+        assert_eq!(nearest_paint(229, 84, 45), idx("red"));
+    }
+
+    #[test]
+    fn a_flag_that_changes_down_its_rows_drawn_backwards_is_a_mirror_image() {
+        // Blue hoist, white over red on the fly side (every row differs from
+        // the first, unlike vertical stripes).
+        let flag = grid(|x, y| {
+            if x < 1.0 / 3.0 {
+                "blue"
+            } else if y < 0.5 {
+                "white"
+            } else {
+                "red"
+            }
+        });
+        assert_eq!(
+            credit(&flag, &flipped_left_right(&flag)),
+            DrawCredit::Mirrored
+        );
+    }
+
+    #[test]
+    fn a_blank_canvas_counts_as_white_for_colours_credit() {
+        // Red over white; drawn as red on the left, the rest left blank.
+        let flag = grid(|_, y| if y < 0.5 { "red" } else { "white" });
+        let drawing = grid(|x, _| if x < 0.5 { "red" } else { BLANK_NAME });
+        assert_eq!(credit(&flag, &drawing), DrawCredit::Colours);
+    }
+
+    #[test]
+    fn grading_refuses_buffers_of_the_wrong_size_itself() {
+        // `grade_freehand` checks sizes first; the inner grader must too.
+        let g = grade_as_drawn(&[0, 0, 0], &[0, 0, 0, 0], &[], 2, 2);
+        assert_eq!(g.score_percent, 0);
+        assert!(g.wrong_cells.is_empty() && !g.correct);
+        let g = grade_as_drawn(&[0; 4], &[0; 3], &[], 2, 2);
+        assert!(g.wrong_cells.is_empty() && !g.correct);
+        let g = grade_as_drawn(&[0; 4], &[0; 4], &[0; 2], 2, 2);
+        assert!(g.wrong_cells.is_empty() && !g.correct);
+    }
+
+    #[test]
+    fn a_colour_on_exactly_six_percent_is_graded_not_detail() {
+        // On a 50×50 grid, a 10×15 block is exactly 6%: a main colour, so
+        // leaving it out is wrong. Grading and the colour hint agree.
+        let (w, h) = (50usize, 50usize);
+        let flag: Vec<u8> = (0..w * h)
+            .map(|i| {
+                if i % w < 10 && i / w < 15 {
+                    idx("blue")
+                } else {
+                    idx("red")
+                }
+            })
+            .collect();
+        assert_eq!(flag_main_colours(flag.clone()), ["red", "blue"]);
+        let all_red = vec![idx("red"); w * h];
+        let g = grade_freehand(flag, all_red, vec![], w as u32, h as u32);
+        assert_eq!(g.missing_colours, ["blue"]);
+        assert!(!g.correct);
+    }
+
+    // ---- Generated striped flags ------------------------------------------
+
+    /// A flag of `colours` in equal bands, across (stripes) or down.
+    fn bands(colours: &[u8], across: bool) -> Vec<u8> {
+        let n = colours.len();
+        cells(|x, y| colours[if across { y * n / H } else { x * n / W }])
+    }
+
+    fn flipped_left_right(d: &[u8]) -> Vec<u8> {
+        cells(|x, y| d[y * W + (W - 1 - x)])
+    }
+
+    /// Fewer cases than the rest: each case grades whole grids, up to three
+    /// times. Nightly's PROPTEST_CASES still scales it.
+    fn grading_config() -> ProptestConfig {
+        ProptestConfig {
+            cases: (ProptestConfig::default().cases / 2).max(8),
+            ..ProptestConfig::default()
+        }
+    }
+
     proptest! {
         #[test]
         fn copying_any_two_colour_split_is_right(a in 0u8..9, b in 0u8..9, cut in 0.3f32..0.7) {
@@ -848,6 +1224,98 @@ mod tests {
             let g = grade(&r, &d, &[]);
             prop_assert!(g.score_percent <= 100);
             prop_assert_eq!(g.wrong_cells.len(), W * H);
+        }
+    }
+
+    proptest! {
+        #![proptest_config(grading_config())]
+
+        #[test]
+        fn copying_any_striped_flag_is_right(colours in proptest::collection::vec(0u8..9, 2..=5), across: bool) {
+            prop_assume!(colours.windows(2).all(|p| !matches(p[0], p[1])));
+            let flag = bands(&colours, across);
+            let g = grade(&flag, &flag, &[]);
+            prop_assert!(g.correct, "{:?}", g);
+            prop_assert_eq!(g.credit, DrawCredit::Full);
+        }
+
+        #[test]
+        fn a_striped_flag_drawn_backwards_earns_full_or_mirror_credit(
+            colours in proptest::collection::vec(0u8..9, 2..=5), across: bool,
+        ) {
+            prop_assume!(colours.windows(2).all(|p| !matches(p[0], p[1])));
+            let flag = bands(&colours, across);
+            let c = credit(&flag, &flipped_left_right(&flag));
+            prop_assert!(c == DrawCredit::Full || c == DrawCredit::Mirrored, "{:?}", c);
+        }
+
+        #[test]
+        fn the_right_colours_in_any_order_earn_at_least_half(
+            colours in proptest::sample::subsequence((0u8..9).collect::<Vec<_>>(), 2..=4),
+            across: bool, turn in 1usize..4,
+        ) {
+            prop_assume!(colours.iter().enumerate()
+                .all(|(i, a)| colours[i + 1..].iter().all(|b| !matches(*a, *b))));
+            let mut shuffled = colours.clone();
+            let turn = turn % shuffled.len();
+            shuffled.rotate_left(turn.max(1));
+            let c = credit(&bands(&colours, across), &bands(&shuffled, across));
+            prop_assert!(c != DrawCredit::None, "{:?} drawn as {:?}", colours, shuffled);
+        }
+
+        #[test]
+        fn right_means_full_credit_and_full_credit_means_right(
+            colours in proptest::collection::vec(0u8..9, 2..=4), across: bool,
+            scribble in proptest::collection::vec((0usize..W * H, 0u8..9), 0..400),
+        ) {
+            let flag = bands(&colours, across);
+            let mut d = flag.clone();
+            for (i, c) in scribble {
+                d[i] = c;
+            }
+            let g = grade(&flag, &d, &[]);
+            prop_assert_eq!(g.correct, g.credit == DrawCredit::Full);
+            // A mirror image is never also the right way round.
+            if g.credit == DrawCredit::Mirrored {
+                prop_assert!(!g.correct);
+            }
+        }
+
+        #[test]
+        fn missing_colours_are_always_main_colours(
+            colours in proptest::collection::vec(0u8..9, 2..=3), across: bool,
+            minor in 0u8..9, spots in proptest::collection::vec(0usize..W * H, 1..100),
+            d in proptest::collection::vec(prop_oneof![0u8..9, Just(BLANK)], W * H),
+        ) {
+            // Bands plus a few spots of a colour under 6% of the flag.
+            let mut r = bands(&colours, across);
+            for i in spots {
+                r[i] = minor;
+            }
+            let main = flag_main_colours(r.clone());
+            let g = grade(&r, &d, &[]);
+            prop_assert!(g.missing_colours.iter().all(|c| main.contains(c)), "{:?} vs {:?}", g.missing_colours, main);
+            if !colours.contains(&minor) {
+                prop_assert!(!g.missing_colours.contains(&PALETTE[minor as usize].to_string()));
+            }
+        }
+    }
+
+    proptest! {
+        #[test]
+        fn main_colours_are_paint_box_colours_in_order_once(
+            r in proptest::collection::vec(prop_oneof![8 => 0u8..9, 1 => Just(BLANK), 1 => 9u8..=254], 0..600),
+        ) {
+            let main = flag_main_colours(r.clone());
+            let positions: Vec<usize> = main.iter()
+                .map(|c| PALETTE.iter().position(|p| p == c).expect("a paint-box colour"))
+                .collect();
+            prop_assert!(positions.windows(2).all(|p| p[0] < p[1]), "{:?}", main);
+            for (p, name) in PALETTE.iter().enumerate() {
+                let area = r.iter().filter(|&&c| c as usize == p).count();
+                let main_sized = area > 0 && area * 100 >= r.len() * MINOR_SHARE_PERCENT as usize;
+                prop_assert_eq!(positions.contains(&p), main_sized, "{} in {:?}", name, main);
+            }
         }
     }
 }
