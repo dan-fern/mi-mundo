@@ -172,11 +172,8 @@ mod tests {
             day_streak(vec![TODAY, TODAY - 1, TODAY - 3, TODAY - 4], TODAY),
             2
         );
-        assert_eq!(
-            day_streak(vec![TODAY - 2, TODAY - 3], TODAY),
-            0,
-            "yesterday missed"
-        );
+        // A gap further back stops a streak anchored on yesterday too.
+        assert_eq!(day_streak(vec![TODAY - 1, TODAY - 2, TODAY - 4], TODAY), 2);
     }
 
     proptest! {
@@ -223,8 +220,14 @@ mod tests {
     proptest! {
         #[test]
         fn the_level_is_days_played_capped(visits in proptest::collection::vec(TODAY - 20..TODAY + 5, 0..40)) {
-            let played = days_played_last_7(visits.clone(), TODAY);
-            prop_assert_eq!(attendance_level_for(visits, TODAY), played.min(ATTENDANCE_MAX));
+            // Counted independently of days_played_last_7; 5 is the gauge's top.
+            let played = visits
+                .iter()
+                .copied()
+                .filter(|d| (TODAY - 6..=TODAY).contains(d))
+                .collect::<BTreeSet<_>>()
+                .len() as u32;
+            prop_assert_eq!(attendance_level_for(visits, TODAY), played.min(5));
         }
 
         #[test]
@@ -235,6 +238,10 @@ mod tests {
             if streak > 0 {
                 prop_assert!(distinct.contains(&TODAY) || distinct.contains(&(TODAY - 1)));
             }
+            // Count back from today, or from yesterday if today isn't played yet.
+            let anchor = if distinct.contains(&TODAY) { TODAY } else { TODAY - 1 };
+            let expected = (0..).take_while(|i| distinct.contains(&(anchor - i))).count() as u32;
+            prop_assert_eq!(streak, expected);
         }
     }
 }

@@ -250,6 +250,17 @@ mod tests {
     }
 
     #[test]
+    fn extra_paint_is_wrong_too() {
+        let g = grade_flag_outline(
+            "h2".into(),
+            s(&["white", "red"]),
+            "h2".into(),
+            s(&["white", "red", "red"]),
+        );
+        assert!(g.layout_right && !g.correct);
+    }
+
+    #[test]
     fn layout_regions_known_and_unknown() {
         assert_eq!(flag_layout_regions("tri-h5".into()), 6);
         assert_eq!(flag_layout_regions("plain".into()), 1);

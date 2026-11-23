@@ -147,6 +147,11 @@ mod tests {
         let choices = quiz_choices("  ".into(), names(&["Lima", "Quito"]), 1);
         assert_eq!(choices.iter().filter(|c| *c == "  ").count(), 1);
         assert_eq!(choices.len(), 3);
+        // A blank candidate equal to the blank answer isn't offered again.
+        assert_eq!(
+            quiz_choices("  ".into(), names(&["  ", "Lima"]), 1).len(),
+            2
+        );
     }
 
     #[test]
@@ -203,6 +208,11 @@ mod tests {
         assert_eq!(quiz_stars(60, 100), 2);
         assert_eq!(quiz_stars(59, 100), 1);
         assert_eq!(quiz_stars(1, 1000), 1);
+        // Not a multiple of ten: 81.8%, 90.9%, 54.5% and 63.6%.
+        assert_eq!(quiz_stars(9, 11), 2);
+        assert_eq!(quiz_stars(10, 11), 3);
+        assert_eq!(quiz_stars(6, 11), 1);
+        assert_eq!(quiz_stars(7, 11), 2);
     }
 
     #[test]

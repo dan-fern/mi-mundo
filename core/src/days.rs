@@ -148,6 +148,16 @@ mod tests {
     fn days_before_1970_have_dates_too() {
         assert_eq!(game_day_label(-1), "1969-12-31");
         assert_eq!(game_day_label(-25_567), "1900-01-01");
+        assert_eq!(game_day(et(1969, 12, 31, 12, 0)), -1);
+        assert_eq!(game_day(et(1969, 12, 30, 23, 0)), -1);
+    }
+
+    /// The clamp ends are real dates: 1900-01-01 00:00Z is 7 pm ET on
+    /// 31 Dec 1899, and 9999-12-31 23:59:59Z is still that day in ET.
+    #[test]
+    fn clamp_ends_have_labels() {
+        assert_eq!(label_at(MIN_UNIX_SECONDS), "1899-12-31");
+        assert_eq!(label_at(MAX_UNIX_SECONDS), "9999-12-31");
     }
 
     proptest! {
@@ -225,7 +235,9 @@ mod tests {
         assert_eq!(sun_11pm - sat_11pm, 25 * 3600);
         assert_eq!(label_at(sat_11pm - 1), "2026-10-31");
         assert_eq!(label_at(sat_11pm), "2026-11-01");
-        // Both 1:30 ams and the hour after 2 am (the clocks went back).
+        // 1:00 EDT, 1:00 EST (the repeated hour) and 2:00 EST just after it.
+        assert_eq!(label_at(sat_11pm + 2 * 3600), "2026-11-01");
+        assert_eq!(label_at(sat_11pm + 3 * 3600), "2026-11-01");
         assert_eq!(label_at(sat_11pm + 4 * 3600), "2026-11-01");
         assert_eq!(label_at(sun_11pm - 1), "2026-11-01");
         assert_eq!(label_at(sun_11pm), "2026-11-02");

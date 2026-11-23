@@ -397,7 +397,9 @@ mod tests {
         let mut features = russia_and_ukraine();
         features[0]["geometry"] =
             json!({"type": "Polygon", "coordinates": [rect(40.0, 50.0, 60.0, 60.0)]});
+        let before = features.clone();
         let err = apply_transfers(&mut features, "test").unwrap_err();
         assert!(err.contains("RUS is not a MultiPolygon"), "{err}");
+        assert_eq!(features, before, "nothing half-moved");
     }
 }

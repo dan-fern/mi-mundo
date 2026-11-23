@@ -219,7 +219,9 @@ pub fn grade_freehand(
     };
     let (reference, drawing, outline) = (clean(reference), clean(drawing), clean(outline));
     let mut grade = grade_as_drawn(&reference, &drawing, &outline, w, h);
-    if grade.correct || drawing.len() != w * h || reference.len() != w * h {
+    // A drawing or outline of the wrong size earns nothing more.
+    let bad_outline = !outline.is_empty() && outline.len() != w * h;
+    if grade.correct || drawing.len() != w * h || bad_outline {
         return grade;
     }
     let flipped = |flip: fn(usize, usize, usize, usize) -> usize| -> Vec<u8> {
@@ -345,12 +347,12 @@ fn grade_as_drawn(
             drawing[i]
         }
     };
+    // The cell and the up to 8 around it, clipped at the edges.
     let neighbours = |i: usize| {
-        let (x, y) = ((i % w) as isize, (i / w) as isize);
-        (-1..=1)
-            .flat_map(move |dy| (-1..=1).map(move |dx| (x + dx, y + dy)))
-            .filter(move |&(nx, ny)| nx >= 0 && ny >= 0 && (nx as usize) < w && (ny as usize) < h)
-            .map(move |(nx, ny)| ny as usize * w + nx as usize)
+        let (x, y) = (i % w, i / w);
+        let xs = x.saturating_sub(1)..=(x + 1).min(w - 1);
+        (y.saturating_sub(1)..=(y + 1).min(h - 1))
+            .flat_map(move |ny| xs.clone().map(move |nx| ny * w + nx))
     };
 
     // Detail: where the real flag isn't its plain outline, and around it.
@@ -998,7 +1000,7 @@ mod tests {
         let flag = grid(france);
         let g = grade(&flag, &flag, &[idx("blue"); 10]);
         assert!(!g.correct);
-        assert_ne!(g.credit, DrawCredit::Full);
+        assert_eq!(g.credit, DrawCredit::None);
     }
 
     #[test]
@@ -1034,6 +1036,8 @@ mod tests {
             }
         }
         assert!(g.wrong_cells.iter().any(|w| *w), "the left band is wrong");
+        // The black scribble is over 6% of the flag but isn't an extra colour.
+        assert!(g.extra_colours.is_empty(), "{g:?}");
     }
 
     #[test]
@@ -1042,8 +1046,27 @@ mod tests {
         let all_red = grid(|_, _| "red");
         let g = grade(&flag, &all_red, &[]);
         // Blue's cells next to the red band match (the 3×3 tolerance).
-        assert!((50..=53).contains(&g.score_percent), "{}", g.score_percent);
+        // 864 red cells plus blue's first row of 48: 912 / 1728.
+        assert_eq!(g.score_percent, 52);
         assert_eq!(g.missing_colours, ["blue"]);
+    }
+
+    /// The 3×3 tolerance reaches every side: one row or column of blue
+    /// next to red matches, whichever side the red is on.
+    #[test]
+    fn the_tolerance_reaches_up_down_left_and_right() {
+        let all_red = grid(|_, _| "red");
+        let halves: [fn(f32, f32) -> &'static str; 4] = [
+            |_, y| if y < 0.5 { "red" } else { "blue" },
+            |_, y| if y < 0.5 { "blue" } else { "red" },
+            |x, _| if x < 0.5 { "red" } else { "blue" },
+            |x, _| if x < 0.5 { "blue" } else { "red" },
+        ];
+        for (i, half) in halves.into_iter().enumerate() {
+            // 864 red cells plus one 48-cell row or 36-cell column of blue.
+            let g = grade(&grid(half), &all_red, &[]);
+            assert_eq!(g.score_percent, 52, "case {i}");
+        }
     }
 
     // ---- Gaps mutation testing found ----------------------------------------
@@ -1200,32 +1223,46 @@ mod tests {
             }
             let g = grade(&flag, &d, &[]);
             prop_assert_eq!(g.correct, g.credit == DrawCredit::Full);
+            // A mirror image is never also the right way round.
+            if g.credit == DrawCredit::Mirrored {
+                prop_assert!(!g.correct);
+            }
         }
 
         #[test]
         fn missing_colours_are_always_main_colours(
-            r in proptest::collection::vec(prop_oneof![0u8..9, Just(BLANK)], W * H),
+            colours in proptest::collection::vec(0u8..9, 2..=3), across: bool,
+            minor in 0u8..9, spots in proptest::collection::vec(0usize..W * H, 1..100),
             d in proptest::collection::vec(prop_oneof![0u8..9, Just(BLANK)], W * H),
         ) {
+            // Bands plus a few spots of a colour under 6% of the flag.
+            let mut r = bands(&colours, across);
+            for i in spots {
+                r[i] = minor;
+            }
             let main = flag_main_colours(r.clone());
             let g = grade(&r, &d, &[]);
             prop_assert!(g.missing_colours.iter().all(|c| main.contains(c)), "{:?} vs {:?}", g.missing_colours, main);
+            if !colours.contains(&minor) {
+                prop_assert!(!g.missing_colours.contains(&PALETTE[minor as usize].to_string()));
+            }
         }
     }
 
     proptest! {
         #[test]
         fn main_colours_are_paint_box_colours_in_order_once(
-            r in proptest::collection::vec(prop_oneof![0u8..9, Just(BLANK), 9u8..=254], 0..600),
+            r in proptest::collection::vec(prop_oneof![8 => 0u8..9, 1 => Just(BLANK), 1 => 9u8..=254], 0..600),
         ) {
             let main = flag_main_colours(r.clone());
             let positions: Vec<usize> = main.iter()
                 .map(|c| PALETTE.iter().position(|p| p == c).expect("a paint-box colour"))
                 .collect();
             prop_assert!(positions.windows(2).all(|p| p[0] < p[1]), "{:?}", main);
-            for p in positions {
+            for (p, name) in PALETTE.iter().enumerate() {
                 let area = r.iter().filter(|&&c| c as usize == p).count();
-                prop_assert!(area > 0 && area * 100 >= r.len() * MINOR_SHARE_PERCENT as usize);
+                let main_sized = area > 0 && area * 100 >= r.len() * MINOR_SHARE_PERCENT as usize;
+                prop_assert_eq!(positions.contains(&p), main_sized, "{} in {:?}", name, main);
             }
         }
     }

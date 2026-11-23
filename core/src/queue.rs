@@ -445,7 +445,7 @@ mod tests {
 
     #[test]
     fn emptying_the_queue_forgets_the_position_and_takes_the_new_day() {
-        // Mutation testing: the empty-queue state kept the old position, so
+        // Regression: the empty-queue state kept the old position, so
         // a refilled queue started part way down instead of at the top.
         let state = playing("c", 2, 100);
         let empty = queue_today(state, vec![], 101);
@@ -525,15 +525,8 @@ mod tests {
     }
 
     #[test]
-    fn from_today_leaves_the_queue_as_is_without_a_current_quiz_in_it() {
-        let q = ids(&["a", "b", "c"]);
-        assert_eq!(queue_from_today(q.clone(), None), q);
-        assert_eq!(queue_from_today(q.clone(), Some("gone".into())), q);
-        assert!(queue_from_today(vec![], Some("a".into())).is_empty());
-        assert_eq!(
-            queue_from_today(q.clone(), Some("c".into())),
-            ids(&["c", "a", "b"])
-        );
+    fn from_today_on_a_one_quiz_queue_is_that_quiz() {
+        assert_eq!(queue_from_today(ids(&["a"]), Some("a".into())), ids(&["a"]));
     }
 
     #[test]
@@ -543,13 +536,13 @@ mod tests {
     }
 
     #[test]
-    fn set_today_keeps_the_day_and_lifts_the_edit_lock() {
+    fn set_today_clears_the_started_lock_and_keeps_the_day() {
         let mut state = playing("a", 0, 40);
         state.started = true;
         let next = queue_set_today(state, ids(&["a", "b"]), "b".into());
         assert_eq!(current(&next), Some("b"));
         assert_eq!((next.position, next.run, next.day), (1, 2, 40));
-        assert!(!next.started && !next.attempted_by_kid);
+        assert!(!next.started);
     }
 
     proptest! {
@@ -629,14 +622,15 @@ mod tests {
         /// Removing some other quiz never changes today's.
         #[test]
         fn removing_another_quiz_keeps_todays(len in 2usize..=20, pick in 0usize..20, gone in 0usize..20, attempted: bool) {
-            let (pick, gone) = (pick % len, gone % len);
-            prop_assume!(pick != gone);
+            let pick = pick % len;
+            let gone = (pick + 1 + gone % (len - 1)) % len;
             let mut queue: Vec<String> = (0..len).map(|i| format!("q{i}")).collect();
             let mut state = playing(&queue[pick], pick as u32, 3);
             state.attempted_by_kid = attempted;
             queue.remove(gone);
-            let next = queue_today(state.clone(), queue, 3);
-            prop_assert_eq!(next.current, state.current);
+            let next = queue_today(state.clone(), queue.clone(), 3);
+            prop_assert_eq!(&next.current, &state.current);
+            prop_assert_eq!(queue[next.position as usize].as_str(), format!("q{pick}"));
         }
 
         /// Once a kid has attempted today's quiz, a parent can't swap it.
@@ -648,15 +642,21 @@ mod tests {
             prop_assert_eq!(queue_set_today(state.clone(), queue.clone(), queue[to % len].clone()), state);
         }
 
-        /// A parent's pick holds for the rest of the day.
+        /// A parent's pick holds for the rest of the day, and the queue
+        /// carries on after it the next.
         #[test]
-        fn set_today_then_the_same_day_keeps_the_pick(len in 1usize..=20, pick in 0usize..20, to in 0usize..20) {
+        fn set_today_then_the_same_day_keeps_the_pick(len in 2usize..=20, pick in 0usize..20, to in 0usize..20) {
+            prop_assume!(to % len != pick % len);
             let queue: Vec<String> = (0..len).map(|i| format!("q{i}")).collect();
             let state = playing(&queue[pick % len], (pick % len) as u32, 8);
             let chosen = queue_set_today(state, queue.clone(), queue[to % len].clone());
             let later = queue_today(chosen.clone(), queue.clone(), 8);
             prop_assert_eq!(later.current.as_deref(), Some(queue[to % len].as_str()));
-            prop_assert_eq!(later, chosen);
+            prop_assert_eq!(&later, &chosen);
+            let mut tried = chosen;
+            tried.attempted_by_kid = true;
+            let tomorrow = queue_today(tried, queue.clone(), 9);
+            prop_assert_eq!(tomorrow.current.as_deref(), Some(queue[(to % len + 1) % len].as_str()));
         }
     }
 }

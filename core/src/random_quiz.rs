@@ -386,6 +386,13 @@ mod tests {
                 let home = if region { region_of(id) } else { continent_of(id) };
                 prop_assert_eq!(&home, &area);
             }
+            // Some countries, no more than asked for, sorted and distinct.
+            prop_assert!(!q.country_ids.is_empty() && q.country_ids.len() <= count as usize);
+            prop_assert!(q.country_ids.windows(2).all(|w| w[0] < w[1]));
+        }
+
+        #[test]
+        fn world_quizzes_name_no_area(count in 1u32..14, seed: u64) {
             prop_assert!(random_quiz(world(), count, RandomQuizScope::World, seed).area.is_none());
         }
     }
