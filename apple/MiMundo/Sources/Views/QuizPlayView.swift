@@ -693,8 +693,8 @@ private struct QuestionCard: View {
     }
 }
 
-/// One flag answer. Before answering it's just the flag (its name would
-/// give it away); after, the right one turns green, a wrong pick red, and
+/// One flag answer. Before answering, selected or not, it's just the flag
+/// (its name would give it away); after, the right one turns green, a wrong pick red, and
 /// each says whose flag it is.
 private struct FlagChoice: View {
     let asset: String?
@@ -716,7 +716,8 @@ private struct FlagChoice: View {
                 }
             }
             .frame(maxWidth: .infinity, minHeight: 90, maxHeight: 90)
-            if state != .open {
+            // Only once answered: a selected flag's name would give it away.
+            if state == .right || state == .wrong || state == .faded {
                 Text(name)
                     .font(.footnote.weight(.semibold))
                     .lineLimit(3)

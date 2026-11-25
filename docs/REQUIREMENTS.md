@@ -118,6 +118,9 @@ Built in steps (owner decision, Nov 2026): multiple choice first (pick the
 flag from four, neighbours' flags as the wrong answers, look-alikes that can't
 be told apart at button size — Monaco/Indonesia, Chad/Romania/Andorra/Moldova, Colombia/Ecuador/Venezuela, El Salvador/Nicaragua/Honduras, Slovakia/Slovenia/Russia, Mali/Senegal/Guinea, Netherlands/Luxembourg, Ireland/Côte d'Ivoire, Australia/New Zealand — never shown
 together), then the layout outline, then freehand, then parent review (5.3).
+The four flags show no names until the answer is entered, even the one the
+kid has selected (that gave the answer away; fixed Nov 2026); then each says
+whose flag it is.
 Step 2 (layout outline), as first built (Nov 2026, since replaced by the
 tracing outline): the kid picked the flag's shape from six, tapped a colour
 from a nine-colour paint box (red, maroon, orange, yellow, green, light blue,

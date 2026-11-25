@@ -7,6 +7,8 @@ on:
   # Nightly, so the UI tests (main only, below) also catch slow breakage.
   schedule:
     - cron: "17 6 * * *"
+  # By hand from the Actions tab (or gh workflow run), e.g. to try a branch.
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -228,11 +230,12 @@ jobs:
           retention-days: 7
 
   # Rust coverage: main and nightly only (not PRs). Runs in parallel with the
-  # build job, so it adds no wall-clock time. No thresholds.
+  # build job, so it adds no wall-clock time. No thresholds. Pure Rust, so it
+  # runs on Linux: macOS runners were too busy to pick it up (Nov 2026).
   rust-coverage:
     name: Rust coverage
     if: github.event_name != 'pull_request'
-    runs-on: macos-15
+    runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
